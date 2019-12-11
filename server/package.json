@@ -1,0 +1,28 @@
+{
+  "name": "math-notes-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "out/index.js",
+  "scripts": {
+    "start": "concurrently \"tsc --watch\" \"nodemon --watch out out/index.js\"",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.16",
+    "concurrently": "^5.0.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-jest": "^23.1.1",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.1",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.3"
+  }
+}
