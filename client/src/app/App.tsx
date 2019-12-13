@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 
 import styles from './App.module.scss';
-import ShopsList from '../shopsList/ShopsList.container';
+import MathExpression from '../mathExpression/MathExpression';
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
-  const [listVisible, setListVisible] = useState(false);
-  const toggleShowList = () => setListVisible(visible => !visible);
+  const [expressions, setExpressions] = useState<Array<string>>([]);
+  const addNewExpression = () =>
+    setExpressions(expressions => [...expressions, '']);
+  const updateExpression = (index, newValue) =>
+    setExpressions(expressions =>
+      expressions.map((expression, i) => (i === index ? newValue : expression))
+    );
 
   return (
     <div className={styles.app}>
-      <header className={styles.appHeader}>
-        {listVisible && <ShopsList />}
-        <span className={styles.appLink} onClick={toggleShowList}>
-          {listVisible ? 'Hide' : 'Show'}
-        </span>
-      </header>
+      <div>
+        {expressions.map((expression, index) => (
+          <MathExpression
+            key={index}
+            value={expression}
+            onValueChange={newValue => updateExpression(index, newValue)}
+          />
+        ))}
+        <div onClick={addNewExpression}>Add new line</div>
+      </div>
     </div>
   );
 };

@@ -1,8 +1,5 @@
-import { combineReducers } from 'redux';
-import shopsListReducer from './shopsList/store';
+// import { combineReducers } from 'redux';
 
-const rootReducer = combineReducers({
-  shopsList: shopsListReducer,
-});
+const rootReducer = (state = {}) => state; // combineReducers({});
 
 export default rootReducer;
