@@ -41,6 +41,8 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.1.2",
     "cypress": "^3.6.1",
     "prettier": "^1.18.2"
   }

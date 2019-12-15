@@ -1,15 +1,14 @@
 describe('Home Page', function() {
-  it('should add new expression', () => {
+  it('should add new expression when clicked add button', () => {
     cy.visit('/');
 
+    cy.get('.MathExpression').should('have.length', 1);
     cy.contains('Add new line').click();
-    cy.contains('Empty expression');
+    cy.get('.MathExpression').should('have.length', 2);
   });
 
   it('should edit expression', () => {
     cy.visit('/');
-
-    cy.contains('Add new line').click();
 
     const expressionText = 'E = m*v^2 / 2';
 

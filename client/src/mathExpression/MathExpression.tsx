@@ -29,7 +29,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
 
   return (
     <div
-      className={classNames(styles.expression, {
+      className={classNames('MathExpression', styles.expression, {
         [styles.isExpressionEmpty]: isExpressionEmpty,
       })}
       onClick={enterEditMode}

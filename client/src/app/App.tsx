@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import MathExpression from '../mathExpression/MathExpression';
 import styles from './App.module.scss';
 
+const initialExpressions = [''];
+
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
-  const [expressions, setExpressions] = useState<Array<string>>([]);
+  const [expressions, setExpressions] = useState<Array<string>>(
+    initialExpressions
+  );
   const addNewExpression = () =>
     setExpressions(expressions => [...expressions, '']);
   const updateExpression = (index, newValue) =>
