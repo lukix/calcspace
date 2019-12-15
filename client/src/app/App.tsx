@@ -1,46 +1,15 @@
-import React, { useState } from 'react';
-import MathExpression from '../mathExpression/MathExpression';
+import React from 'react';
+import NoteCard from '../noteCard/NoteCard';
 import styles from './App.module.scss';
-
-const initialExpressions = [''];
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
-  const [expressions, setExpressions] = useState<Array<string>>(
-    initialExpressions
-  );
-  const addNewExpression = () =>
-    setExpressions(expressions => [...expressions, '']);
-  const updateExpression = (index, newValue) =>
-    setExpressions(expressions =>
-      expressions.map((expression, i) => (i === index ? newValue : expression))
-    );
-  const deleteExpression = index =>
-    setExpressions(expressions =>
-      expressions.filter((expression, i) => i !== index)
-    );
-
   return (
-    <div className={styles.app}>
+    <div>
       <div className={styles.headerBar}>Math Notes</div>
       <div className={styles.contentContainer}>
-        <div className={styles.card}>
-          {expressions.map((expression, index) => (
-            <MathExpression
-              key={index}
-              value={expression}
-              onValueChange={newValue => updateExpression(index, newValue)}
-              onDelete={() => deleteExpression(index)}
-            />
-          ))}
-          <button
-            className={styles.addExpressionButton}
-            onClick={addNewExpression}
-          >
-            Add new line
-          </button>
-        </div>
+        <NoteCard />
       </div>
     </div>
   );
