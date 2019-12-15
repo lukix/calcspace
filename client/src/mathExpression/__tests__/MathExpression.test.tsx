@@ -3,6 +3,11 @@ import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MathExpression from '../MathExpression';
 
+const defaultProps = {
+  onValueChange: () => {},
+  onDelete: () => {},
+};
+
 describe('MathExpression component', () => {
   it('should display given expression', () => {
     // given
@@ -10,7 +15,7 @@ describe('MathExpression component', () => {
 
     // when
     const { getByText } = render(
-      <MathExpression value={expression} onValueChange={() => null} />
+      <MathExpression {...defaultProps} value={expression} />
     );
 
     // then
@@ -24,7 +29,7 @@ describe('MathExpression component', () => {
 
     // when
     const { getByText } = render(
-      <MathExpression value={emptyExpression} onValueChange={() => null} />
+      <MathExpression {...defaultProps} value={emptyExpression} />
     );
 
     // then
@@ -37,7 +42,11 @@ describe('MathExpression component', () => {
     const newExpresison = 'F = m * a';
     const onValueChange = jest.fn();
     const { getByText, container } = render(
-      <MathExpression value={oldExpression} onValueChange={onValueChange} />
+      <MathExpression
+        {...defaultProps}
+        value={oldExpression}
+        onValueChange={onValueChange}
+      />
     );
 
     // when

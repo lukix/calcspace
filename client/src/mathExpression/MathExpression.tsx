@@ -49,7 +49,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
         )}
       </div>
       <div className={styles.controls}>
-        <FaTrash onClick={onDelete} />
+        <FaTrash onClick={onDelete} title="Delete expression" />
       </div>
     </div>
   );

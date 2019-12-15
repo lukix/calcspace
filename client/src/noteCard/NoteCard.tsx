@@ -1,25 +1,17 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import MathExpression from '../mathExpression/MathExpression';
+import { reducer, initialState, getActions } from './noteCardState';
 import styles from './NoteCard.module.scss';
-
-const initialExpressions = [''];
 
 interface NoteCardProps {}
 
 const NoteCard: React.FC<NoteCardProps> = () => {
-  const [expressions, setExpressions] = useState<Array<string>>(
-    initialExpressions
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { expressions } = state;
+
+  const { addNewExpression, updateExpression, deleteExpression } = getActions(
+    dispatch
   );
-  const addNewExpression = () =>
-    setExpressions(expressions => [...expressions, '']);
-  const updateExpression = (index, newValue) =>
-    setExpressions(expressions =>
-      expressions.map((expression, i) => (i === index ? newValue : expression))
-    );
-  const deleteExpression = index =>
-    setExpressions(expressions =>
-      expressions.filter((expression, i) => i !== index)
-    );
 
   return (
     <div className={styles.card}>
@@ -31,7 +23,10 @@ const NoteCard: React.FC<NoteCardProps> = () => {
           onDelete={() => deleteExpression(index)}
         />
       ))}
-      <button className={styles.addExpressionButton} onClick={addNewExpression}>
+      <button
+        className={styles.addExpressionButton}
+        onClick={() => addNewExpression()}
+      >
         Add new line
       </button>
     </div>

@@ -6,7 +6,7 @@ const createReducer = ({
   initialState,
   actionHandlers,
 }: {
-  initialState: any;
+  initialState?: any;
   actionHandlers: { [key: string]: ActionHandler };
 }) => {
   const reducer = (
