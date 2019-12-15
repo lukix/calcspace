@@ -1,23 +1,40 @@
+@import '../style/colors.scss';
+
 .app {
-  text-align: center;
+
 }
 
-.appHeader {
-  background-color: #282c34;
-  min-height: 100vh;
+.headerBar {
+  height: 65px;
+  background: $wine-color;
+  color: $light-white-color;
+  padding: 0 15px;
+  margin-bottom: 50px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 2rem;
 }
 
-.appLink {
-  color: #09d3ac;
+.card {
+  background: $light-white-color;
+  color: $kinda-black-color;
+  box-shadow: 0px 0px 5px 0px transparentize($kinda-black-color, 0.5);
+  margin: 30px;
+  padding: 20px;
+  min-height: calc(100vh - 200px);
+}
+
+.addExpressionButton {
+  margin-top: 10px;
+  background: $wine-color;
+  color: $light-white-color;
+  border: 0px none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1rem;
   cursor: pointer;
 
-  &:hover {
-    text-decoration: underline;
+  &:active {
+    background: $eastern-blue-color;
   }
 }

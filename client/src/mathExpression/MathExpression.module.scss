@@ -1,0 +1,23 @@
+@import '../style/colors.scss';
+
+.expression {
+  font-family: 'Courier New', Courier, monospace;
+  line-height: 25px;
+  cursor: pointer;
+  padding: 0 2px;
+
+  &:hover {
+    background: transparentize($wine-color, 0.7);
+  }
+
+  & > input {
+    font-family: 'Courier New', Courier, monospace;
+    border: 0px;
+    font-size: 1rem;
+    height: 22px;
+  }
+
+  &.isExpressionEmpty {
+    color: transparentize($kinda-black-color, 0.5);
+  }
+}

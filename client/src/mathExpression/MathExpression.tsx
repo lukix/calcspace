@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import InputWithAutoFocus from './InputWithAutoFocus';
+import styles from './MathExpression.module.scss';
 
 interface MathExpressionProps {
   value: string;
@@ -22,19 +24,28 @@ const MathExpression: React.FC<MathExpressionProps> = ({
     setIsInEditMode(false);
   };
 
-  if (isInEditMode) {
-    return (
-      <div>
+  const isExpressionEmpty = value.trim() === '';
+  const displayValue = isExpressionEmpty ? 'Empty expression' : value;
+
+  return (
+    <div
+      className={classNames(styles.expression, {
+        [styles.isExpressionEmpty]: isExpressionEmpty,
+      })}
+      onClick={enterEditMode}
+    >
+      {isInEditMode ? (
         <InputWithAutoFocus
           value={currentValue}
           onChange={e => setCurrentValue(e.target.value)}
           onBlur={leaveEditMode}
+          onKeyPress={e => (e.key === 'Enter' ? leaveEditMode() : null)}
         />
-      </div>
-    );
-  } else {
-    return <div onClick={enterEditMode}>{value || 'Empty expression'}</div>;
-  }
+      ) : (
+        displayValue
+      )}
+    </div>
+  );
 };
 
 export default MathExpression;

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-
-import styles from './App.module.scss';
 import MathExpression from '../mathExpression/MathExpression';
+import styles from './App.module.scss';
 
 interface AppProps {}
 
@@ -16,7 +15,8 @@ const App: React.FC<AppProps> = () => {
 
   return (
     <div className={styles.app}>
-      <div>
+      <div className={styles.headerBar}>Math Notes</div>
+      <div className={styles.card}>
         {expressions.map((expression, index) => (
           <MathExpression
             key={index}
@@ -24,7 +24,12 @@ const App: React.FC<AppProps> = () => {
             onValueChange={newValue => updateExpression(index, newValue)}
           />
         ))}
-        <div onClick={addNewExpression}>Add new line</div>
+        <button
+          className={styles.addExpressionButton}
+          onClick={addNewExpression}
+        >
+          Add new line
+        </button>
       </div>
     </div>
   );
