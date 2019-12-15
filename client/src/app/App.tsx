@@ -20,20 +20,22 @@ const App: React.FC<AppProps> = () => {
   return (
     <div className={styles.app}>
       <div className={styles.headerBar}>Math Notes</div>
-      <div className={styles.card}>
-        {expressions.map((expression, index) => (
-          <MathExpression
-            key={index}
-            value={expression}
-            onValueChange={newValue => updateExpression(index, newValue)}
-          />
-        ))}
-        <button
-          className={styles.addExpressionButton}
-          onClick={addNewExpression}
-        >
-          Add new line
-        </button>
+      <div className={styles.contentContainer}>
+        <div className={styles.card}>
+          {expressions.map((expression, index) => (
+            <MathExpression
+              key={index}
+              value={expression}
+              onValueChange={newValue => updateExpression(index, newValue)}
+            />
+          ))}
+          <button
+            className={styles.addExpressionButton}
+            onClick={addNewExpression}
+          >
+            Add new line
+          </button>
+        </div>
       </div>
     </div>
   );
