@@ -16,6 +16,10 @@ const App: React.FC<AppProps> = () => {
     setExpressions(expressions =>
       expressions.map((expression, i) => (i === index ? newValue : expression))
     );
+  const deleteExpression = index =>
+    setExpressions(expressions =>
+      expressions.filter((expression, i) => i !== index)
+    );
 
   return (
     <div className={styles.app}>
@@ -27,6 +31,7 @@ const App: React.FC<AppProps> = () => {
               key={index}
               value={expression}
               onValueChange={newValue => updateExpression(index, newValue)}
+              onDelete={() => deleteExpression(index)}
             />
           ))}
           <button

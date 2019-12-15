@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
+import { FaTrash } from 'react-icons/fa';
 import InputWithAutoFocus from './InputWithAutoFocus';
 import styles from './MathExpression.module.scss';
 
 interface MathExpressionProps {
   value: string;
   onValueChange: (value: string) => void;
+  onDelete: () => void;
 }
 
 const MathExpression: React.FC<MathExpressionProps> = ({
   value,
   onValueChange,
+  onDelete,
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
   useEffect(() => {
@@ -32,18 +35,22 @@ const MathExpression: React.FC<MathExpressionProps> = ({
       className={classNames('MathExpression', styles.expression, {
         [styles.isExpressionEmpty]: isExpressionEmpty,
       })}
-      onClick={enterEditMode}
     >
-      {isInEditMode ? (
-        <InputWithAutoFocus
-          value={currentValue}
-          onChange={e => setCurrentValue(e.target.value)}
-          onBlur={leaveEditMode}
-          onKeyPress={e => (e.key === 'Enter' ? leaveEditMode() : null)}
-        />
-      ) : (
-        displayValue
-      )}
+      <div className={styles.value} onClick={enterEditMode}>
+        {isInEditMode ? (
+          <InputWithAutoFocus
+            value={currentValue}
+            onChange={e => setCurrentValue(e.target.value)}
+            onBlur={leaveEditMode}
+            onKeyPress={e => (e.key === 'Enter' ? leaveEditMode() : null)}
+          />
+        ) : (
+          displayValue
+        )}
+      </div>
+      <div className={styles.controls}>
+        <FaTrash onClick={onDelete} />
+      </div>
     </div>
   );
 };

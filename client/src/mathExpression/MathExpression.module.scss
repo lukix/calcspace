@@ -1,14 +1,14 @@
 @import '../style/colors.scss';
 
 .expression {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
   font-family: 'Courier New', Courier, monospace;
   line-height: 25px;
-  cursor: pointer;
   padding: 0 2px;
-
-  &:hover {
-    background: transparentize($wine-color, 0.7);
-  }
 
   & > input {
     font-family: 'Courier New', Courier, monospace;
@@ -19,5 +19,31 @@
 
   &.isExpressionEmpty {
     color: transparentize($kinda-black-color, 0.5);
+  }
+
+  &:hover {
+    background: transparentize($wine-color, 0.7);
+    .controls {
+      visibility: visible;
+    }
+  }
+
+  .value {
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .controls {
+    visibility: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin: 0 5px;
+    color: $kinda-black-color;
+
+    svg {
+      cursor: pointer;
+    }
   }
 }
