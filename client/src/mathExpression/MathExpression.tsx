@@ -33,8 +33,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
 
   const isExpressionEmpty = value.trim() === '';
   const displayValue = isExpressionEmpty ? 'Empty expression' : value;
-  const displayValueWithResult =
-    result === null ? displayValue : `${displayValue} = ${result}`;
+  const resultToDisplay = result && ` = ${result}`;
 
   return (
     <div
@@ -51,7 +50,10 @@ const MathExpression: React.FC<MathExpressionProps> = ({
             onKeyPress={e => (e.key === 'Enter' ? leaveEditMode() : null)}
           />
         ) : (
-          displayValueWithResult
+          <>
+            <span className={styles.valueText}>{displayValue}</span>
+            <span className={styles.resultText}>{resultToDisplay}</span>
+          </>
         )}
       </div>
       <div className={styles.controls}>
