@@ -7,7 +7,12 @@ export const ACTION_TYPES = {
   DELETE_EXPRESSION: 'DELETE_EXPRESSION',
 };
 
-const emptyExpression = { value: '', result: null, error: null };
+const emptyExpression = {
+  value: '',
+  result: null,
+  error: null,
+  showResult: false,
+};
 
 export const initialState = {
   expressions: [emptyExpression],

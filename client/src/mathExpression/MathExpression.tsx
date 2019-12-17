@@ -8,6 +8,7 @@ interface MathExpressionProps {
   value: string;
   result?: number;
   error?: { message: string };
+  showResult: boolean;
   onValueChange: (value: string) => void;
   onDelete: () => void;
 }
@@ -16,6 +17,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
   value,
   result,
   error,
+  showResult,
   onValueChange,
   onDelete,
 }) => {
@@ -33,7 +35,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
 
   const isExpressionEmpty = value.trim() === '';
   const displayValue = isExpressionEmpty ? 'Empty expression' : value;
-  const resultToDisplay = result && ` = ${result}`;
+  const resultToDisplay = showResult && result && ` = ${result}`;
 
   return (
     <div

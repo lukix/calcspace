@@ -4,7 +4,7 @@ describe('evaluateExpressionsList', () => {
   it('should evaluate expressions when given simple list', () => {
     // given
     const expressionsList = [
-      { value: 'x = 5', result: null, error: null },
+      { value: 'x = 2 + 3', result: null, error: null },
       { value: 'y = x + 2', result: null, error: null },
     ];
 
@@ -13,8 +13,21 @@ describe('evaluateExpressionsList', () => {
 
     // then
     expect(evaluatedList).toEqual([
-      { value: 'x = 5', result: 5, error: null },
-      { value: 'y = x + 2', result: 7, error: null },
+      { value: 'x = 2 + 3', result: 5, error: null, showResult: true },
+      { value: 'y = x + 2', result: 7, error: null, showResult: true },
+    ]);
+  });
+
+  it('should set showResult to false when expression is the same as the result', () => {
+    // given
+    const expressionsList = [{ value: 'x = 5', result: null, error: null }];
+
+    // when
+    const evaluatedList = evaluateExpressionsList(expressionsList);
+
+    // then
+    expect(evaluatedList).toEqual([
+      { value: 'x = 5', result: 5, error: null, showResult: false },
     ]);
   });
 

@@ -23,6 +23,7 @@ const NoteCard: React.FC<NoteCardProps> = () => {
           value={expression.value}
           result={expression.result}
           error={expression.error}
+          showResult={expression.showResult}
           onValueChange={newValue => updateExpression(index, newValue)}
           onDelete={() => deleteExpression(index)}
         />

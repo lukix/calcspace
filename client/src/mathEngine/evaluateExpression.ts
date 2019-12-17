@@ -5,9 +5,13 @@ const evaluateExpression = (
   expressionString: string,
   values: { [key: string]: number }
 ) => {
-  const { symbol, parsedExpression, valid, error } = parseExpression(
-    expressionString
-  );
+  const {
+    symbol,
+    expression,
+    parsedExpression,
+    valid,
+    error,
+  } = parseExpression(expressionString);
 
   if (!valid) {
     return {
@@ -17,6 +21,7 @@ const evaluateExpression = (
         message: `Invalid expression: ${error}`,
       },
       symbol,
+      expression,
     };
   }
 
@@ -26,12 +31,14 @@ const evaluateExpression = (
       result,
       error: null,
       symbol,
+      expression,
     };
   } catch (e) {
     return {
       result: null,
       error: { type: ERROR_TYPES.UNDEFINED_VARIABLE, message: `${e}` },
       symbol,
+      expression,
     };
   }
 };

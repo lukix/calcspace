@@ -16,7 +16,7 @@ describe('noteCardState reducer', () => {
 
     // then
     expect(newState).toEqual({
-      expressions: [{ value: '5', result: 5, error: null }],
+      expressions: [{ value: '5', result: 5, error: null, showResult: false }],
     });
   });
 
@@ -35,12 +35,12 @@ describe('noteCardState reducer', () => {
     const newState = reducer(initialState, addAction);
 
     // then
-    expect(newState.expressions[0]).toEqual({
+    expect(newState.expressions[0]).toMatchObject({
       value: 'x = 5',
       result: 5,
       error: null,
     });
-    expect(newState.expressions[1]).toEqual({
+    expect(newState.expressions[1]).toMatchObject({
       value: 'y = x * 2',
       result: 10,
       error: null,
