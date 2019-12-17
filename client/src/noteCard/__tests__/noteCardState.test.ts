@@ -1,6 +1,4 @@
-import { reducer, getActions } from '../noteCardState';
-
-const dispatch = x => x;
+import { reducer, actions } from '../noteCardState';
 
 describe('noteCardState reducer', () => {
   it('should update state after update action', () => {
@@ -8,7 +6,7 @@ describe('noteCardState reducer', () => {
     const initialState = {
       expressions: [{ value: '', result: null, error: null }],
     };
-    const { updateExpression } = getActions(dispatch);
+    const { updateExpression } = actions;
     const index = 0;
     const newValue = '5';
     const updateAction = updateExpression(index, newValue);
@@ -30,7 +28,7 @@ describe('noteCardState reducer', () => {
         { value: 'y = x * 2', result: null, error: null },
       ],
     };
-    const { addNewExpression } = getActions(dispatch);
+    const { addNewExpression } = actions;
     const addAction = addNewExpression();
 
     // when

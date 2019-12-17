@@ -1,6 +1,9 @@
-const createDispatchBinder = (actionCreators: {
-  [key: string]: Function;
-}) => dispatch =>
+const bindDispatch = (
+  actionCreators: {
+    [key: string]: Function;
+  },
+  dispatch
+) =>
   Object.entries(actionCreators).reduce(
     (acc: { [key: string]: Function }, [actionKeyName, actionCreator]) => ({
       ...acc,
@@ -9,4 +12,4 @@ const createDispatchBinder = (actionCreators: {
     {}
   );
 
-export default createDispatchBinder;
+export default bindDispatch;
