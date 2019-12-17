@@ -30,7 +30,7 @@ const evaluateExpression = (
   } catch (e) {
     return {
       result: null,
-      error: { type: ERROR_TYPES.UNDEFINED_VARIABLE, message: e },
+      error: { type: ERROR_TYPES.UNDEFINED_VARIABLE, message: `${e}` },
       symbol,
     };
   }

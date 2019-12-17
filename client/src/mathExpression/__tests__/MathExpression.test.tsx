@@ -19,7 +19,7 @@ describe('MathExpression component', () => {
     );
 
     // then
-    expect(getByText(expression)).not.toEqual(null);
+    expect(getByText(expression, { exact: false })).not.toEqual(null);
   });
 
   it('should display placeholder message when given empty expression', () => {
@@ -33,7 +33,7 @@ describe('MathExpression component', () => {
     );
 
     // then
-    expect(getByText(expectedPlaceholder)).not.toEqual(null);
+    expect(getByText(expectedPlaceholder, { exact: false })).not.toEqual(null);
   });
 
   it('should call a callback when exiting edit mode', () => {
@@ -50,7 +50,7 @@ describe('MathExpression component', () => {
     );
 
     // when
-    fireEvent.click(getByText(oldExpression));
+    fireEvent.click(getByText(oldExpression, { exact: false }));
     const input = container.querySelector('input');
     if (!input) {
       throw new Error('Input not found');

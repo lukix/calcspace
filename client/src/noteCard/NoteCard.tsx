@@ -18,7 +18,9 @@ const NoteCard: React.FC<NoteCardProps> = () => {
       {expressions.map((expression, index) => (
         <MathExpression
           key={index}
-          value={expression}
+          value={expression.value}
+          result={expression.result}
+          error={expression.error}
           onValueChange={newValue => updateExpression(index, newValue)}
           onDelete={() => deleteExpression(index)}
         />

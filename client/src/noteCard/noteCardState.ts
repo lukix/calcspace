@@ -1,5 +1,6 @@
 import { createReducer } from '../shared/reduxHelpers';
 import createDispatchBinder from '../shared/createDispatchBinder';
+import evaluateExpression from '../mathEngine/evaluateExpression';
 
 export const ACTION_TYPES = {
   ADD_EXPRESSION: 'ADD_EXPRESSION',
@@ -7,27 +8,47 @@ export const ACTION_TYPES = {
   DELETE_EXPRESSION: 'DELETE_EXPRESSION',
 };
 
-export const initialState = {
-  expressions: [''],
+const emptyExpression = { value: '', result: null, error: null };
+
+const evaluateExpressions = expressions => {
+  const initial = { values: {}, expressions: [] };
+  const { expressions: evaluatedExpressions } = expressions.reduce(
+    (acc, expression) => {
+      const { result, error, symbol } = evaluateExpression(
+        expression.value,
+        acc.values
+      );
+      return {
+        values: symbol ? { ...acc.values, [symbol]: result } : acc.values,
+        expressions: [...acc.expressions, { ...expression, result, error }],
+      };
+    },
+    initial
+  );
+  return evaluatedExpressions;
 };
 
-export const reducer = createReducer({
+export const initialState = {
+  expressions: [emptyExpression],
+};
+
+const expressionsReducer = createReducer({
   actionHandlers: {
-    [ACTION_TYPES.ADD_EXPRESSION]: state => ({
-      ...state,
-      expressions: [...state.expressions, ''],
-    }),
-    [ACTION_TYPES.UPDATE_EXPRESSION]: (state, { index, newValue }) => ({
-      ...state,
-      expressions: state.expressions.map((expression, i) =>
-        i === index ? newValue : expression
+    [ACTION_TYPES.ADD_EXPRESSION]: state => [...state, emptyExpression],
+    [ACTION_TYPES.UPDATE_EXPRESSION]: (state, { index, newValue }) =>
+      state.map((expression, i) =>
+        i === index ? { ...expression, value: newValue } : expression
       ),
-    }),
-    [ACTION_TYPES.DELETE_EXPRESSION]: (state, { index }) => ({
-      ...state,
-      expressions: state.expressions.filter((expression, i) => i !== index),
-    }),
+    [ACTION_TYPES.DELETE_EXPRESSION]: (state, { index }) =>
+      state.filter((expression, i) => i !== index),
   },
+});
+
+export const reducer = (state, action) => ({
+  ...state,
+  expressions: evaluateExpressions(
+    expressionsReducer(state.expressions, action)
+  ),
 });
 
 export const getActions = createDispatchBinder({
