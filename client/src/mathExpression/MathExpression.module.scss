@@ -10,11 +10,12 @@
   line-height: 25px;
   padding: 0 2px;
 
-  & > input {
+  input {
     font-family: 'Courier New', Courier, monospace;
     border: 0px;
     font-size: 1rem;
     height: 22px;
+    background: transparent;
   }
 
   &.isExpressionEmpty {
