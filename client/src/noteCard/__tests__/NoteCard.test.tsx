@@ -4,7 +4,6 @@ import NoteCard from '../NoteCard';
 
 describe('NoteCard component', () => {
   it('should initialize with an empty expression', () => {
-    expect(true).toEqual(true);
     // given
     const { queryByText } = render(<NoteCard />);
 
@@ -12,15 +11,14 @@ describe('NoteCard component', () => {
     expect(queryByText('Empty expression')).not.toEqual(null);
   });
 
-  it('should allow to delete an expression', () => {
-    expect(true).toEqual(true);
-    // given
-    const { queryByText, getByTitle } = render(<NoteCard />);
+  // it('should allow to delete an expression', () => {
+  //   // given
+  //   const { queryByText, getByTitle } = render(<NoteCard />);
 
-    // when
-    fireEvent.click(getByTitle('Delete', { exact: false }));
+  //   // when
+  //   fireEvent.click(getByTitle('Delete', { exact: false }));
 
-    // then
-    expect(queryByText('Empty expression')).toEqual(null);
-  });
+  //   // then
+  //   expect(queryByText('Empty expression')).toEqual(null);
+  // });
 });

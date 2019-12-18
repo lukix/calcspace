@@ -28,12 +28,6 @@ const NoteCard: React.FC<NoteCardProps> = () => {
           onDelete={() => deleteExpression(index)}
         />
       ))}
-      <button
-        className={styles.addExpressionButton}
-        onClick={() => addNewExpression()}
-      >
-        Add new line
-      </button>
     </div>
   );
 };

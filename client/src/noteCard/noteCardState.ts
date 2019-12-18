@@ -1,7 +1,8 @@
+import { pipe, dropLastWhile } from 'ramda';
 import { createReducer } from '../shared/reduxHelpers';
 import evaluateExpressionsList from './evaluateExpressionsList';
 
-export const ACTION_TYPES = {
+const ACTION_TYPES = {
   ADD_EXPRESSION: 'ADD_EXPRESSION',
   UPDATE_EXPRESSION: 'UPDATE_EXPRESSION',
   DELETE_EXPRESSION: 'DELETE_EXPRESSION',
@@ -30,11 +31,25 @@ const expressionsReducer = createReducer({
   },
 });
 
+const isExpressionEmpty = expression => expression.value === '';
+
+const trimEmptyExpressions = dropLastWhile(isExpressionEmpty);
+
+const addEmptyExpression = expressions => {
+  const lastExpression = expressions[expressions.length - 1];
+  return lastExpression && isExpressionEmpty(lastExpression)
+    ? expressions
+    : [...expressions, emptyExpression];
+};
+
 export const reducer = (state, action) => ({
   ...state,
-  expressions: evaluateExpressionsList(
-    expressionsReducer(state.expressions, action)
-  ),
+  expressions: pipe(
+    expressionsReducer,
+    evaluateExpressionsList,
+    trimEmptyExpressions,
+    addEmptyExpression
+  )(state.expressions, action),
 });
 
 export const actions = {

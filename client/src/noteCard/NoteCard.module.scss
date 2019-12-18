@@ -8,18 +8,3 @@
   padding: 20px;
   min-height: calc(100vh - 200px);
 }
-
-.addExpressionButton {
-  margin-top: 10px;
-  background: $wine-color;
-  color: $light-white-color;
-  border: 0px none;
-  border-radius: 6px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:active {
-    background: $eastern-blue-color;
-  }
-}
