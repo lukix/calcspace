@@ -9,7 +9,7 @@ const App: React.FC<AppProps> = () => {
     <div>
       <div className={styles.headerBar}>Math Notes</div>
       <div className={styles.contentContainer}>
-        <NoteCard />
+        <NoteCard initialList={[{ value: '' }]} />
       </div>
     </div>
   );

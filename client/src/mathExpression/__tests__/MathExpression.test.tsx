@@ -15,7 +15,7 @@ describe('MathExpression component', () => {
 
     // when
     const { getByText } = render(
-      <MathExpression {...defaultProps} value={expression} />
+      <MathExpression {...defaultProps} value={expression} showResult={false} />
     );
 
     // then
@@ -29,7 +29,11 @@ describe('MathExpression component', () => {
 
     // when
     const { getByText } = render(
-      <MathExpression {...defaultProps} value={emptyExpression} />
+      <MathExpression
+        {...defaultProps}
+        value={emptyExpression}
+        showResult={false}
+      />
     );
 
     // then
@@ -45,6 +49,7 @@ describe('MathExpression component', () => {
       <MathExpression
         {...defaultProps}
         value={oldExpression}
+        showResult={false}
         onValueChange={onValueChange}
       />
     );

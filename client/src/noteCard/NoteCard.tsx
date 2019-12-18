@@ -1,16 +1,18 @@
 import React, { useReducer } from 'react';
 import bindDispatch from '../shared/bindDispatch';
 import MathExpression from '../mathExpression/MathExpression';
-import { reducer, initialState, actions } from './noteCardState';
+import { reducer, getInitialState, actions } from './noteCardState';
 import styles from './NoteCard.module.scss';
 
-interface NoteCardProps {}
+interface NoteCardProps {
+  initialList: Array<{ value: string }>;
+}
 
-const NoteCard: React.FC<NoteCardProps> = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const NoteCard: React.FC<NoteCardProps> = ({ initialList }) => {
+  const [state, dispatch] = useReducer(reducer, getInitialState(initialList));
   const { expressions } = state;
 
-  const { addNewExpression, updateExpression, deleteExpression } = bindDispatch(
+  const { updateExpression, deleteExpression } = bindDispatch(
     actions,
     dispatch
   );

@@ -39,7 +39,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
 
   return (
     <div
-      className={classNames('MathExpression', styles.expression, {
+      className={classNames('math-expression', styles.expression, {
         [styles.isExpressionEmpty]: isExpressionEmpty,
       })}
     >
@@ -60,7 +60,11 @@ const MathExpression: React.FC<MathExpressionProps> = ({
       </div>
       <div className={styles.controls}>
         {error && <FaExclamationCircle title={error.message} />}
-        <FaTrash onClick={onDelete} title="Delete expression" />
+        <FaTrash
+          onClick={onDelete}
+          title="Delete expression"
+          className="delete-expression-btn"
+        />
       </div>
     </div>
   );

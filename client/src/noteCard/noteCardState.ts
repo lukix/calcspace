@@ -15,9 +15,9 @@ const emptyExpression = {
   showResult: false,
 };
 
-export const initialState = {
-  expressions: [emptyExpression],
-};
+export const getInitialState = initialList => ({
+  expressions: initialList,
+});
 
 const expressionsReducer = createReducer({
   actionHandlers: {
