@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { FaTrash, FaExclamationCircle } from 'react-icons/fa';
-import InputWithAutoFocus from './InputWithAutoFocus';
+import ExpressionInput from './ExpressionInput';
 import styles from './MathExpression.module.scss';
 
 interface MathExpressionProps {
@@ -45,7 +45,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
     >
       <div className={styles.value} onClick={enterEditMode}>
         {isInEditMode ? (
-          <InputWithAutoFocus
+          <ExpressionInput
             value={currentValue}
             onChange={e => setCurrentValue(e.target.value)}
             onBlur={leaveEditMode}

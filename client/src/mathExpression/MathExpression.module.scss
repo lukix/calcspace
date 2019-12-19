@@ -1,21 +1,25 @@
 @import '../style/colors.scss';
 
+$expression-font-family: 'Courier New', Courier, monospace;
+
 .expression {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 
-  font-family: 'Courier New', Courier, monospace;
+  font-family: $expression-font-family;
   line-height: 25px;
   padding: 0 2px;
 
   input {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: $expression-font-family;
     border: 0px;
     font-size: 1rem;
     height: 22px;
     background: transparent;
+    width: 400px;
+    outline: none;
   }
 
   &.isExpressionEmpty {
