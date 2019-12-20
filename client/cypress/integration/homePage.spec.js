@@ -1,21 +1,43 @@
-describe('Home Page', function() {
-  it('should add new expression when clicked add button', () => {
+describe('Home Page', () => {
+  it('should calculate result based on previously defined variables', () => {
     cy.visit('/');
-
-    cy.get('.math-expression').should('have.length', 1);
-    cy.contains('Add new line').click();
-    cy.get('.math-expression').should('have.length', 2);
-  });
-
-  it('should edit expression', () => {
-    cy.visit('/');
-
-    const expressionText = 'E = m*v^2 / 2';
 
     cy.contains('Empty expression').click();
     cy.focused()
-      .type(expressionText)
+      .type('x = 5')
       .blur();
-    cy.contains(expressionText);
+
+    cy.contains('Empty expression').click();
+    cy.focused()
+      .type('x + 3')
+      .blur();
+
+    cy.contains('= 8');
+  });
+
+  it('should move text on the right of the cursor to the new expression below', () => {
+    cy.visit('/');
+
+    cy.contains('Empty expression').click();
+    cy.focused()
+      .type('x = 1 + 2')
+      .blur();
+
+    cy.contains('Empty expression').click();
+    cy.focused()
+      .type('y = 3')
+      .blur();
+
+    cy.get('.math-expression')
+      .eq(0)
+      .click();
+
+    cy.focused().type(
+      '{end}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{enter}'
+    );
+    cy.focused().contains('+ 2');
+    cy.focused().blur();
+
+    cy.get('.math-expression').should('have.length', 4);
   });
 });

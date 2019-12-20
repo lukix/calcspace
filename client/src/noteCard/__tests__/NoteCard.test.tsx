@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  render,
-  fireEvent,
-  getByTitle as getByTitleFrom,
-} from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import NoteCard from '../NoteCard';
 
 describe('NoteCard component', () => {

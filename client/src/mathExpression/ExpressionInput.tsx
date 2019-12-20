@@ -3,21 +3,24 @@ import React, { useEffect, useRef } from 'react';
 interface ExpressionInputProps {
   onEnterKeyDown?: (textLeft: string, textRight: string) => void;
   onEdgeBackspaceKeyDown?: (text: string) => void;
+  cursorPosition: number | null;
   [propName: string]: any;
 }
 
 const ExpressionInput: React.FC<ExpressionInputProps> = ({
   onEnterKeyDown = () => {},
   onEdgeBackspaceKeyDown = () => {},
+  cursorPosition,
   ...inputProps
 }) => {
   const inputEl = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (inputEl.current) {
+    if (inputEl.current && cursorPosition !== null) {
       inputEl.current.focus();
+      inputEl.current.setSelectionRange(cursorPosition, cursorPosition);
     }
-  }, []);
+  }, [cursorPosition]);
 
   const keyDownHandler = event => {
     const callForKey = (key, callback) => {

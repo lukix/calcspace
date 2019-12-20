@@ -11,6 +11,9 @@ interface MathExpressionProps {
   showResult: boolean;
   onValueChange: (value: string) => void;
   onDelete: () => void;
+  onEdgeBackspacePress: (text: string) => void;
+  onEnterPress: (textBeforeCursor: string, textAfterCursor: string) => void;
+  cursorPosition: number | null;
 }
 
 const MathExpression: React.FC<MathExpressionProps> = ({
@@ -20,43 +23,31 @@ const MathExpression: React.FC<MathExpressionProps> = ({
   showResult,
   onValueChange,
   onDelete,
+  onEdgeBackspacePress,
+  onEnterPress,
+  cursorPosition,
 }) => {
-  const [currentValue, setCurrentValue] = useState(value);
-  useEffect(() => {
-    setCurrentValue(value);
-  }, [value]);
-
-  const [isInEditMode, setIsInEditMode] = useState(false);
-  const enterEditMode = () => setIsInEditMode(true);
-  const leaveEditMode = () => {
-    onValueChange(currentValue);
-    setIsInEditMode(false);
-  };
-
   const isExpressionEmpty = value.trim() === '';
-  const displayValue = isExpressionEmpty ? 'Empty expression' : value;
-  const resultToDisplay = showResult && result && ` = ${result}`;
+  const resultToDisplay = showResult && result !== null && ` = ${result}`;
+  const displayValue = isExpressionEmpty
+    ? 'Empty expression'
+    : `${value}${resultToDisplay || ''}`;
 
   return (
-    <div
-      className={classNames('math-expression', styles.expression, {
-        [styles.isExpressionEmpty]: isExpressionEmpty,
-      })}
-    >
-      <div className={styles.value} onClick={enterEditMode}>
-        {isInEditMode ? (
+    <div className={`math-expression ${styles.expression}`}>
+      <div className={styles.value}>
+        <div className={styles.valueInput}>
           <ExpressionInput
-            value={currentValue}
-            onChange={e => setCurrentValue(e.target.value)}
-            onBlur={leaveEditMode}
-            onKeyPress={e => (e.key === 'Enter' ? leaveEditMode() : null)}
+            value={value}
+            onChange={e => onValueChange(e.target.value)}
+            onEdgeBackspaceKeyDown={onEdgeBackspacePress}
+            onEnterKeyDown={onEnterPress}
+            cursorPosition={cursorPosition}
           />
-        ) : (
-          <>
-            <span className={styles.valueText}>{displayValue}</span>
-            <span className={styles.resultText}>{resultToDisplay}</span>
-          </>
-        )}
+        </div>
+        <div className={styles.valueDisplay}>
+          <span className={styles.valueText}>{displayValue}</span>
+        </div>
       </div>
       <div className={styles.controls}>
         {error && <FaExclamationCircle title={error.message} />}

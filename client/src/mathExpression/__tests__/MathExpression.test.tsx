@@ -39,32 +39,4 @@ describe('MathExpression component', () => {
     // then
     expect(getByText(expectedPlaceholder, { exact: false })).not.toEqual(null);
   });
-
-  it('should call a callback when exiting edit mode', () => {
-    // given
-    const oldExpression = 'E = m*c^2';
-    const newExpresison = 'F = m * a';
-    const onValueChange = jest.fn();
-    const { getByText, container } = render(
-      <MathExpression
-        {...defaultProps}
-        value={oldExpression}
-        showResult={false}
-        onValueChange={onValueChange}
-      />
-    );
-
-    // when
-    fireEvent.click(getByText(oldExpression, { exact: false }));
-    const input = container.querySelector('input');
-    if (!input) {
-      throw new Error('Input not found');
-    }
-    userEvent.type(input, newExpresison);
-    fireEvent.blur(input);
-
-    // then
-    expect(onValueChange).toHaveBeenCalledTimes(1);
-    expect(onValueChange).toHaveBeenCalledWith(newExpresison);
-  });
 });

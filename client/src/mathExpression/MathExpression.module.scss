@@ -22,10 +22,6 @@ $expression-font-family: 'Courier New', Courier, monospace;
     outline: none;
   }
 
-  &.isExpressionEmpty {
-    color: transparentize($kinda-black-color, 0.5);
-  }
-
   &:hover {
     background: transparentize($wine-color, 0.7);
     .controls {
@@ -34,11 +30,25 @@ $expression-font-family: 'Courier New', Courier, monospace;
   }
 
   .value {
-    cursor: pointer;
     flex: 1;
+    position: relative;
+
+    height: 25px;
+
+    & > div {
+      position: absolute;
+    }
+
+    .valueInput {
+      z-index: 2;
+    }
+
+    .valueDisplay {
+      z-index: 1;
+    }
   }
 
-  .resultText {
+  .valueText {
     opacity: 0.5;
   }
 
