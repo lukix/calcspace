@@ -1,16 +1,13 @@
 describe('Home Page', () => {
-  it('should calculate result based on previously defined variables', () => {
+  it('should calculate result based on previously defined variable', () => {
     cy.visit('/');
 
-    cy.contains('Empty expression').click();
+    cy.get('.math-expression input').click();
     cy.focused()
       .type('x = 5')
-      .blur();
+      .type('{enter}');
 
-    cy.contains('Empty expression').click();
-    cy.focused()
-      .type('x + 3')
-      .blur();
+    cy.focused().type('x + 3');
 
     cy.contains('= 8');
   });
@@ -18,26 +15,16 @@ describe('Home Page', () => {
   it('should move text on the right of the cursor to the new expression below', () => {
     cy.visit('/');
 
-    cy.contains('Empty expression').click();
+    cy.get('.math-expression input').click();
     cy.focused()
       .type('x = 1 + 2')
-      .blur();
+      .type('{leftarrow}{leftarrow}{leftarrow}{leftarrow}')
+      .type('{enter}');
 
-    cy.contains('Empty expression').click();
-    cy.focused()
-      .type('y = 3')
-      .blur();
+    cy.focused().type('x');
 
-    cy.get('.math-expression')
-      .eq(0)
-      .click();
+    cy.contains(' = 3');
 
-    cy.focused().type(
-      '{end}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{enter}'
-    );
-    cy.focused().contains('+ 2');
-    cy.focused().blur();
-
-    cy.get('.math-expression').should('have.length', 4);
+    cy.get('.math-expression').should('have.length', 3);
   });
 });

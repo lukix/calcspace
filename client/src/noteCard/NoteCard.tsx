@@ -18,7 +18,6 @@ const NoteCard: React.FC<NoteCardProps> = ({ initialList }) => {
 
   const {
     updateExpression,
-    deleteExpression,
     backspaceDeleteExpression,
     enterAddExpression,
   } = bindDispatch(actions, dispatch);
@@ -62,7 +61,6 @@ const NoteCard: React.FC<NoteCardProps> = ({ initialList }) => {
           error={expression.error}
           showResult={expression.showResult}
           onValueChange={newValue => updateExpression(index, newValue)}
-          onDelete={() => deleteExpression(index)}
           onEdgeBackspacePress={text => onEdgeBackspacePress(index, text)}
           onEnterPress={(textLeft, textRight) =>
             onEnterPress(index, textLeft, textRight)

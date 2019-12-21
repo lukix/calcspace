@@ -3,9 +3,7 @@ import { createReducer } from '../shared/reduxHelpers';
 import evaluateExpressionsList from './evaluateExpressionsList';
 
 const ACTION_TYPES = {
-  ADD_EXPRESSION: 'ADD_EXPRESSION',
   UPDATE_EXPRESSION: 'UPDATE_EXPRESSION',
-  DELETE_EXPRESSION: 'DELETE_EXPRESSION',
   BACKSPACE_DELETE: 'BACKSPACE_DELETE',
   ENTER_ADD: 'ENTER_ADD',
 };
@@ -23,13 +21,10 @@ export const getInitialState = initialList => ({
 
 const expressionsReducer = createReducer({
   actionHandlers: {
-    [ACTION_TYPES.ADD_EXPRESSION]: state => [...state, emptyExpression],
     [ACTION_TYPES.UPDATE_EXPRESSION]: (state, { index, newValue }) =>
       state.map((expression, i) =>
         i === index ? { ...expression, value: newValue } : expression
       ),
-    [ACTION_TYPES.DELETE_EXPRESSION]: (state, { index }) =>
-      state.filter((expression, i) => i !== index),
     [ACTION_TYPES.BACKSPACE_DELETE]: (state, { index, text }) =>
       state
         .map((expression, i) =>
@@ -69,14 +64,9 @@ export const reducer = (state, action) => ({
 });
 
 export const actions = {
-  addNewExpression: () => ({ type: ACTION_TYPES.ADD_EXPRESSION }),
   updateExpression: (index, newValue) => ({
     type: ACTION_TYPES.UPDATE_EXPRESSION,
     payload: { index, newValue },
-  }),
-  deleteExpression: index => ({
-    type: ACTION_TYPES.DELETE_EXPRESSION,
-    payload: { index },
   }),
   backspaceDeleteExpression: (index, text) => ({
     type: ACTION_TYPES.BACKSPACE_DELETE,

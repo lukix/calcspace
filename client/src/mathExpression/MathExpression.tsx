@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaTrash, FaExclamationCircle } from 'react-icons/fa';
+import { FaExclamationCircle } from 'react-icons/fa';
 import ExpressionInput from './ExpressionInput';
 import styles from './MathExpression.module.scss';
 
@@ -9,7 +9,6 @@ interface MathExpressionProps {
   error?: { message: string };
   showResult: boolean;
   onValueChange: (value: string) => void;
-  onDelete: () => void;
   onEdgeBackspacePress: (text: string) => void;
   onEnterPress: (textBeforeCursor: string, textAfterCursor: string) => void;
   onDownArrowPress: (cursonPosition: number) => void;
@@ -23,7 +22,6 @@ const MathExpression: React.FC<MathExpressionProps> = ({
   error,
   showResult,
   onValueChange,
-  onDelete,
   onEdgeBackspacePress,
   onEnterPress,
   onDownArrowPress,
@@ -56,11 +54,6 @@ const MathExpression: React.FC<MathExpressionProps> = ({
       </div>
       <div className={styles.controls}>
         {error && <FaExclamationCircle title={error.message} />}
-        <FaTrash
-          onClick={onDelete}
-          title="Delete expression"
-          className="delete-expression-btn"
-        />
       </div>
     </div>
   );

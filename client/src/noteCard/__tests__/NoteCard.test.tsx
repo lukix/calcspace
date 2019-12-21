@@ -14,27 +14,4 @@ describe('NoteCard component', () => {
     expect(queryByText('Empty expression', { exact: false })).not.toEqual(null);
     expect(queryByText('x = 5', { exact: false })).not.toEqual(null);
   });
-
-  it('should allow to delete an expression', () => {
-    // given
-    const initialList = [{ value: 'expression to delete' }, { value: '' }];
-    const { getByText, queryByText, container } = render(
-      <NoteCard initialList={initialList} />
-    );
-    const expressionToDelete = container.querySelectorAll(
-      '.math-expression'
-    )[0];
-    const deleteButton = expressionToDelete.querySelector(
-      '.delete-expression-btn'
-    );
-    if (!deleteButton) {
-      throw 'deleteButton not found';
-    }
-
-    // when
-    fireEvent.click(deleteButton);
-
-    // then
-    expect(queryByText('expression to delete', { exact: false })).toEqual(null);
-  });
 });

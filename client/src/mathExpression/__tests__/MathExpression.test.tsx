@@ -5,7 +5,6 @@ import MathExpression from '../MathExpression';
 
 const defaultProps = {
   onValueChange: () => {},
-  onDelete: () => {},
 };
 
 describe('MathExpression component', () => {
