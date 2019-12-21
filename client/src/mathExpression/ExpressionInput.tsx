@@ -3,6 +3,8 @@ import React, { useEffect, useRef } from 'react';
 interface ExpressionInputProps {
   onEnterKeyDown?: (textLeft: string, textRight: string) => void;
   onEdgeBackspaceKeyDown?: (text: string) => void;
+  onDownArrowKeyDown?: (cursonPosition: number) => void;
+  onUpArrowKeyDown?: (cursonPosition: number) => void;
   cursorPosition: number | null;
   [propName: string]: any;
 }
@@ -10,6 +12,8 @@ interface ExpressionInputProps {
 const ExpressionInput: React.FC<ExpressionInputProps> = ({
   onEnterKeyDown = () => {},
   onEdgeBackspaceKeyDown = () => {},
+  onDownArrowKeyDown = () => {},
+  onUpArrowKeyDown = () => {},
   cursorPosition,
   ...inputProps
 }) => {
@@ -44,6 +48,13 @@ const ExpressionInput: React.FC<ExpressionInputProps> = ({
         onEdgeBackspaceKeyDown(value);
       }
     });
+    callForKey('ArrowDown', (value, cursorPosition) => {
+      onDownArrowKeyDown(cursorPosition);
+    });
+    callForKey('ArrowUp', (value, cursorPosition) => {
+      onUpArrowKeyDown(cursorPosition);
+    });
+
     if (inputProps.onKeyDown) {
       inputProps.onKeyDown(event);
     }

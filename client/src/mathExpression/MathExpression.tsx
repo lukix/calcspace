@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import classNames from 'classnames';
+import React from 'react';
 import { FaTrash, FaExclamationCircle } from 'react-icons/fa';
 import ExpressionInput from './ExpressionInput';
 import styles from './MathExpression.module.scss';
@@ -13,6 +12,8 @@ interface MathExpressionProps {
   onDelete: () => void;
   onEdgeBackspacePress: (text: string) => void;
   onEnterPress: (textBeforeCursor: string, textAfterCursor: string) => void;
+  onDownArrowPress: (cursonPosition: number) => void;
+  onUpArrowPress: (cursonPosition: number) => void;
   cursorPosition: number | null;
 }
 
@@ -25,6 +26,8 @@ const MathExpression: React.FC<MathExpressionProps> = ({
   onDelete,
   onEdgeBackspacePress,
   onEnterPress,
+  onDownArrowPress,
+  onUpArrowPress,
   cursorPosition,
 }) => {
   const isExpressionEmpty = value.trim() === '';
@@ -42,6 +45,8 @@ const MathExpression: React.FC<MathExpressionProps> = ({
             onChange={e => onValueChange(e.target.value)}
             onEdgeBackspaceKeyDown={onEdgeBackspacePress}
             onEnterKeyDown={onEnterPress}
+            onDownArrowKeyDown={onDownArrowPress}
+            onUpArrowKeyDown={onUpArrowPress}
             cursorPosition={cursorPosition}
           />
         </div>

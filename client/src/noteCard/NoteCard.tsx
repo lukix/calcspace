@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useState } from 'react';
 import bindDispatch from '../shared/bindDispatch';
 import MathExpression from '../mathExpression/MathExpression';
 import { reducer, getInitialState, actions } from './noteCardState';
@@ -42,6 +42,16 @@ const NoteCard: React.FC<NoteCardProps> = ({ initialList }) => {
     enterAddExpression(index, textLeft, textRight);
   };
 
+  const moveCursorTo = (index, cursorPosition) => {
+    if (index < 0 || index >= expressions.length) {
+      return;
+    }
+    setCursorPositionInfo({
+      expressionIndex: index,
+      position: Math.min(expressions[index].value.length, cursorPosition),
+    });
+  };
+
   return (
     <div className={styles.card}>
       {expressions.map((expression, index) => (
@@ -56,6 +66,12 @@ const NoteCard: React.FC<NoteCardProps> = ({ initialList }) => {
           onEdgeBackspacePress={text => onEdgeBackspacePress(index, text)}
           onEnterPress={(textLeft, textRight) =>
             onEnterPress(index, textLeft, textRight)
+          }
+          onDownArrowPress={cursorPosition =>
+            moveCursorTo(index + 1, cursorPosition)
+          }
+          onUpArrowPress={cursorPosition =>
+            moveCursorTo(index - 1, cursorPosition)
           }
           cursorPosition={
             cursorPositionInfo && cursorPositionInfo.expressionIndex === index
