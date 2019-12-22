@@ -7,8 +7,19 @@
   padding: 0 15px;
   margin-bottom: 50px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   font-size: 2rem;
+}
+
+.icons {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.addNewCardIcon {
+  cursor: pointer;
 }
 
 .contentContainer {
