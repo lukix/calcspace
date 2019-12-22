@@ -46,6 +46,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
             onDownArrowKeyDown={onDownArrowPress}
             onUpArrowKeyDown={onUpArrowPress}
             cursorPosition={cursorPosition}
+            maxLength={80}
           />
         </div>
         <div className={styles.valueDisplay}>

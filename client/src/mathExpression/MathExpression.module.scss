@@ -18,7 +18,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
     font-size: 1rem;
     height: 22px;
     background: transparent;
-    width: 400px;
+    width: 100%;
     outline: none;
   }
 
@@ -41,6 +41,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
 
     .valueInput {
       z-index: 2;
+      width: 100%;
     }
 
     .valueDisplay {
