@@ -1,26 +1,29 @@
 import React, { useReducer, useState } from 'react';
-import bindDispatch from '../shared/bindDispatch';
 import MathExpression from '../mathExpression/MathExpression';
-import { reducer, getInitialState, actions } from './noteCardState';
 import styles from './NoteCard.module.scss';
 
 interface NoteCardProps {
-  initialList: Array<{ value: string }>;
+  expressions: Array<{
+    value: string;
+    result?: number;
+    error?: { message: string };
+    showResult: boolean;
+  }>;
+  updateExpression: Function; // (index: number, newValue: string) => void;
+  backspaceDeleteExpression: Function; // (index: number, text: string) => void;
+  enterAddExpression: Function; // (index: number, textLeft: string, textRight: string) => void;
 }
 
-const NoteCard: React.FC<NoteCardProps> = ({ initialList }) => {
+const NoteCard: React.FC<NoteCardProps> = ({
+  expressions,
+  updateExpression,
+  backspaceDeleteExpression,
+  enterAddExpression,
+}) => {
   const [cursorPositionInfo, setCursorPositionInfo] = useState<{
     expressionIndex: number;
     position: number;
   } | null>(null);
-  const [state, dispatch] = useReducer(reducer, getInitialState(initialList));
-  const { expressions } = state;
-
-  const {
-    updateExpression,
-    backspaceDeleteExpression,
-    enterAddExpression,
-  } = bindDispatch(actions, dispatch);
 
   const onEdgeBackspacePress = (index, text) => {
     if (index === 0) {

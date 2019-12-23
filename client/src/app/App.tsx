@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { FaPlus } from 'react-icons/fa';
+import bindDispatch from '../shared/bindDispatch';
 import NoteCard from '../noteCard/NoteCard';
+import { reducer, getInitialState, actions } from './state';
 import styles from './App.module.scss';
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
+  const [state, dispatch] = useReducer(reducer, getInitialState());
+  const { expressions } = state;
+
+  const {
+    updateExpression,
+    backspaceDeleteExpression,
+    enterAddExpression,
+  } = bindDispatch(actions, dispatch);
+
   return (
     <div>
       <div className={styles.headerBar}>
@@ -15,7 +26,12 @@ const App: React.FC<AppProps> = () => {
         </div>
       </div>
       <div className={styles.contentContainer}>
-        <NoteCard initialList={[{ value: '' }]} />
+        <NoteCard
+          expressions={expressions}
+          updateExpression={updateExpression}
+          backspaceDeleteExpression={backspaceDeleteExpression}
+          enterAddExpression={enterAddExpression}
+        />
       </div>
     </div>
   );

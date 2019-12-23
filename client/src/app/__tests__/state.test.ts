@@ -1,6 +1,6 @@
-import { reducer, actions } from '../noteCardState';
+import { reducer, actions } from '../state';
 
-describe('noteCardState reducer', () => {
+describe('state reducer', () => {
   it('should update state after update action', () => {
     // given
     const initialState = {
