@@ -1,17 +1,29 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import NoteCard from '../NoteCard';
 
+const defaultProps = {
+  updateExpression: () => {},
+  backspaceDeleteExpression: () => {},
+  enterAddExpression: () => {},
+  deleteCard: () => {},
+};
+
 describe('NoteCard component', () => {
-  it('should initialize with a given list', () => {
+  it('should initialize with a given expressions list', () => {
     // given
-    const initialList = [{ value: '' }, { value: 'x = 5' }];
+    const expressions = [
+      { value: 'x = 4', showResult: false },
+      { value: 'y = 5', showResult: false },
+    ];
 
     // when
-    const { queryByText } = render(<NoteCard initialList={initialList} />);
+    const { queryByText } = render(
+      <NoteCard {...defaultProps} expressions={expressions} />
+    );
 
     // then
-    expect(queryByText('Empty expression', { exact: false })).not.toEqual(null);
-    expect(queryByText('x = 5', { exact: false })).not.toEqual(null);
+    expect(queryByText('x = 4', { exact: false })).not.toEqual(null);
+    expect(queryByText('y = 5', { exact: false })).not.toEqual(null);
   });
 });
