@@ -50,4 +50,16 @@ describe('evaluateExpressionsList', () => {
     expect(evaluatedList[1]).toMatchObject({ value: 'a + 1', result: null });
     expect(typeof evaluatedList[1].error).not.toEqual(null);
   });
+
+  it('should not evaluate expression whose result is a function', () => {
+    // given
+    const expressionsList = [{ value: 'sin', result: null, error: null }];
+
+    // when
+    const evaluatedList = evaluateExpressionsList(expressionsList);
+
+    // then
+    expect(evaluatedList[0]).toMatchObject({ value: 'sin', result: null });
+    expect(typeof evaluatedList[0].error).not.toEqual(null);
+  });
 });
