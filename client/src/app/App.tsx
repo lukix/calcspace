@@ -18,6 +18,7 @@ const App: React.FC<AppProps> = () => {
       updateExpression,
       backspaceDeleteExpression,
       enterAddExpression,
+      deleteCard,
     } = bindDispatch(getCardActions(id), dispatch);
 
     return (
@@ -27,6 +28,7 @@ const App: React.FC<AppProps> = () => {
         updateExpression={updateExpression}
         backspaceDeleteExpression={backspaceDeleteExpression}
         enterAddExpression={enterAddExpression}
+        deleteCard={deleteCard}
       />
     );
   });

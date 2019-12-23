@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaTimesCircle } from 'react-icons/fa';
 import MathExpression from '../mathExpression/MathExpression';
 import styles from './NoteCard.module.scss';
 
@@ -12,6 +13,7 @@ interface NoteCardProps {
   updateExpression: Function; // (index: number, newValue: string) => void;
   backspaceDeleteExpression: Function; // (index: number, text: string) => void;
   enterAddExpression: Function; // (index: number, textLeft: string, textRight: string) => void;
+  deleteCard: Function;
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({
@@ -19,6 +21,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
   updateExpression,
   backspaceDeleteExpression,
   enterAddExpression,
+  deleteCard,
 }) => {
   const [cursorPositionInfo, setCursorPositionInfo] = useState<{
     expressionIndex: number;
@@ -56,31 +59,36 @@ const NoteCard: React.FC<NoteCardProps> = ({
 
   return (
     <div className={styles.card}>
-      {expressions.map((expression, index) => (
-        <MathExpression
-          key={index}
-          value={expression.value}
-          result={expression.result}
-          error={expression.error}
-          showResult={expression.showResult}
-          onValueChange={newValue => updateExpression(index, newValue)}
-          onEdgeBackspacePress={text => onEdgeBackspacePress(index, text)}
-          onEnterPress={(textLeft, textRight) =>
-            onEnterPress(index, textLeft, textRight)
-          }
-          onDownArrowPress={cursorPosition =>
-            moveCursorTo(index + 1, cursorPosition)
-          }
-          onUpArrowPress={cursorPosition =>
-            moveCursorTo(index - 1, cursorPosition)
-          }
-          cursorPosition={
-            cursorPositionInfo && cursorPositionInfo.expressionIndex === index
-              ? cursorPositionInfo.position
-              : null
-          }
-        />
-      ))}
+      <div className={styles.deleteCardButton}>
+        <FaTimesCircle onClick={() => deleteCard()} />
+      </div>
+      <div>
+        {expressions.map((expression, index) => (
+          <MathExpression
+            key={index}
+            value={expression.value}
+            result={expression.result}
+            error={expression.error}
+            showResult={expression.showResult}
+            onValueChange={newValue => updateExpression(index, newValue)}
+            onEdgeBackspacePress={text => onEdgeBackspacePress(index, text)}
+            onEnterPress={(textLeft, textRight) =>
+              onEnterPress(index, textLeft, textRight)
+            }
+            onDownArrowPress={cursorPosition =>
+              moveCursorTo(index + 1, cursorPosition)
+            }
+            onUpArrowPress={cursorPosition =>
+              moveCursorTo(index - 1, cursorPosition)
+            }
+            cursorPosition={
+              cursorPositionInfo && cursorPositionInfo.expressionIndex === index
+                ? cursorPositionInfo.position
+                : null
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 };

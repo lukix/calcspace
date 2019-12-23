@@ -6,6 +6,7 @@ const ACTION_TYPES = {
   BACKSPACE_DELETE_EXPRESSION: 'BACKSPACE_DELETE',
   ENTER_ADD_EXPRESSION: 'ENTER_ADD_EXPRESSION',
   ADD_CARD: 'ADD_CARD',
+  DELETE_CARD: 'DELETE_CARD',
 };
 
 const getRandomId = () => `${Math.round(Math.random() * 1e8)}`;
@@ -78,6 +79,10 @@ export const reducer = createReducer({
       ...state,
       cards: [createEmptyCard(), ...state.cards],
     }),
+    [ACTION_TYPES.DELETE_CARD]: (state, { cardId }) => ({
+      ...state,
+      cards: state.cards.filter(card => card.id !== cardId),
+    }),
   },
 });
 
@@ -94,6 +99,7 @@ export const getCardActions = cardId => ({
     type: ACTION_TYPES.ENTER_ADD_EXPRESSION,
     payload: { index, textLeft, textRight, cardId },
   }),
+  deleteCard: () => ({ type: ACTION_TYPES.DELETE_CARD, payload: { cardId } }),
 });
 
 export const actions = {
