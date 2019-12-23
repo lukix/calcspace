@@ -2,37 +2,48 @@ import React, { useReducer } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import bindDispatch from '../shared/bindDispatch';
 import NoteCard from '../noteCard/NoteCard';
-import { reducer, getInitialState, actions } from './state';
+import { reducer, getInitialState, getCardActions, actions } from './state';
 import styles from './App.module.scss';
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
   const [state, dispatch] = useReducer(reducer, getInitialState());
-  const { expressions } = state;
+  const { cards } = state;
 
-  const {
-    updateExpression,
-    backspaceDeleteExpression,
-    enterAddExpression,
-  } = bindDispatch(actions, dispatch);
+  const { addCard } = bindDispatch(actions, dispatch);
+
+  const cardsComponents = cards.map(({ id, expressions }) => {
+    const {
+      updateExpression,
+      backspaceDeleteExpression,
+      enterAddExpression,
+    } = bindDispatch(getCardActions(id), dispatch);
+
+    return (
+      <NoteCard
+        key={id}
+        expressions={expressions}
+        updateExpression={updateExpression}
+        backspaceDeleteExpression={backspaceDeleteExpression}
+        enterAddExpression={enterAddExpression}
+      />
+    );
+  });
 
   return (
     <div>
       <div className={styles.headerBar}>
         <div className={styles.headerTitle}>Math Notes</div>
         <div className={styles.icons}>
-          <FaPlus className={styles.addNewCardIcon} title="Add new card" />
+          <FaPlus
+            className={styles.addNewCardIcon}
+            title="Add new card"
+            onClick={() => addCard()}
+          />
         </div>
       </div>
-      <div className={styles.contentContainer}>
-        <NoteCard
-          expressions={expressions}
-          updateExpression={updateExpression}
-          backspaceDeleteExpression={backspaceDeleteExpression}
-          enterAddExpression={enterAddExpression}
-        />
-      </div>
+      <div className={styles.contentContainer}>{cardsComponents}</div>
     </div>
   );
 };

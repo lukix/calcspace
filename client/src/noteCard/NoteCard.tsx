@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import MathExpression from '../mathExpression/MathExpression';
 import styles from './NoteCard.module.scss';
 

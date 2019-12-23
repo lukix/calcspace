@@ -1,12 +1,14 @@
-import { pipe } from 'ramda';
 import { createReducer } from '../shared/reduxHelpers';
 import evaluateExpressionsList from './evaluateExpressionsList';
 
 const ACTION_TYPES = {
   UPDATE_EXPRESSION: 'UPDATE_EXPRESSION',
-  BACKSPACE_DELETE: 'BACKSPACE_DELETE',
-  ENTER_ADD: 'ENTER_ADD',
+  BACKSPACE_DELETE_EXPRESSION: 'BACKSPACE_DELETE',
+  ENTER_ADD_EXPRESSION: 'ENTER_ADD_EXPRESSION',
+  ADD_CARD: 'ADD_CARD',
 };
+
+const getRandomId = () => `${Math.round(Math.random() * 1e8)}`;
 
 const emptyExpression = {
   value: '',
@@ -15,52 +17,85 @@ const emptyExpression = {
   showResult: false,
 };
 
-export const getInitialState = () => ({
+const createEmptyCard = () => ({
+  id: getRandomId(),
   expressions: [{ ...emptyExpression }],
 });
 
-const expressionsReducer = createReducer({
+export const getInitialState = () => ({
+  cards: [createEmptyCard()],
+});
+
+const getCardExpressions = (state, cardId) =>
+  state.cards.find(({ id }) => id === cardId).expressions;
+const setCardExpressions = (state, cardId, value) => ({
+  ...state,
+  cards: state.cards.map(card =>
+    card.id === cardId
+      ? { ...card, expressions: evaluateExpressionsList(value) }
+      : card
+  ),
+});
+
+export const reducer = createReducer({
   actionHandlers: {
-    [ACTION_TYPES.UPDATE_EXPRESSION]: (state, { index, newValue }) =>
-      state.map((expression, i) =>
-        i === index ? { ...expression, value: newValue } : expression
-      ),
-    [ACTION_TYPES.BACKSPACE_DELETE]: (state, { index, text }) =>
-      state
-        .map((expression, i) =>
-          i === index - 1
-            ? { ...expression, value: `${expression.value}${text}` }
-            : expression
+    [ACTION_TYPES.UPDATE_EXPRESSION]: (state, { index, newValue, cardId }) =>
+      setCardExpressions(
+        state,
+        cardId,
+        getCardExpressions(state, cardId).map((expression, i) =>
+          i === index ? { ...expression, value: newValue } : expression
         )
-        .filter((expression, i) => i !== index),
-    [ACTION_TYPES.ENTER_ADD]: (state, { index, textLeft, textRight }) => [
-      ...state.slice(0, index),
-      { ...state[index], value: textLeft },
-      { ...emptyExpression, value: textRight },
-      ...state.slice(index + 1),
-    ],
+      ),
+    [ACTION_TYPES.BACKSPACE_DELETE_EXPRESSION]: (
+      state,
+      { index, text, cardId }
+    ) =>
+      setCardExpressions(
+        state,
+        cardId,
+        getCardExpressions(state, cardId)
+          .map((expression, i) =>
+            i === index - 1
+              ? { ...expression, value: `${expression.value}${text}` }
+              : expression
+          )
+          .filter((expression, i) => i !== index)
+      ),
+    [ACTION_TYPES.ENTER_ADD_EXPRESSION]: (
+      state,
+      { index, textLeft, textRight, cardId }
+    ) => {
+      const expressions = getCardExpressions(state, cardId);
+      return setCardExpressions(state, cardId, [
+        ...expressions.slice(0, index),
+        { ...expressions[index], value: textLeft },
+        { ...emptyExpression, value: textRight },
+        ...expressions.slice(index + 1),
+      ]);
+    },
+    [ACTION_TYPES.ADD_CARD]: state => ({
+      ...state,
+      cards: [createEmptyCard(), ...state.cards],
+    }),
   },
 });
 
-export const reducer = (state, action) => ({
-  ...state,
-  expressions: pipe(
-    expressionsReducer,
-    evaluateExpressionsList
-  )(state.expressions, action),
+export const getCardActions = cardId => ({
+  updateExpression: (index, newValue) => ({
+    type: ACTION_TYPES.UPDATE_EXPRESSION,
+    payload: { index, newValue, cardId },
+  }),
+  backspaceDeleteExpression: (index, text) => ({
+    type: ACTION_TYPES.BACKSPACE_DELETE_EXPRESSION,
+    payload: { index, text, cardId },
+  }),
+  enterAddExpression: (index, textLeft, textRight) => ({
+    type: ACTION_TYPES.ENTER_ADD_EXPRESSION,
+    payload: { index, textLeft, textRight, cardId },
+  }),
 });
 
 export const actions = {
-  updateExpression: (index, newValue) => ({
-    type: ACTION_TYPES.UPDATE_EXPRESSION,
-    payload: { index, newValue },
-  }),
-  backspaceDeleteExpression: (index, text) => ({
-    type: ACTION_TYPES.BACKSPACE_DELETE,
-    payload: { index, text },
-  }),
-  enterAddExpression: (index, textLeft, textRight) => ({
-    type: ACTION_TYPES.ENTER_ADD,
-    payload: { index, textLeft, textRight },
-  }),
+  addCard: () => ({ type: ACTION_TYPES.ADD_CARD }),
 };
