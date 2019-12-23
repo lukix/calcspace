@@ -1,11 +1,13 @@
-import { reducer, getCardActions, actions } from '../state';
+import { getReducer, getCardActions, actions } from '../state';
+
+const generateId = () => '99';
 
 const commonTestState = {
   cards: [
     {
       id: '1',
       expressions: [
-        { value: '123', result: 123, error: null, showResult: false },
+        { id: '1', value: '123', result: 123, error: null, showResult: false },
       ],
     },
   ],
@@ -18,7 +20,7 @@ describe('state reducer', () => {
     const addCardAction = actions.addCard();
 
     // when
-    const newState = reducer(prevState, addCardAction);
+    const newState = getReducer(generateId)(prevState, addCardAction);
 
     // then
     expect(newState.cards.length).toEqual(2);
@@ -32,7 +34,7 @@ describe('state reducer', () => {
     const deleteCardAction = getCardActions(cardId).deleteCard();
 
     // when
-    const newState = reducer(prevState, deleteCardAction);
+    const newState = getReducer(generateId)(prevState, deleteCardAction);
 
     // then
     expect(newState.cards.length).toEqual(0);
@@ -52,7 +54,7 @@ describe('state reducer', () => {
     );
 
     // when
-    const newState = reducer(prevState, updateAction);
+    const newState = getReducer(generateId)(prevState, updateAction);
 
     // then
     expect(newState).toEqual({
@@ -60,7 +62,7 @@ describe('state reducer', () => {
         {
           id: '1',
           expressions: [
-            { value: '5', result: 5, error: null, showResult: false },
+            { id: '1', value: '5', result: 5, error: null, showResult: false },
           ],
         },
       ],
@@ -83,7 +85,10 @@ describe('state reducer', () => {
     );
 
     // when
-    const newState = reducer(prevState, enterAddExpressionAction);
+    const newState = getReducer(generateId)(
+      prevState,
+      enterAddExpressionAction
+    );
 
     // then
     expect(newState).toEqual({
@@ -91,8 +96,14 @@ describe('state reducer', () => {
         {
           id: '1',
           expressions: [
-            { value: '12', result: 12, error: null, showResult: false },
-            { value: '3', result: 3, error: null, showResult: false },
+            {
+              id: '1',
+              value: '12',
+              result: 12,
+              error: null,
+              showResult: false,
+            },
+            { id: '99', value: '3', result: 3, error: null, showResult: false },
           ],
         },
       ],
@@ -106,8 +117,20 @@ describe('state reducer', () => {
         {
           id: '1',
           expressions: [
-            { value: '123', result: 123, error: null, showResult: false },
-            { value: '456', result: 456, error: null, showResult: false },
+            {
+              id: '1',
+              value: '123',
+              result: 123,
+              error: null,
+              showResult: false,
+            },
+            {
+              id: '2',
+              value: '456',
+              result: 456,
+              error: null,
+              showResult: false,
+            },
           ],
         },
       ],
@@ -122,7 +145,10 @@ describe('state reducer', () => {
     ).backspaceDeleteExpression(expressionIndex, text);
 
     // when
-    const newState = reducer(prevState, backspaceDeleteExpressionAction);
+    const newState = getReducer(generateId)(
+      prevState,
+      backspaceDeleteExpressionAction
+    );
 
     // then
     expect(newState).toEqual({
@@ -130,7 +156,13 @@ describe('state reducer', () => {
         {
           id: '1',
           expressions: [
-            { value: '123456', result: 123456, error: null, showResult: false },
+            {
+              id: '1',
+              value: '123456',
+              result: 123456,
+              error: null,
+              showResult: false,
+            },
           ],
         },
       ],

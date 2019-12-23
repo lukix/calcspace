@@ -5,6 +5,7 @@ import styles from './NoteCard.module.scss';
 
 interface NoteCardProps {
   expressions: Array<{
+    id: string;
     value: string;
     result?: number;
     error?: { message: string };
@@ -65,7 +66,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
       <div>
         {expressions.map((expression, index) => (
           <MathExpression
-            key={index}
+            key={expression.id}
             value={expression.value}
             result={expression.result}
             error={expression.error}

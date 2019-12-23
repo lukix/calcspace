@@ -25,7 +25,7 @@ describe('Home Page', () => {
 
     cy.contains(' = 3');
 
-    cy.get('.math-expression').should('have.length', 3);
+    cy.get('.math-expression').should('have.length', 2);
   });
 
   it('should merge current expression with the previous one when pressed backspace on the beginning of the expression', () => {
@@ -43,6 +43,29 @@ describe('Home Page', () => {
     cy.contains('12356');
   });
 
+  it('should not change next expression when the previous one gets deleted with backspace', () => {
+    cy.visit('/');
+
+    cy.get('.math-expression input').click();
+    cy.focused()
+      .type('123')
+      .type('{enter}');
+
+    cy.focused()
+      .type('456')
+      .type('{enter}');
+
+    cy.focused()
+      .type('789')
+      .type('{uparrow}');
+
+    cy.focused().type('{leftarrow}{leftarrow}{leftarrow}{backspace}');
+
+    cy.contains('123');
+    cy.contains('456');
+    cy.contains('789');
+  });
+
   it('move focus to the previous expression when pressed arrow up', () => {
     cy.visit('/');
 
@@ -56,22 +79,5 @@ describe('Home Page', () => {
       .type('{uparrow}');
 
     cy.focused().should('have.value', '123');
-  });
-
-  it('move focus to the next expression when pressed arrow down', () => {
-    cy.visit('/');
-
-    cy.get('.math-expression input').click();
-    cy.focused()
-      .type('123')
-      .type('{enter}');
-
-    cy.focused()
-      .type('456')
-      .type('{uparrow}');
-
-    cy.focused().type('{downarrow}');
-
-    cy.focused().should('have.value', '456');
   });
 });

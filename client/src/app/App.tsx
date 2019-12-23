@@ -1,14 +1,15 @@
 import React, { useReducer } from 'react';
 import { FaPlus } from 'react-icons/fa';
+import uuid from 'uuid/v4';
 import bindDispatch from '../shared/bindDispatch';
 import NoteCard from '../noteCard/NoteCard';
-import { reducer, getInitialState, getCardActions, actions } from './state';
+import { getReducer, getInitialState, getCardActions, actions } from './state';
 import styles from './App.module.scss';
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
-  const [state, dispatch] = useReducer(reducer, getInitialState());
+  const [state, dispatch] = useReducer(getReducer(uuid), getInitialState(uuid));
   const { cards } = state;
 
   const { addCard } = bindDispatch(actions, dispatch);

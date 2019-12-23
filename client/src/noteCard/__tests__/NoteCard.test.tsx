@@ -13,8 +13,8 @@ describe('NoteCard component', () => {
   it('should initialize with a given expressions list', () => {
     // given
     const expressions = [
-      { value: 'x = 4', showResult: false },
-      { value: 'y = 5', showResult: false },
+      { id: '1', value: 'x = 4', showResult: false },
+      { id: '2', value: 'y = 5', showResult: false },
     ];
 
     // when

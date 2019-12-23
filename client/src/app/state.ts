@@ -1,3 +1,4 @@
+import uuid from 'uuid/v4';
 import { createReducer } from '../shared/reduxHelpers';
 import evaluateExpressionsList from './evaluateExpressionsList';
 
@@ -9,22 +10,21 @@ const ACTION_TYPES = {
   DELETE_CARD: 'DELETE_CARD',
 };
 
-const getRandomId = () => `${Math.round(Math.random() * 1e8)}`;
-
-const emptyExpression = {
+const createEmptyExpression = generateId => ({
+  id: generateId(),
   value: '',
   result: null,
   error: null,
   showResult: false,
-};
-
-const createEmptyCard = () => ({
-  id: getRandomId(),
-  expressions: [{ ...emptyExpression }],
 });
 
-export const getInitialState = () => ({
-  cards: [createEmptyCard()],
+const createEmptyCard = generateId => ({
+  id: uuid(),
+  expressions: [{ ...createEmptyExpression(generateId) }],
+});
+
+export const getInitialState = generateId => ({
+  cards: [createEmptyCard(generateId)],
 });
 
 const getCardExpressions = (state, cardId) =>
@@ -38,53 +38,54 @@ const setCardExpressions = (state, cardId, value) => ({
   ),
 });
 
-export const reducer = createReducer({
-  actionHandlers: {
-    [ACTION_TYPES.UPDATE_EXPRESSION]: (state, { index, newValue, cardId }) =>
-      setCardExpressions(
-        state,
-        cardId,
-        getCardExpressions(state, cardId).map((expression, i) =>
-          i === index ? { ...expression, value: newValue } : expression
-        )
-      ),
-    [ACTION_TYPES.BACKSPACE_DELETE_EXPRESSION]: (
-      state,
-      { index, text, cardId }
-    ) =>
-      setCardExpressions(
-        state,
-        cardId,
-        getCardExpressions(state, cardId)
-          .map((expression, i) =>
-            i === index - 1
-              ? { ...expression, value: `${expression.value}${text}` }
-              : expression
+export const getReducer = generateId =>
+  createReducer({
+    actionHandlers: {
+      [ACTION_TYPES.UPDATE_EXPRESSION]: (state, { index, newValue, cardId }) =>
+        setCardExpressions(
+          state,
+          cardId,
+          getCardExpressions(state, cardId).map((expression, i) =>
+            i === index ? { ...expression, value: newValue } : expression
           )
-          .filter((expression, i) => i !== index)
-      ),
-    [ACTION_TYPES.ENTER_ADD_EXPRESSION]: (
-      state,
-      { index, textLeft, textRight, cardId }
-    ) => {
-      const expressions = getCardExpressions(state, cardId);
-      return setCardExpressions(state, cardId, [
-        ...expressions.slice(0, index),
-        { ...expressions[index], value: textLeft },
-        { ...emptyExpression, value: textRight },
-        ...expressions.slice(index + 1),
-      ]);
+        ),
+      [ACTION_TYPES.BACKSPACE_DELETE_EXPRESSION]: (
+        state,
+        { index, text, cardId }
+      ) =>
+        setCardExpressions(
+          state,
+          cardId,
+          getCardExpressions(state, cardId)
+            .map((expression, i) =>
+              i === index - 1
+                ? { ...expression, value: `${expression.value}${text}` }
+                : expression
+            )
+            .filter((expression, i) => i !== index)
+        ),
+      [ACTION_TYPES.ENTER_ADD_EXPRESSION]: (
+        state,
+        { index, textLeft, textRight, cardId }
+      ) => {
+        const expressions = getCardExpressions(state, cardId);
+        return setCardExpressions(state, cardId, [
+          ...expressions.slice(0, index),
+          { ...expressions[index], value: textLeft },
+          { ...createEmptyExpression(generateId), value: textRight },
+          ...expressions.slice(index + 1),
+        ]);
+      },
+      [ACTION_TYPES.ADD_CARD]: state => ({
+        ...state,
+        cards: [createEmptyCard(generateId), ...state.cards],
+      }),
+      [ACTION_TYPES.DELETE_CARD]: (state, { cardId }) => ({
+        ...state,
+        cards: state.cards.filter(card => card.id !== cardId),
+      }),
     },
-    [ACTION_TYPES.ADD_CARD]: state => ({
-      ...state,
-      cards: [createEmptyCard(), ...state.cards],
-    }),
-    [ACTION_TYPES.DELETE_CARD]: (state, { cardId }) => ({
-      ...state,
-      cards: state.cards.filter(card => card.id !== cardId),
-    }),
-  },
-});
+  });
 
 export const getCardActions = cardId => ({
   updateExpression: (index, newValue) => ({
