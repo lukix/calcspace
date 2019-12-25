@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import classNames from 'classnames';
 import { FaExclamationCircle } from 'react-icons/fa';
 import ExpressionInput from './ExpressionInput';
 import styles from './MathExpression.module.scss';
@@ -28,6 +29,29 @@ const MathExpression: React.FC<MathExpressionProps> = ({
   onUpArrowPress,
   cursorPosition,
 }) => {
+  const [showResultInNewLine, setShowResultInNewLine] = useState(false);
+  const valueDisplayElement = useRef<HTMLDivElement>(null);
+  const valueTextElement = useRef<HTMLSpanElement>(null);
+
+  const determineHowToDisplayResult = useCallback(() => {
+    if (!valueDisplayElement.current || !valueTextElement.current) {
+      return;
+    }
+    const resultFitsInOneLine = valueTextElement.current.offsetWidth <= valueDisplayElement.current.offsetWidth;
+    setShowResultInNewLine(!resultFitsInOneLine);
+  }, []);
+
+  useEffect(() => {
+    determineHowToDisplayResult();
+  }, [determineHowToDisplayResult, result]);
+
+  useEffect(() => {
+    window.addEventListener('resize', determineHowToDisplayResult);
+    return () => {
+      window.removeEventListener('resize', determineHowToDisplayResult);
+    }
+  }, [determineHowToDisplayResult]);
+
   const isExpressionEmpty = value.trim() === '';
   const resultToDisplay = showResult && result !== null && ` = ${result}`;
   const displayValue = isExpressionEmpty
@@ -35,26 +59,33 @@ const MathExpression: React.FC<MathExpressionProps> = ({
     : `${value}${resultToDisplay || ''}`;
 
   return (
-    <div className={`math-expression ${styles.expression}`}>
-      <div className={styles.value}>
-        <div className={styles.valueInput}>
-          <ExpressionInput
-            value={value}
-            onChange={e => onValueChange(e.target.value)}
-            onEdgeBackspaceKeyDown={onEdgeBackspacePress}
-            onEnterKeyDown={onEnterPress}
-            onDownArrowKeyDown={onDownArrowPress}
-            onUpArrowKeyDown={onUpArrowPress}
-            cursorPosition={cursorPosition}
-            maxLength={80}
-          />
+    <div>
+      <div className={`math-expression ${styles.expression}`}>
+        <div className={styles.value}>
+          <div className={styles.valueInput}>
+            <ExpressionInput
+              value={value}
+              onChange={e => onValueChange(e.target.value)}
+              onEdgeBackspaceKeyDown={onEdgeBackspacePress}
+              onEnterKeyDown={onEnterPress}
+              onDownArrowKeyDown={onDownArrowPress}
+              onUpArrowKeyDown={onUpArrowPress}
+              cursorPosition={cursorPosition}
+              maxLength={80}
+            />
+          </div>
+          <div className={styles.valueDisplay} ref={valueDisplayElement}>
+            <span className={classNames(styles.valueText, { [styles.visible]: !showResultInNewLine })} ref={valueTextElement}>
+              {displayValue}
+            </span>
+          </div>
         </div>
-        <div className={styles.valueDisplay}>
-          <span className={styles.valueText}>{displayValue}</span>
+        <div className={styles.controls}>
+          {error && <FaExclamationCircle title={error.message} />}
         </div>
       </div>
-      <div className={styles.controls}>
-        {error && <FaExclamationCircle title={error.message} />}
+      <div className={classNames(styles.newLineResult, { [styles.visible]: showResultInNewLine })}>
+        {`= ${result}`}
       </div>
     </div>
   );

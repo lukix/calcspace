@@ -47,11 +47,18 @@ $expression-font-family: 'Courier New', Courier, monospace;
     .valueDisplay {
       z-index: 1;
       white-space: pre;
+      overflow: hidden;
+      max-width: 100%;
     }
   }
 
   .valueText {
     opacity: 0.5;
+    visibility: hidden;
+
+    &.visible {
+      visibility: visible;
+    }
   }
 
   .controls {
@@ -67,5 +74,15 @@ $expression-font-family: 'Courier New', Courier, monospace;
       cursor: pointer;
       margin-left: 7px;
     }
+  }
+}
+
+.newLineResult {
+  font-family: $expression-font-family;
+  opacity: 0.5;
+  display: none;
+
+  &.visible {
+    display: block;
   }
 }
