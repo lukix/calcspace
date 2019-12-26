@@ -13,6 +13,7 @@
     "node-sass": "^4.13.0",
     "ramda": "^0.26.1",
     "react": "^16.11.0",
+    "react-beautiful-dnd": "^12.2.0",
     "react-dom": "^16.11.0",
     "react-icons": "^3.8.0",
     "react-redux": "^7.1.3",
