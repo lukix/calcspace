@@ -15,7 +15,7 @@ const App: React.FC<AppProps> = () => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
   const { cards } = state;
 
-  const { addCard } = bindDispatch(actions, dispatch);
+  const { addCard, setCards } = bindDispatch(actions, dispatch);
 
   useEffect(() => {
     if (state) {
@@ -41,6 +41,7 @@ const App: React.FC<AppProps> = () => {
           getCardActions={cardId =>
             bindDispatch(getCardActions(cardId), dispatch)
           }
+          setCards={setCards}
         />
       </div>
     </div>

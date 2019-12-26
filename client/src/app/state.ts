@@ -8,6 +8,7 @@ const ACTION_TYPES = {
   ENTER_ADD_EXPRESSION: 'ENTER_ADD_EXPRESSION',
   ADD_CARD: 'ADD_CARD',
   DELETE_CARD: 'DELETE_CARD',
+  SET_CARDS: 'SET_CARDS',
 };
 
 const createEmptyExpression = generateId => ({
@@ -84,6 +85,10 @@ export const getReducer = generateId =>
         ...state,
         cards: state.cards.filter(card => card.id !== cardId),
       }),
+      [ACTION_TYPES.SET_CARDS]: (state, { cards }) => ({
+        ...state,
+        cards,
+      }),
     },
   });
 
@@ -105,4 +110,5 @@ export const getCardActions = cardId => ({
 
 export const actions = {
   addCard: () => ({ type: ACTION_TYPES.ADD_CARD }),
+  setCards: cards => ({ type: ACTION_TYPES.SET_CARDS, payload: { cards } }),
 };
