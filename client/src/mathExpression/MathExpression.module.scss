@@ -22,12 +22,6 @@ $expression-font-family: 'Courier New', Courier, monospace;
     outline: none;
   }
 
-  &:hover {
-    .controls {
-      visibility: visible;
-    }
-  }
-
   .value {
     flex: 1;
     position: relative;
@@ -61,7 +55,6 @@ $expression-font-family: 'Courier New', Courier, monospace;
   }
 
   .controls {
-    visibility: hidden;
     display: flex;
     flex-direction: row;
     align-items: center;

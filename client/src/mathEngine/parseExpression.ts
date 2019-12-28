@@ -39,8 +39,6 @@ const parseExpression = (expressionToParse: string) => {
       ? splittedByEquals
       : [null, splittedByEquals[0]];
 
-  // TODO: Validate expression using lib
-
   if (symbol !== null && !symbol.match(IS_SYMBOL_REGEX)) {
     return createErrorResult(ERRORS.SINGLE_SYMBOL_ON_THE_LEFT_ALLOWED);
   }

@@ -35,7 +35,7 @@ const evaluateExpression = (
   try {
     const result = parsedExpression.evaluate(values);
     if (typeof result !== 'number') {
-      throw 'Expression cannot be evaluated to number';
+      throw new Error('Expression cannot be evaluated to number');
     }
     return createEvaluationResult({
       result,
