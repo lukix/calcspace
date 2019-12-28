@@ -37,7 +37,9 @@ const MathExpression: React.FC<MathExpressionProps> = ({
     if (!valueDisplayElement.current || !valueTextElement.current) {
       return;
     }
-    const resultFitsInOneLine = valueTextElement.current.offsetWidth <= valueDisplayElement.current.offsetWidth;
+    const resultFitsInOneLine =
+      valueTextElement.current.offsetWidth <=
+      valueDisplayElement.current.offsetWidth;
     setShowResultInNewLine(!resultFitsInOneLine);
   }, []);
 
@@ -49,7 +51,7 @@ const MathExpression: React.FC<MathExpressionProps> = ({
     window.addEventListener('resize', determineHowToDisplayResult);
     return () => {
       window.removeEventListener('resize', determineHowToDisplayResult);
-    }
+    };
   }, [determineHowToDisplayResult]);
 
   const isExpressionEmpty = value.trim() === '';
@@ -75,7 +77,12 @@ const MathExpression: React.FC<MathExpressionProps> = ({
             />
           </div>
           <div className={styles.valueDisplay} ref={valueDisplayElement}>
-            <span className={classNames(styles.valueText, { [styles.visible]: !showResultInNewLine })} ref={valueTextElement}>
+            <span
+              className={classNames(styles.valueText, {
+                [styles.visible]: !showResultInNewLine,
+              })}
+              ref={valueTextElement}
+            >
               {displayValue}
             </span>
           </div>
@@ -84,7 +91,11 @@ const MathExpression: React.FC<MathExpressionProps> = ({
           {error && <FaExclamationCircle title={error.message} />}
         </div>
       </div>
-      <div className={classNames(styles.newLineResult, { [styles.visible]: showResultInNewLine })}>
+      <div
+        className={classNames(styles.newLineResult, {
+          [styles.visible]: showResultInNewLine,
+        })}
+      >
         {`= ${result}`}
       </div>
     </div>

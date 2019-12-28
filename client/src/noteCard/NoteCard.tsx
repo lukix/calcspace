@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaTimesCircle } from 'react-icons/fa';
+import classNames from 'classnames';
 import MathExpression from '../mathExpression/MathExpression';
 import styles from './NoteCard.module.scss';
 
@@ -15,6 +16,9 @@ interface NoteCardProps {
   backspaceDeleteExpression: Function; // (index: number, text: string) => void;
   enterAddExpression: Function; // (index: number, textLeft: string, textRight: string) => void;
   deleteCard: Function;
+  isActive: boolean;
+  isSomeCardActive: boolean;
+  unselect: Function;
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({
@@ -23,6 +27,9 @@ const NoteCard: React.FC<NoteCardProps> = ({
   backspaceDeleteExpression,
   enterAddExpression,
   deleteCard,
+  isActive,
+  isSomeCardActive,
+  unselect,
 }) => {
   const [cursorPositionInfo, setCursorPositionInfo] = useState<{
     expressionIndex: number;
@@ -59,10 +66,16 @@ const NoteCard: React.FC<NoteCardProps> = ({
   };
 
   return (
-    <div className={styles.card}>
-      <div className={styles.deleteCardButton}>
-        <FaTimesCircle onClick={() => deleteCard()} />
-      </div>
+    <div
+      className={classNames(styles.card, {
+        [styles.notActive]: !isActive && isSomeCardActive,
+      })}
+    >
+      {isActive && (
+        <div className={styles.closeCardButton}>
+          <FaTimesCircle onClick={() => unselect()} />
+        </div>
+      )}
       <div>
         {expressions.map((expression, index) => (
           <MathExpression

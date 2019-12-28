@@ -6,9 +6,13 @@
   box-shadow: 0px 0px 5px 0px transparentize($kinda-black-color, 0.5);
   padding: 20px;
   position: relative;
+
+  &.notActive {
+    opacity: 0.5;
+  }
 }
 
-.deleteCardButton {
+.closeCardButton {
   position: absolute;
   right: -12px;
   top: -12px;

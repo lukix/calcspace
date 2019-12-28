@@ -23,7 +23,6 @@ $expression-font-family: 'Courier New', Courier, monospace;
   }
 
   &:hover {
-    background: transparentize($wine-color, 0.7);
     .controls {
       visibility: visible;
     }

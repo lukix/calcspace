@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import DraggableCard from './DraggableCard';
 
@@ -21,13 +21,14 @@ const CardsList: React.FC<CardsListProps> = ({
   getCardActions,
   setCards,
 }) => {
+  const [selectedCardId, setSelectedCardId] = useState(null);
+
   const onDragEnd = ({ source, destination }) => {
     if (!destination) {
       return;
     }
 
     const reorderedCards = reorder(cards, source.index, destination.index);
-
     setCards(reorderedCards);
   };
 
@@ -43,6 +44,9 @@ const CardsList: React.FC<CardsListProps> = ({
                 index={index}
                 expressions={expressions}
                 getCardActions={getCardActions}
+                selectCardId={setSelectedCardId}
+                isActive={id === selectedCardId}
+                isSomeCardActive={selectedCardId !== null}
               />
             ))}
             {provided.placeholder}
