@@ -44,7 +44,7 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
 
   return (
     <Draggable draggableId={id} index={index} isDragDisabled={isSomeCardActive}>
-      {provided => (
+      {(provided, { isDragging }) => (
         <OutsideClickHandler
           onOutsideClick={unselectCards}
           disabled={!isActive}
@@ -71,6 +71,7 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
               isActive={isActive}
               isSomeCardActive={isSomeCardActive}
               unselect={unselectCards}
+              isDragging={isDragging}
             />
           </div>
         </OutsideClickHandler>

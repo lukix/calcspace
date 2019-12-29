@@ -12,13 +12,14 @@ interface NoteCardProps {
     error?: { message: string };
     showResult: boolean;
   }>;
-  updateExpression: Function; // (index: number, newValue: string) => void;
-  backspaceDeleteExpression: Function; // (index: number, text: string) => void;
-  enterAddExpression: Function; // (index: number, textLeft: string, textRight: string) => void;
+  updateExpression: Function;
+  backspaceDeleteExpression: Function;
+  enterAddExpression: Function;
   deleteCard: Function;
   isActive: boolean;
   isSomeCardActive: boolean;
   unselect: Function;
+  isDragging: boolean;
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({
@@ -30,6 +31,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
   isActive,
   isSomeCardActive,
   unselect,
+  isDragging,
 }) => {
   const [cursorPositionInfo, setCursorPositionInfo] = useState<{
     expressionIndex: number;
@@ -69,6 +71,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
     <div
       className={classNames(styles.card, {
         [styles.notActive]: !isActive && isSomeCardActive,
+        [styles.isDragging]: isDragging,
       })}
     >
       {isActive && (
@@ -105,7 +108,6 @@ const NoteCard: React.FC<NoteCardProps> = ({
       </div>
       {isActive && (
         <div className={styles.cardFooter}>
-          {/* <span>Created on 29 dec 2019 14:12</span> */}
           <button onClick={() => deleteCard()}>
             <FaTrash />
             Delete Card

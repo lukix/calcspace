@@ -10,6 +10,10 @@
   &.notActive {
     opacity: 0.5;
   }
+
+  &.isDragging {
+    box-shadow: 0px 0px 15px 0px transparentize($kinda-black-color, 0.5);
+  }
 }
 
 .closeCardButton {
