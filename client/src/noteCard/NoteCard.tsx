@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaTimesCircle } from 'react-icons/fa';
+import { FaTimesCircle, FaTrash } from 'react-icons/fa';
 import classNames from 'classnames';
 import MathExpression from '../mathExpression/MathExpression';
 import styles from './NoteCard.module.scss';
@@ -103,6 +103,15 @@ const NoteCard: React.FC<NoteCardProps> = ({
           />
         ))}
       </div>
+      {isActive && (
+        <div className={styles.cardFooter}>
+          {/* <span>Created on 29 dec 2019 14:12</span> */}
+          <button onClick={() => deleteCard()}>
+            <FaTrash />
+            Delete Card
+          </button>
+        </div>
+      )}
     </div>
   );
 };

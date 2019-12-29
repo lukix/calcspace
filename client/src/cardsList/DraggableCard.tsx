@@ -36,6 +36,10 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
     deleteCard,
   } = getCardActions(id);
 
+  const deleteAndUnselectCard = () => {
+    deleteCard();
+    selectCardId(null);
+  };
   const unselectCards = () => selectCardId(null);
 
   return (
@@ -63,7 +67,7 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
               updateExpression={updateExpression}
               backspaceDeleteExpression={backspaceDeleteExpression}
               enterAddExpression={enterAddExpression}
-              deleteCard={deleteCard}
+              deleteCard={deleteAndUnselectCard}
               isActive={isActive}
               isSomeCardActive={isSomeCardActive}
               unselect={unselectCards}

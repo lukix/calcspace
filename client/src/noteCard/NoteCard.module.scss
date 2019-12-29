@@ -26,3 +26,27 @@
     cursor: pointer;
   }
 }
+
+.cardFooter {
+  margin-top: 20px;
+  margin-bottom: -10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  color: #aaa;
+  font-size: 0.8rem;
+
+  button {
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid;
+    border-radius: 2px;
+    display: flex;
+    height: 24px;
+
+    svg {
+      margin-right: 4px;
+    }
+  }
+}
