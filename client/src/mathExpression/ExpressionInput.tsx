@@ -10,10 +10,10 @@ interface ExpressionInputProps {
 }
 
 const ExpressionInput: React.FC<ExpressionInputProps> = ({
-  onEnterKeyDown = () => {},
-  onEdgeBackspaceKeyDown = () => {},
-  onDownArrowKeyDown = () => {},
-  onUpArrowKeyDown = () => {},
+  onEnterKeyDown = () => { },
+  onEdgeBackspaceKeyDown = () => { },
+  onDownArrowKeyDown = () => { },
+  onUpArrowKeyDown = () => { },
   cursorPosition,
   ...inputProps
 }) => {

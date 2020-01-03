@@ -9,7 +9,7 @@ import styles from './App.module.scss';
 
 const initializeState = () => loadAppState(localStorage, getInitialState(uuid));
 
-interface AppProps {}
+interface AppProps { }
 
 const App: React.FC<AppProps> = () => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
