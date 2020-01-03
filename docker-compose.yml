@@ -1,0 +1,18 @@
+version: '3'
+services:
+  client:
+    build: ./client
+    command: yarn start
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+  server:
+    build: ./server
+    command: yarn start
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
