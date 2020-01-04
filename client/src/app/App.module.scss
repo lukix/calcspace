@@ -15,10 +15,11 @@
   height: 100%;
   display: flex;
   align-items: center;
-}
 
-.addNewCardIcon {
-  cursor: pointer;
+  svg {
+    cursor: pointer;
+    margin: 0 10px;
+  }
 }
 
 .contentContainer {

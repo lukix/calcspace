@@ -1,0 +1,49 @@
+@import '../style/colors.scss';
+
+.signInModal {
+  padding: 20px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.formField {
+  margin-bottom: 15px;
+
+  label, input[type="text"], input[type="password"] {
+    display: block;
+    margin-bottom: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  input[type="text"], input[type="password"] {
+    font-size: 1rem;
+    height: 26px;
+    padding: 0 5px;
+  }
+
+  input[type="submit"] {
+    background: $wine-color;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .signUpMessage {
+    display: inline;
+    font-size: 0.8rem;
+    margin-left: 8px;
+  }
+
+  .linkLikeButton {
+    cursor: pointer;
+    text-decoration: underline;
+    color: $wine-color;
+  }
+}
