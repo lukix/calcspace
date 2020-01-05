@@ -1,10 +1,13 @@
 import { Router } from 'express';
-import mapHandlerToRoute from './mapHandlerToRoute';
+import mapRouteObjectToRoute from './mapRouteObjectToRoute';
 
 const createRouterFromRouteObjects = routeObjects => {
   const router = Router();
-  routeObjects.forEach(({ path, method, handler }) => {
-    router[method](path, mapHandlerToRoute(handler));
+  routeObjects.forEach(routeObject => {
+    router[routeObject.method](
+      routeObject.path,
+      mapRouteObjectToRoute(routeObject)
+    );
   });
   return router;
 };

@@ -2,6 +2,7 @@ version: '3'
 services:
   client:
     build: ./client
+    restart: always
     command: yarn start
     ports:
       - "3000:3000"
@@ -12,6 +13,7 @@ services:
       CHOKIDAR_USEPOLLING: "true"
   server:
     build: ./server
+    restart: always
     command: yarn start
     ports:
       - "3001:3001"
