@@ -49,4 +49,22 @@ describe('mapHandlerToRoute', () => {
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(418);
   });
+
+  it('should sent status 500 when handler throws an error', async () => {
+    const handler = () => {
+      throw new Error('Error');
+    };
+    const route = mapHandlerToRoute(handler);
+    const req = {};
+    const res = {
+      status: jest.fn(),
+      sendStatus: jest.fn(),
+      send: jest.fn(),
+    };
+
+    await route(req, res);
+
+    expect(res.sendStatus).toHaveBeenCalledTimes(1);
+    expect(res.sendStatus).toHaveBeenCalledWith(500);
+  });
 });
