@@ -33,7 +33,15 @@ export default ({ db }) => {
       const { error: validationError } = await validationSchema.validate(body, {
         convert: false,
       });
-      return validationError;
+      if (validationError) {
+        return validationError;
+      }
+
+      const user = await usersCollection.findOne({ username: body.username });
+      if (user) {
+        return { error: 'Given username is already taken' };
+      }
+      return null;
     },
     handler: async ({ body }) => {
       const { username, password } = body;
