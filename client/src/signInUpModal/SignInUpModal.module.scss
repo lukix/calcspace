@@ -12,11 +12,21 @@
 .formField {
   margin-bottom: 15px;
 
-  label, input[type="text"], input[type="password"] {
+  .label, input[type="text"], input[type="password"] {
     display: block;
     margin-bottom: 5px;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .label {
+    display: flex;
+    justify-content: space-between;
+
+    .errorMessage {
+      color: red;
+      font-size: 0.8rem;
+    }
   }
 
   input[type="text"], input[type="password"] {

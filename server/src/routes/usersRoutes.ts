@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
-import Joi from '@hapi/joi';
-
+import * as yup from 'yup';
 const SALT_ROUNDS = 10;
 
 export default ({ db }) => {
@@ -19,13 +18,14 @@ export default ({ db }) => {
     path: '/',
     method: 'post',
     validate: async ({ body }) => {
-      const validationSchema = Joi.object({
-        username: Joi.string()
-          .alphanum()
+      const validationSchema = yup.object({
+        username: yup
+          .string()
           .min(2)
           .max(30)
           .required(),
-        password: Joi.string()
+        password: yup
+          .string()
           .min(6)
           .max(72)
           .required(),
