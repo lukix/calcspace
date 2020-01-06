@@ -58,14 +58,13 @@ describe('mapRouteObjectToRoute', () => {
     const req = {};
     const res = {
       status: jest.fn(),
-      sendStatus: jest.fn(),
       send: jest.fn(),
     };
 
     await route(req, res);
 
-    expect(res.sendStatus).toHaveBeenCalledTimes(1);
-    expect(res.sendStatus).toHaveBeenCalledWith(500);
+    expect(res.status).toHaveBeenCalledTimes(1);
+    expect(res.status).toHaveBeenCalledWith(500);
   });
 
   it('should create a function which sets status 200 when validation passes', async () => {

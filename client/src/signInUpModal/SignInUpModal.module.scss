@@ -50,10 +50,43 @@
     font-size: 0.8rem;
     margin-left: 8px;
   }
+}
 
-  .linkLikeButton {
-    cursor: pointer;
-    text-decoration: underline;
-    color: $wine-color;
+.linkLikeButton {
+  cursor: pointer;
+  text-decoration: underline;
+  color: $wine-color;
+}
+
+
+
+.signUpSuccessMessage {
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
+
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-top: 15px;
+    display: block;
+    color: #449944;
+    font-size: 80px;
+  }
+}
+
+.errorMessage {
+  color: red;
+  font-size: 0.8rem;
 }

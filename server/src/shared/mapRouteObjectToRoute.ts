@@ -19,7 +19,8 @@ const mapRouteObjectToRoute = ({
     res.status(status);
     res.send(response);
   } catch (err) {
-    res.sendStatus(500);
+    res.status(500);
+    res.send({ error: 'Internal server error has occured' });
   }
 };
 

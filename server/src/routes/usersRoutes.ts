@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = 14;
 
 export default ({ db }) => {
   const usersCollection = db.collection('users');
