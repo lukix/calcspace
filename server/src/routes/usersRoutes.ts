@@ -30,10 +30,12 @@ export default ({ db }) => {
           .max(72)
           .required(),
       });
-      const { error: validationError } = await validationSchema.validate(body, {
-        convert: false,
-      });
-      if (validationError) {
+      try {
+        await validationSchema.validate(body, {
+          convert: false,
+          abortEarly: false,
+        });
+      } catch (validationError) {
         return validationError;
       }
 
@@ -52,5 +54,14 @@ export default ({ db }) => {
     },
   };
 
-  return [getUsers, addUser];
+  const getUsernameAvailability = {
+    path: '/username-availability/:username',
+    method: 'get',
+    handler: async ({ params }) => {
+      const user = await usersCollection.findOne({ username: params.username });
+      return { response: { isUsernameAvailable: user === null } };
+    },
+  };
+
+  return [getUsers, addUser, getUsernameAvailability];
 };

@@ -6,6 +6,7 @@ import { FaRegCheckCircle } from 'react-icons/fa';
 import Modal from '../modal/Modal';
 import ModalFormField from './ModalFormField';
 import { actions, selectors } from './store';
+import httpRequest from '../shared/httpRequest';
 import styles from './SignInUpModal.module.scss';
 
 const validationSchema = yup.object().shape({
@@ -58,7 +59,22 @@ const SignUpModal: React.FC<SignUpModalProps> = ({
       repeatPassword: '',
     },
     validationSchema,
-    onSubmit: ({ username, password }) => {
+    onSubmit: async ({ username, password }, formikProps) => {
+      try {
+        const { isUsernameAvailable } = await httpRequest.get(
+          `users/username-availability/${username}`
+        );
+        if (!isUsernameAvailable) {
+          formikProps.setFieldError(
+            'username',
+            'This username is already taken'
+          );
+          return;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
       addUser({ username, password });
     },
   });
