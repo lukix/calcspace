@@ -15,10 +15,11 @@ const mapRouteObjectToRoute = ({
       return;
     }
 
-    const { status = 200, response } = await handler(req);
+    const { status = 200, response } = await handler(req, res);
     res.status(status);
     res.send(response);
   } catch (err) {
+    console.log(err); // TODO: Decouple - custom logger
     res.status(500);
     res.send({ error: 'Internal server error has occured' });
   }

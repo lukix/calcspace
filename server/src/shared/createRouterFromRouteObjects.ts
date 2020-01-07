@@ -6,6 +6,7 @@ const createRouterFromRouteObjects = routeObjects => {
   routeObjects.forEach(routeObject => {
     router[routeObject.method](
       routeObject.path,
+      ...(routeObject.middlewares || []),
       mapRouteObjectToRoute(routeObject)
     );
   });

@@ -1,16 +1,51 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import * as yup from 'yup';
-const SALT_ROUNDS = 14;
+import getJwtTokenCookie from '../auth/getJwtTokenCookie';
+import { SALT_ROUNDS } from '../config';
 
 export default ({ db }) => {
   const usersCollection = db.collection('users');
 
-  const getUsers = {
-    path: '/',
-    method: 'get',
-    handler: async () => {
-      const users = await usersCollection.find({}).toArray();
-      return { response: users };
+  const authenticate = {
+    path: '/authenticate',
+    method: 'post',
+    validate: async ({ body }) => {
+      const validationSchema = yup.object({
+        username: yup.string().required(),
+        password: yup.string().required(),
+      });
+      try {
+        await validationSchema.validate(body, {
+          convert: false,
+          abortEarly: false,
+        });
+      } catch (validationError) {
+        return validationError;
+      }
+      return null;
+    },
+    handler: async ({ body }, res) => {
+      const AUTH_FAILED_RESPONSE = {
+        response: { message: 'Invalid username or password' },
+        status: 401,
+      };
+      const { username, password } = body;
+      const user = await usersCollection.findOne({ username });
+      if (!user) {
+        return AUTH_FAILED_RESPONSE;
+      }
+      if (!(await bcrypt.compare(password, user.password))) {
+        return AUTH_FAILED_RESPONSE;
+      }
+
+      const jwtTokenCookie = getJwtTokenCookie(user._id, username);
+      res.cookie(
+        jwtTokenCookie.name,
+        jwtTokenCookie.value,
+        jwtTokenCookie.options
+      );
+      return {};
     },
   };
 
@@ -63,5 +98,5 @@ export default ({ db }) => {
     },
   };
 
-  return [getUsers, addUser, getUsernameAvailability];
+  return [authenticate, addUser, getUsernameAvailability];
 };

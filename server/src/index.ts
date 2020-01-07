@@ -1,12 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import { MongoClient } from 'mongodb';
 
 import createRouterFromRouteObjects from './shared/createRouterFromRouteObjects';
 import nestRoutes from './shared/nestRoutes';
+import applyMiddlewares from './shared/applyMiddlewares';
 
 import usersRoutes from './routes/usersRoutes';
+import protectedRoutes from './routes/protectedRoutes';
+import authorizationMiddleware from './auth/authorizationMiddleware';
 
 const app = express();
 const PORT = 3001;
@@ -15,6 +19,7 @@ const DB_NAME = 'math-notes';
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 (async () => {
   const client = await MongoClient.connect(CONNECTION_STRING, {
@@ -34,13 +39,18 @@ app.use(bodyParser.json());
     handler: () => ({ response: 'Hello World!' }),
   };
 
-  const rootRouter = createRouterFromRouteObjects(
-    nestRoutes('/api', [
-      testRoute,
-      ...nestRoutes('/users', usersRoutes({ db })),
-      // HERE ADD NEXT ROUTES
-    ])
-  );
+  const routesDefinitions = nestRoutes('/api', [
+    testRoute,
+    ...nestRoutes('/users', usersRoutes({ db })),
+    ...applyMiddlewares(
+      [authorizationMiddleware],
+      nestRoutes('/secrets', protectedRoutes({ db }))
+    ),
+  ]);
+
+  const rootRouter = createRouterFromRouteObjects(routesDefinitions);
+
+  console.log(routesDefinitions.map(({ path }) => path));
 
   app.use(rootRouter);
 
