@@ -8,6 +8,7 @@ const HttpRequest = ({ baseUrl }) => {
         method,
         url: `${baseUrl}${url}`,
         data,
+        withCredentials: true,
       })
       .then(({ data }) => data);
 

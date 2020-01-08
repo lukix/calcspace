@@ -38,6 +38,12 @@ export const reducer = createReducer({
       addedUser: null,
       addUserError: false,
     }),
+    ...createAsyncActionHandlers({
+      types: actionTypes.addUser,
+      payloadKey: 'addedUser',
+      pendingKey: 'isAddingUser',
+      errorKey: 'addUserError',
+    }),
   },
 });
 

@@ -11,13 +11,11 @@ import applyMiddlewares from './shared/applyMiddlewares';
 import usersRoutes from './routes/usersRoutes';
 import protectedRoutes from './routes/protectedRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
+import { DB_NAME, CONNECTION_STRING, PORT, CLIENT_URL } from './config';
 
 const app = express();
-const PORT = 3001;
-const CONNECTION_STRING = 'mongodb://mongo:27017';
-const DB_NAME = 'math-notes';
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: CLIENT_URL }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 

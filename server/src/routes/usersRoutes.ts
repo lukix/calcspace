@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import * as yup from 'yup';
-import getJwtTokenCookie from '../auth/getJwtTokenCookie';
+import getJwtTokenCookie from '../auth/getNewJwtTokenCookie';
 import { SALT_ROUNDS } from '../config';
+import authorizationMiddleware from '../auth/authorizationMiddleware';
 
 export default ({ db }) => {
   const usersCollection = db.collection('users');
@@ -23,7 +23,6 @@ export default ({ db }) => {
       } catch (validationError) {
         return validationError;
       }
-      return null;
     },
     handler: async ({ body }, res) => {
       const AUTH_FAILED_RESPONSE = {
@@ -45,7 +44,7 @@ export default ({ db }) => {
         jwtTokenCookie.value,
         jwtTokenCookie.options
       );
-      return {};
+      return { response: { username } };
     },
   };
 
@@ -98,5 +97,20 @@ export default ({ db }) => {
     },
   };
 
-  return [authenticate, addUser, getUsernameAvailability];
+  const getCurrentlyLoggedInUser = {
+    path: '/logged-in',
+    method: 'get',
+    middlewares: [authorizationMiddleware],
+    handler: async ({ user }) => {
+      const { username } = user;
+      return { response: { username } };
+    },
+  };
+
+  return [
+    authenticate,
+    addUser,
+    getUsernameAvailability,
+    getCurrentlyLoggedInUser,
+  ];
 };
