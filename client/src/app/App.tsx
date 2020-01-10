@@ -6,11 +6,10 @@ import bindDispatch from '../shared/bindDispatch';
 import CardsList from '../cardsList/CardsList';
 import SignInUpModal from '../signInUpModal/SignInUpModal';
 import { getReducer, getInitialState, getCardActions, actions } from './state';
-import { loadAppState, persistAppState } from './storage';
 import { actions as reduxActions, selectors } from './store';
 import styles from './App.module.scss';
 
-const initializeState = () => loadAppState(localStorage, getInitialState(uuid));
+const initializeState = () => getInitialState(uuid);
 
 interface AppProps {
   user: { username: string } | null;
@@ -22,12 +21,6 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
   const { cards } = state;
 
   const { addCard, setCards } = bindDispatch(actions, dispatch);
-
-  useEffect(() => {
-    if (state) {
-      persistAppState(localStorage, state);
-    }
-  }, [state]);
 
   useEffect(() => {
     fetchLoggedInUser();

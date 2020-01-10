@@ -17,7 +17,7 @@ const app = express();
 
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser({ sameSite: true }));
 
 (async () => {
   const client = await MongoClient.connect(CONNECTION_STRING, {
