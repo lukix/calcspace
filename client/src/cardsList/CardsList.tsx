@@ -2,24 +2,16 @@ import React, { useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import DraggableCard from './DraggableCard';
 
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
 interface CardsListProps {
   cards: Array<{ id: string; expressions: Array<any> }>;
   getCardActions: Function;
-  setCards: Function;
+  reorderCards: Function;
 }
 
 const CardsList: React.FC<CardsListProps> = ({
   cards,
   getCardActions,
-  setCards,
+  reorderCards,
 }) => {
   const [selectedCardId, setSelectedCardId] = useState(null);
 
@@ -28,8 +20,7 @@ const CardsList: React.FC<CardsListProps> = ({
       return;
     }
 
-    const reorderedCards = reorder(cards, source.index, destination.index);
-    setCards(reorderedCards);
+    reorderCards(source.index, destination.index);
   };
 
   return (

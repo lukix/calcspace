@@ -1,6 +1,7 @@
 import uuid from 'uuid/v4';
 import { createReducer } from '../shared/reduxHelpers';
 import evaluateExpressionsList from './evaluateExpressionsList';
+import { reorderArray } from './utils';
 
 const ACTION_TYPES = {
   UPDATE_EXPRESSION: 'UPDATE_EXPRESSION',
@@ -8,7 +9,7 @@ const ACTION_TYPES = {
   ENTER_ADD_EXPRESSION: 'ENTER_ADD_EXPRESSION',
   ADD_CARD: 'ADD_CARD',
   DELETE_CARD: 'DELETE_CARD',
-  SET_CARDS: 'SET_CARDS',
+  REORDER_CARDS: 'REORDER_CARDS',
 };
 
 const createEmptyExpression = generateId => ({
@@ -85,9 +86,12 @@ export const getReducer = generateId =>
         ...state,
         cards: state.cards.filter(card => card.id !== cardId),
       }),
-      [ACTION_TYPES.SET_CARDS]: (state, { cards }) => ({
+      [ACTION_TYPES.REORDER_CARDS]: (
+        state,
+        { sourceCardIndex, destinationCardIndex }
+      ) => ({
         ...state,
-        cards,
+        cards: reorderArray(state.cards, sourceCardIndex, destinationCardIndex),
       }),
     },
   });
@@ -110,5 +114,8 @@ export const getCardActions = cardId => ({
 
 export const actions = {
   addCard: () => ({ type: ACTION_TYPES.ADD_CARD }),
-  setCards: cards => ({ type: ACTION_TYPES.SET_CARDS, payload: { cards } }),
+  reorderCards: (sourceCardIndex, destinationCardIndex) => ({
+    type: ACTION_TYPES.REORDER_CARDS,
+    payload: { sourceCardIndex, destinationCardIndex },
+  }),
 };

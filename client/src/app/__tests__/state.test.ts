@@ -168,4 +168,37 @@ describe('state reducer', () => {
       ],
     });
   });
+
+  it('should reorder cards', () => {
+    // given
+    const prevState = {
+      cards: [
+        { id: '0', expressions: [] },
+        { id: '1', expressions: [] },
+        { id: '2', expressions: [] },
+        { id: '3', expressions: [] },
+      ],
+    };
+
+    const sourceCardIndex = 2;
+    const destinationCardIndex = 0;
+
+    const updateAction = actions.reorderCards(
+      sourceCardIndex,
+      destinationCardIndex
+    );
+
+    // when
+    const newState = getReducer(generateId)(prevState, updateAction);
+
+    // then
+    expect(newState).toEqual({
+      cards: [
+        { id: '2', expressions: [] },
+        { id: '0', expressions: [] },
+        { id: '1', expressions: [] },
+        { id: '3', expressions: [] },
+      ],
+    });
+  });
 });

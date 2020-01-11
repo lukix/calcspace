@@ -20,11 +20,17 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
   const { cards } = state;
 
-  const { addCard, setCards } = bindDispatch(actions, dispatch);
+  const { addCard, reorderCards } = bindDispatch(actions, dispatch);
 
   useEffect(() => {
     fetchLoggedInUser();
   }, [fetchLoggedInUser]);
+
+  useEffect(() => {
+    if (user) {
+      console.log('TODO: Fetch cards (and discard any existing cards)');
+    }
+  }, [user]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -48,7 +54,7 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
           getCardActions={cardId =>
             bindDispatch(getCardActions(cardId), dispatch)
           }
-          setCards={setCards}
+          reorderCards={reorderCards}
         />
       </div>
       <SignInUpModal
