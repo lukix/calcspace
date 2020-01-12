@@ -7,6 +7,8 @@ import CardsList from '../cardsList/CardsList';
 import SignInUpModal from '../signInUpModal/SignInUpModal';
 import { getReducer, getInitialState, getCardActions, actions } from './state';
 import { actions as reduxActions, selectors } from './store';
+import { usePrevious } from './utils';
+import { compareStates } from './syncService';
 import styles from './App.module.scss';
 
 const initializeState = () => getInitialState(uuid);
@@ -33,6 +35,13 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
   }, [user]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const previousCards = usePrevious(cards);
+  useEffect(() => {
+    if (previousCards) {
+      compareStates(previousCards, cards);
+    }
+  }, [cards]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
