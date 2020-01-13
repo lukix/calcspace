@@ -15,7 +15,7 @@ const mapRouteObjectToRoute = ({
       return;
     }
 
-    const { status = 200, response } = await handler(req, res);
+    const { status = 200, response } = (await handler(req, res)) || {};
     res.status(status);
     res.send(response);
   } catch (err) {

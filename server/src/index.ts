@@ -9,7 +9,7 @@ import nestRoutes from './shared/nestRoutes';
 import applyMiddlewares from './shared/applyMiddlewares';
 
 import usersRoutes from './routes/usersRoutes';
-import protectedRoutes from './routes/protectedRoutes';
+import cardsRoutes from './routes/cardsRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
 import { DB_NAME, CONNECTION_STRING, PORT, CLIENT_URL } from './config';
 
@@ -42,7 +42,7 @@ app.use(cookieParser({ sameSite: true }));
     ...nestRoutes('/users', usersRoutes({ db })),
     ...applyMiddlewares(
       [authorizationMiddleware],
-      nestRoutes('/secrets', protectedRoutes({ db }))
+      nestRoutes('/cards', cardsRoutes({ db }))
     ),
   ]);
 

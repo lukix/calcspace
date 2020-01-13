@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import getJwtTokenCookie from '../auth/getNewJwtTokenCookie';
 import { SALT_ROUNDS } from '../config';
 import authorizationMiddleware from '../auth/authorizationMiddleware';
+import validateBodyWithYup from '../shared/validateBodyWithYup';
 
 export default ({ db }) => {
   const usersCollection = db.collection('users');
@@ -10,20 +11,12 @@ export default ({ db }) => {
   const authenticate = {
     path: '/authenticate',
     method: 'post',
-    validate: async ({ body }) => {
-      const validationSchema = yup.object({
+    validate: validateBodyWithYup(
+      yup.object({
         username: yup.string().required(),
         password: yup.string().required(),
-      });
-      try {
-        await validationSchema.validate(body, {
-          convert: false,
-          abortEarly: false,
-        });
-      } catch (validationError) {
-        return validationError;
-      }
-    },
+      })
+    ),
     handler: async ({ body }, res) => {
       const AUTH_FAILED_RESPONSE = {
         response: { message: 'Invalid username or password' },
@@ -64,12 +57,8 @@ export default ({ db }) => {
           .max(72)
           .required(),
       });
-      try {
-        await validationSchema.validate(body, {
-          convert: false,
-          abortEarly: false,
-        });
-      } catch (validationError) {
+      const validationError = validateBodyWithYup(validationSchema)({ body });
+      if (validationError) {
         return validationError;
       }
 
@@ -82,7 +71,7 @@ export default ({ db }) => {
     handler: async ({ body }) => {
       const { username, password } = body;
       const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-      const user = { username, password: hashedPassword };
+      const user = { username, password: hashedPassword, cards: [] };
       const { insertedId } = await usersCollection.insertOne(user);
       return { status: 200, response: { id: insertedId } };
     },
