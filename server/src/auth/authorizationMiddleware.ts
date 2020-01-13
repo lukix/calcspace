@@ -5,8 +5,7 @@ import { JWT_SECRET_KEY } from '../config';
 const authorizationMiddleware = async (req, res, next) => {
   const { jwtToken } = req.cookies;
   if (!jwtToken) {
-    res.sendStatus(403);
-    return next();
+    return res.sendStatus(403);
   }
   try {
     const { userId, username } = jwt.verify(jwtToken, JWT_SECRET_KEY);
