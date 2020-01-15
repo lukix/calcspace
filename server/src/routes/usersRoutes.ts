@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import getJwtTokenCookie from '../auth/getNewJwtTokenCookie';
 import { SALT_ROUNDS } from '../config';
 import authorizationMiddleware from '../auth/authorizationMiddleware';
-import validateBodyWithYup from '../shared/validateBodyWithYup';
+import { validateBodyWithYup } from '../shared/express-helpers';
 
 export default ({ db }) => {
   const usersCollection = db.collection('users');

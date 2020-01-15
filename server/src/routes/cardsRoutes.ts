@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import * as yup from 'yup';
-import validateBodyWithYup from '../shared/validateBodyWithYup';
+import { validateBodyWithYup } from '../shared/express-helpers';
 
 export default ({ db }) => {
   const usersCollection = db.collection('users');
@@ -56,6 +56,35 @@ export default ({ db }) => {
         },
         { $pull: { cards: { id: cardId } } }
       );
+    },
+  };
+
+  const updateCard = {
+    path: '/:cardId',
+    method: 'delete',
+    handler: async ({ user, params }) => {
+      // const { cardId } = params;
+      // await usersCollection.updateOne(
+      //   {
+      //     _id: ObjectId(user.userId),
+      //   },
+      //   { $pull: { cards: { id: cardId } } }
+      // );
+    },
+  };
+
+  const reorderCards = {
+    path: '/',
+    method: 'put',
+    handler: async ({ user, params }) => {
+      // Save, delete, insert in a new place
+      // const { cardId } = params;
+      // await usersCollection.updateOne(
+      //   {
+      //     _id: ObjectId(user.userId),
+      //   },
+      //   { $pull: { cards: { id: cardId } } }
+      // );
     },
   };
 

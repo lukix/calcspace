@@ -4,9 +4,11 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { MongoClient } from 'mongodb';
 
-import createRouterFromRouteObjects from './shared/createRouterFromRouteObjects';
-import nestRoutes from './shared/nestRoutes';
-import applyMiddlewares from './shared/applyMiddlewares';
+import {
+  createRouterFromRouteObjects,
+  nestRoutes,
+  applyMiddlewares,
+} from './shared/express-helpers';
 
 import usersRoutes from './routes/usersRoutes';
 import cardsRoutes from './routes/cardsRoutes';
