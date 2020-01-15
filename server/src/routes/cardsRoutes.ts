@@ -61,32 +61,40 @@ export default ({ db }) => {
 
   const updateCard = {
     path: '/:cardId',
-    method: 'delete',
-    handler: async ({ user, params }) => {
-      // const { cardId } = params;
-      // await usersCollection.updateOne(
-      //   {
-      //     _id: ObjectId(user.userId),
-      //   },
-      //   { $pull: { cards: { id: cardId } } }
-      // );
-    },
-  };
-
-  const reorderCards = {
-    path: '/',
     method: 'put',
-    handler: async ({ user, params }) => {
-      // Save, delete, insert in a new place
-      // const { cardId } = params;
-      // await usersCollection.updateOne(
-      //   {
-      //     _id: ObjectId(user.userId),
-      //   },
-      //   { $pull: { cards: { id: cardId } } }
-      // );
+    validate: validateBodyWithYup(
+      yup.object({
+        expressions: yup.array().of(yup.string()),
+      })
+    ),
+    handler: async ({ body, user, params }) => {
+      const { cardId } = params;
+      const newCard = { ...body, id: cardId };
+      const { result } = await usersCollection.updateOne(
+        {
+          _id: ObjectId(user.userId),
+        },
+        { $set: { 'cards.$[card]': newCard } },
+        { arrayFilters: [{ 'card.id': { $eq: cardId } }] }
+      );
+      return { status: result.nModified === 0 ? 404 : 200 };
     },
   };
 
-  return [getCards, addCard, deleteCard];
+  // const reorderCards = {
+  //   path: '/',
+  //   method: 'put',
+  //   handler: async ({ user, params }) => {
+  //     // Save, delete, insert in a new place
+  //     // const { cardId } = params;
+  //     // await usersCollection.updateOne(
+  //     //   {
+  //     //     _id: ObjectId(user.userId),
+  //     //   },
+  //     //   { $pull: { cards: { id: cardId } } }
+  //     // );
+  //   },
+  // };
+
+  return [getCards, addCard, deleteCard, updateCard];
 };

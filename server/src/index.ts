@@ -50,7 +50,9 @@ app.use(cookieParser({ sameSite: true }));
 
   const rootRouter = createRouterFromRouteObjects(routesDefinitions);
 
-  console.log(routesDefinitions.map(({ path }) => path));
+  console.log(
+    routesDefinitions.map(({ path, method }) => `${path} (${method})`)
+  );
 
   app.use(rootRouter);
 
