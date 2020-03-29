@@ -15,12 +15,9 @@ describe('NoteCard component', () => {
   it('should initialize with a given expressions list', () => {
     // given
     const code = 'x = 4\ny = 5';
-    const evaluatedCode = 'x = 4\ny = 5';
 
     // when
-    const { queryByText } = render(
-      <NoteCard {...defaultProps} code={code} evaluatedCode={evaluatedCode} />
-    );
+    const { queryByText } = render(<NoteCard {...defaultProps} code={code} />);
 
     // then
     expect(queryByText('x = 4', { exact: false })).not.toEqual(null);

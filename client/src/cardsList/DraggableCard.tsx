@@ -7,7 +7,6 @@ import styles from './DraggableCard.module.scss';
 interface DraggableCardProps {
   id: string;
   code: string;
-  evaluatedCode: string;
   index: number;
   getCardActions: Function;
   selectCardId: Function;
@@ -18,7 +17,6 @@ interface DraggableCardProps {
 const DraggableCard: React.FC<DraggableCardProps> = ({
   id,
   code,
-  evaluatedCode,
   index,
   getCardActions,
   selectCardId,
@@ -55,7 +53,6 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
 
             <NoteCard
               code={code}
-              evaluatedCode={evaluatedCode}
               updateCode={updateCode}
               deleteCard={deleteAndUnselectCard}
               isActive={isActive}

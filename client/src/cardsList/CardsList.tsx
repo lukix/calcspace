@@ -3,7 +3,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import DraggableCard from './DraggableCard';
 
 interface CardsListProps {
-  cards: Array<{ id: string; code: string; evaluatedCode: string }>;
+  cards: Array<{ id: string; code: string }>;
   getCardActions: Function;
   reorderCards: Function;
 }
@@ -28,13 +28,12 @@ const CardsList: React.FC<CardsListProps> = ({
       <Droppable droppableId="droppable">
         {provided => (
           <div ref={provided.innerRef}>
-            {cards.map(({ id, code, evaluatedCode }, index) => (
+            {cards.map(({ id, code }, index) => (
               <DraggableCard
                 key={id}
                 id={id}
                 index={index}
                 code={code}
-                evaluatedCode={evaluatedCode}
                 getCardActions={getCardActions}
                 selectCardId={setSelectedCardId}
                 isActive={id === selectedCardId}

@@ -1,6 +1,5 @@
 import uuid from 'uuid/v4';
 import { createReducer } from '../shared/reduxHelpers';
-import evaluateCode from './evaluateCode';
 import { reorderArray } from './utils';
 
 const ACTION_TYPES = {
@@ -13,7 +12,6 @@ const ACTION_TYPES = {
 const createEmptyCard = generateId => ({
   id: uuid(),
   code: '',
-  evaluatedCode: '',
 });
 
 export const getInitialState = generateId => ({
@@ -23,9 +21,7 @@ export const getInitialState = generateId => ({
 const setCardCode = (state, cardId, value) => ({
   ...state,
   cards: state.cards.map(card =>
-    card.id === cardId
-      ? { ...card, code: value, evaluatedCode: evaluateCode(value) }
-      : card
+    card.id === cardId ? { ...card, code: value } : card
   ),
 });
 

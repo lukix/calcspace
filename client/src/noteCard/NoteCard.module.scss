@@ -64,7 +64,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
 @mixin commonCodeFormat {
   font-family: $expression-font-family;
   font-size: 1rem;
-  line-height: 1rem;
+  line-height: 1.2rem;
   margin: 0;
   padding: 8px;
   border: 0;

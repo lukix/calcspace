@@ -7,7 +7,6 @@ const commonTestState = {
     {
       id: '1',
       code: '123',
-      evaluatedCode: '123',
     },
   ],
 };
@@ -57,7 +56,6 @@ describe('state reducer', () => {
         {
           id: '1',
           code: '5',
-          evaluatedCode: '5',
         },
       ],
     });
@@ -67,10 +65,10 @@ describe('state reducer', () => {
     // given
     const prevState = {
       cards: [
-        { id: '0', code: '', evaluatedCode: '' },
-        { id: '1', code: '', evaluatedCode: '' },
-        { id: '2', code: '', evaluatedCode: '' },
-        { id: '3', code: '', evaluatedCode: '' },
+        { id: '0', code: '' },
+        { id: '1', code: '' },
+        { id: '2', code: '' },
+        { id: '3', code: '' },
       ],
     };
 
@@ -88,10 +86,10 @@ describe('state reducer', () => {
     // then
     expect(newState).toEqual({
       cards: [
-        { id: '2', code: '', evaluatedCode: '' },
-        { id: '0', code: '', evaluatedCode: '' },
-        { id: '1', code: '', evaluatedCode: '' },
-        { id: '3', code: '', evaluatedCode: '' },
+        { id: '2', code: '' },
+        { id: '0', code: '' },
+        { id: '1', code: '' },
+        { id: '3', code: '' },
       ],
     });
   });
