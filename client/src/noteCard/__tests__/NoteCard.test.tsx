@@ -3,23 +3,23 @@ import { render } from '@testing-library/react';
 import NoteCard from '../NoteCard';
 
 const defaultProps = {
-  updateExpression: () => {},
-  backspaceDeleteExpression: () => {},
-  enterAddExpression: () => {},
+  updateCode: () => {},
   deleteCard: () => {},
+  unselect: () => {},
+  isActive: false,
+  isSomeCardActive: false,
+  isDragging: false,
 };
 
 describe('NoteCard component', () => {
   it('should initialize with a given expressions list', () => {
     // given
-    const expressions = [
-      { id: '1', value: 'x = 4', showResult: false },
-      { id: '2', value: 'y = 5', showResult: false },
-    ];
+    const code = 'x = 4\ny = 5';
+    const evaluatedCode = 'x = 4\ny = 5';
 
     // when
     const { queryByText } = render(
-      <NoteCard {...defaultProps} expressions={expressions} />
+      <NoteCard {...defaultProps} code={code} evaluatedCode={evaluatedCode} />
     );
 
     // then

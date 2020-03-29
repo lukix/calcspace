@@ -6,9 +6,8 @@ const commonTestState = {
   cards: [
     {
       id: '1',
-      expressions: [
-        { id: '1', value: '123', result: 123, error: null, showResult: false },
-      ],
+      code: '123',
+      evaluatedCode: '123',
     },
   ],
 };
@@ -40,18 +39,14 @@ describe('state reducer', () => {
     expect(newState.cards.length).toEqual(0);
   });
 
-  it('should update expression', () => {
+  it('should update code', () => {
     // given
     const prevState = commonTestState;
 
     const cardId = '1';
-    const expressionIndex = 0;
     const newValue = '5';
 
-    const updateAction = getCardActions(cardId).updateExpression(
-      expressionIndex,
-      newValue
-    );
+    const updateAction = getCardActions(cardId).updateCode(newValue);
 
     // when
     const newState = getReducer(generateId)(prevState, updateAction);
@@ -61,109 +56,8 @@ describe('state reducer', () => {
       cards: [
         {
           id: '1',
-          expressions: [
-            { id: '1', value: '5', result: 5, error: null, showResult: false },
-          ],
-        },
-      ],
-    });
-  });
-
-  it('should enter add expression', () => {
-    // given
-    const prevState = commonTestState;
-
-    const cardId = '1';
-    const expressionIndex = 0;
-    const textLeft = '12';
-    const textRight = '3';
-
-    const enterAddExpressionAction = getCardActions(cardId).enterAddExpression(
-      expressionIndex,
-      textLeft,
-      textRight
-    );
-
-    // when
-    const newState = getReducer(generateId)(
-      prevState,
-      enterAddExpressionAction
-    );
-
-    // then
-    expect(newState).toEqual({
-      cards: [
-        {
-          id: '1',
-          expressions: [
-            {
-              id: '1',
-              value: '12',
-              result: 12,
-              error: null,
-              showResult: false,
-            },
-            { id: '99', value: '3', result: 3, error: null, showResult: false },
-          ],
-        },
-      ],
-    });
-  });
-
-  it('should backspace delete expression', () => {
-    // given
-    const prevState = {
-      cards: [
-        {
-          id: '1',
-          expressions: [
-            {
-              id: '1',
-              value: '123',
-              result: 123,
-              error: null,
-              showResult: false,
-            },
-            {
-              id: '2',
-              value: '456',
-              result: 456,
-              error: null,
-              showResult: false,
-            },
-          ],
-        },
-      ],
-    };
-
-    const cardId = '1';
-    const expressionIndex = 1;
-    const text = '456';
-
-    const backspaceDeleteExpressionAction = getCardActions(
-      cardId
-    ).backspaceDeleteExpression(expressionIndex, text);
-
-    // when
-    const newState = getReducer(generateId)(
-      prevState,
-      backspaceDeleteExpressionAction
-    );
-
-    // then
-    expect(newState).toEqual({
-      cards: [
-        {
-          id: '1',
-          expressions: [
-            {
-              id: '1',
-              value: '123456',
-              result: 123456,
-              error: null,
-              showResult: false,
-            },
-          ],
+          code: '5',
+          evaluatedCode: '5',
         },
       ],
     });
@@ -173,10 +67,10 @@ describe('state reducer', () => {
     // given
     const prevState = {
       cards: [
-        { id: '0', expressions: [] },
-        { id: '1', expressions: [] },
-        { id: '2', expressions: [] },
-        { id: '3', expressions: [] },
+        { id: '0', code: '', evaluatedCode: '' },
+        { id: '1', code: '', evaluatedCode: '' },
+        { id: '2', code: '', evaluatedCode: '' },
+        { id: '3', code: '', evaluatedCode: '' },
       ],
     };
 
@@ -194,10 +88,10 @@ describe('state reducer', () => {
     // then
     expect(newState).toEqual({
       cards: [
-        { id: '2', expressions: [] },
-        { id: '0', expressions: [] },
-        { id: '1', expressions: [] },
-        { id: '3', expressions: [] },
+        { id: '2', code: '', evaluatedCode: '' },
+        { id: '0', code: '', evaluatedCode: '' },
+        { id: '1', code: '', evaluatedCode: '' },
+        { id: '3', code: '', evaluatedCode: '' },
       ],
     });
   });

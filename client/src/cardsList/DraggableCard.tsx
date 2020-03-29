@@ -6,13 +6,8 @@ import styles from './DraggableCard.module.scss';
 
 interface DraggableCardProps {
   id: string;
-  expressions: Array<{
-    id: string;
-    value: string;
-    result?: number;
-    error?: { message: string };
-    showResult: boolean;
-  }>;
+  code: string;
+  evaluatedCode: string;
   index: number;
   getCardActions: Function;
   selectCardId: Function;
@@ -22,19 +17,15 @@ interface DraggableCardProps {
 
 const DraggableCard: React.FC<DraggableCardProps> = ({
   id,
-  expressions,
+  code,
+  evaluatedCode,
   index,
   getCardActions,
   selectCardId,
   isActive,
   isSomeCardActive,
 }) => {
-  const {
-    updateExpression,
-    backspaceDeleteExpression,
-    enterAddExpression,
-    deleteCard,
-  } = getCardActions(id);
+  const { updateCode, deleteCard } = getCardActions(id);
 
   const deleteAndUnselectCard = () => {
     deleteCard();
@@ -63,10 +54,9 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
             )}
 
             <NoteCard
-              expressions={expressions}
-              updateExpression={updateExpression}
-              backspaceDeleteExpression={backspaceDeleteExpression}
-              enterAddExpression={enterAddExpression}
+              code={code}
+              evaluatedCode={evaluatedCode}
+              updateCode={updateCode}
               deleteCard={deleteAndUnselectCard}
               isActive={isActive}
               isSomeCardActive={isSomeCardActive}

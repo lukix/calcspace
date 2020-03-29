@@ -1,5 +1,7 @@
 @import '../style/colors.scss';
 
+$expression-font-family: 'Courier New', Courier, monospace;
+
 .card {
   background: $light-white-color;
   color: $kinda-black-color;
@@ -53,4 +55,34 @@
       margin-right: 4px;
     }
   }
+}
+
+.codeWrapper {
+  position: relative;
+}
+
+@mixin commonCodeFormat {
+  font-family: $expression-font-family;
+  font-size: 1rem;
+  line-height: 1rem;
+  margin: 0;
+  padding: 8px;
+  border: 0;
+  overflow: hidden;
+}
+
+.codeEditor {
+  @include commonCodeFormat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 20px);
+  resize: none;
+  background: transparent;
+  color: transparent;
+  caret-color: black;
+}
+
+.formattedCode {
+  @include commonCodeFormat;
 }

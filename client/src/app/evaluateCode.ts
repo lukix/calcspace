@@ -1,28 +1,27 @@
 import evaluateExpression from '../mathEngine/evaluateExpression';
 
-const evaluateExpressionsList = expressions => {
+const evaluateCode = code => {
+  const expressions = code.split('\n');
   const initialState = { values: {}, expressions: [] };
   const { expressions: evaluatedExpressions } = expressions.reduce(
     (acc, expression) => {
       const { result, error, symbol, expression: expStr } = evaluateExpression(
-        expression.value,
+        expression,
         acc.values
       );
-      const showResult = expStr !== `${result}`;
+      const showResult = result !== null && expStr !== `${result}`;
+      const resultString = showResult ? ` = ${result}` : '';
       return {
         values:
           symbol && result !== null
             ? { ...acc.values, [symbol]: result }
             : acc.values,
-        expressions: [
-          ...acc.expressions,
-          { ...expression, result, error, showResult },
-        ],
+        expressions: [...acc.expressions, `${expression}${resultString}`],
       };
     },
     initialState
   );
-  return evaluatedExpressions;
+  return evaluatedExpressions.join('\n');
 };
 
-export default evaluateExpressionsList;
+export default evaluateCode;
