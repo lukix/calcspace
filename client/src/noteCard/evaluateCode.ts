@@ -1,27 +1,37 @@
 import evaluateExpression from '../mathEngine/evaluateExpression';
 
+export const tokens = {
+  NORMAL: 'NORMAL',
+  VIRTUAL: 'VIRTUAL',
+  ERROR: 'ERROR',
+};
+
 const evaluateCode = code => {
-  const expressions = code.split('\n');
-  const initialState = { values: {}, expressions: [] };
-  const { expressions: evaluatedExpressions } = expressions.reduce(
-    (acc, expression) => {
-      const { result, error, symbol, expression: expStr } = evaluateExpression(
-        expression,
-        acc.values
-      );
-      const showResult = result !== null && expStr !== `${result}`;
-      const resultString = showResult ? ` = ${result}` : '';
-      return {
-        values:
-          symbol && result !== null
-            ? { ...acc.values, [symbol]: result }
-            : acc.values,
-        expressions: [...acc.expressions, `${expression}${resultString}`],
-      };
-    },
-    initialState
-  );
-  return evaluatedExpressions.join('\n');
+  const codeLines = code.split('\n');
+  const initialState = { values: {}, evaluatedLines: [] };
+  const { evaluatedLines } = codeLines.reduce((acc, expression) => {
+    const { result, error, symbol, expression: expStr } = evaluateExpression(
+      expression,
+      acc.values
+    );
+    const showResult = result !== null && expStr !== `${result}`;
+    const resultString = showResult ? ` = ${result}` : '';
+    const tokenizedLine = [
+      {
+        value: expression,
+        tags: [tokens.NORMAL, ...(error ? [tokens.ERROR] : [])],
+      },
+      { value: resultString, tags: [tokens.VIRTUAL] },
+    ];
+    return {
+      values:
+        symbol && result !== null
+          ? { ...acc.values, [symbol]: result }
+          : acc.values,
+      evaluatedLines: [...acc.evaluatedLines, tokenizedLine],
+    };
+  }, initialState);
+  return evaluatedLines;
 };
 
 export default evaluateCode;

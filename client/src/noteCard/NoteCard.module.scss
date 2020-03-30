@@ -85,4 +85,12 @@ $expression-font-family: 'Courier New', Courier, monospace;
 
 .formattedCode {
   @include commonCodeFormat;
+
+  .tokenError {
+    color: red;
+  }
+
+  .tokenVirtual {
+    color: #999;
+  }
 }

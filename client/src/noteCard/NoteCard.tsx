@@ -1,8 +1,27 @@
 import React from 'react';
 import { FaTimesCircle, FaTrash } from 'react-icons/fa';
 import classNames from 'classnames';
-import evaluateCode from './evaluateCode';
+import evaluateCode, { tokens as availableTokens } from './evaluateCode';
 import styles from './NoteCard.module.scss';
+
+const HighlightedLine = ({ tokens }) => {
+  return tokens.map(({ value, tags }) => {
+    const className = classNames({
+      [styles.tokenVirtual]: tags.includes(availableTokens.VIRTUAL),
+      [styles.tokenError]: tags.includes(availableTokens.ERROR),
+    });
+    return <span className={className}>{value}</span>;
+  });
+};
+
+const HighlightedCode = ({ tokenizedLines }) => {
+  return tokenizedLines.map(tokens => (
+    <>
+      <HighlightedLine tokens={tokens} />
+      <br />
+    </>
+  ));
+};
 
 interface NoteCardProps {
   code: string;
@@ -50,7 +69,9 @@ const NoteCard: React.FC<NoteCardProps> = ({
             style={{ height: `${code.split('\n').length * 1.2}rem` }}
           />
         )}
-        <pre className={styles.formattedCode}>{`${evaluatedCode} `}</pre>
+        <pre className={styles.formattedCode}>
+          <HighlightedCode tokenizedLines={evaluatedCode} />
+        </pre>
       </div>
       {isActive && (
         <div className={styles.cardFooter}>
