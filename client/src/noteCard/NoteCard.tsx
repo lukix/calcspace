@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { FaTimesCircle, FaTrash } from 'react-icons/fa';
 import classNames from 'classnames';
 import evaluateCode, { tokens as availableTokens } from './evaluateCode';
 import styles from './NoteCard.module.scss';
 
 const HighlightedLine = ({ tokens }) => {
-  return tokens.map(({ value, tags }) => {
+  return tokens.map(({ value, tags }, index) => {
     const className = classNames({
       [styles.tokenVirtual]: tags.includes(availableTokens.VIRTUAL),
       [styles.tokenError]: tags.includes(availableTokens.ERROR),
     });
-    return <span className={className}>{value}</span>;
+    return (
+      <span key={index} className={className}>
+        {value}
+      </span>
+    );
   });
 };
 
 const HighlightedCode = ({ tokenizedLines }) => {
-  return tokenizedLines.map(tokens => (
-    <>
+  return tokenizedLines.map((tokens, index) => (
+    <Fragment key={index}>
       <HighlightedLine tokens={tokens} />
       <br />
-    </>
+    </Fragment>
   ));
 };
 
