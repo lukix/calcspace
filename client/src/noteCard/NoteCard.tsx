@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useRef, useEffect } from 'react';
 import { FaTimesCircle, FaTrash } from 'react-icons/fa';
 import classNames from 'classnames';
 import evaluateCode, { tokens as availableTokens } from './evaluateCode';
@@ -46,6 +46,14 @@ const NoteCard: React.FC<NoteCardProps> = ({
   unselect,
   isDragging,
 }) => {
+  const textareaElement = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (isActive && textareaElement.current) {
+      textareaElement.current.focus();
+    }
+  }, [isActive]);
+
   const onCodeChange = e => {
     updateCode(e.target.value);
   };
@@ -67,6 +75,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
       <div className={styles.codeWrapper}>
         {isActive && (
           <textarea
+            ref={textareaElement}
             className={styles.codeEditor}
             value={code}
             onChange={onCodeChange}
