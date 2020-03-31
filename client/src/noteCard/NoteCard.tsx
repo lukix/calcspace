@@ -1,5 +1,5 @@
-import React, { Fragment, useRef, useEffect } from 'react';
-import { FaTimesCircle, FaTrash } from 'react-icons/fa';
+import React, { Fragment, useRef } from 'react';
+import { FaTrash } from 'react-icons/fa';
 import classNames from 'classnames';
 import evaluateCode, { tokens as availableTokens } from './evaluateCode';
 import styles from './NoteCard.module.scss';
@@ -31,28 +31,20 @@ interface NoteCardProps {
   code: string;
   updateCode: Function;
   deleteCard: Function;
-  isActive: boolean;
-  isSomeCardActive: boolean;
-  unselect: Function;
-  isDragging: boolean;
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({
   code,
   updateCode,
   deleteCard,
-  isActive,
-  isSomeCardActive,
-  unselect,
-  isDragging,
 }) => {
   const textareaElement = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    if (isActive && textareaElement.current) {
+  const focusTextarea = () => {
+    if (textareaElement.current) {
       textareaElement.current.focus();
     }
-  }, [isActive]);
+  };
 
   const onCodeChange = e => {
     updateCode(e.target.value);
@@ -61,39 +53,24 @@ const NoteCard: React.FC<NoteCardProps> = ({
   const evaluatedCode = evaluateCode(code);
 
   return (
-    <div
-      className={classNames(styles.card, {
-        [styles.notActive]: !isActive && isSomeCardActive,
-        [styles.isDragging]: isDragging,
-      })}
-    >
-      {isActive && (
-        <div className={styles.closeCardButton}>
-          <FaTimesCircle onClick={() => unselect()} />
-        </div>
-      )}
+    <div className={styles.card} onClick={focusTextarea}>
       <div className={styles.codeWrapper}>
-        {isActive && (
-          <textarea
-            ref={textareaElement}
-            className={styles.codeEditor}
-            value={code}
-            onChange={onCodeChange}
-            style={{ height: `${code.split('\n').length * 1.2}rem` }}
-          />
-        )}
+        <textarea
+          ref={textareaElement}
+          className={styles.codeEditor}
+          value={code}
+          onChange={onCodeChange}
+          style={{ height: `${code.split('\n').length * 1.2}rem` }}
+        />
         <pre className={styles.formattedCode}>
           <HighlightedCode tokenizedLines={evaluatedCode} />
         </pre>
       </div>
-      {isActive && (
-        <div className={styles.cardFooter}>
-          <button onClick={() => deleteCard()}>
-            <FaTrash />
-            Delete Card
-          </button>
-        </div>
-      )}
+      <div className={styles.cardFooter}>
+        <button onClick={() => deleteCard()}>
+          <FaTrash />
+        </button>
+      </div>
     </div>
   );
 };

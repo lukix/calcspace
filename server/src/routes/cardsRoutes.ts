@@ -81,20 +81,5 @@ export default ({ db }) => {
     },
   };
 
-  // const reorderCards = {
-  //   path: '/',
-  //   method: 'put',
-  //   handler: async ({ user, params }) => {
-  //     // Save, delete, insert in a new place
-  //     // const { cardId } = params;
-  //     // await usersCollection.updateOne(
-  //     //   {
-  //     //     _id: ObjectId(user.userId),
-  //     //   },
-  //     //   { $pull: { cards: { id: cardId } } }
-  //     // );
-  //   },
-  // };
-
   return [getCards, addCard, deleteCard, updateCard];
 };

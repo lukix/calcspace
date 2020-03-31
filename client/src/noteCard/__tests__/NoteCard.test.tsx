@@ -17,10 +17,27 @@ describe('NoteCard component', () => {
     const code = 'x = 4\ny = 5';
 
     // when
+    const { queryAllByText } = render(
+      <NoteCard {...defaultProps} code={code} />
+    );
+
+    // then
+    expect(
+      queryAllByText('x = 4', { exact: false }).length
+    ).toBeGreaterThanOrEqual(1);
+    expect(
+      queryAllByText('y = 5', { exact: false }).length
+    ).toBeGreaterThanOrEqual(1);
+  });
+
+  it('should display result of an expression', () => {
+    // given
+    const code = 'x = 4 + 2';
+
+    // when
     const { queryByText } = render(<NoteCard {...defaultProps} code={code} />);
 
     // then
-    expect(queryByText('x = 4', { exact: false })).not.toEqual(null);
-    expect(queryByText('y = 5', { exact: false })).not.toEqual(null);
+    expect(queryByText('= 6', { exact: false })).not.toEqual(null);
   });
 });

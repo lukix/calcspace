@@ -63,7 +63,6 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
           getCardActions={cardId =>
             bindDispatch(getCardActions(cardId), dispatch)
           }
-          reorderCards={reorderCards}
         />
       </div>
       <SignInUpModal

@@ -1,50 +1,27 @@
-import React, { useState } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import DraggableCard from './DraggableCard';
+import React from 'react';
+import NoteCard from '../noteCard/NoteCard';
 
 interface CardsListProps {
   cards: Array<{ id: string; code: string }>;
   getCardActions: Function;
-  reorderCards: Function;
 }
 
-const CardsList: React.FC<CardsListProps> = ({
-  cards,
-  getCardActions,
-  reorderCards,
-}) => {
-  const [selectedCardId, setSelectedCardId] = useState(null);
-
-  const onDragEnd = ({ source, destination }) => {
-    if (!destination) {
-      return;
-    }
-
-    reorderCards(source.index, destination.index);
-  };
-
+const CardsList: React.FC<CardsListProps> = ({ cards, getCardActions }) => {
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="droppable">
-        {provided => (
-          <div ref={provided.innerRef}>
-            {cards.map(({ id, code }, index) => (
-              <DraggableCard
-                key={id}
-                id={id}
-                index={index}
-                code={code}
-                getCardActions={getCardActions}
-                selectCardId={setSelectedCardId}
-                isActive={id === selectedCardId}
-                isSomeCardActive={selectedCardId !== null}
-              />
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <div>
+      {cards.map(({ id, code }) => {
+        const { updateCode, deleteCard } = getCardActions(id);
+
+        return (
+          <NoteCard
+            key={id}
+            updateCode={updateCode}
+            deleteCard={deleteCard}
+            code={code}
+          />
+        );
+      })}
+    </div>
   );
 };
 
