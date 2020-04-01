@@ -2,10 +2,13 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import NoteCard from '../NoteCard';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = (): void => {};
+
 const defaultProps = {
-  updateCode: () => {},
-  deleteCard: () => {},
-  unselect: () => {},
+  updateCode: noop,
+  deleteCard: noop,
+  unselect: noop,
   isActive: false,
   isSomeCardActive: false,
   isDragging: false,
