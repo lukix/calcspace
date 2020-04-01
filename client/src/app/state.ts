@@ -1,6 +1,5 @@
 import uuid from 'uuid/v4';
 import { createReducer } from '../shared/reduxHelpers';
-import { reorderArray } from './utils';
 
 const ACTION_TYPES = {
   UPDATE_CODE: 'UPDATE_CODE',
@@ -38,13 +37,6 @@ export const getReducer = generateId =>
         ...state,
         cards: state.cards.filter(card => card.id !== cardId),
       }),
-      [ACTION_TYPES.REORDER_CARDS]: (
-        state,
-        { sourceCardIndex, destinationCardIndex }
-      ) => ({
-        ...state,
-        cards: reorderArray(state.cards, sourceCardIndex, destinationCardIndex),
-      }),
     },
   });
 
@@ -58,8 +50,4 @@ export const getCardActions = cardId => ({
 
 export const actions = {
   addCard: () => ({ type: ACTION_TYPES.ADD_CARD }),
-  reorderCards: (sourceCardIndex, destinationCardIndex) => ({
-    type: ACTION_TYPES.REORDER_CARDS,
-    payload: { sourceCardIndex, destinationCardIndex },
-  }),
 };

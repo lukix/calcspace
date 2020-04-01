@@ -22,7 +22,7 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
   const { cards } = state;
 
-  const { addCard, reorderCards } = bindDispatch(actions, dispatch);
+  const { addCard } = bindDispatch(actions, dispatch);
 
   useEffect(() => {
     fetchLoggedInUser();
