@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import classNames from 'classnames';
 import { FaPlus } from 'react-icons/fa';
 import styles from './FilesList.module.scss';
 
@@ -9,6 +10,8 @@ interface FilesListProps {
 }
 
 const FilesList: React.FC<FilesListProps> = ({ items, addFile }) => {
+  const { pathname } = useLocation();
+
   return (
     <div className={styles.filesListPanel}>
       <div className={styles.actionIcons}>
@@ -18,7 +21,13 @@ const FilesList: React.FC<FilesListProps> = ({ items, addFile }) => {
       <ul className={styles.filesList}>
         {items.map(({ id, name }) => (
           <Link key={id} to={`/file/${id}`}>
-            <li>{name}</li>
+            <li
+              className={classNames({
+                [styles.selected]: `/file/${id}` === pathname,
+              })}
+            >
+              {name}
+            </li>
           </Link>
         ))}
       </ul>

@@ -57,7 +57,7 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
                 <FilePage cards={cards} updateCode={updateCode} />
               </Route>
               <Route path="/">
-                Welcome! Select file in the left panel to get started.
+                Welcome! Select a file in the left panel to get started.
               </Route>
             </Switch>
           </div>

@@ -2,7 +2,7 @@
 
 Start app by running:
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 Rebuild docker images:
