@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaPlus, FaTrash } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
@@ -16,7 +17,9 @@ const FilesList: React.FC<FilesListProps> = ({ items, addFile }) => {
       </div>
       <ul className={styles.filesList}>
         {items.map(({ id, name }) => (
-          <li key={id}>{name}</li>
+          <Link key={id} to={`/file/${id}`}>
+            <li>{name}</li>
+          </Link>
         ))}
       </ul>
     </div>

@@ -24,4 +24,13 @@
   list-style-type: none;
   padding: 5px 10px;
   font-family: 'Courier New', Courier, monospace;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
