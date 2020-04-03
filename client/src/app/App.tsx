@@ -1,11 +1,12 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { FaPlus, FaSignInAlt } from 'react-icons/fa';
 import uuid from 'uuid/v4';
 import bindDispatch from '../shared/bindDispatch';
-import CardsList from '../cardsList/CardsList';
+import HeaderBar from '../headerBar/HeaderBar';
+import CodeEditor from '../codeEditor/CodeEditor';
 import SignInUpModal from '../signInUpModal/SignInUpModal';
-import { getReducer, getInitialState, getCardActions, actions } from './state';
+import FilesList from '../filesList/FilesList';
+import { getReducer, getInitialState, actions } from './state';
 import { actions as reduxActions, selectors } from './store';
 import { usePrevious } from './utils';
 import { compareStates } from './syncService';
@@ -22,7 +23,7 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
   const { cards } = state;
 
-  const { addCard } = bindDispatch(actions, dispatch);
+  const { addCard, updateCode } = bindDispatch(actions, dispatch);
 
   useEffect(() => {
     fetchLoggedInUser();
@@ -43,27 +44,19 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
     }
   }, [cards]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const { id, code } = cards[0];
+
   return (
-    <div>
-      <div className={styles.headerBar}>
-        <div className={styles.headerTitle}>
-          Math Notes{user && ` - ${user.username}`}
-        </div>
-        <div className={styles.icons}>
-          <FaPlus title="Add new card" onClick={() => addCard()} />
-          <FaSignInAlt
-            title="Sign in / Sign up"
-            onClick={() => setIsModalVisible(true)}
+    <div className={styles.app}>
+      <HeaderBar setIsModalVisible={setIsModalVisible} />
+      <div className={styles.contentContainer}>
+        <FilesList items={cards} addFile={addCard} />
+        <div className={styles.content}>
+          <CodeEditor
+            code={code}
+            updateCode={code => updateCode({ code, id })}
           />
         </div>
-      </div>
-      <div className={styles.contentContainer}>
-        <CardsList
-          cards={cards}
-          getCardActions={cardId =>
-            bindDispatch(getCardActions(cardId), dispatch)
-          }
-        />
       </div>
       <SignInUpModal
         visible={isModalVisible}

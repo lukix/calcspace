@@ -1,0 +1,28 @@
+@import '../style/colors.scss';
+
+.headerBar {
+  height: 40px;
+  background: $wine-color;
+  color: $light-white-color;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.icons {
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  svg {
+    cursor: pointer;
+    margin: 0 10px;
+  }
+}
+
+.contentContainer {
+  max-width: 1024px;
+  margin: 0px auto;
+}

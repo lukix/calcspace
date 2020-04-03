@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import NoteCard from '../NoteCard';
+import CodeEditor from '../CodeEditor';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = (): void => {};
@@ -14,14 +14,14 @@ const defaultProps = {
   isDragging: false,
 };
 
-describe('NoteCard component', () => {
+describe('CodeEditor component', () => {
   it('should initialize with a given expressions list', () => {
     // given
     const code = 'x = 4\ny = 5';
 
     // when
     const { queryAllByText } = render(
-      <NoteCard {...defaultProps} code={code} />
+      <CodeEditor {...defaultProps} code={code} />
     );
 
     // then
@@ -38,7 +38,9 @@ describe('NoteCard component', () => {
     const code = 'x = 4 + 2';
 
     // when
-    const { queryByText } = render(<NoteCard {...defaultProps} code={code} />);
+    const { queryByText } = render(
+      <CodeEditor {...defaultProps} code={code} />
+    );
 
     // then
     expect(queryByText('= 6', { exact: false })).not.toEqual(null);

@@ -2,13 +2,9 @@
 
 $expression-font-family: 'Courier New', Courier, monospace;
 
-.card {
-  background: $light-white-color;
-  color: $kinda-black-color;
-  box-shadow: 0px 0px 5px 0px transparentize($kinda-black-color, 0.5);
-  padding: 20px;
-  position: relative;
-  margin: 40px 0;
+.codeEditor {
+  height: 100%;
+  max-height: 100%;
 }
 
 .closeCardButton {
@@ -26,28 +22,9 @@ $expression-font-family: 'Courier New', Courier, monospace;
   }
 }
 
-.cardFooter {
-  margin-top: 5px;
-  margin-bottom: -10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  color: #aaa;
-  font-size: 0.8rem;
-
-  button {
-    cursor: pointer;
-    background: transparent;
-    border: 1px solid;
-    border-radius: 2px;
-    display: flex;
-    height: 24px;
-  }
-}
-
 .codeWrapper {
   position: relative;
+  height: 100%;
 }
 
 @mixin commonCodeFormat {
@@ -60,16 +37,19 @@ $expression-font-family: 'Courier New', Courier, monospace;
   overflow: hidden;
 }
 
-.codeEditor {
+.editorTextarea {
   @include commonCodeFormat;
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(100% - 20px);
+  width: 100%;
   resize: none;
   background: transparent;
   color: transparent;
   caret-color: black;
+  min-height: 200px;
+  box-sizing: border-box;
+  min-height: 100%;
 }
 
 .formattedCode {

@@ -1,4 +1,3 @@
-import uuid from 'uuid/v4';
 import { createReducer } from '../shared/reduxHelpers';
 
 const ACTION_TYPES = {
@@ -9,8 +8,9 @@ const ACTION_TYPES = {
 };
 
 const createEmptyCard = generateId => ({
-  id: uuid(),
+  id: generateId(),
   code: '',
+  name: 'New file',
 });
 
 export const getInitialState = generateId => ({
@@ -40,14 +40,11 @@ export const getReducer = generateId =>
     },
   });
 
-export const getCardActions = cardId => ({
-  updateCode: newValue => ({
-    type: ACTION_TYPES.UPDATE_CODE,
-    payload: { newValue, cardId },
-  }),
-  deleteCard: () => ({ type: ACTION_TYPES.DELETE_CARD, payload: { cardId } }),
-});
-
 export const actions = {
   addCard: () => ({ type: ACTION_TYPES.ADD_CARD }),
+  updateCode: ({ code, id }) => ({
+    type: ACTION_TYPES.UPDATE_CODE,
+    payload: { newValue: code, cardId: id },
+  }),
+  // deleteCard: () => ({ type: ACTION_TYPES.DELETE_CARD, payload: { cardId } }),
 };

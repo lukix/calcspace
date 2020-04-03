@@ -1,8 +1,7 @@
-import React, { Fragment, useRef } from 'react';
-import { FaTrash } from 'react-icons/fa';
+import React, { Fragment } from 'react';
 import classNames from 'classnames';
 import evaluateCode, { tokens as availableTokens } from './evaluateCode';
-import styles from './NoteCard.module.scss';
+import styles from './CodeEditor.module.scss';
 
 const HighlightedLine = ({ tokens }) => {
   return tokens.map(({ value, tags }, index) => {
@@ -27,25 +26,12 @@ const HighlightedCode = ({ tokenizedLines }) => {
   ));
 };
 
-interface NoteCardProps {
+interface CodeEditorProps {
   code: string;
   updateCode: Function;
-  deleteCard: Function;
 }
 
-const NoteCard: React.FC<NoteCardProps> = ({
-  code,
-  updateCode,
-  deleteCard,
-}) => {
-  const textareaElement = useRef<HTMLTextAreaElement>(null);
-
-  const focusTextarea = () => {
-    if (textareaElement.current) {
-      textareaElement.current.focus();
-    }
-  };
-
+const CodeEditor: React.FC<CodeEditorProps> = ({ code, updateCode }) => {
   const onCodeChange = e => {
     updateCode(e.target.value);
   };
@@ -53,26 +39,21 @@ const NoteCard: React.FC<NoteCardProps> = ({
   const evaluatedCode = evaluateCode(code);
 
   return (
-    <div className={styles.card} onClick={focusTextarea}>
+    <div className={styles.codeEditor}>
       <div className={styles.codeWrapper}>
         <textarea
-          ref={textareaElement}
-          className={styles.codeEditor}
+          className={styles.editorTextarea}
           value={code}
           onChange={onCodeChange}
           style={{ height: `${code.split('\n').length * 1.2}rem` }}
+          placeholder="Type a math expression..."
         />
         <pre className={styles.formattedCode}>
           <HighlightedCode tokenizedLines={evaluatedCode} />
         </pre>
       </div>
-      <div className={styles.cardFooter}>
-        <button onClick={() => deleteCard()}>
-          <FaTrash />
-        </button>
-      </div>
     </div>
   );
 };
 
-export default NoteCard;
+export default CodeEditor;
