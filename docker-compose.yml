@@ -1,6 +1,7 @@
 version: '3'
 services:
   client:
+    stdin_open: true
     build: ./client
     restart: always
     command: yarn start
