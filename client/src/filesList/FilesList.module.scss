@@ -39,6 +39,20 @@
     }
   }
 
+  .fileName {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 5px;
+    }
+
+    span {
+      position: relative;
+      top: 1px;
+    }
+  }
+
   li {
     padding: 0px 10px;
     height: 30px;

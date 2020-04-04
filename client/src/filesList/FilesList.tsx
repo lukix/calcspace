@@ -21,7 +21,14 @@ const FilesList: React.FC<FilesListProps> = ({
       </div>
       <ul className={styles.filesList}>
         {items.map(({ id, name }) => (
-          <FileItem key={id} id={id} name={name} deleteFile={deleteFile} />
+          <FileItem
+            key={id}
+            id={id}
+            name={name}
+            deleteFile={deleteFile}
+            isSynchronizing={false}
+            isModified={false}
+          />
         ))}
       </ul>
     </div>
