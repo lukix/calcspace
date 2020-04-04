@@ -7,21 +7,6 @@ $expression-font-family: 'Courier New', Courier, monospace;
   max-height: 100%;
 }
 
-.closeCardButton {
-  position: absolute;
-  right: -12px;
-  top: -12px;
-  font-size: 32px;
-  background: white;
-  height: 32px;
-  border-radius: 16px;
-
-  svg {
-    display: block;
-    cursor: pointer;
-  }
-}
-
 .codeWrapper {
   position: relative;
   height: 100%;

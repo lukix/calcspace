@@ -2,52 +2,51 @@ import { createReducer } from '../shared/reduxHelpers';
 
 const ACTION_TYPES = {
   UPDATE_CODE: 'UPDATE_CODE',
-  ADD_CARD: 'ADD_CARD',
-  DELETE_CARD: 'DELETE_CARD',
-  REORDER_CARDS: 'REORDER_CARDS',
+  ADD_FILE: 'ADD_FILE',
+  DELETE_FILE: 'DELETE_FILE',
 };
 
-const createEmptyCard = generateId => ({
+const createEmptyFile = generateId => ({
   id: generateId(),
   code: '',
-  name: 'New file',
+  name: new Date().toISOString(),
 });
 
 export const getInitialState = generateId => ({
-  cards: [createEmptyCard(generateId)],
+  files: [createEmptyFile(generateId)],
 });
 
-const setCardCode = (state, cardId, value) => ({
+const setFileCode = (state, fileId, value) => ({
   ...state,
-  cards: state.cards.map(card =>
-    card.id === cardId ? { ...card, code: value } : card
+  files: state.files.map(file =>
+    file.id === fileId ? { ...file, code: value } : file
   ),
 });
 
 export const getReducer = generateId =>
   createReducer({
     actionHandlers: {
-      [ACTION_TYPES.UPDATE_CODE]: (state, { newValue, cardId }) =>
-        setCardCode(state, cardId, newValue),
-      [ACTION_TYPES.ADD_CARD]: state => ({
+      [ACTION_TYPES.UPDATE_CODE]: (state, { newValue, fileId }) =>
+        setFileCode(state, fileId, newValue),
+      [ACTION_TYPES.ADD_FILE]: state => ({
         ...state,
-        cards: [createEmptyCard(generateId), ...state.cards],
+        files: [createEmptyFile(generateId), ...state.files],
       }),
-      [ACTION_TYPES.DELETE_CARD]: (state, { cardId }) => ({
+      [ACTION_TYPES.DELETE_FILE]: (state, { fileId }) => ({
         ...state,
-        cards: state.cards.filter(card => card.id !== cardId),
+        files: state.files.filter(file => file.id !== fileId),
       }),
     },
   });
 
 export const actions = {
-  addCard: () => ({ type: ACTION_TYPES.ADD_CARD }),
+  addFile: () => ({ type: ACTION_TYPES.ADD_FILE }),
   updateCode: ({ code, id }) => ({
     type: ACTION_TYPES.UPDATE_CODE,
-    payload: { newValue: code, cardId: id },
+    payload: { newValue: code, fileId: id },
   }),
-  deleteCard: ({ id }) => ({
-    type: ACTION_TYPES.DELETE_CARD,
-    payload: { cardId: id },
+  deleteFile: ({ id }) => ({
+    type: ACTION_TYPES.DELETE_FILE,
+    payload: { fileId: id },
   }),
 };

@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useState } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import uuid from 'uuid/v4';
@@ -9,8 +9,6 @@ import SignInUpModal from '../signInUpModal/SignInUpModal';
 import FilesList from '../filesList/FilesList';
 import { getReducer, getInitialState, actions } from './state';
 import { actions as reduxActions, selectors } from './store';
-import { usePrevious } from './utils';
-import { compareStates } from './syncService';
 
 import sharedStyles from '../shared/shared.module.scss';
 import styles from './App.module.scss';
@@ -31,9 +29,9 @@ const App: React.FC<AppProps> = ({
   fetchLoggedInUser,
 }) => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
-  const { cards } = state;
+  const { files } = state;
 
-  const { addCard, updateCode, deleteCard } = bindDispatch(actions, dispatch);
+  const { addFile, updateCode, deleteFile } = bindDispatch(actions, dispatch);
 
   useEffect(() => {
     fetchLoggedInUser();
@@ -41,16 +39,9 @@ const App: React.FC<AppProps> = ({
 
   useEffect(() => {
     if (user) {
-      console.log('TODO: Fetch cards (and discard any existing cards)');
+      console.log('TODO: Fetch files (and discard any existing files)');
     }
   }, [user]);
-
-  const previousCards = usePrevious(cards);
-  useEffect(() => {
-    if (previousCards) {
-      compareStates(previousCards, cards);
-    }
-  }, [cards]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isFetchingUser) {
     return <div className={sharedStyles.infoBox}>Loading...</div>;
@@ -65,11 +56,11 @@ const App: React.FC<AppProps> = ({
       <div className={styles.app}>
         <HeaderBar username={user && user.username} />
         <div className={styles.contentContainer}>
-          <FilesList items={cards} addFile={addCard} deleteFile={deleteCard} />
+          <FilesList items={files} addFile={addFile} deleteFile={deleteFile} />
           <div className={styles.content}>
             <Switch>
               <Route path="/file/:fileId">
-                <FilePage cards={cards} updateCode={updateCode} />
+                <FilePage files={files} updateCode={updateCode} />
               </Route>
               <Route path="/">
                 <div className={sharedStyles.infoBox}>

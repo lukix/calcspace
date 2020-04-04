@@ -1,95 +1,64 @@
-import { getReducer, getCardActions, actions } from '../state';
+import { getReducer, actions } from '../state';
 
 const generateId = () => '99';
 
 const commonTestState = {
-  cards: [
+  files: [
     {
       id: '1',
+      name: 'file1',
       code: '123',
     },
   ],
 };
 
 describe('state reducer', () => {
-  it('should add a card', () => {
+  it('should add a file', () => {
     // given
     const prevState = commonTestState;
-    const addCardAction = actions.addCard();
+    const addFileAction = actions.addFile();
 
     // when
-    const newState = getReducer(generateId)(prevState, addCardAction);
+    const newState = getReducer(generateId)(prevState, addFileAction);
 
     // then
-    expect(newState.cards.length).toEqual(2);
+    expect(newState.files.length).toEqual(2);
   });
 
-  it('should delete a card', () => {
+  it('should delete a file', () => {
     // given
     const prevState = commonTestState;
 
-    const cardId = '1';
-    const deleteCardAction = getCardActions(cardId).deleteCard();
+    const fileId = '1';
+    const deleteFileAction = actions.deleteFile({ id: fileId });
 
     // when
-    const newState = getReducer(generateId)(prevState, deleteCardAction);
+    const newState = getReducer(generateId)(prevState, deleteFileAction);
 
     // then
-    expect(newState.cards.length).toEqual(0);
+    expect(newState.files.length).toEqual(0);
   });
 
   it('should update code', () => {
     // given
     const prevState = commonTestState;
 
-    const cardId = '1';
+    const fileId = '1';
     const newValue = '5';
 
-    const updateAction = getCardActions(cardId).updateCode(newValue);
+    const updateAction = actions.updateCode({ id: fileId, code: newValue });
 
     // when
     const newState = getReducer(generateId)(prevState, updateAction);
 
     // then
     expect(newState).toEqual({
-      cards: [
+      files: [
         {
           id: '1',
+          name: 'file1',
           code: '5',
         },
-      ],
-    });
-  });
-
-  it('should reorder cards', () => {
-    // given
-    const prevState = {
-      cards: [
-        { id: '0', code: '' },
-        { id: '1', code: '' },
-        { id: '2', code: '' },
-        { id: '3', code: '' },
-      ],
-    };
-
-    const sourceCardIndex = 2;
-    const destinationCardIndex = 0;
-
-    const updateAction = actions.reorderCards(
-      sourceCardIndex,
-      destinationCardIndex
-    );
-
-    // when
-    const newState = getReducer(generateId)(prevState, updateAction);
-
-    // then
-    expect(newState).toEqual({
-      cards: [
-        { id: '2', code: '' },
-        { id: '0', code: '' },
-        { id: '1', code: '' },
-        { id: '3', code: '' },
       ],
     });
   });

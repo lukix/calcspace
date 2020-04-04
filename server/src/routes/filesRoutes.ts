@@ -5,7 +5,7 @@ import { validateBodyWithYup } from '../shared/express-helpers';
 export default ({ db }) => {
   const usersCollection = db.collection('users');
 
-  const getCards = {
+  const getFiles = {
     path: '/',
     method: 'get',
     handler: async ({ user }) => {
@@ -17,50 +17,50 @@ export default ({ db }) => {
         return { status: 404 };
       }
 
-      const { cards } = foundUser;
+      const { files } = foundUser;
 
       return {
-        response: cards,
+        response: files,
       };
     },
   };
 
-  const addCard = {
+  const addFile = {
     path: '/',
     method: 'post',
     validate: validateBodyWithYup(
       yup.object({
-        cardId: yup.string().required(),
+        fileId: yup.string().required(),
       })
     ),
     handler: async ({ user, body }) => {
-      const { cardId } = body;
-      const newCard = { id: cardId, expressions: [] };
+      const { fileId } = body;
+      const newFile = { id: fileId, expressions: [] };
       await usersCollection.updateOne(
         {
           _id: ObjectId(user.userId),
         },
-        { $push: { cards: { $each: [newCard], $position: 0 } } }
+        { $push: { files: { $each: [newFile], $position: 0 } } }
       );
     },
   };
 
-  const deleteCard = {
-    path: '/:cardId',
+  const deleteFile = {
+    path: '/:fileId',
     method: 'delete',
     handler: async ({ user, params }) => {
-      const { cardId } = params;
+      const { fileId } = params;
       await usersCollection.updateOne(
         {
           _id: ObjectId(user.userId),
         },
-        { $pull: { cards: { id: cardId } } }
+        { $pull: { files: { id: fileId } } }
       );
     },
   };
 
-  const updateCard = {
-    path: '/:cardId',
+  const updateFile = {
+    path: '/:fileId',
     method: 'put',
     validate: validateBodyWithYup(
       yup.object({
@@ -68,18 +68,18 @@ export default ({ db }) => {
       })
     ),
     handler: async ({ body, user, params }) => {
-      const { cardId } = params;
-      const newCard = { ...body, id: cardId };
+      const { fileId } = params;
+      const newFile = { ...body, id: fileId };
       const { result } = await usersCollection.updateOne(
         {
           _id: ObjectId(user.userId),
         },
-        { $set: { 'cards.$[card]': newCard } },
-        { arrayFilters: [{ 'card.id': { $eq: cardId } }] }
+        { $set: { 'files.$[file]': newFile } },
+        { arrayFilters: [{ 'file.id': { $eq: fileId } }] }
       );
       return { status: result.nModified === 0 ? 404 : 200 };
     },
   };
 
-  return [getCards, addCard, deleteCard, updateCard];
+  return [getFiles, addFile, deleteFile, updateFile];
 };

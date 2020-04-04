@@ -7,11 +7,6 @@ const noop = (): void => {};
 
 const defaultProps = {
   updateCode: noop,
-  deleteCard: noop,
-  unselect: noop,
-  isActive: false,
-  isSomeCardActive: false,
-  isDragging: false,
 };
 
 describe('CodeEditor component', () => {

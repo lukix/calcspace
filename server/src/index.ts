@@ -11,7 +11,7 @@ import {
 } from './shared/express-helpers';
 
 import usersRoutes from './routes/usersRoutes';
-import cardsRoutes from './routes/cardsRoutes';
+import filesRoutes from './routes/filesRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
 import { DB_NAME, CONNECTION_STRING, PORT, CLIENT_URL } from './config';
 
@@ -24,7 +24,7 @@ app.use(cookieParser({ sameSite: true }));
 (async () => {
   const client = await MongoClient.connect(CONNECTION_STRING, {
     useUnifiedTopology: true,
-  }).catch(err => {
+  }).catch((err) => {
     console.log('ERROR WHILE CONNECTING TO THE DB');
     throw err;
   });
@@ -44,7 +44,7 @@ app.use(cookieParser({ sameSite: true }));
     ...nestRoutes('/users', usersRoutes({ db })),
     ...applyMiddlewares(
       [authorizationMiddleware],
-      nestRoutes('/cards', cardsRoutes({ db }))
+      nestRoutes('/files', filesRoutes({ db }))
     ),
   ]);
 
@@ -58,7 +58,7 @@ app.use(cookieParser({ sameSite: true }));
 
   app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 
-  process.on('SIGINT', function() {
+  process.on('SIGINT', function () {
     client.close(() => {
       console.log('Mongoose disconnected on app termination');
       process.exit(0);

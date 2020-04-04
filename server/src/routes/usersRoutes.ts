@@ -46,16 +46,8 @@ export default ({ db }) => {
     method: 'post',
     validate: async ({ body }) => {
       const validationSchema = yup.object({
-        username: yup
-          .string()
-          .min(2)
-          .max(30)
-          .required(),
-        password: yup
-          .string()
-          .min(6)
-          .max(72)
-          .required(),
+        username: yup.string().min(2).max(30).required(),
+        password: yup.string().min(6).max(72).required(),
       });
       const validationError = validateBodyWithYup(validationSchema)({ body });
       if (validationError) {
@@ -71,7 +63,7 @@ export default ({ db }) => {
     handler: async ({ body }) => {
       const { username, password } = body;
       const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-      const user = { username, password: hashedPassword, cards: [] };
+      const user = { username, password: hashedPassword, files: [] };
       const { insertedId } = await usersCollection.insertOne(user);
       return { status: 200, response: { id: insertedId } };
     },
