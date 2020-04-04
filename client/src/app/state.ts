@@ -46,5 +46,8 @@ export const actions = {
     type: ACTION_TYPES.UPDATE_CODE,
     payload: { newValue: code, cardId: id },
   }),
-  // deleteCard: () => ({ type: ACTION_TYPES.DELETE_CARD, payload: { cardId } }),
+  deleteCard: ({ id }) => ({
+    type: ACTION_TYPES.DELETE_CARD,
+    payload: { cardId: id },
+  }),
 };

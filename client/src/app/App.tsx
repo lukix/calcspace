@@ -11,6 +11,8 @@ import { getReducer, getInitialState, actions } from './state';
 import { actions as reduxActions, selectors } from './store';
 import { usePrevious } from './utils';
 import { compareStates } from './syncService';
+
+import sharedStyles from '../shared/shared.module.scss';
 import styles from './App.module.scss';
 
 const initializeState = () => getInitialState(uuid);
@@ -24,7 +26,7 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
   const { cards } = state;
 
-  const { addCard, updateCode } = bindDispatch(actions, dispatch);
+  const { addCard, updateCode, deleteCard } = bindDispatch(actions, dispatch);
 
   useEffect(() => {
     fetchLoggedInUser();
@@ -50,14 +52,16 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
       <div className={styles.app}>
         <HeaderBar setIsModalVisible={setIsModalVisible} />
         <div className={styles.contentContainer}>
-          <FilesList items={cards} addFile={addCard} />
+          <FilesList items={cards} addFile={addCard} deleteFile={deleteCard} />
           <div className={styles.content}>
             <Switch>
               <Route path="/file/:fileId">
                 <FilePage cards={cards} updateCode={updateCode} />
               </Route>
               <Route path="/">
-                Welcome! Select a file in the left panel to get started.
+                <div className={sharedStyles.infoBox}>
+                  Welcome! Select a file in the left panel to get started.
+                </div>
               </Route>
             </Switch>
           </div>

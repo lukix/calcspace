@@ -1,34 +1,27 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import classNames from 'classnames';
 import { FaPlus } from 'react-icons/fa';
+import FileItem from './FileItem';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
   items: Array<{ id: string; name: string }>;
   addFile: Function;
+  deleteFile: Function;
 }
 
-const FilesList: React.FC<FilesListProps> = ({ items, addFile }) => {
-  const { pathname } = useLocation();
-
+const FilesList: React.FC<FilesListProps> = ({
+  items,
+  addFile,
+  deleteFile,
+}) => {
   return (
     <div className={styles.filesListPanel}>
       <div className={styles.actionIcons}>
         <FaPlus title="New File" onClick={() => addFile()} />
-        {/* <FaTrash title="Delete File" /> */}
       </div>
       <ul className={styles.filesList}>
         {items.map(({ id, name }) => (
-          <Link key={id} to={`/file/${id}`}>
-            <li
-              className={classNames({
-                [styles.selected]: `/file/${id}` === pathname,
-              })}
-            >
-              {name}
-            </li>
-          </Link>
+          <FileItem key={id} id={id} name={name} deleteFile={deleteFile} />
         ))}
       </ul>
     </div>
