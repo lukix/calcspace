@@ -19,10 +19,17 @@ const initializeState = () => getInitialState(uuid);
 
 interface AppProps {
   user: { username: string } | null;
+  isFetchingUser: boolean;
+  fetchingUserError: boolean;
   fetchLoggedInUser: Function;
 }
 
-const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
+const App: React.FC<AppProps> = ({
+  user,
+  isFetchingUser,
+  fetchingUserError,
+  fetchLoggedInUser,
+}) => {
   const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
   const { cards } = state;
 
@@ -38,8 +45,6 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
     }
   }, [user]);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
   const previousCards = usePrevious(cards);
   useEffect(() => {
     if (previousCards) {
@@ -47,10 +52,18 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
     }
   }, [cards]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (isFetchingUser) {
+    return <div className={sharedStyles.infoBox}>Loading...</div>;
+  }
+
+  if (fetchingUserError) {
+    return <SignInUpModal visible onHide={() => {}} />;
+  }
+
   return (
     <BrowserRouter>
       <div className={styles.app}>
-        <HeaderBar setIsModalVisible={setIsModalVisible} />
+        <HeaderBar username={user && user.username} />
         <div className={styles.contentContainer}>
           <FilesList items={cards} addFile={addCard} deleteFile={deleteCard} />
           <div className={styles.content}>
@@ -66,10 +79,6 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
             </Switch>
           </div>
         </div>
-        <SignInUpModal
-          visible={isModalVisible}
-          onHide={() => setIsModalVisible(false)}
-        />
       </div>
     </BrowserRouter>
   );
@@ -78,6 +87,8 @@ const App: React.FC<AppProps> = ({ user, fetchLoggedInUser }) => {
 export default connect(
   state => ({
     user: selectors.user(state),
+    isFetchingUser: selectors.isFetchingUser(state),
+    fetchingUserError: selectors.fetchingUserError(state),
   }),
   {
     fetchLoggedInUser: reduxActions.fetchLoggedInUser,

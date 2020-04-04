@@ -26,12 +26,14 @@ export const reducer = createReducer({
   initialState: {
     user: null,
     isFetchingUser: false,
+    fetchingUserError: false,
   },
   actionHandlers: {
     ...createAsyncActionHandlers({
       types: actionTypes.fetchLoggedInUser,
       payloadKey: 'user',
       pendingKey: 'isFetchingUser',
+      errorKey: 'fetchingUserError',
     }),
     [actionTypes.SET_LOGGED_IN_USER]: (state, { username }) => ({
       ...state,
@@ -43,4 +45,5 @@ export const reducer = createReducer({
 export const selectors = {
   user: state => state.userData.user,
   isFetchingUser: state => state.userData.isFetchingUser,
+  fetchingUserError: state => state.userData.fetchingUserError,
 };

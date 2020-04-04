@@ -1,23 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaSignInAlt } from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa';
 import styles from './HeaderBar.module.scss';
 
 interface HeaderBarProps {
-  setIsModalVisible: Function;
+  username: string | null;
 }
 
-const HeaderBar: React.FC<HeaderBarProps> = ({ setIsModalVisible }) => {
+const HeaderBar: React.FC<HeaderBarProps> = ({ username }) => {
   return (
     <div className={styles.headerBar}>
       <div className={styles.headerTitle}>
         <Link to="/">Math IDE</Link>
       </div>
       <div className={styles.icons}>
-        <FaSignInAlt
-          title="Sign in / Sign up"
-          onClick={() => setIsModalVisible(true)}
-        />
+        {username && <FaUserCircle title={`Logged in as "${username}"`} />}
       </div>
     </div>
   );

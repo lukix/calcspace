@@ -23,17 +23,10 @@ const INVALID_CREDENTIALS_STATUS = 'INVALID_CREDENTIALS_STATUS';
 
 interface LogInModalProps {
   visible: boolean;
-  onHide: Function;
   goToSignUpMode: Function;
-  setLoggedInUser: ({ username: string }) => void;
 }
 
-const LogInModal: React.FC<LogInModalProps> = ({
-  visible,
-  onHide,
-  goToSignUpMode,
-  setLoggedInUser,
-}) => {
+const LogInModal: React.FC<LogInModalProps> = ({ visible, goToSignUpMode }) => {
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -45,8 +38,7 @@ const LogInModal: React.FC<LogInModalProps> = ({
         formikProps.setStatus(null);
         formikProps.setSubmitting(true);
         await httpRequest.post(`users/authenticate`, { username, password });
-        setLoggedInUser({ username });
-        onHide();
+        window.location.replace('/');
       } catch (err) {
         formikProps.setStatus(INVALID_CREDENTIALS_STATUS);
       } finally {
@@ -64,7 +56,7 @@ const LogInModal: React.FC<LogInModalProps> = ({
   }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Modal visible={visible} onHide={onHide} title="Log In">
+    <Modal visible={visible} title="Log In">
       <div className={styles.signInModal}>
         <form onSubmit={formik.handleSubmit}>
           <ModalFormField

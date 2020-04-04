@@ -5,11 +5,16 @@ import styles from './Modal.module.scss';
 interface ModalProps {
   children: ReactNode;
   visible: boolean;
-  onHide: Function;
+  onHide?: Function;
   title?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, visible, onHide, title }) => {
+const Modal: React.FC<ModalProps> = ({
+  children,
+  visible,
+  onHide = () => {},
+  title,
+}) => {
   return (
     <div
       className={classNames(styles.modalOverlay, { [styles.visible]: visible })}
