@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import Modal from '../modal/Modal';
+import Modal from './modal/Modal';
 import ModalFormField from './ModalFormField';
 import httpRequest from '../shared/httpRequest';
 import styles from './SignInUpModal.module.scss';

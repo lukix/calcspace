@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FaRegCheckCircle } from 'react-icons/fa';
-import Modal from '../modal/Modal';
+import Modal from './modal/Modal';
 import ModalFormField from './ModalFormField';
 import { actions, selectors } from './store';
 import httpRequest from '../shared/httpRequest';

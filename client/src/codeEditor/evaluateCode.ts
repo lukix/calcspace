@@ -1,4 +1,4 @@
-import evaluateExpression from '../mathEngine/evaluateExpression';
+import evaluateExpression from './mathEngine/evaluateExpression';
 
 export const tokens = {
   NORMAL: 'NORMAL',
