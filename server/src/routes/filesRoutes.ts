@@ -20,7 +20,33 @@ export default ({ db }) => {
       const { files } = foundUser;
 
       return {
-        response: files,
+        response: files.map((file) => ({ id: file._id, name: file.name })),
+      };
+    },
+  };
+
+  const getFileById = {
+    path: '/:fileId',
+    method: 'get',
+    handler: async ({ user, params }) => {
+      const { fileId } = params;
+      const foundUser = await usersCollection.findOne({
+        _id: ObjectId(user.userId),
+      });
+
+      if (!foundUser) {
+        return { status: 404 };
+      }
+
+      const { files } = foundUser;
+      const foundFile = files.find(({ _id }) => _id.toString() === fileId);
+
+      if (!foundFile) {
+        return { status: 404 };
+      }
+
+      return {
+        response: { code: foundFile.code, id: foundFile.id },
       };
     },
   };
@@ -81,5 +107,5 @@ export default ({ db }) => {
     },
   };
 
-  return [getFiles, addFile, deleteFile, updateFile];
+  return [getFiles, getFileById, addFile, deleteFile, updateFile];
 };

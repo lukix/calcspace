@@ -1,27 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import useAsyncAction from '../shared/useAsyncAction';
+import httpRequest from '../shared/httpRequest';
 import CodeEditor from '../codeEditor/CodeEditor';
 import sharedStyles from '../shared/shared.module.scss';
 
-interface FilePageProps {
-  files: Array<{ id: string; code: string }>;
-  updateCode: Function;
-}
+interface FilePageProps {}
 
-const FilePage: React.FC<FilePageProps> = ({ files, updateCode }) => {
+const fetchFileAction = id => httpRequest.get(`files/${id}`);
+
+const FilePage: React.FC<FilePageProps> = () => {
   const { fileId } = useParams();
-  const file = files.find(({ id }) => id === fileId);
+  const [fetchFile, file, isFetchingFile, fetchingFileError] = useAsyncAction(
+    fetchFileAction
+  );
 
-  if (!file) {
-    return <div className={sharedStyles.infoBox}>File not found</div>;
+  useEffect(() => {
+    fetchFile(fileId);
+  }, [fetchFile, fileId]);
+
+  if (fetchingFileError) {
+    return (
+      <div className={sharedStyles.infoBox}>
+        Error occured when fetching the file. File might have been deleted.
+      </div>
+    );
   }
 
-  return (
-    <CodeEditor
-      code={file.code}
-      updateCode={code => updateCode({ code, id: fileId })}
-    />
-  );
+  if (isFetchingFile || !file) {
+    return <div className={sharedStyles.infoBox}>Loading file...</div>;
+  }
+
+  return <CodeEditor initialCode={file.code} />;
 };
 
 export default FilePage;

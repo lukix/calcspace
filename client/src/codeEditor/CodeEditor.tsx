@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import classNames from 'classnames';
 import evaluateCode, { tokens as availableTokens } from './evaluateCode';
 import styles from './CodeEditor.module.scss';
@@ -27,13 +27,14 @@ const HighlightedCode = ({ tokenizedLines }) => {
 };
 
 interface CodeEditorProps {
-  code: string;
-  updateCode: Function;
+  initialCode: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ code, updateCode }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode }) => {
+  const [code, setCode] = useState(initialCode);
+
   const onCodeChange = e => {
-    updateCode(e.target.value);
+    setCode(e.target.value);
   };
 
   const evaluatedCode = evaluateCode(code);

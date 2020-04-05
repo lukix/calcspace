@@ -28,27 +28,20 @@ const App: React.FC<AppProps> = ({
   fetchingUserError,
   fetchLoggedInUser,
 }) => {
-  const [state, dispatch] = useReducer(getReducer(uuid), null, initializeState);
-  const { files } = state;
+  const [, dispatch] = useReducer(getReducer(uuid), null, initializeState);
 
-  const { addFile, updateCode, deleteFile } = bindDispatch(actions, dispatch);
+  const { addFile, deleteFile } = bindDispatch(actions, dispatch);
 
   useEffect(() => {
     fetchLoggedInUser();
   }, [fetchLoggedInUser]);
 
-  useEffect(() => {
-    if (user) {
-      console.log('TODO: Fetch files (and discard any existing files)');
-    }
-  }, [user]);
-
-  if (isFetchingUser) {
-    return <div className={sharedStyles.infoBox}>Loading...</div>;
-  }
-
   if (fetchingUserError) {
     return <SignInUpModal visible onHide={() => {}} />;
+  }
+
+  if (isFetchingUser || !user) {
+    return <div className={sharedStyles.infoBox}>Loading...</div>;
   }
 
   return (
@@ -56,11 +49,11 @@ const App: React.FC<AppProps> = ({
       <div className={styles.app}>
         <HeaderBar username={user && user.username} />
         <div className={styles.contentContainer}>
-          <FilesList items={files} addFile={addFile} deleteFile={deleteFile} />
+          <FilesList addFile={addFile} deleteFile={deleteFile} />
           <div className={styles.content}>
             <Switch>
               <Route path="/file/:fileId">
-                <FilePage files={files} updateCode={updateCode} />
+                <FilePage />
               </Route>
               <Route path="/">
                 <div className={sharedStyles.infoBox}>
