@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
-import CodeEditor from '../codeEditor/CodeEditor';
+import CodeEditor from './codeEditor/CodeEditor';
 import sharedStyles from '../shared/shared.module.scss';
 
 interface FilePageProps {}
