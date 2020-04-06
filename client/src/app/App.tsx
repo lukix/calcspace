@@ -1,19 +1,14 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import uuid from 'uuid/v4';
-import bindDispatch from '../shared/bindDispatch';
 import HeaderBar from '../headerBar/HeaderBar';
 import FilePage from '../filePage/FilePage';
 import SignInUpModal from '../signInUpModal/SignInUpModal';
 import FilesList from '../filesList/FilesList';
-import { getReducer, getInitialState, actions } from './state';
 import { actions as reduxActions, selectors } from './store';
 
 import sharedStyles from '../shared/shared.module.scss';
 import styles from './App.module.scss';
-
-const initializeState = () => getInitialState(uuid);
 
 interface AppProps {
   user: { username: string } | null;
@@ -28,10 +23,6 @@ const App: React.FC<AppProps> = ({
   fetchingUserError,
   fetchLoggedInUser,
 }) => {
-  const [, dispatch] = useReducer(getReducer(uuid), null, initializeState);
-
-  const { addFile, deleteFile } = bindDispatch(actions, dispatch);
-
   useEffect(() => {
     fetchLoggedInUser();
   }, [fetchLoggedInUser]);
@@ -49,7 +40,7 @@ const App: React.FC<AppProps> = ({
       <div className={styles.app}>
         <HeaderBar username={user && user.username} />
         <div className={styles.contentContainer}>
-          <FilesList addFile={addFile} deleteFile={deleteFile} />
+          <FilesList />
           <div className={styles.content}>
             <Switch>
               <Route path="/file/:fileId">

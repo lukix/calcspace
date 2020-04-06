@@ -61,12 +61,20 @@
     justify-content: space-between;
     align-items: center;
 
-    &:hover {
+    &:not(.isCreating):hover {
       background: rgba(0, 0, 0, 0.3);
 
       .fileActionIcons {
         visibility: visible;
       }
+    }
+  }
+
+  .isCreating {
+    opacity: 0.3;
+
+    a {
+      cursor: default;
     }
   }
 

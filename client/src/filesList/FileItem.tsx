@@ -29,12 +29,15 @@ const StatusIcon: React.FC<StatusIconProps> = ({
   return <FaRegCircle size={size} title="Synchronized" />;
 };
 
+const noop = () => {};
+
 interface FileItemProps {
   id: string;
   name: string;
   deleteFile: Function;
   isSynchronizing: boolean;
   isModified: boolean;
+  isCreating?: boolean;
 }
 
 const FileItem: React.FC<FileItemProps> = ({
@@ -43,28 +46,39 @@ const FileItem: React.FC<FileItemProps> = ({
   deleteFile,
   isSynchronizing,
   isModified,
+  isCreating,
 }) => {
   const { pathname } = useLocation();
   const path = `/file/${id}`;
+
+  const conditionalLinkDisabling = e => {
+    if (isCreating) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <li
       className={classNames({
         [styles.selected]: path === pathname,
+        [styles.isCreating]: isCreating,
       })}
     >
-      <Link to={path}>
+      <Link to={path} onClick={conditionalLinkDisabling}>
         <div className={styles.fileName}>
           <StatusIcon
             size={12}
-            isSynchronizing={isSynchronizing}
+            isSynchronizing={Boolean(isSynchronizing || isCreating)}
             isModified={isModified}
           />
           <span>{name}</span>
         </div>
       </Link>
       <div className={styles.fileActionIcons}>
-        <FaTrash title="Delete File" onClick={() => deleteFile({ id })} />
+        <FaTrash
+          title="Delete File"
+          onClick={isCreating ? noop : () => deleteFile({ id })}
+        />
       </div>
     </li>
   );

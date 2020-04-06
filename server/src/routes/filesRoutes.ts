@@ -54,20 +54,17 @@ export default ({ db }) => {
   const addFile = {
     path: '/',
     method: 'post',
-    validate: validateBodyWithYup(
-      yup.object({
-        fileId: yup.string().required(),
-      })
-    ),
-    handler: async ({ user, body }) => {
-      const { fileId } = body;
-      const newFile = { id: fileId, expressions: [] };
+    handler: async ({ user }) => {
+      const newFile = { _id: ObjectId(), name: 'Unnamed file', code: '' };
       await usersCollection.updateOne(
         {
           _id: ObjectId(user.userId),
         },
         { $push: { files: { $each: [newFile], $position: 0 } } }
       );
+      return {
+        response: { id: newFile._id, name: newFile.name, code: newFile.code },
+      };
     },
   };
 
