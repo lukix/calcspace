@@ -61,7 +61,7 @@
     justify-content: space-between;
     align-items: center;
 
-    &:not(.isCreating):hover {
+    &:not(.isBusy):hover {
       background: rgba(0, 0, 0, 0.3);
 
       .fileActionIcons {
@@ -70,7 +70,7 @@
     }
   }
 
-  .isCreating {
+  .isBusy {
     opacity: 0.3;
 
     a {

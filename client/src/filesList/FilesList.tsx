@@ -6,22 +6,22 @@ import { actions, selectors } from './store';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
-  // addFile: Function;
-  // deleteFile: Function;
-
-  files: Array<{ id: string; name: string; isCreating?: boolean }>;
+  files: Array<{
+    id: string;
+    name: string;
+    isCreating?: boolean;
+    isDeleting?: boolean;
+  }>;
   isFetchingFiles: boolean;
   fetchingFilesError: boolean;
   isCreatingFile: boolean;
 
   fetchFiles: Function;
   addFile: Function;
+  deleteFile: Function;
 }
 
 const FilesList: React.FC<FilesListProps> = ({
-  // addFile,
-  // deleteFile,
-
   files,
   // isFetchingFiles,
   // fetchingFilesError,
@@ -29,12 +29,11 @@ const FilesList: React.FC<FilesListProps> = ({
 
   fetchFiles,
   addFile,
+  deleteFile,
 }) => {
   useEffect(() => {
     fetchFiles();
   }, [fetchFiles]);
-
-  const deleteFile = ({ id }) => {};
 
   return (
     <div className={styles.filesListPanel}>
@@ -44,7 +43,7 @@ const FilesList: React.FC<FilesListProps> = ({
         )}
       </div>
       <ul className={styles.filesList}>
-        {files.map(({ id, name, isCreating }) => (
+        {files.map(({ id, name, isCreating, isDeleting }) => (
           <FileItem
             key={id}
             id={id}
@@ -53,6 +52,7 @@ const FilesList: React.FC<FilesListProps> = ({
             isSynchronizing={false}
             isModified={false}
             isCreating={isCreating}
+            isDeleting={isDeleting}
           />
         ))}
       </ul>
@@ -70,5 +70,6 @@ export default connect(
   {
     fetchFiles: actions.fetchFiles,
     addFile: actions.addFile,
+    deleteFile: actions.deleteFile,
   }
 )(FilesList);

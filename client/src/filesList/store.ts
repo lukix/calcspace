@@ -9,6 +9,7 @@ import httpRequest from '../shared/httpRequest';
 const actionTypes = {
   fetchFiles: createAsyncActionTypes('FETCH_FILES'),
   addFile: createAsyncActionTypes('ADD_FILE'),
+  deleteFile: createAsyncActionTypes('DELETE_FILE'),
 };
 
 export const actions = {
@@ -19,6 +20,13 @@ export const actions = {
   addFile: createAsyncActionCreator({
     actionTypes: actionTypes.addFile,
     action: () => httpRequest.post('files'),
+  }),
+  deleteFile: createAsyncActionCreator({
+    actionTypes: actionTypes.deleteFile,
+    action: ({ id }) => httpRequest.delete(`files/${id}`),
+    mapStartAction: (action, { id }) => ({ ...action, payload: { id } }),
+    mapSuccessAction: (action, { id }) => ({ ...action, payload: { id } }),
+    mapFailureAction: (action, { id }) => ({ ...action, payload: { id } }),
   }),
 };
 
@@ -37,6 +45,7 @@ export const reducer = createReducer({
       pendingKey: 'isFetchingFiles',
       errorKey: 'fetchingFilesError',
     }),
+
     [actionTypes.addFile.START]: state => ({
       ...state,
       files: [
@@ -51,6 +60,23 @@ export const reducer = createReducer({
     [actionTypes.addFile.FAILURE]: state => ({
       ...state,
       files: state.files.filter(({ id }) => id !== TEMP_ID),
+    }),
+
+    [actionTypes.deleteFile.START]: (state, { id }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, isDeleting: true } : file
+      ),
+    }),
+    [actionTypes.deleteFile.SUCCESS]: (state, { id }) => ({
+      ...state,
+      files: state.files.filter(file => file.id !== id),
+    }),
+    [actionTypes.deleteFile.FAILURE]: (state, { id }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, isDeleting: false } : file
+      ),
     }),
   },
 });

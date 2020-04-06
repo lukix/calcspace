@@ -29,8 +29,6 @@ const StatusIcon: React.FC<StatusIconProps> = ({
   return <FaRegCircle size={size} title="Synchronized" />;
 };
 
-const noop = () => {};
-
 interface FileItemProps {
   id: string;
   name: string;
@@ -38,6 +36,7 @@ interface FileItemProps {
   isSynchronizing: boolean;
   isModified: boolean;
   isCreating?: boolean;
+  isDeleting?: boolean;
 }
 
 const FileItem: React.FC<FileItemProps> = ({
@@ -47,12 +46,15 @@ const FileItem: React.FC<FileItemProps> = ({
   isSynchronizing,
   isModified,
   isCreating,
+  isDeleting,
 }) => {
   const { pathname } = useLocation();
   const path = `/file/${id}`;
 
+  const isBusy = isCreating || isDeleting;
+
   const conditionalLinkDisabling = e => {
-    if (isCreating) {
+    if (isBusy) {
       e.preventDefault();
     }
   };
@@ -61,24 +63,21 @@ const FileItem: React.FC<FileItemProps> = ({
     <li
       className={classNames({
         [styles.selected]: path === pathname,
-        [styles.isCreating]: isCreating,
+        [styles.isBusy]: isBusy,
       })}
     >
       <Link to={path} onClick={conditionalLinkDisabling}>
         <div className={styles.fileName}>
           <StatusIcon
             size={12}
-            isSynchronizing={Boolean(isSynchronizing || isCreating)}
+            isSynchronizing={Boolean(isSynchronizing || isBusy)}
             isModified={isModified}
           />
           <span>{name}</span>
         </div>
       </Link>
       <div className={styles.fileActionIcons}>
-        <FaTrash
-          title="Delete File"
-          onClick={isCreating ? noop : () => deleteFile({ id })}
-        />
+        <FaTrash title="Delete File" onClick={() => deleteFile({ id })} />
       </div>
     </li>
   );

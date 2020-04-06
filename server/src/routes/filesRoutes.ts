@@ -77,7 +77,7 @@ export default ({ db }) => {
         {
           _id: ObjectId(user.userId),
         },
-        { $pull: { files: { id: fileId } } }
+        { $pull: { files: { _id: ObjectId(fileId) } } }
       );
     },
   };
