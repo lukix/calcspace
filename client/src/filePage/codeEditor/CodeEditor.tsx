@@ -28,13 +28,16 @@ const HighlightedCode = ({ tokenizedLines }) => {
 
 interface CodeEditorProps {
   initialCode: string;
+  onChange: Function;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const [code, setCode] = useState(initialCode);
 
   const onCodeChange = e => {
-    setCode(e.target.value);
+    const value = e.target.value;
+    setCode(value);
+    onChange(value);
   };
 
   const evaluatedCode = evaluateCode(code);

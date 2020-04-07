@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
 import CodeEditor from './codeEditor/CodeEditor';
+import SyncService from './syncService';
 import sharedStyles from '../shared/shared.module.scss';
 
 interface FilePageProps {}
@@ -19,6 +20,17 @@ const FilePage: React.FC<FilePageProps> = () => {
     fetchFile(fileId);
   }, [fetchFile, fileId]);
 
+  const syncService = useMemo(() => {
+    return SyncService({
+      synchronize: code => httpRequest.put(`files/${fileId}/code`, { code }),
+      debounceTimeout: 1500,
+    });
+  }, [fileId]);
+
+  const onCodeChange = value => {
+    syncService.pushChanges(value);
+  };
+
   if (fetchingFileError) {
     return (
       <div className={sharedStyles.infoBox}>
@@ -31,7 +43,7 @@ const FilePage: React.FC<FilePageProps> = () => {
     return <div className={sharedStyles.infoBox}>Loading file...</div>;
   }
 
-  return <CodeEditor initialCode={file.code} />;
+  return <CodeEditor initialCode={file.code} onChange={onCodeChange} />;
 };
 
 export default FilePage;

@@ -82,27 +82,27 @@ export default ({ db }) => {
     },
   };
 
-  const updateFile = {
-    path: '/:fileId',
+  const updateFileCode = {
+    path: '/:fileId/code',
     method: 'put',
     validate: validateBodyWithYup(
       yup.object({
-        expressions: yup.array().of(yup.string()),
+        code: yup.string(),
       })
     ),
     handler: async ({ body, user, params }) => {
       const { fileId } = params;
-      const newFile = { ...body, id: fileId };
+      const { code } = body;
       const { result } = await usersCollection.updateOne(
         {
           _id: ObjectId(user.userId),
         },
-        { $set: { 'files.$[file]': newFile } },
-        { arrayFilters: [{ 'file.id': { $eq: fileId } }] }
+        { $set: { 'files.$[file].code': code } },
+        { arrayFilters: [{ 'file._id': { $eq: ObjectId(fileId) } }] }
       );
       return { status: result.nModified === 0 ? 404 : 200 };
     },
   };
 
-  return [getFiles, getFileById, addFile, deleteFile, updateFile];
+  return [getFiles, getFileById, addFile, deleteFile, updateFileCode];
 };
