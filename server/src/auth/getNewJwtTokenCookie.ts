@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET_KEY, TOKEN_EXPIRATION_DURATION_MS } from '../config';
+import {
+  JWT_SECRET_KEY,
+  TOKEN_EXPIRATION_DURATION_MS,
+  JWT_TOKEN_COOKIE_NAME,
+} from '../config';
 
 const getNewJwtTokenCookie = (userId, username) => {
   const token = jwt.sign({ userId, username }, JWT_SECRET_KEY, {
@@ -7,7 +11,7 @@ const getNewJwtTokenCookie = (userId, username) => {
   });
 
   const cookie = {
-    name: 'jwtToken',
+    name: JWT_TOKEN_COOKIE_NAME,
     value: token,
     options: {
       maxAge: TOKEN_EXPIRATION_DURATION_MS,

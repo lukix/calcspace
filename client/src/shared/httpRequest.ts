@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '../config';
+import { API_URL } from '../config';
 
 const HttpRequest = ({ baseUrl }) => {
   const request = method => (url: string, data?: any) =>
@@ -22,4 +22,4 @@ const HttpRequest = ({ baseUrl }) => {
   return httpRequest;
 };
 
-export default HttpRequest({ baseUrl: config.API_URL });
+export default HttpRequest({ baseUrl: API_URL });

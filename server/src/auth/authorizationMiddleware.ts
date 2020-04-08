@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import getNewJwtTokenCookie from './getNewJwtTokenCookie';
-import { JWT_SECRET_KEY } from '../config';
+import { JWT_SECRET_KEY, JWT_TOKEN_COOKIE_NAME } from '../config';
 
 const authorizationMiddleware = async (req, res, next) => {
-  const { jwtToken } = req.cookies;
+  const jwtToken = req.cookies[JWT_TOKEN_COOKIE_NAME];
   if (!jwtToken) {
     return res.sendStatus(403);
   }

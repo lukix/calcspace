@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
 import getJwtTokenCookie from '../auth/getNewJwtTokenCookie';
-import { SALT_ROUNDS } from '../config';
+import { SALT_ROUNDS, JWT_TOKEN_COOKIE_NAME, SIGN_OUT_URL } from '../config';
 import authorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
@@ -38,6 +38,15 @@ export default ({ db }) => {
         jwtTokenCookie.options
       );
       return { response: { username } };
+    },
+  };
+
+  const signOut = {
+    path: '/sign-out',
+    method: 'get',
+    handler: async (req, res) => {
+      res.clearCookie(JWT_TOKEN_COOKIE_NAME);
+      res.redirect(SIGN_OUT_URL);
     },
   };
 
@@ -90,6 +99,7 @@ export default ({ db }) => {
 
   return [
     authenticate,
+    signOut,
     addUser,
     getUsernameAvailability,
     getCurrentlyLoggedInUser,
