@@ -11,6 +11,7 @@ interface FilesListProps {
     name: string;
     isCreating?: boolean;
     isDeleting?: boolean;
+    isRenaming?: boolean;
   }>;
   isFetchingFiles: boolean;
   fetchingFilesError: boolean;
@@ -19,6 +20,7 @@ interface FilesListProps {
   fetchFiles: Function;
   addFile: Function;
   deleteFile: Function;
+  renameFile: Function;
 }
 
 const FilesList: React.FC<FilesListProps> = ({
@@ -30,6 +32,7 @@ const FilesList: React.FC<FilesListProps> = ({
   fetchFiles,
   addFile,
   deleteFile,
+  renameFile,
 }) => {
   useEffect(() => {
     fetchFiles();
@@ -43,16 +46,18 @@ const FilesList: React.FC<FilesListProps> = ({
         )}
       </div>
       <ul className={styles.filesList}>
-        {files.map(({ id, name, isCreating, isDeleting }) => (
+        {files.map(({ id, name, isCreating, isDeleting, isRenaming }) => (
           <FileItem
             key={id}
             id={id}
             name={name}
             deleteFile={deleteFile}
+            renameFile={renameFile}
             isSynchronizing={false}
             isModified={false}
             isCreating={isCreating}
             isDeleting={isDeleting}
+            isRenaming={isRenaming}
           />
         ))}
       </ul>
@@ -71,5 +76,6 @@ export default connect(
     fetchFiles: actions.fetchFiles,
     addFile: actions.addFile,
     deleteFile: actions.deleteFile,
+    renameFile: actions.renameFile,
   }
 )(FilesList);

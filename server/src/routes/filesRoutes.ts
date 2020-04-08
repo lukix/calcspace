@@ -104,5 +104,34 @@ export default ({ db }) => {
     },
   };
 
-  return [getFiles, getFileById, addFile, deleteFile, updateFileCode];
+  const updateFileName = {
+    path: '/:fileId/name',
+    method: 'put',
+    validate: validateBodyWithYup(
+      yup.object({
+        name: yup.string(),
+      })
+    ),
+    handler: async ({ body, user, params }) => {
+      const { fileId } = params;
+      const { name } = body;
+      const { result } = await usersCollection.updateOne(
+        {
+          _id: ObjectId(user.userId),
+        },
+        { $set: { 'files.$[file].name': name } },
+        { arrayFilters: [{ 'file._id': { $eq: ObjectId(fileId) } }] }
+      );
+      return { status: result.nModified === 0 ? 404 : 200 };
+    },
+  };
+
+  return [
+    getFiles,
+    getFileById,
+    addFile,
+    deleteFile,
+    updateFileCode,
+    updateFileName,
+  ];
 };

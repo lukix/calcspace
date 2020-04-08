@@ -10,6 +10,7 @@ const actionTypes = {
   fetchFiles: createAsyncActionTypes('FETCH_FILES'),
   addFile: createAsyncActionTypes('ADD_FILE'),
   deleteFile: createAsyncActionTypes('DELETE_FILE'),
+  renameFile: createAsyncActionTypes('RENAME_FILE'),
 };
 
 export const actions = {
@@ -27,6 +28,23 @@ export const actions = {
     mapStartAction: (action, { id }) => ({ ...action, payload: { id } }),
     mapSuccessAction: (action, { id }) => ({ ...action, payload: { id } }),
     mapFailureAction: (action, { id }) => ({ ...action, payload: { id } }),
+  }),
+  renameFile: createAsyncActionCreator({
+    actionTypes: actionTypes.renameFile,
+    action: ({ id, oldName, newName }) =>
+      httpRequest.put(`files/${id}/name`, { name: newName }),
+    mapStartAction: (action, { id, oldName, newName }) => ({
+      ...action,
+      payload: { id, newName },
+    }),
+    mapSuccessAction: (action, { id, oldName, newName }) => ({
+      ...action,
+      payload: { id },
+    }),
+    mapFailureAction: (action, { id, oldName, newName }) => ({
+      ...action,
+      payload: { id, oldName },
+    }),
   }),
 };
 
@@ -76,6 +94,25 @@ export const reducer = createReducer({
       ...state,
       files: state.files.map(file =>
         file.id === id ? { ...file, isDeleting: false } : file
+      ),
+    }),
+
+    [actionTypes.renameFile.START]: (state, { id, newName }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, name: newName, isRenaming: true } : file
+      ),
+    }),
+    [actionTypes.renameFile.SUCCESS]: (state, { id }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, isRenaming: false } : file
+      ),
+    }),
+    [actionTypes.renameFile.FAILURE]: (state, { id, oldName }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, name: oldName, isRenaming: false } : file
       ),
     }),
   },

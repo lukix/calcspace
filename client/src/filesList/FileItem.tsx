@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import {
   FaTrash,
+  FaPen,
   FaRegCircle,
   FaRegDotCircle,
   FaHourglassEnd,
@@ -33,25 +34,54 @@ interface FileItemProps {
   id: string;
   name: string;
   deleteFile: Function;
+  renameFile: Function;
   isSynchronizing: boolean;
   isModified: boolean;
   isCreating?: boolean;
   isDeleting?: boolean;
+  isRenaming?: boolean;
 }
 
 const FileItem: React.FC<FileItemProps> = ({
   id,
   name,
   deleteFile,
+  renameFile,
   isSynchronizing,
   isModified,
   isCreating,
   isDeleting,
+  isRenaming,
 }) => {
   const { pathname } = useLocation();
-  const path = `/file/${id}`;
+  const [isInRenamingMode, setIsInRenamingMode] = useState(false);
+  const textInput = useRef<HTMLInputElement>(null);
 
-  const isBusy = isCreating || isDeleting;
+  const focusTextInput = () => {
+    if (textInput.current) {
+      textInput.current.focus();
+    }
+  };
+
+  useEffect(() => {
+    if (isInRenamingMode) {
+      focusTextInput();
+    }
+  }, [isInRenamingMode]);
+
+  const selectEnterPresses = func => e => {
+    if (e.key === 'Enter') {
+      func(e);
+    }
+  };
+
+  const saveNewName = e => {
+    setIsInRenamingMode(false);
+    renameFile({ id, oldName: name, newName: e.target.value });
+  };
+
+  const path = `/file/${id}`;
+  const isBusy = isCreating || isDeleting || isRenaming;
 
   const conditionalLinkDisabling = e => {
     if (isBusy) {
@@ -73,10 +103,22 @@ const FileItem: React.FC<FileItemProps> = ({
             isSynchronizing={Boolean(isSynchronizing || isBusy)}
             isModified={isModified}
           />
-          <span>{name}</span>
+
+          {isInRenamingMode ? (
+            <input
+              ref={textInput}
+              type="text"
+              defaultValue={name}
+              onBlur={saveNewName}
+              onKeyPress={selectEnterPresses(saveNewName)}
+            />
+          ) : (
+            <span>{name}</span>
+          )}
         </div>
       </Link>
       <div className={styles.fileActionIcons}>
+        <FaPen title="Rename File" onClick={() => setIsInRenamingMode(true)} />
         <FaTrash title="Delete File" onClick={() => deleteFile({ id })} />
       </div>
     </li>
