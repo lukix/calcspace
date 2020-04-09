@@ -1,30 +1,7 @@
-import React, { Fragment, useState } from 'react';
-import classNames from 'classnames';
-import evaluateCode, { tokens as availableTokens } from './evaluateCode';
+import React, { useState } from 'react';
+import evaluateCode from './evaluateCode';
+import HighlightedCode from './HighlightedCode';
 import styles from './CodeEditor.module.scss';
-
-const HighlightedLine = ({ tokens }) => {
-  return tokens.map(({ value, tags }, index) => {
-    const className = classNames({
-      [styles.tokenVirtual]: tags.includes(availableTokens.VIRTUAL),
-      [styles.tokenError]: tags.includes(availableTokens.ERROR),
-    });
-    return (
-      <span key={index} className={className}>
-        {value}
-      </span>
-    );
-  });
-};
-
-const HighlightedCode = ({ tokenizedLines }) => {
-  return tokenizedLines.map((tokens, index) => (
-    <Fragment key={index}>
-      <HighlightedLine tokens={tokens} />
-      <br />
-    </Fragment>
-  ));
-};
 
 interface CodeEditorProps {
   initialCode: string;
