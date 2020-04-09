@@ -11,6 +11,10 @@ const actionTypes = {
   addFile: createAsyncActionTypes('ADD_FILE'),
   deleteFile: createAsyncActionTypes('DELETE_FILE'),
   renameFile: createAsyncActionTypes('RENAME_FILE'),
+  DIRTY_FILE: 'DIRTY_FILE',
+  MARK_SYNCING_START: 'MARK_SYNCING_START',
+  MARK_SYNCING_SUCCESS: 'MARK_SYNCING_SUCCESS',
+  MARK_SYNCING_FAILURE: 'MARK_SYNCING_FAILURE',
 };
 
 export const actions = {
@@ -45,6 +49,19 @@ export const actions = {
       ...action,
       payload: { id, oldName },
     }),
+  }),
+  dirtyFile: ({ id }) => ({ type: actionTypes.DIRTY_FILE, payload: { id } }),
+  markSyncingStart: ({ id }) => ({
+    type: actionTypes.MARK_SYNCING_START,
+    payload: { id },
+  }),
+  markSyncingSuccess: ({ id }) => ({
+    type: actionTypes.MARK_SYNCING_SUCCESS,
+    payload: { id },
+  }),
+  markSyncingFailure: ({ id }) => ({
+    type: actionTypes.MARK_SYNCING_FAILURE,
+    payload: { id },
   }),
 };
 
@@ -113,6 +130,33 @@ export const reducer = createReducer({
       ...state,
       files: state.files.map(file =>
         file.id === id ? { ...file, name: oldName, isRenaming: false } : file
+      ),
+    }),
+
+    [actionTypes.DIRTY_FILE]: (state, { id }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, isModified: true } : file
+      ),
+    }),
+    [actionTypes.MARK_SYNCING_START]: (state, { id }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, isSynchronizing: true } : file
+      ),
+    }),
+    [actionTypes.MARK_SYNCING_SUCCESS]: (state, { id }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id
+          ? { ...file, isModified: false, isSynchronizing: false }
+          : file
+      ),
+    }),
+    [actionTypes.MARK_SYNCING_FAILURE]: (state, { id }) => ({
+      ...state,
+      files: state.files.map(file =>
+        file.id === id ? { ...file, isSynchronizing: false } : file
       ),
     }),
   },

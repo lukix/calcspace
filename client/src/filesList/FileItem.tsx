@@ -35,8 +35,8 @@ interface FileItemProps {
   name: string;
   deleteFile: Function;
   renameFile: Function;
-  isSynchronizing: boolean;
-  isModified: boolean;
+  isSynchronizing?: boolean;
+  isModified?: boolean;
   isCreating?: boolean;
   isDeleting?: boolean;
   isRenaming?: boolean;
@@ -47,11 +47,11 @@ const FileItem: React.FC<FileItemProps> = ({
   name,
   deleteFile,
   renameFile,
-  isSynchronizing,
-  isModified,
-  isCreating,
-  isDeleting,
-  isRenaming,
+  isSynchronizing = false,
+  isModified = false,
+  isCreating = false,
+  isDeleting = false,
+  isRenaming = false,
 }) => {
   const { pathname } = useLocation();
   const [isInRenamingMode, setIsInRenamingMode] = useState(false);

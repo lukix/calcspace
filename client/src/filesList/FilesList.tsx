@@ -12,6 +12,8 @@ interface FilesListProps {
     isCreating?: boolean;
     isDeleting?: boolean;
     isRenaming?: boolean;
+    isModified?: boolean;
+    isSynchronizing?: boolean;
   }>;
   isFetchingFiles: boolean;
   fetchingFilesError: boolean;
@@ -46,20 +48,30 @@ const FilesList: React.FC<FilesListProps> = ({
         )}
       </div>
       <ul className={styles.filesList}>
-        {files.map(({ id, name, isCreating, isDeleting, isRenaming }) => (
-          <FileItem
-            key={id}
-            id={id}
-            name={name}
-            deleteFile={deleteFile}
-            renameFile={renameFile}
-            isSynchronizing={false}
-            isModified={false}
-            isCreating={isCreating}
-            isDeleting={isDeleting}
-            isRenaming={isRenaming}
-          />
-        ))}
+        {files.map(
+          ({
+            id,
+            name,
+            isModified,
+            isCreating,
+            isDeleting,
+            isRenaming,
+            isSynchronizing,
+          }) => (
+            <FileItem
+              key={id}
+              id={id}
+              name={name}
+              deleteFile={deleteFile}
+              renameFile={renameFile}
+              isSynchronizing={isSynchronizing}
+              isModified={isModified}
+              isCreating={isCreating}
+              isDeleting={isDeleting}
+              isRenaming={isRenaming}
+            />
+          )
+        )}
       </ul>
     </div>
   );

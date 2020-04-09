@@ -1,16 +1,28 @@
 import React, { useEffect, useMemo } from 'react';
+import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
+import { actions } from '../shared/filesStore';
 import CodeEditor from './codeEditor/CodeEditor';
 import SyncService from './syncService';
 import sharedStyles from '../shared/shared.module.scss';
 
-interface FilePageProps {}
+interface FilePageProps {
+  dirtyFile: Function;
+  markSyncingStart: Function;
+  markSyncingSuccess: Function;
+  markSyncingFailure: Function;
+}
 
 const fetchFileAction = id => httpRequest.get(`files/${id}`);
 
-const FilePage: React.FC<FilePageProps> = () => {
+const FilePage: React.FC<FilePageProps> = ({
+  dirtyFile,
+  markSyncingStart,
+  markSyncingSuccess,
+  markSyncingFailure,
+}) => {
   const { fileId } = useParams();
   const [fetchFile, file, isFetchingFile, fetchingFileError] = useAsyncAction(
     fetchFileAction
@@ -24,10 +36,14 @@ const FilePage: React.FC<FilePageProps> = () => {
     return SyncService({
       synchronize: code => httpRequest.put(`files/${fileId}/code`, { code }),
       debounceTimeout: 1500,
+      onSyncStart: () => markSyncingStart({ id: fileId }),
+      onSyncSuccess: () => markSyncingSuccess({ id: fileId }),
+      onSyncError: () => markSyncingFailure({ id: fileId }),
     });
-  }, [fileId]);
+  }, [markSyncingStart, markSyncingSuccess, markSyncingFailure, fileId]);
 
   const onCodeChange = value => {
+    dirtyFile({ id: fileId });
     syncService.pushChanges(value);
   };
 
@@ -46,4 +62,12 @@ const FilePage: React.FC<FilePageProps> = () => {
   return <CodeEditor initialCode={file.code} onChange={onCodeChange} />;
 };
 
-export default FilePage;
+export default connect(
+  null,
+  {
+    dirtyFile: actions.dirtyFile,
+    markSyncingStart: actions.markSyncingStart,
+    markSyncingSuccess: actions.markSyncingSuccess,
+    markSyncingFailure: actions.markSyncingFailure,
+  }
+)(FilePage);
