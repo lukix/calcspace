@@ -6,7 +6,7 @@ import CodeEditor from '../CodeEditor';
 const noop = (): void => {};
 
 const defaultProps = {
-  updateCode: noop,
+  onChange: noop,
 };
 
 describe('CodeEditor component', () => {
@@ -16,7 +16,7 @@ describe('CodeEditor component', () => {
 
     // when
     const { queryAllByText } = render(
-      <CodeEditor {...defaultProps} code={code} />
+      <CodeEditor {...defaultProps} initialCode={code} />
     );
 
     // then
@@ -34,7 +34,7 @@ describe('CodeEditor component', () => {
 
     // when
     const { queryByText } = render(
-      <CodeEditor {...defaultProps} code={code} />
+      <CodeEditor {...defaultProps} initialCode={code} />
     );
 
     // then

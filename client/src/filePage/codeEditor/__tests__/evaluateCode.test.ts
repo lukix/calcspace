@@ -1,7 +1,7 @@
-import evaluateCode from '../evaluateCode';
+import evaluateCode, { tokens } from '../evaluateCode';
 
 describe('evaluateCode', () => {
-  it('should append results to existing code', () => {
+  it('should return tokenized structure with results', () => {
     // given
     const code = 'x = 2 + 3\ny = x + 2';
 
@@ -9,7 +9,16 @@ describe('evaluateCode', () => {
     const evaluatedCode = evaluateCode(code);
 
     // then
-    expect(evaluatedCode).toEqual('x = 2 + 3 = 5\ny = x + 2 = 7');
+    expect(evaluatedCode).toEqual([
+      [
+        { value: 'x = 2 + 3', tags: [tokens.NORMAL] },
+        { value: ' = 5', tags: [tokens.VIRTUAL] },
+      ],
+      [
+        { value: 'y = x + 2', tags: [tokens.NORMAL] },
+        { value: ' = 7', tags: [tokens.VIRTUAL] },
+      ],
+    ]);
   });
 
   it('should not append result when it is the same as assignment right-hand side', () => {
@@ -20,18 +29,23 @@ describe('evaluateCode', () => {
     const evaluatedCode = evaluateCode(code);
 
     // then
-    expect(evaluatedCode).toEqual('x = 5');
+    expect(evaluatedCode).toEqual([
+      [{ value: 'x = 5', tags: [tokens.NORMAL] }],
+    ]);
   });
 
-  it('should not append result when there are not evaluated symbols', () => {
+  it('should tag expression with error if there are not evaluated symbols', () => {
     // given
-    const code = 'a = x\na+1';
+    const code = 'a = x\na + 1';
 
     // when
     const evaluatedCode = evaluateCode(code);
 
     // then
-    expect(evaluatedCode).toEqual('a = x\na+1');
+    expect(evaluatedCode).toEqual([
+      [{ value: 'a = x', tags: [tokens.NORMAL, tokens.ERROR] }],
+      [{ value: 'a + 1', tags: [tokens.NORMAL, tokens.ERROR] }],
+    ]);
   });
 
   it('should not append result which is a function', () => {
@@ -42,6 +56,8 @@ describe('evaluateCode', () => {
     const evaluatedCode = evaluateCode(code);
 
     // then
-    expect(evaluatedCode).toEqual('sin');
+    expect(evaluatedCode).toEqual([
+      [{ value: 'sin', tags: [tokens.NORMAL, tokens.ERROR] }],
+    ]);
   });
 });

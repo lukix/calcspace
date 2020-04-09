@@ -21,7 +21,9 @@ const evaluateCode = code => {
         value: expression,
         tags: [tokens.NORMAL, ...(error ? [tokens.ERROR] : [])],
       },
-      { value: resultString, tags: [tokens.VIRTUAL] },
+      ...(resultString === ''
+        ? []
+        : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
     ];
     return {
       values:
