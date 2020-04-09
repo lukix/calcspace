@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { FaPlus } from 'react-icons/fa';
 import FileItem from './FileItem';
-import { actions, selectors } from './store';
+import { actions, selectors } from '../shared/filesStore';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
