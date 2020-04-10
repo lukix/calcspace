@@ -24,7 +24,7 @@ module.exports = {
     // 'func-names': ['off'],
     // 'arrow-parens': ['off'],
     // 'import/prefer-default-export': 0,
-    // '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/explicit-function-return-type': 0,
     // '@typescript-eslint/ban-ts-ignore': 0,
     // '@typescript-eslint/no-explicit-any': 0,
   },

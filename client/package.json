@@ -30,7 +30,8 @@
     "test": "react-scripts test",
     "test:e2e": "cypress run",
     "eject": "react-scripts eject",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "pre-push": "yarn run lint && CI=true yarn run test"
   },
   "browserslist": {
     "production": [
