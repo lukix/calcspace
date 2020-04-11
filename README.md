@@ -19,3 +19,8 @@ See logs:
 ```
 docker-compose logs -f
 ```
+
+Setup DB structure:
+```
+sudo docker exec -it mathnotes_server_1 yarn run setupDb
+```

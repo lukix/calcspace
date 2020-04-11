@@ -5,9 +5,7 @@ import { SALT_ROUNDS, JWT_TOKEN_COOKIE_NAME, SIGN_OUT_URL } from '../config';
 import authorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
-export default ({ db }) => {
-  const usersCollection = db.collection('users');
-
+export default ({ dbClient }) => {
   const authenticate = {
     path: '/authenticate',
     method: 'post',
@@ -23,7 +21,9 @@ export default ({ db }) => {
         status: 401,
       };
       const { username, password } = body;
-      const user = await usersCollection.findOne({ username });
+      const user = await dbClient
+        .query('SELECT id, password FROM users WHERE name = $1', [username])
+        .then(({ rows }) => rows[0]);
       if (!user) {
         return AUTH_FAILED_RESPONSE;
       }
@@ -31,7 +31,7 @@ export default ({ db }) => {
         return AUTH_FAILED_RESPONSE;
       }
 
-      const jwtTokenCookie = getJwtTokenCookie(user._id, username);
+      const jwtTokenCookie = getJwtTokenCookie(user.id, username);
       res.cookie(
         jwtTokenCookie.name,
         jwtTokenCookie.value,
@@ -63,7 +63,9 @@ export default ({ db }) => {
         return validationError;
       }
 
-      const user = await usersCollection.findOne({ username: body.username });
+      const user = await dbClient
+        .query('SELECT id FROM users WHERE name = $1', [body.username])
+        .then(({ rows }) => rows[0]);
       if (user) {
         return { error: 'Given username is already taken' };
       }
@@ -72,9 +74,15 @@ export default ({ db }) => {
     handler: async ({ body }) => {
       const { username, password } = body;
       const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-      const user = { username, password: hashedPassword, files: [] };
-      const { insertedId } = await usersCollection.insertOne(user);
-      return { status: 200, response: { id: insertedId } };
+      const {
+        id,
+      } = await dbClient
+        .query(
+          'INSERT INTO users (name, password) VALUES ($1, $2) RETURNING id',
+          [username, hashedPassword]
+        )
+        .then(({ rows }) => rows[0]);
+      return { status: 200, response: { id } };
     },
   };
 
@@ -82,8 +90,11 @@ export default ({ db }) => {
     path: '/username-availability/:username',
     method: 'get',
     handler: async ({ params }) => {
-      const user = await usersCollection.findOne({ username: params.username });
-      return { response: { isUsernameAvailable: user === null } };
+      const { username } = params;
+      const user = await dbClient
+        .query('SELECT id FROM users WHERE name = $1', [username])
+        .then(({ rows }) => rows[0]);
+      return { response: { isUsernameAvailable: !user } };
     },
   };
 

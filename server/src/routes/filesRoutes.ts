@@ -1,27 +1,19 @@
-import { ObjectId } from 'mongodb';
 import * as yup from 'yup';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
-export default ({ db }) => {
-  const usersCollection = db.collection('users');
-
+export default ({ dbClient }) => {
   const getFiles = {
     path: '/',
     method: 'get',
     handler: async ({ user }) => {
-      const foundUser = await usersCollection.findOne({
-        _id: ObjectId(user.userId),
-      });
+      const {
+        rows: files,
+      } = await dbClient.query(
+        'SELECT id, name FROM files WHERE user_id = $1',
+        [user.userId]
+      );
 
-      if (!foundUser) {
-        return { status: 404 };
-      }
-
-      const { files } = foundUser;
-
-      return {
-        response: files.map((file) => ({ id: file._id, name: file.name })),
-      };
+      return { response: files };
     },
   };
 
@@ -30,23 +22,20 @@ export default ({ db }) => {
     method: 'get',
     handler: async ({ user, params }) => {
       const { fileId } = params;
-      const foundUser = await usersCollection.findOne({
-        _id: ObjectId(user.userId),
-      });
 
-      if (!foundUser) {
-        return { status: 404 };
-      }
-
-      const { files } = foundUser;
-      const foundFile = files.find(({ _id }) => _id.toString() === fileId);
+      const foundFile = await dbClient
+        .query('SELECT name, code FROM files WHERE id = $1 AND user_id = $2', [
+          fileId,
+          user.userId,
+        ])
+        .then(({ rows }) => rows[0]);
 
       if (!foundFile) {
         return { status: 404 };
       }
 
       return {
-        response: { code: foundFile.code, id: foundFile.id },
+        response: foundFile,
       };
     },
   };
@@ -55,15 +44,17 @@ export default ({ db }) => {
     path: '/',
     method: 'post',
     handler: async ({ user }) => {
-      const newFile = { _id: ObjectId(), name: 'Unnamed file', code: '' };
-      await usersCollection.updateOne(
-        {
-          _id: ObjectId(user.userId),
-        },
-        { $push: { files: { $each: [newFile], $position: 0 } } }
-      );
+      const fileName = 'Unnamed file';
+      const fileCode = '';
+      const newFile = await dbClient
+        .query(
+          'INSERT INTO files (user_id, name, code) VALUES ($1, $2, $3) RETURNING id, name, code',
+          [user.userId, fileName, fileCode]
+        )
+        .then(({ rows }) => rows[0]);
+
       return {
-        response: { id: newFile._id, name: newFile.name, code: newFile.code },
+        response: newFile,
       };
     },
   };
@@ -73,12 +64,12 @@ export default ({ db }) => {
     method: 'delete',
     handler: async ({ user, params }) => {
       const { fileId } = params;
-      await usersCollection.updateOne(
-        {
-          _id: ObjectId(user.userId),
-        },
-        { $pull: { files: { _id: ObjectId(fileId) } } }
-      );
+      await dbClient
+        .query('DELETE FROM files WHERE id = $1 AND user_id = $2', [
+          fileId,
+          user.userId,
+        ])
+        .then(({ rows }) => rows[0]);
     },
   };
 
@@ -93,14 +84,11 @@ export default ({ db }) => {
     handler: async ({ body, user, params }) => {
       const { fileId } = params;
       const { code } = body;
-      const { result } = await usersCollection.updateOne(
-        {
-          _id: ObjectId(user.userId),
-        },
-        { $set: { 'files.$[file].code': code } },
-        { arrayFilters: [{ 'file._id': { $eq: ObjectId(fileId) } }] }
+      const result = await dbClient.query(
+        'UPDATE files SET code = $1 WHERE id = $2 AND user_id = $3',
+        [code, fileId, user.userId]
       );
-      return { status: result.nModified === 0 ? 404 : 200 };
+      return { status: result.rowCount === 0 ? 404 : 200 };
     },
   };
 
@@ -115,14 +103,11 @@ export default ({ db }) => {
     handler: async ({ body, user, params }) => {
       const { fileId } = params;
       const { name } = body;
-      const { result } = await usersCollection.updateOne(
-        {
-          _id: ObjectId(user.userId),
-        },
-        { $set: { 'files.$[file].name': name } },
-        { arrayFilters: [{ 'file._id': { $eq: ObjectId(fileId) } }] }
+      const result = await dbClient.query(
+        'UPDATE files SET name = $1 WHERE id = $2 AND user_id = $3',
+        [name, fileId, user.userId]
       );
-      return { status: result.nModified === 0 ? 404 : 200 };
+      return { status: result.rowCount === 0 ? 404 : 200 };
     },
   };
 

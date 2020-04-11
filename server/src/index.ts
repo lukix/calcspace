@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import { MongoClient } from 'mongodb';
+import { Client } from 'pg';
 
 import {
   createRouterFromRouteObjects,
@@ -13,7 +13,14 @@ import {
 import usersRoutes from './routes/usersRoutes';
 import filesRoutes from './routes/filesRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
-import { DB_NAME, CONNECTION_STRING, PORT, CLIENT_URL } from './config';
+import {
+  DB_NAME,
+  DB_USER,
+  DB_HOST,
+  DB_PASSWORD,
+  PORT,
+  CLIENT_URL,
+} from './config';
 
 const app = express();
 
@@ -22,16 +29,21 @@ app.use(bodyParser.json());
 app.use(cookieParser({ sameSite: true }));
 
 (async () => {
-  const client = await MongoClient.connect(CONNECTION_STRING, {
-    useUnifiedTopology: true,
-  }).catch((err) => {
-    console.log('ERROR WHILE CONNECTING TO THE DB');
-    throw err;
+  const dbClient = new Client({
+    user: DB_USER,
+    host: DB_HOST,
+    database: DB_NAME,
+    password: DB_PASSWORD,
   });
 
-  console.log('Connected successfully to the DB server');
+  try {
+    await dbClient.connect();
+  } catch (err) {
+    console.log('ERROR WHILE CONNECTING TO THE DB');
+    throw err;
+  }
 
-  const db = client.db(DB_NAME);
+  console.log('Connected successfully to the DB server');
 
   const testRoute = {
     path: '/',
@@ -41,10 +53,10 @@ app.use(cookieParser({ sameSite: true }));
 
   const routesDefinitions = nestRoutes('/api', [
     testRoute,
-    ...nestRoutes('/users', usersRoutes({ db })),
+    ...nestRoutes('/users', usersRoutes({ dbClient })),
     ...applyMiddlewares(
       [authorizationMiddleware],
-      nestRoutes('/files', filesRoutes({ db }))
+      nestRoutes('/files', filesRoutes({ dbClient }))
     ),
   ]);
 
@@ -58,10 +70,9 @@ app.use(cookieParser({ sameSite: true }));
 
   app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 
-  process.on('SIGINT', function () {
-    client.close(() => {
-      console.log('Mongoose disconnected on app termination');
-      process.exit(0);
-    });
+  process.on('SIGINT', async () => {
+    dbClient.end();
+    console.log('DB disconnected on app termination');
+    process.exit(0);
   });
 })();
