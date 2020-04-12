@@ -11,7 +11,8 @@ services:
       - ./client:/app
       - /app/node_modules
     environment:
-      CHOKIDAR_USEPOLLING: "true"
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_API_URL=${API_URL}
   server:
     build: ./server
     restart: always
@@ -21,6 +22,14 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+    environment:
+      - APP_PORT=${APP_PORT}
+      - CLIENT_URL=${CLIENT_URL}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TOKEN_EXPIRATION_DURATION_MS=${TOKEN_EXPIRATION_DURATION_MS}
   postgres:
     image: postgres
     restart: always
@@ -29,6 +38,6 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
