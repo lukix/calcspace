@@ -2,8 +2,10 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { FaPlus } from 'react-icons/fa';
 import classNames from 'classnames';
+import Spinner from '../shared/spinner';
 import FileItem from './FileItem';
 import { actions, selectors } from '../shared/filesStore';
+import sharedStyles from '../shared/shared.module.scss';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
@@ -30,7 +32,7 @@ const noop = () => {};
 
 const FilesList: React.FC<FilesListProps> = ({
   files,
-  // isFetchingFiles,
+  isFetchingFiles,
   // fetchingFilesError,
   isCreatingFile,
 
@@ -43,6 +45,35 @@ const FilesList: React.FC<FilesListProps> = ({
     fetchFiles();
   }, [fetchFiles]);
 
+  const filesList = (
+    <ul className={styles.filesList}>
+      {files.map(
+        ({
+          id,
+          name,
+          isModified,
+          isCreating,
+          isDeleting,
+          isRenaming,
+          isSynchronizing,
+        }) => (
+          <FileItem
+            key={id}
+            id={id}
+            name={name}
+            deleteFile={deleteFile}
+            renameFile={renameFile}
+            isSynchronizing={isSynchronizing}
+            isModified={isModified}
+            isCreating={isCreating}
+            isDeleting={isDeleting}
+            isRenaming={isRenaming}
+          />
+        )
+      )}
+    </ul>
+  );
+
   return (
     <div className={styles.filesListPanel}>
       <div
@@ -54,32 +85,13 @@ const FilesList: React.FC<FilesListProps> = ({
         <FaPlus title="New File" />
         Add New File
       </div>
-      <ul className={styles.filesList}>
-        {files.map(
-          ({
-            id,
-            name,
-            isModified,
-            isCreating,
-            isDeleting,
-            isRenaming,
-            isSynchronizing,
-          }) => (
-            <FileItem
-              key={id}
-              id={id}
-              name={name}
-              deleteFile={deleteFile}
-              renameFile={renameFile}
-              isSynchronizing={isSynchronizing}
-              isModified={isModified}
-              isCreating={isCreating}
-              isDeleting={isDeleting}
-              isRenaming={isRenaming}
-            />
-          )
-        )}
-      </ul>
+      {isFetchingFiles ? (
+        <div className={sharedStyles.spinnerContainer}>
+          <Spinner />
+        </div>
+      ) : (
+        filesList
+      )}
     </div>
   );
 };
