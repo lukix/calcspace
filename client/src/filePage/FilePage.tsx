@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
 import { actions } from '../shared/filesStore';
+import Spinner from '../shared/spinner';
 import CodeEditor from './codeEditor/CodeEditor';
 import SyncService from './syncService';
 import sharedStyles from '../shared/shared.module.scss';
@@ -56,7 +57,11 @@ const FilePage: React.FC<FilePageProps> = ({
   }
 
   if (isFetchingFile || !file) {
-    return <div className={sharedStyles.infoBox}>Loading file...</div>;
+    return (
+      <div className={sharedStyles.spinnerContainer}>
+        <Spinner />
+      </div>
+    );
   }
 
   return <CodeEditor initialCode={file.code} onChange={onCodeChange} />;
