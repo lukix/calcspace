@@ -84,8 +84,8 @@ export const reducer = createReducer({
     [actionTypes.addFile.START]: state => ({
       ...state,
       files: [
-        { id: TEMP_ID, name: 'Unnamed file', code: '', isCreating: true },
         ...state.files,
+        { id: TEMP_ID, name: 'Unnamed file', code: '', isCreating: true },
       ],
     }),
     [actionTypes.addFile.SUCCESS]: (state, payload) => ({
@@ -163,7 +163,10 @@ export const reducer = createReducer({
 });
 
 export const selectors = {
-  files: state => state.filesList.files,
+  files: state =>
+    state.filesList.files.sort((fileA, fileB) =>
+      fileA.name.localeCompare(fileB.name)
+    ),
   isFetchingFiles: state => state.filesList.isFetchingFiles,
   fetchingFilesError: state => state.filesList.fetchingFilesError,
   isCreatingFile: state =>
