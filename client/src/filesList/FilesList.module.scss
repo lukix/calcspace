@@ -15,9 +15,10 @@
 }
 
 .filesListPanel {
-  background: $kinda-black-color;
-  color: $light-white-color;
+  background: rgba(0, 0, 0, 0.4);
+  color: $light-background-color;
   width: 460px;
+  margin: 15px;
 }
 
 .filesList {

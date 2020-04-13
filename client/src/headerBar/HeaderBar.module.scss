@@ -2,8 +2,9 @@
 
 .headerBar {
   height: 40px;
-  background: $wine-color;
-  color: $light-white-color;
+  background: rgba(0, 0, 0, 0.4);
+  color: $light-background-color;
+  border-bottom: 2px solid $accent-color;
   padding: 0 10px;
   display: flex;
   justify-content: space-between;

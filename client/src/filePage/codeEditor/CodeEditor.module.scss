@@ -20,6 +20,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
   padding: 8px;
   border: 0;
   overflow: hidden;
+  color: $font-light-color;
 }
 
 .editorTextarea {
@@ -31,7 +32,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
   resize: none;
   background: transparent;
   color: transparent;
-  caret-color: black;
+  caret-color: $font-light-color;
   min-height: 200px;
   box-sizing: border-box;
   min-height: 100%;
