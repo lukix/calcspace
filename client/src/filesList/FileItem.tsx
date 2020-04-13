@@ -77,7 +77,9 @@ const FileItem: React.FC<FileItemProps> = ({
 
   const saveNewName = e => {
     setIsInRenamingMode(false);
-    renameFile({ id, oldName: name, newName: e.target.value });
+    if (e.target.value) {
+      renameFile({ id, oldName: name, newName: e.target.value });
+    }
   };
 
   const path = `/file/${id}`;
@@ -111,6 +113,7 @@ const FileItem: React.FC<FileItemProps> = ({
               defaultValue={name}
               onBlur={saveNewName}
               onKeyPress={selectEnterPresses(saveNewName)}
+              maxLength={30}
             />
           ) : (
             <span>{name}</span>

@@ -3,7 +3,7 @@
 .filesListPanel {
   background: rgba(0, 0, 0, 0.4);
   color: $light-background-color;
-  width: 460px;
+  min-width: 380px;
   margin: 15px;
   display: flex;
   flex-direction: column;
