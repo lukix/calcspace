@@ -57,11 +57,7 @@ const FilePage: React.FC<FilePageProps> = ({
   }
 
   if (isFetchingFile || !file) {
-    return (
-      <div className={sharedStyles.spinnerContainer}>
-        <Spinner />
-      </div>
-    );
+    return <Spinner centered />;
   }
 
   return <CodeEditor initialCode={file.code} onChange={onCodeChange} />;

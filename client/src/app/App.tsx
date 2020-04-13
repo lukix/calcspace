@@ -33,11 +33,7 @@ const App: React.FC<AppProps> = ({
   }
 
   if (isFetchingUser || !user) {
-    return (
-      <div className={sharedStyles.spinnerContainer}>
-        <Spinner />
-      </div>
-    );
+    return <Spinner centered />;
   }
 
   return (

@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import Spinner from '../shared/spinner';
 import FileItem from './FileItem';
 import { actions, selectors } from '../shared/filesStore';
-import sharedStyles from '../shared/shared.module.scss';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
@@ -85,13 +84,7 @@ const FilesList: React.FC<FilesListProps> = ({
         <FaPlus title="New File" />
         Add New File
       </div>
-      {isFetchingFiles ? (
-        <div className={sharedStyles.spinnerContainer}>
-          <Spinner />
-        </div>
-      ) : (
-        filesList
-      )}
+      {isFetchingFiles ? <Spinner centered /> : filesList}
     </div>
   );
 };
