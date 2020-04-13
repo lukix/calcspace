@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { FaPlus } from 'react-icons/fa';
+import classNames from 'classnames';
 import FileItem from './FileItem';
 import { actions, selectors } from '../shared/filesStore';
 import styles from './FilesList.module.scss';
@@ -25,6 +26,8 @@ interface FilesListProps {
   renameFile: Function;
 }
 
+const noop = () => {};
+
 const FilesList: React.FC<FilesListProps> = ({
   files,
   // isFetchingFiles,
@@ -42,10 +45,14 @@ const FilesList: React.FC<FilesListProps> = ({
 
   return (
     <div className={styles.filesListPanel}>
-      <div className={styles.actionIcons}>
-        {!isCreatingFile && (
-          <FaPlus title="New File" onClick={() => addFile()} />
-        )}
+      <div
+        className={classNames(styles.addFileButton, {
+          [styles.addFileDisabled]: isCreatingFile,
+        })}
+        onClick={isCreatingFile ? noop : () => addFile()}
+      >
+        <FaPlus title="New File" />
+        Add New File
       </div>
       <ul className={styles.filesList}>
         {files.map(
