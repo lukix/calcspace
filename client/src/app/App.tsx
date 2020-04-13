@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Spinner from '../shared/spinner';
 import HeaderBar from '../headerBar/HeaderBar';
 import FilePage from '../filePage/FilePage';
 import SignInUpModal from '../signInUpModal/SignInUpModal';
@@ -32,7 +33,11 @@ const App: React.FC<AppProps> = ({
   }
 
   if (isFetchingUser || !user) {
-    return <div className={sharedStyles.infoBox}>Loading...</div>;
+    return (
+      <div className={sharedStyles.spinnerContainer}>
+        <Spinner />
+      </div>
+    );
   }
 
   return (

@@ -12,6 +12,10 @@ body {
   height: 100vh;
 }
 
+#root {
+  height: 100vh;
+}
+
 textarea, input {
   outline-color: $accent-color;
 }
