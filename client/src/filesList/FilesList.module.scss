@@ -1,5 +1,14 @@
 @import '../style/colors.scss';
 
+.filesListPanel {
+  background: rgba(0, 0, 0, 0.4);
+  color: $light-background-color;
+  width: 460px;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
 .actionIcons {
   padding: 10px;
   font-size: 1.2rem;
@@ -14,17 +23,11 @@
   }
 }
 
-.filesListPanel {
-  background: rgba(0, 0, 0, 0.4);
-  color: $light-background-color;
-  width: 460px;
-  margin: 15px;
-}
-
 .filesList {
   list-style-type: none;
   padding: 5px 0px;
   font-family: 'Courier New', Courier, monospace;
+  overflow: auto;
 
   .selected {
     background: rgba(0, 0, 0, 0.4);
