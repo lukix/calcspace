@@ -17,6 +17,15 @@
   }
 }
 
+.headerTitle {
+  display: flex;
+  align-items: center;
+
+  a {
+    margin-right: 10px;
+  }
+}
+
 .signOutLink {
   font-size: 1rem;
 }

@@ -171,4 +171,9 @@ export const selectors = {
   fetchingFilesError: state => state.filesList.fetchingFilesError,
   isCreatingFile: state =>
     state.filesList.files.some(({ isCreating }) => isCreating),
+  isSynchronizingAnyFile: state =>
+    state.filesList.files.some(
+      ({ isCreating, isDeleting, isSynchronizing, isRenaming }) =>
+        isCreating || isDeleting || isSynchronizing || isRenaming
+    ),
 };
