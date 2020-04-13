@@ -84,7 +84,9 @@ const FilesList: React.FC<FilesListProps> = ({
         <FaPlus title="New File" />
         Add New File
       </div>
-      {isFetchingFiles ? <Spinner centered /> : filesList}
+      <Spinner show={isFetchingFiles} centered>
+        {filesList}
+      </Spinner>
     </div>
   );
 };
