@@ -1,8 +1,6 @@
 {
   "name": "math-notes-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "out/index.js",
   "scripts": {
     "start": "concurrently \"tsc --watch\" \"nodemon --watch out out/index.js\"",
     "build": "tsc",
@@ -11,8 +9,6 @@
     "pre-push": "yarn run lint && CI=true yarn run test",
     "setupDb": "node ./out/setupDatabase.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
