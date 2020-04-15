@@ -16,14 +16,14 @@ services:
   server:
     build: ./server
     restart: always
-    command: yarn start
+    command: yarn run dev
     ports:
       - "3001:3001"
     volumes:
       - ./server:/app
       - /app/node_modules
     environment:
-      - APP_PORT=${APP_PORT}
+      - PORT=${PORT}
       - CLIENT_URL=${CLIENT_URL}
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}

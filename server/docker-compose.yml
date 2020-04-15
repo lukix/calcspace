@@ -2,7 +2,7 @@ version: '3'
 services:
   server:
     build: .
-    command: yarn start
+    command: yarn run build && yarn start
     ports:
       - "3001:3001"
     volumes:

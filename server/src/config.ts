@@ -1,4 +1,4 @@
-export const PORT = process.env.APP_PORT || 3001;
+export const PORT = process.env.PORT || 3001;
 export const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 export const DB_HOST = process.env.DB_HOST || 'postgres';
 export const DB_NAME = process.env.DB_NAME || 'postgres';

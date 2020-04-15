@@ -2,7 +2,8 @@
   "name": "math-notes-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "concurrently \"tsc --watch\" \"nodemon --watch out out/index.js\"",
+    "start": "node out/index.js",
+    "dev": "concurrently \"tsc --watch\" \"nodemon --watch out out/index.js\"",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint \"./src/*\"",
