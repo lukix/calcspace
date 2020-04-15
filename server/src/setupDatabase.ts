@@ -1,5 +1,7 @@
 import { Client } from 'pg';
 
+import { DB_NAME, DB_USER, DB_HOST, DB_PASSWORD } from './config';
+
 const queries = [
   {
     name: 'createUuidExtension',
@@ -33,10 +35,10 @@ const queries = [
 
 const setupDatabase = async () => {
   const client = new Client({
-    user: 'postgres',
-    host: 'postgres',
-    database: 'postgres',
-    password: 'postgres',
+    user: DB_USER,
+    host: DB_HOST,
+    database: DB_NAME,
+    password: DB_PASSWORD,
   });
   await client.connect();
   try {
