@@ -13,6 +13,7 @@ import {
 import usersRoutes from './routes/usersRoutes';
 import filesRoutes from './routes/filesRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
+import setupDatabase from './setupDatabase';
 import {
   DB_NAME,
   DB_USER,
@@ -22,13 +23,15 @@ import {
   CLIENT_URL,
 } from './config';
 
-const app = express();
-
-app.use(cors({ credentials: true, origin: CLIENT_URL }));
-app.use(bodyParser.json());
-app.use(cookieParser({ sameSite: true }));
-
 (async () => {
+  await setupDatabase();
+
+  const app = express();
+
+  app.use(cors({ credentials: true, origin: CLIENT_URL }));
+  app.use(bodyParser.json());
+  app.use(cookieParser({ sameSite: true }));
+
   const dbClient = new Client({
     user: DB_USER,
     host: DB_HOST,

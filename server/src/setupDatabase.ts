@@ -31,7 +31,7 @@ const queries = [
   },
 ];
 
-(async () => {
+const setupDatabase = async () => {
   const client = new Client({
     user: 'postgres',
     host: 'postgres',
@@ -49,4 +49,6 @@ const queries = [
     console.error(error);
   }
   await client.end();
-})();
+};
+
+export default setupDatabase;
