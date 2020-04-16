@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import Modal from './modal/Modal';
-import ModalFormField from './ModalFormField';
 import httpRequest from '../shared/httpRequest';
-import styles from './SignInUpModal.module.scss';
 import { actions } from '../app/store';
 import Spinner from '../shared/spinner';
+import Modal from './modal/Modal';
+import ModalFormField from './ModalFormField';
+import AppDescription from './AppDescription';
+import styles from './SignInUpModal.module.scss';
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -61,6 +62,7 @@ const LogInModal: React.FC<LogInModalProps> = ({ visible, goToSignUpMode }) => {
 
   return (
     <Modal visible={visible} title="Log In">
+      <AppDescription />
       <div className={styles.signInModal}>
         <Spinner show={isRedirecting} centered>
           <form onSubmit={formik.handleSubmit}>

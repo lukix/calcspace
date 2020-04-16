@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FaRegCheckCircle } from 'react-icons/fa';
+import httpRequest from '../shared/httpRequest';
 import Modal from './modal/Modal';
 import ModalFormField from './ModalFormField';
 import { actions, selectors } from './store';
-import httpRequest from '../shared/httpRequest';
+import AppDescription from './AppDescription';
 import styles from './SignInUpModal.module.scss';
 
 const validationSchema = yup.object().shape({
@@ -87,6 +88,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({
 
   return (
     <Modal visible={visible} onHide={onHide} title="Create An Account">
+      <AppDescription />
       <div className={styles.signInModal}>
         {!addedUser ? (
           <form onSubmit={formik.handleSubmit}>
