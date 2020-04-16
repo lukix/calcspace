@@ -5,9 +5,8 @@ import Spinner from '../shared/spinner';
 import HeaderBar from '../headerBar/HeaderBar';
 import FilePage from '../filePage/FilePage';
 import FilesList from '../filesList/FilesList';
+import UserGuide from './UserGuide';
 import { actions as reduxActions, selectors } from './store';
-
-import sharedStyles from '../shared/shared.module.scss';
 import styles from './App.module.scss';
 
 interface AuthorizedAppProps {
@@ -46,9 +45,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
               <FilePage />
             </Route>
             <Route path="/">
-              <div className={sharedStyles.infoBox}>
-                Welcome! Select a file in the left panel to get started.
-              </div>
+              <UserGuide />
             </Route>
           </Switch>
         </div>
