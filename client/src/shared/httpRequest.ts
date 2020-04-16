@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '../config';
 
-const HttpRequest = ({ baseUrl }) => {
+const HttpRequest = ({ baseUrl, responseErrorHandlers = {} }) => {
   const request = method => (url: string, data?: any) =>
     axios
       .request({
@@ -10,7 +10,14 @@ const HttpRequest = ({ baseUrl }) => {
         data,
         withCredentials: true,
       })
-      .then(({ data }) => data);
+      .then(({ data }) => data)
+      .catch(error => {
+        if (error.response && responseErrorHandlers[error.response.status]) {
+          return responseErrorHandlers[error.response.status](error);
+        } else {
+          throw error;
+        }
+      });
 
   const httpRequest = {
     get: request('get'),
@@ -22,4 +29,11 @@ const HttpRequest = ({ baseUrl }) => {
   return httpRequest;
 };
 
-export default HttpRequest({ baseUrl: API_URL });
+const forbiddenErrorHandler = () => {
+  window.location.replace('/log-in');
+};
+
+export default HttpRequest({
+  baseUrl: API_URL,
+  responseErrorHandlers: { 403: forbiddenErrorHandler },
+});
