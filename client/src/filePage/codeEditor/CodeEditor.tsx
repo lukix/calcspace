@@ -20,7 +20,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const evaluatedCode = evaluateCode(code);
 
   return (
-    <div>
+    <div className={styles.codeEditor}>
       <div className={styles.codeWrapper}>
         <textarea
           className={styles.editorTextarea}

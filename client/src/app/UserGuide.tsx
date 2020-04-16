@@ -18,7 +18,7 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       </p>
       <h2>Getting Started</h2>
       <p>
-        In the left panel you can create multiple files. Each file is an
+        In the left panel, you can create multiple files. Each file is an
         independent environment where you can write sequences of math
         expressions. Let's start with a simple addition:
         <pre className={styles.codeSnippet}>
