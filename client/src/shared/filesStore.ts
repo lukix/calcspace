@@ -136,7 +136,9 @@ export const reducer = createReducer({
     [actionTypes.DIRTY_FILE]: (state, { id }) => ({
       ...state,
       files: state.files.map(file =>
-        file.id === id ? { ...file, isModified: true } : file
+        file.id === id
+          ? { ...file, isModified: true, synchronizationError: false }
+          : file
       ),
     }),
     [actionTypes.MARK_SYNCING_START]: (state, { id }) => ({
@@ -149,14 +151,21 @@ export const reducer = createReducer({
       ...state,
       files: state.files.map(file =>
         file.id === id
-          ? { ...file, isModified: false, isSynchronizing: false }
+          ? {
+              ...file,
+              isModified: false,
+              isSynchronizing: false,
+              synchronizationError: false,
+            }
           : file
       ),
     }),
     [actionTypes.MARK_SYNCING_FAILURE]: (state, { id }) => ({
       ...state,
       files: state.files.map(file =>
-        file.id === id ? { ...file, isSynchronizing: false } : file
+        file.id === id
+          ? { ...file, isSynchronizing: false, synchronizationError: true }
+          : file
       ),
     }),
   },
@@ -176,8 +185,13 @@ export const selectors = {
       ({ isCreating, isDeleting, isSynchronizing, isRenaming }) =>
         isCreating || isDeleting || isSynchronizing || isRenaming
     ),
-  areThereAnyUnsavedChanges: state =>
+  areThereAnyChangesToBeSaved: state =>
     state.filesList.files.some(
-      ({ isModified, isSynchronizing }) => isModified && !isSynchronizing
+      ({ isModified, isSynchronizing, synchronizationError }) =>
+        isModified && !isSynchronizing && !synchronizationError
+    ),
+  areThereAnySynchronizationErrors: state =>
+    state.filesList.files.some(
+      ({ synchronizationError }) => synchronizationError
     ),
 };
