@@ -9,18 +9,23 @@ import styles from './HeaderBar.module.scss';
 
 interface HeaderBarProps {
   isSynchronizingAnyFile: boolean;
+  areThereAnyUnsavedChanges: boolean;
   username: string | null;
 }
 
 const HeaderBar: React.FC<HeaderBarProps> = ({
   username,
   isSynchronizingAnyFile,
+  areThereAnyUnsavedChanges,
 }) => {
   return (
     <div className={styles.headerBar}>
       <div className={styles.headerTitle}>
         <Link to="/">Math IDE</Link>
-        <Spinner size={18} show={isSynchronizingAnyFile} />
+        <Spinner
+          size={18}
+          show={isSynchronizingAnyFile || areThereAnyUnsavedChanges}
+        />
       </div>
       <div className={styles.icons}>
         <a href={SIGN_OUT_URL} className={styles.signOutLink}>
@@ -34,4 +39,5 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
 
 export default connect(state => ({
   isSynchronizingAnyFile: selectors.isSynchronizingAnyFile(state),
+  areThereAnyUnsavedChanges: selectors.areThereAnyUnsavedChanges(state),
 }))(HeaderBar);

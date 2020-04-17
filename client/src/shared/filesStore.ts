@@ -176,4 +176,8 @@ export const selectors = {
       ({ isCreating, isDeleting, isSynchronizing, isRenaming }) =>
         isCreating || isDeleting || isSynchronizing || isRenaming
     ),
+  areThereAnyUnsavedChanges: state =>
+    state.filesList.files.some(
+      ({ isModified, isSynchronizing }) => isModified && !isSynchronizing
+    ),
 };
