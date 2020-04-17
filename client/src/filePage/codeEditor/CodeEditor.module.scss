@@ -35,6 +35,11 @@ $expression-font-family: 'Courier New', Courier, monospace;
   min-height: 200px;
   box-sizing: border-box;
   min-height: 100%;
+
+  &::placeholder {
+    color: white;
+    opacity: 0.5;
+  }
 }
 
 .formattedCode {
