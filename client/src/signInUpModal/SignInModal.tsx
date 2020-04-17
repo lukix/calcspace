@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import httpRequest from '../shared/httpRequest';
-import { actions } from '../app/store';
 import Spinner from '../shared/spinner';
 import Modal from './modal/Modal';
 import ModalFormField from './ModalFormField';
@@ -90,9 +88,4 @@ const LogInModal: React.FC<LogInModalProps> = () => {
   );
 };
 
-export default connect(
-  null,
-  {
-    setLoggedInUser: actions.setLoggedInUser,
-  }
-)(LogInModal);
+export default LogInModal;

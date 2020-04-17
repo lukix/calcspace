@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FaRegCheckCircle } from 'react-icons/fa';
+import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
 import Modal from './modal/Modal';
 import ModalFormField from './ModalFormField';
-import { actions, selectors } from './store';
 import AppDescription from './AppDescription';
 import styles from './SignInUpModal.module.scss';
 
@@ -31,21 +30,16 @@ const validationSchema = yup.object().shape({
     .required(),
 });
 
-interface SignUpModalProps {
-  addUser: Function;
-  clearAddedUser: Function;
-  isAddingUser: boolean;
-  addedUser: object;
-  addUserError: { error: string } | null;
-}
+const addedUserAction = ({ username, password }) =>
+  httpRequest.post('users', { username, password });
 
-const SignUpModal: React.FC<SignUpModalProps> = ({
-  addUser,
-  clearAddedUser,
-  isAddingUser,
-  addedUser,
-  addUserError,
-}) => {
+interface SignUpModalProps {}
+
+const SignUpModal: React.FC<SignUpModalProps> = () => {
+  const [addUser, addedUser, isAddingUser, addUserError] = useAsyncAction(
+    addedUserAction
+  );
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -72,12 +66,6 @@ const SignUpModal: React.FC<SignUpModalProps> = ({
       addUser({ username, password });
     },
   });
-
-  useEffect(() => {
-    return () => {
-      clearAddedUser();
-    };
-  }, [clearAddedUser]);
 
   return (
     <Modal visible title="Create An Account">
@@ -133,14 +121,4 @@ const SignUpModal: React.FC<SignUpModalProps> = ({
   );
 };
 
-export default connect(
-  state => ({
-    isAddingUser: selectors.isAddingUser(state),
-    addedUser: selectors.addedUser(state),
-    addUserError: selectors.addUserError(state),
-  }),
-  {
-    addUser: actions.addUser,
-    clearAddedUser: actions.clearAddedUser,
-  }
-)(SignUpModal);
+export default SignUpModal;

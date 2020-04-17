@@ -8,17 +8,12 @@ import httpRequest from '../shared/httpRequest';
 
 const actionTypes = {
   fetchLoggedInUser: createAsyncActionTypes('FETCH_LOGGED_IN_USER'),
-  SET_LOGGED_IN_USER: 'SET_LOGGED_IN_USER',
 };
 
 export const actions = {
   fetchLoggedInUser: createAsyncActionCreator({
     actionTypes: actionTypes.fetchLoggedInUser,
     action: () => httpRequest.get('users/logged-in'),
-  }),
-  setLoggedInUser: ({ username }) => ({
-    type: actionTypes.SET_LOGGED_IN_USER,
-    payload: { username },
   }),
 };
 
@@ -34,10 +29,6 @@ export const reducer = createReducer({
       payloadKey: 'user',
       pendingKey: 'isFetchingUser',
       errorKey: 'fetchingUserError',
-    }),
-    [actionTypes.SET_LOGGED_IN_USER]: (state, { username }) => ({
-      ...state,
-      user: { username },
     }),
   },
 });
