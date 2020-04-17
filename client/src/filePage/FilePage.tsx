@@ -51,7 +51,7 @@ const FilePage: React.FC<FilePageProps> = ({
   if (fetchingFileError) {
     return (
       <div className={sharedStyles.infoBox}>
-        Error occured when fetching the file. File might have been deleted.
+        Error occured when fetching the file.
       </div>
     );
   }

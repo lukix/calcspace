@@ -32,7 +32,7 @@ const noop = () => {};
 const FilesList: React.FC<FilesListProps> = ({
   files,
   isFetchingFiles,
-  // fetchingFilesError,
+  fetchingFilesError,
   isCreatingFile,
 
   fetchFiles,
@@ -85,6 +85,9 @@ const FilesList: React.FC<FilesListProps> = ({
         Add New File
       </div>
       <Spinner show={isFetchingFiles} centered>
+        {fetchingFilesError && (
+          <div className={styles.fetchErrorMessage}>Fetching files failed.</div>
+        )}
         {filesList}
       </Spinner>
     </div>
