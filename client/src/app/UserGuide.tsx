@@ -21,35 +21,35 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         In the left panel, you can create multiple files. Each file is an
         independent environment where you can write sequences of math
         expressions. Let's start with a simple addition:
-        <pre className={styles.codeSnippet}>
-          14 + 7<span className={styles.tokenVirtual}> = 21</span>
-        </pre>
+      </p>
+      <pre className={styles.codeSnippet}>
+        14 + 7<span className={styles.tokenVirtual}> = 21</span>
+      </pre>
+      <p>
         Note how the result of this expression is slightly faded. It means that
         it has been automatically generated and cannot be edited. You can enter
         multiple expressions - each in a new line. Here is an example:
-        <pre className={styles.codeSnippet}>
-          2 + 2 * 2<span className={styles.tokenVirtual}> = 6</span>
-          <br />7 * (6 + 1)<span className={styles.tokenVirtual}> = 49</span>
-          <br />
-          123 / 5<span className={styles.tokenVirtual}> = 2.46</span>
-          <br />2 ^ 3<span className={styles.tokenVirtual}> = 8</span>
-        </pre>
       </p>
+      <pre className={styles.codeSnippet}>
+        2 + 2 * 2<span className={styles.tokenVirtual}> = 6</span>
+        <br />7 * (6 + 1)<span className={styles.tokenVirtual}> = 49</span>
+        <br />
+        123 / 5<span className={styles.tokenVirtual}> = 2.46</span>
+        <br />2 ^ 3<span className={styles.tokenVirtual}> = 8</span>
+      </pre>
       <h2>Variables</h2>
-      <p>
-        Here is how you can declare variables:
-        <pre className={styles.codeSnippet}>
-          x = 10
-          <br />x * 3.6<span className={styles.tokenVirtual}> = 36</span>
-        </pre>
-        Another example:
-        <pre className={styles.codeSnippet}>
-          m = 10
-          <br />v = 2 * 3<span className={styles.tokenVirtual}> = 6</span>
-          <br />E = (m * v ^ 2) / 2
-          <span className={styles.tokenVirtual}> = 180</span>
-        </pre>
-      </p>
+      <p>Here is how you can declare variables:</p>
+      <pre className={styles.codeSnippet}>
+        x = 10
+        <br />x * 3.6<span className={styles.tokenVirtual}> = 36</span>
+      </pre>
+      <p>Another example:</p>
+      <pre className={styles.codeSnippet}>
+        m = 10
+        <br />v = 2 * 3<span className={styles.tokenVirtual}> = 6</span>
+        <br />E = (m * v ^ 2) / 2
+        <span className={styles.tokenVirtual}> = 180</span>
+      </pre>
     </div>
   );
 };
