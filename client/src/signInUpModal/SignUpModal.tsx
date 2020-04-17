@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FaRegCheckCircle } from 'react-icons/fa';
@@ -31,10 +32,6 @@ const validationSchema = yup.object().shape({
 });
 
 interface SignUpModalProps {
-  visible: boolean;
-  onHide: Function;
-  goToLogInMode: Function;
-
   addUser: Function;
   clearAddedUser: Function;
   isAddingUser: boolean;
@@ -43,10 +40,6 @@ interface SignUpModalProps {
 }
 
 const SignUpModal: React.FC<SignUpModalProps> = ({
-  visible,
-  onHide,
-  goToLogInMode,
-
   addUser,
   clearAddedUser,
   isAddingUser,
@@ -87,7 +80,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({
   }, [clearAddedUser]);
 
   return (
-    <Modal visible={visible} onHide={onHide} title="Create An Account">
+    <Modal visible title="Create An Account">
       <AppDescription />
       <div className={styles.signInModal}>
         {!addedUser ? (
@@ -117,14 +110,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({
                 disabled={isAddingUser}
               />
               <p className={styles.signUpMessage}>
-                Already have an account?{' '}
-                <span
-                  className={styles.linkLikeButton}
-                  onClick={() => goToLogInMode()}
-                >
-                  Log in
-                </span>
-                .
+                Already have an account? <Link to="/log-in">Log in</Link>.
               </p>
             </div>
             {addUserError && (
@@ -138,13 +124,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({
             <FaRegCheckCircle />
             <p>
               You have successfully signed up! You can{' '}
-              <span
-                className={styles.linkLikeButton}
-                onClick={() => goToLogInMode()}
-              >
-                Log in
-              </span>{' '}
-              now.
+              <Link to="/log-in">Log in</Link> now.
             </p>
           </div>
         )}

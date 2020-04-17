@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import SignInUpModal from '../signInUpModal/SignInUpModal';
+import { SignInModal, SignUpModal } from '../signInUpModal';
 import AuthorizedApp from './AuthorizedApp';
 
 interface AppProps {}
@@ -10,7 +10,10 @@ const App: React.FC<AppProps> = () => {
     <BrowserRouter>
       <Switch>
         <Route path="/log-in">
-          <SignInUpModal visible onHide={() => {}} />
+          <SignInModal />
+        </Route>
+        <Route path="/sign-up">
+          <SignUpModal />
         </Route>
         <Route path="/">
           <AuthorizedApp />

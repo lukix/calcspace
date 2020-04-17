@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import httpRequest from '../shared/httpRequest';
@@ -23,12 +24,9 @@ const validationSchema = yup.object().shape({
 
 const INVALID_CREDENTIALS_STATUS = 'INVALID_CREDENTIALS_STATUS';
 
-interface LogInModalProps {
-  visible: boolean;
-  goToSignUpMode: Function;
-}
+interface LogInModalProps {}
 
-const LogInModal: React.FC<LogInModalProps> = ({ visible, goToSignUpMode }) => {
+const LogInModal: React.FC<LogInModalProps> = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const formik = useFormik({
@@ -52,16 +50,8 @@ const LogInModal: React.FC<LogInModalProps> = ({ visible, goToSignUpMode }) => {
     },
   });
 
-  useEffect(() => {
-    return () => {
-      if (!visible) {
-        formik.resetForm();
-      }
-    };
-  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
-    <Modal visible={visible} title="Log In">
+    <Modal visible title="Log In">
       <AppDescription />
       <div className={styles.signInModal}>
         <Spinner show={isRedirecting} centered>
@@ -85,14 +75,7 @@ const LogInModal: React.FC<LogInModalProps> = ({ visible, goToSignUpMode }) => {
                 disabled={formik.isSubmitting}
               />
               <p className={styles.signUpMessage}>
-                Don't have an account?{' '}
-                <span
-                  className={styles.linkLikeButton}
-                  onClick={() => goToSignUpMode()}
-                >
-                  Sign up
-                </span>
-                .
+                Don't have an account? <Link to="/sign-up">Sign up</Link>.
               </p>
             </div>
             {formik.status === INVALID_CREDENTIALS_STATUS && (
