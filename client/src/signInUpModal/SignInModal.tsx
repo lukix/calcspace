@@ -21,6 +21,7 @@ const validationSchema = yup.object().shape({
 });
 
 const INVALID_CREDENTIALS_STATUS = 'INVALID_CREDENTIALS_STATUS';
+const OTHER_ERROR_STATUS = 'OTHER_ERROR_STATUS';
 
 interface LogInModalProps {}
 
@@ -41,7 +42,11 @@ const LogInModal: React.FC<LogInModalProps> = () => {
         setIsRedirecting(true);
         window.location.replace('/');
       } catch (err) {
-        formikProps.setStatus(INVALID_CREDENTIALS_STATUS);
+        formikProps.setStatus(
+          err.response && err.response.status === 401
+            ? INVALID_CREDENTIALS_STATUS
+            : OTHER_ERROR_STATUS
+        );
       } finally {
         formikProps.setSubmitting(false);
       }
@@ -79,6 +84,11 @@ const LogInModal: React.FC<LogInModalProps> = () => {
             {formik.status === INVALID_CREDENTIALS_STATUS && (
               <p className={styles.errorMessage}>
                 Invalid username or password.
+              </p>
+            )}
+            {formik.status === OTHER_ERROR_STATUS && (
+              <p className={styles.errorMessage}>
+                Unexpected error has occurred.
               </p>
             )}
           </form>
