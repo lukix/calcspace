@@ -8,6 +8,7 @@ import { actions, selectors } from '../shared/filesStore';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
+  isFilesPanelVisible: boolean;
   files: Array<{
     id: string;
     name: string;
@@ -30,6 +31,7 @@ interface FilesListProps {
 const noop = () => {};
 
 const FilesList: React.FC<FilesListProps> = ({
+  isFilesPanelVisible,
   files,
   isFetchingFiles,
   fetchingFilesError,
@@ -43,6 +45,10 @@ const FilesList: React.FC<FilesListProps> = ({
   useEffect(() => {
     fetchFiles();
   }, [fetchFiles]);
+
+  if (!isFilesPanelVisible) {
+    return null;
+  }
 
   const filesList = (
     <ul className={styles.filesList}>
@@ -96,6 +102,7 @@ const FilesList: React.FC<FilesListProps> = ({
 
 export default connect(
   state => ({
+    isFilesPanelVisible: selectors.isFilesPanelVisible(state),
     files: selectors.files(state),
     isFetchingFiles: selectors.isFetchingFiles(state),
     fetchingFilesError: selectors.fetchingFilesError(state),

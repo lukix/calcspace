@@ -4,9 +4,16 @@
   background: rgba(0, 0, 0, 0.4);
   color: $light-background-color;
   min-width: 380px;
-  margin: 15px;
+  margin: 15px 0 15px 15px;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 568px) {
+  .filesListPanel {
+    min-width: calc(100vw - 30px);
+    max-width: calc(100vw - 30px);
+  }
 }
 
 .addFileButton {

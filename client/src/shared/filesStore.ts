@@ -7,6 +7,7 @@ import {
 import httpRequest from '../shared/httpRequest';
 
 const actionTypes = {
+  SET_FILES_PANEL_VISIBLE: 'SET_FILES_PANEL_VISIBLE',
   fetchFiles: createAsyncActionTypes('FETCH_FILES'),
   addFile: createAsyncActionTypes('ADD_FILE'),
   deleteFile: createAsyncActionTypes('DELETE_FILE'),
@@ -18,6 +19,10 @@ const actionTypes = {
 };
 
 export const actions = {
+  setFilesPanelVisible: visible => ({
+    type: actionTypes.SET_FILES_PANEL_VISIBLE,
+    payload: { visible },
+  }),
   fetchFiles: createAsyncActionCreator({
     actionTypes: actionTypes.fetchFiles,
     action: () => httpRequest.get('files'),
@@ -69,11 +74,17 @@ const TEMP_ID = 'TEMP_ID';
 
 export const reducer = createReducer({
   initialState: {
+    isFilesPanelVisible: window.innerWidth >= 1024,
     files: [],
     isFetchingFiles: false,
     fetchingFilesError: false,
   },
   actionHandlers: {
+    [actionTypes.SET_FILES_PANEL_VISIBLE]: (state, { visible }) => ({
+      ...state,
+      isFilesPanelVisible: visible,
+    }),
+
     ...createAsyncActionHandlers({
       types: actionTypes.fetchFiles,
       payloadKey: 'files',
@@ -172,6 +183,7 @@ export const reducer = createReducer({
 });
 
 export const selectors = {
+  isFilesPanelVisible: state => state.filesList.isFilesPanelVisible,
   files: state =>
     state.filesList.files.sort((fileA, fileB) =>
       fileA.name.localeCompare(fileB.name)

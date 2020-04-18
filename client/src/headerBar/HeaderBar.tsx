@@ -1,30 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { FaUserCircle, FaExclamationCircle } from 'react-icons/fa';
+import { FaBars, FaUserCircle, FaExclamationCircle } from 'react-icons/fa';
 import { SIGN_OUT_URL } from '../config';
 import Spinner from '../shared/spinner';
-import { selectors } from '../shared/filesStore';
+import { selectors, actions } from '../shared/filesStore';
 import styles from './HeaderBar.module.scss';
 
 interface HeaderBarProps {
+  username: string | null;
+
+  isFilesPanelVisible: boolean;
   isSynchronizingAnyFile: boolean;
   areThereAnyChangesToBeSaved: boolean;
   areThereAnySynchronizationErrors: boolean;
-  username: string | null;
+  setFilesPanelVisible: Function;
 }
 
 const HeaderBar: React.FC<HeaderBarProps> = ({
   username,
+  isFilesPanelVisible,
   isSynchronizingAnyFile,
   areThereAnyChangesToBeSaved,
   areThereAnySynchronizationErrors,
+  setFilesPanelVisible,
 }) => {
   const showSpinner = isSynchronizingAnyFile || areThereAnyChangesToBeSaved;
   const showError = areThereAnySynchronizationErrors && !showSpinner;
+  const toggleFilesPanel = () => {
+    setFilesPanelVisible(!isFilesPanelVisible);
+  };
   return (
     <div className={styles.headerBar}>
       <div className={styles.headerTitle}>
+        <FaBars
+          className={styles.menuToggleButton}
+          onClick={toggleFilesPanel}
+          title="Toggle files panel visibility"
+        />
         <Link to="/">Math IDE</Link>
         <Spinner
           size={18}
@@ -47,10 +60,16 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   );
 };
 
-export default connect(state => ({
-  isSynchronizingAnyFile: selectors.isSynchronizingAnyFile(state),
-  areThereAnyChangesToBeSaved: selectors.areThereAnyChangesToBeSaved(state),
-  areThereAnySynchronizationErrors: selectors.areThereAnySynchronizationErrors(
-    state
-  ),
-}))(HeaderBar);
+export default connect(
+  state => ({
+    isFilesPanelVisible: selectors.isFilesPanelVisible(state),
+    isSynchronizingAnyFile: selectors.isSynchronizingAnyFile(state),
+    areThereAnyChangesToBeSaved: selectors.areThereAnyChangesToBeSaved(state),
+    areThereAnySynchronizationErrors: selectors.areThereAnySynchronizationErrors(
+      state
+    ),
+  }),
+  {
+    setFilesPanelVisible: actions.setFilesPanelVisible,
+  }
+)(HeaderBar);
