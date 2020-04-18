@@ -61,7 +61,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
           value={isInViewMode ? codeWithResults : code}
           onChange={onCodeChange}
           style={{ height: `${code.split('\n').length * 1.2}rem` }}
-          placeholder="Type a math expression..."
+          placeholder={
+            isInViewMode ? 'File is empty' : 'Type a math expression...'
+          }
           readOnly={isInViewMode}
         />
         <pre

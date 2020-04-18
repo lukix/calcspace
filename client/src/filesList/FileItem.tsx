@@ -77,8 +77,9 @@ const FileItem: React.FC<FileItemProps> = ({
 
   const saveNewName = e => {
     setIsInRenamingMode(false);
-    if (e.target.value) {
-      renameFile({ id, oldName: name, newName: e.target.value });
+    const newName = e.target.value.trim();
+    if (newName) {
+      renameFile({ id, oldName: name, newName });
     }
   };
 
