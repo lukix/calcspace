@@ -17,6 +17,7 @@ const getNewJwtTokenCookie = (userId, username) => {
       maxAge: TOKEN_EXPIRATION_DURATION_MS,
       httpOnly: true,
       sameSite: 'none',
+      secure: true,
     },
   };
   return cookie;
