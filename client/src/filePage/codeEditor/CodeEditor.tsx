@@ -1,14 +1,39 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 import evaluateCode from './evaluateCode';
 import HighlightedCode from './HighlightedCode';
+import RadioButtons from './radioButtons/RadioButtons';
 import styles from './CodeEditor.module.scss';
+
+const evaluatedLineToRawString = evaluatedLine => {
+  return evaluatedLine.map(({ value }) => value).join('');
+};
+
+const evaluatedCodeToRawString = evaluatedCode => {
+  return evaluatedCode.map(evaluatedLineToRawString).join('\n');
+};
 
 interface CodeEditorProps {
   initialCode: string;
   onChange: Function;
 }
 
+const modes = {
+  EDIT_MODE: 'EDIT_MODE',
+  VIEW_MODE: 'VIEW_MODE',
+};
+const modeOptions = [
+  { value: modes.EDIT_MODE, label: 'Edit Mode' },
+  {
+    value: modes.VIEW_MODE,
+    label: 'View Mode',
+    description:
+      'View Mode lets you select and copy any fragment of the code - even automatically generated results',
+  },
+];
+
 const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
+  const [mode, setMode] = useState(modes.EDIT_MODE);
   const [code, setCode] = useState(initialCode);
 
   const onCodeChange = e => {
@@ -19,17 +44,31 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
 
   const evaluatedCode = evaluateCode(code);
 
+  const isInViewMode = mode === modes.VIEW_MODE;
+  const codeWithResults = evaluatedCodeToRawString(evaluatedCode);
+
   return (
     <div className={styles.codeEditor}>
+      <RadioButtons
+        className={styles.radioButtons}
+        items={modeOptions}
+        value={mode}
+        onChange={setMode}
+      />
       <div className={styles.codeWrapper}>
         <textarea
           className={styles.editorTextarea}
-          value={code}
+          value={isInViewMode ? codeWithResults : code}
           onChange={onCodeChange}
           style={{ height: `${code.split('\n').length * 1.2}rem` }}
           placeholder="Type a math expression..."
+          readOnly={isInViewMode}
         />
-        <pre className={styles.formattedCode}>
+        <pre
+          className={classNames(styles.formattedCode, {
+            [styles.withoutHighlighting]: isInViewMode,
+          })}
+        >
           <HighlightedCode tokenizedLines={evaluatedCode} />
         </pre>
       </div>

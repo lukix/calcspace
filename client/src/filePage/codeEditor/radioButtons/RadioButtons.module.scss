@@ -1,0 +1,39 @@
+@import '../../../style/colors.scss';
+
+.radioButtons {
+  display: inline-flex;
+
+  .item {
+    display: inline-block;
+    border: 2px solid white;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px;
+    text-align: center;
+    width: 100px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    & + .item {
+      border-left: 0;
+    }
+
+    &.selected {
+      background-color: $accent-color;
+      border-top-color: $accent-color;
+      border-bottom-color: $accent-color;
+      color: black;
+      font-weight: bold;
+    }
+
+    &:first-child.selected {
+      border-left-color: $accent-color;
+    }
+
+    &:last-child.selected {
+      border-right-color: $accent-color;
+    }
+  }
+}

@@ -9,6 +9,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
 .codeWrapper {
   position: relative;
   height: 100%;
+  margin-top: 20px;
 }
 
 @mixin commonCodeFormat {
@@ -45,11 +46,17 @@ $expression-font-family: 'Courier New', Courier, monospace;
 .formattedCode {
   @include commonCodeFormat;
 
-  .tokenError {
-    color: red;
-  }
+  &:not(.withoutHighlighting) {
+    .tokenError {
+      color: red;
+    }
 
-  .tokenVirtual {
-    color: #999;
+    .tokenVirtual {
+      color: #999;
+    }
   }
+}
+
+.radioButtons {
+  margin-top: 1px;
 }
