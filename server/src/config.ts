@@ -12,3 +12,7 @@ export const TOKEN_EXPIRATION_DURATION_MS = process.env
 export const SALT_ROUNDS = 14;
 export const JWT_TOKEN_COOKIE_NAME = 'jwtToken';
 export const SIGN_OUT_URL = `${CLIENT_URL}`;
+export const COOKIE_SAME_SITE = process.env.COOKIE_SAME_SITE || 'none';
+export const COOKIE_SECURE = process.env.COOKIE_SECURE
+  ? process.env.COOKIE_SECURE === 'true'
+  : false;

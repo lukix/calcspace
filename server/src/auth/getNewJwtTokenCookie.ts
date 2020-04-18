@@ -3,6 +3,8 @@ import {
   JWT_SECRET_KEY,
   TOKEN_EXPIRATION_DURATION_MS,
   JWT_TOKEN_COOKIE_NAME,
+  COOKIE_SAME_SITE,
+  COOKIE_SECURE,
 } from '../config';
 
 const getNewJwtTokenCookie = (userId, username) => {
@@ -16,8 +18,8 @@ const getNewJwtTokenCookie = (userId, username) => {
     options: {
       maxAge: TOKEN_EXPIRATION_DURATION_MS,
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: COOKIE_SAME_SITE,
+      secure: COOKIE_SECURE,
     },
   };
   return cookie;
