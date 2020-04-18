@@ -30,7 +30,7 @@ import {
 
   app.use(cors({ credentials: true, origin: CLIENT_URL }));
   app.use(bodyParser.json());
-  app.use(cookieParser(null, { sameSite: true }));
+  app.use(cookieParser());
 
   const dbClient = new Client({
     user: DB_USER,
