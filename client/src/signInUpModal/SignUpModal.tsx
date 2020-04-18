@@ -16,7 +16,12 @@ const validationSchema = yup.object().shape({
     .label('Username')
     .min(2)
     .max(30)
-    .required(),
+    .required()
+    .test(
+      'leading-trailing-spaces',
+      'Leading and trailing spaces are not allowed',
+      value => (value || '').trim() === value
+    ),
   password: yup
     .string()
     .label('Password')

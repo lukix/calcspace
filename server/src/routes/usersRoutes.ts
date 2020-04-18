@@ -55,7 +55,16 @@ export default ({ dbClient }) => {
     method: 'post',
     validate: async ({ body }) => {
       const validationSchema = yup.object({
-        username: yup.string().min(2).max(30).required(),
+        username: yup
+          .string()
+          .min(2)
+          .max(30)
+          .required()
+          .test(
+            'leading-trailing-spaces',
+            'Leading and trailing spaces are not allowed',
+            (value) => (value || '').trim() === value
+          ),
         password: yup.string().min(6).max(72).required(),
       });
       const validationError = validateBodyWithYup(validationSchema)({ body });
