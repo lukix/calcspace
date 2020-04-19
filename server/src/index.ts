@@ -27,6 +27,7 @@ import {
   await setupDatabase();
 
   const app = express();
+  app.disable('x-powered-by');
 
   app.use(cors({ credentials: true, origin: CLIENT_URL }));
   app.use(bodyParser.json());
