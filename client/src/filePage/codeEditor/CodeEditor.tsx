@@ -47,6 +47,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const isInViewMode = mode === modes.VIEW_MODE;
   const codeWithResults = evaluatedCodeToRawString(evaluatedCode);
 
+  const longestLineLength = Math.max(
+    ...codeWithResults.split('\n').map(line => line.length)
+  );
+
   return (
     <div className={styles.codeEditor}>
       <RadioButtons
@@ -60,7 +64,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
           className={styles.editorTextarea}
           value={isInViewMode ? codeWithResults : code}
           onChange={onCodeChange}
-          style={{ height: `${code.split('\n').length * 1.2}rem` }}
+          style={{
+            height: `${code.split('\n').length * 1.2}rem`,
+            width: `${longestLineLength}ch`,
+          }}
           placeholder={
             isInViewMode ? 'File is empty' : 'Type a math expression...'
           }

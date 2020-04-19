@@ -28,13 +28,11 @@ $expression-font-family: 'Courier New', Courier, monospace;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  min-width: calc(100% - 16px);
   resize: none;
   background: transparent;
   color: transparent;
   caret-color: $font-light-color;
-  min-height: 200px;
-  box-sizing: border-box;
   min-height: 100%;
 
   &::placeholder {
@@ -45,6 +43,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
 
 .formattedCode {
   @include commonCodeFormat;
+  width: fit-content;
 
   &:not(.withoutHighlighting) {
     .tokenError {
