@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import {
   FaTrash,
@@ -54,6 +54,7 @@ const FileItem: React.FC<FileItemProps> = ({
   isRenaming = false,
 }) => {
   const { pathname } = useLocation();
+  const { push: historyPush } = useHistory();
   const [isInRenamingMode, setIsInRenamingMode] = useState(false);
   const textInput = useRef<HTMLInputElement>(null);
 
@@ -85,6 +86,7 @@ const FileItem: React.FC<FileItemProps> = ({
 
   const path = `/file/${id}`;
   const isBusy = isCreating || isDeleting || isRenaming;
+  const isSelected = path === pathname;
 
   const conditionalLinkDisabling = e => {
     if (isBusy) {
@@ -92,10 +94,17 @@ const FileItem: React.FC<FileItemProps> = ({
     }
   };
 
+  const deleteHandler = () => {
+    if (isSelected) {
+      historyPush('/');
+    }
+    deleteFile({ id });
+  };
+
   return (
     <li
       className={classNames({
-        [styles.selected]: path === pathname,
+        [styles.selected]: isSelected,
         [styles.isBusy]: isBusy,
       })}
     >
@@ -123,7 +132,7 @@ const FileItem: React.FC<FileItemProps> = ({
       </Link>
       <div className={styles.fileActionIcons}>
         <FaPen title="Rename File" onClick={() => setIsInRenamingMode(true)} />
-        <FaTrash title="Delete File" onClick={() => deleteFile({ id })} />
+        <FaTrash title="Delete File" onClick={deleteHandler} />
       </div>
     </li>
   );
