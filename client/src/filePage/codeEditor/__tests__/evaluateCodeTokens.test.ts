@@ -1,6 +1,6 @@
 import evaluateCode, { tokens } from '../evaluateCode';
 
-describe('evaluateCode', () => {
+describe('evaluateCode - tokenization test', () => {
   it('should return tokenized structure with results', () => {
     // given
     const code = 'x = 2 + 3\ny = x + 2';

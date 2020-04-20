@@ -3,15 +3,8 @@ import classNames from 'classnames';
 import evaluateCode from './evaluateCode';
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons/RadioButtons';
+import evaluatedCodeToString from './evaluatedCodeToString';
 import styles from './CodeEditor.module.scss';
-
-const evaluatedLineToRawString = evaluatedLine => {
-  return evaluatedLine.map(({ value }) => value).join('');
-};
-
-const evaluatedCodeToRawString = evaluatedCode => {
-  return evaluatedCode.map(evaluatedLineToRawString).join('\n');
-};
 
 interface CodeEditorProps {
   initialCode: string;
@@ -45,7 +38,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const evaluatedCode = evaluateCode(code);
 
   const isInViewMode = mode === modes.VIEW_MODE;
-  const codeWithResults = evaluatedCodeToRawString(evaluatedCode);
+  const codeWithResults = evaluatedCodeToString(evaluatedCode);
 
   const longestLineLength = Math.max(
     ...codeWithResults.split('\n').map(line => line.length)
