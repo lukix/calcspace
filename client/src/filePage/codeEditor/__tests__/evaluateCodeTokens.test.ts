@@ -60,4 +60,53 @@ describe('evaluateCode - tokenization test', () => {
       [{ value: 'sin', tags: [tokens.NORMAL, tokens.ERROR] }],
     ]);
   });
+
+  it('should treat lines with leading "//" as comments', () => {
+    // given
+    const code = '// this is a comment';
+
+    // when
+    const evaluatedCode = evaluateCode(code);
+
+    // then
+    expect(evaluatedCode).toEqual([
+      [{ value: '// this is a comment', tags: [tokens.COMMENT] }],
+    ]);
+  });
+
+  it('should allow spaces before comment slashes', () => {
+    // given
+    const code = '  // this is a comment with leading spaces';
+
+    // when
+    const evaluatedCode = evaluateCode(code);
+
+    // then
+    expect(evaluatedCode).toEqual([
+      [
+        {
+          value: '  // this is a comment with leading spaces',
+          tags: [tokens.COMMENT],
+        },
+      ],
+    ]);
+  });
+
+  it('should not allow characters preceding "//"', () => {
+    // given
+    const code = '5 + 5 // comment must start at the beginning of the line';
+
+    // when
+    const evaluatedCode = evaluateCode(code);
+
+    // then
+    expect(evaluatedCode).toEqual([
+      [
+        {
+          value: '5 + 5 // comment must start at the beginning of the line',
+          tags: [tokens.NORMAL, tokens.ERROR],
+        },
+      ],
+    ]);
+  });
 });

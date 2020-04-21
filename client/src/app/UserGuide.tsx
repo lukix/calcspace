@@ -16,6 +16,11 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         </b>{' '}
         or continue reading this guide to get familiar with how Math IDE works.
       </p>
+      <h2>Beta Disclaimer</h2>
+      <p>
+        Please note that this is a beta version and the syntax described below
+        may change in the future.
+      </p>
       <h2>Getting Started</h2>
       <p>
         In the left panel, you can create multiple files. Each file is an
@@ -49,6 +54,25 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         <br />v = 2 * 3<span className={styles.tokenVirtual}> = 6</span>
         <br />E = (m * v ^ 2) / 2
         <span className={styles.tokenVirtual}> = 180</span>
+      </pre>
+      <h2>Comments</h2>
+      <p>
+        Besides regular mathematical expressions, you may want to write some
+        text to make your calculations easier to understand. To do that, start a
+        line with <span className={styles.inlineCode}>//</span>. The line will
+        be marked as a comment and the program won't treat it as a math
+        expression.
+      </p>
+      <pre className={styles.codeSnippet}>
+        <span className={styles.tokenComment}>// This is a comment</span> <br />
+        1 * 2 * 3 * 4<span className={styles.tokenVirtual}> = 24</span>
+        <br />
+        <br />
+        <span className={styles.tokenComment}>
+          // And this is another comment
+        </span>
+        <br />
+        4!<span className={styles.tokenVirtual}> = 24</span>
       </pre>
     </div>
   );

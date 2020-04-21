@@ -53,6 +53,10 @@ $expression-font-family: 'Courier New', Courier, monospace;
     .tokenVirtual {
       color: #999;
     }
+
+    .tokenComment {
+      color: $accent-color;
+    }
   }
 }
 

@@ -7,6 +7,7 @@ const HighlightedLine = ({ tokens }) => {
   return tokens.map(({ value, tags }, index) => {
     const className = classNames({
       [styles.tokenVirtual]: tags.includes(availableTokens.VIRTUAL),
+      [styles.tokenComment]: tags.includes(availableTokens.COMMENT),
       [styles.tokenError]: tags.includes(availableTokens.ERROR),
     });
     return (

@@ -15,6 +15,10 @@ $expression-font-family: 'Courier New', Courier, monospace;
   .tokenVirtual {
     color: #999;
   }
+
+  .tokenComment {
+    color: $accent-color;
+  }
 }
 
 .userGuide {
@@ -32,4 +36,10 @@ $expression-font-family: 'Courier New', Courier, monospace;
   margin-left: 10px;
   padding: 10px;
   border-left: 2px solid $accent-color;
+}
+
+.inlineCode {
+  color: $accent-color;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0 5px;
 }
