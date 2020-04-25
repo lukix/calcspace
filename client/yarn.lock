@@ -10408,6 +10408,11 @@ raf@^3.4.1:
   dependencies:
     performance-now "^2.1.0"
 
+ramda.pipe@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/ramda.pipe/-/ramda.pipe-0.26.1.tgz#c342ce9ec88bc19ddedff6d7f1943a33ef1f8743"
+  integrity sha512-qJJgaFrj8kitQ935AXlQx5IKYyFKk1S2imR8EHUaqcoV9FObA5RVK1favxNWJeLKJZl7L5kz4gbxBZ2Q8eptag==
+
 ramda@0.24.1:
   version "0.24.1"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"

@@ -1,4 +1,5 @@
 import tokens from './tokens';
+import ParserError from './ParserError';
 
 const isOpeningParenthesis = (token) =>
   token.type === tokens.OPERATOR && token.value === '(';
@@ -33,7 +34,7 @@ const buildSubexpressions = (
       }
       if (isClosingParenthesis(currentToken)) {
         if (subexpressionsStack.length <= 1) {
-          throw new Error(
+          throw new ParserError(
             'Encountered closing parenthesis without opening one'
           );
         }
@@ -55,7 +56,7 @@ const buildSubexpressions = (
   );
 
   if (subexpressionsStack.length > 1) {
-    throw new Error('Encountered not closed parenthesis');
+    throw new ParserError('Encountered not closed parenthesis');
   }
 
   return subexpressionsStack[0];

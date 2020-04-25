@@ -1,4 +1,5 @@
 import tokens from '../tokens';
+import ParserError from '../ParserError';
 import buildSubexpressions from '../buildSubexpressions';
 
 describe('buildSubexpressions', () => {
@@ -102,7 +103,7 @@ describe('buildSubexpressions', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new Error('Encountered not closed parenthesis')
+      new ParserError('Encountered not closed parenthesis')
     );
   });
 
@@ -120,7 +121,7 @@ describe('buildSubexpressions', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new Error('Encountered closing parenthesis without opening one')
+      new ParserError('Encountered closing parenthesis without opening one')
     );
   });
 });

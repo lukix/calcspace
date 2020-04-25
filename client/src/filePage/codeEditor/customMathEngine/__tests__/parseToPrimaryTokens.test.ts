@@ -1,4 +1,5 @@
 import tokens from '../tokens';
+import ParserError from '../ParserError';
 import parseToPrimaryTokens from '../parseToPrimaryTokens';
 
 describe('parseToPrimaryTokens', () => {
@@ -83,6 +84,8 @@ describe('parseToPrimaryTokens', () => {
     const parseFunction = () => parseToPrimaryTokens(expressionString);
 
     // then
-    expect(parseFunction).toThrowError(new Error('Invalid character `@`'));
+    expect(parseFunction).toThrowError(
+      new ParserError('Invalid character `@`')
+    );
   });
 });

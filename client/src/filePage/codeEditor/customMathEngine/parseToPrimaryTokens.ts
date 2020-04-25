@@ -1,4 +1,5 @@
 import tokens from './tokens';
+import ParserError from './ParserError';
 
 const allowedSymbolChars = '.abcdefghijklmnoprstuwqxyz0123456789_'.split('');
 const allowedOperatorChars = '+-*/^()'.split('');
@@ -38,7 +39,7 @@ const parseToPrimaryTokens = (
         currentString: '',
       };
     }
-    throw new Error(`Invalid character \`${currentChar}\``);
+    throw new ParserError(`Invalid character \`${currentChar}\``);
   }, initialReducerState);
 
   return currentString === ''

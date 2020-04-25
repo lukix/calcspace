@@ -1,4 +1,5 @@
 import tokens from '../tokens';
+import ParserError from '../ParserError';
 import validateTokensList from '../validateTokensList';
 
 describe('validateTokensList', () => {
@@ -56,7 +57,7 @@ describe('validateTokensList', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new Error('Encountered leading binary operator')
+      new ParserError('Encountered leading binary operator')
     );
   });
 
@@ -73,7 +74,7 @@ describe('validateTokensList', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new Error('Encountered trailing binary operator')
+      new ParserError('Encountered trailing binary operator')
     );
   });
 
@@ -92,7 +93,7 @@ describe('validateTokensList', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new Error('Encountered two adjacent operators')
+      new ParserError('Encountered two adjacent operators')
     );
   });
 
@@ -112,7 +113,7 @@ describe('validateTokensList', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new Error('Expected an operator but encountered SYMBOL instead')
+      new ParserError('Expected an operator but encountered SYMBOL instead')
     );
   });
 
@@ -132,7 +133,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrow();
+    expect(testFunction).toThrow(ParserError);
   });
 
   it('should throw an error when there is an error in function', () => {
@@ -152,6 +153,6 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrow();
+    expect(testFunction).toThrow(ParserError);
   });
 });

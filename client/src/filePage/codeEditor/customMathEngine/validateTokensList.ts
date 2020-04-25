@@ -1,4 +1,5 @@
 import tokens from './tokens';
+import ParserError from './ParserError';
 
 const createAdjacentPairs = (tokensList) => {
   const { pairs, previousToken: lastToken } = tokensList.reduce(
@@ -28,22 +29,22 @@ const validateTokensList = (tokensList) => {
   adjacentPairs.forEach(([previousToken, currentToken]) => {
     if (previousToken && !currentToken) {
       if (previousToken.type === tokens.OPERATOR) {
-        throw new Error('Encountered trailing binary operator');
+        throw new ParserError('Encountered trailing binary operator');
       }
     }
 
     if (currentToken && currentToken.type === tokens.OPERATOR) {
       if (!previousToken && currentToken.value !== '-') {
-        throw new Error('Encountered leading binary operator');
+        throw new ParserError('Encountered leading binary operator');
       }
       if (previousToken && previousToken.type === tokens.OPERATOR) {
-        throw new Error('Encountered two adjacent operators');
+        throw new ParserError('Encountered two adjacent operators');
       }
     }
 
     if (currentToken && currentToken.type !== tokens.OPERATOR) {
       if (previousToken && previousToken.type !== tokens.OPERATOR) {
-        throw new Error(
+        throw new ParserError(
           `Expected an operator but encountered ${currentToken.type} instead`
         );
       }

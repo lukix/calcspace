@@ -9,6 +9,7 @@
     "formik": "^2.1.4",
     "lodash.debounce": "^4.0.8",
     "node-sass": "^4.13.1",
+    "ramda.pipe": "^0.26.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.9.0",
