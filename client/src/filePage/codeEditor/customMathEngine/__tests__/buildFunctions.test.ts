@@ -29,29 +29,6 @@ describe('buildFunctions', () => {
     ]);
   });
 
-  it('short test', () => {
-    // given
-    const tokensList = [
-      { type: tokens.SYMBOL, value: 'foo' },
-      {
-        type: tokens.SUBEXPRESSION,
-        value: [{ type: tokens.SYMBOL, value: 'c' }],
-      },
-    ];
-
-    // when
-    const tokensListWithFunctions = buildFunctions(tokensList);
-
-    // then
-    expect(tokensListWithFunctions).toEqual([
-      {
-        type: tokens.FUNCTION,
-        name: 'foo',
-        subexpressionContent: [{ type: tokens.SYMBOL, value: 'c' }],
-      },
-    ]);
-  });
-
   it('should build function nested in subexpressions', () => {
     // given
     const tokensList = [

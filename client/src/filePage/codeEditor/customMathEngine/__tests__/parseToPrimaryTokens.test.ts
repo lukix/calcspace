@@ -61,7 +61,7 @@ describe('parseToPrimaryTokens', () => {
 
   it('should support functions', () => {
     // given
-    const expressionString = 'sqrt(420)';
+    const expressionString = 'sqrt(42.0)';
 
     // when
     const tokensList = parseToPrimaryTokens(expressionString);
@@ -70,7 +70,7 @@ describe('parseToPrimaryTokens', () => {
     expect(tokensList).toEqual([
       { type: tokens.SYMBOL, value: 'sqrt' },
       { type: tokens.OPERATOR, value: '(' },
-      { type: tokens.SYMBOL, value: '420' },
+      { type: tokens.SYMBOL, value: '42.0' },
       { type: tokens.OPERATOR, value: ')' },
     ]);
   });

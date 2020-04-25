@@ -1,6 +1,6 @@
 import tokens from './tokens';
 
-const allowedSymbolChars = 'abcdefghijklmnoprstuwqxyz0123456789_'.split('');
+const allowedSymbolChars = '.abcdefghijklmnoprstuwqxyz0123456789_'.split('');
 const allowedOperatorChars = '+-*/^()'.split('');
 
 const isValidSymbolChar = (char) =>
