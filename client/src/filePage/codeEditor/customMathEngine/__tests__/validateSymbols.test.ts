@@ -4,7 +4,6 @@ import validateSymbols from '../validateSymbols';
 
 describe('validateSymbols', () => {
   it('should work as identity function when all symbols are valid', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.SYMBOL, value: 'abc_1' },
@@ -28,7 +27,6 @@ describe('validateSymbols', () => {
   });
 
   it('should validate subexpressions', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       {
@@ -45,7 +43,6 @@ describe('validateSymbols', () => {
   });
 
   it('should validate function names', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       {
@@ -63,7 +60,6 @@ describe('validateSymbols', () => {
   });
 
   it(`should validate function's subexpression`, () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       {
@@ -111,7 +107,6 @@ describe('validateSymbols', () => {
     },
   ].forEach(({ testDescription, symbolValue }) => {
     it(testDescription, () => {
-      expect(true).toEqual(true);
       // given
       const tokensList = [{ type: tokens.SYMBOL, value: symbolValue }];
 

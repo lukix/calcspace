@@ -4,6 +4,7 @@ import buildSubexpressions from './buildSubexpressions';
 import buildFunctions from './buildFunctions';
 import validateTokensList from './validateTokensList';
 import validateSymbols from './validateSymbols';
+import buildPrecedenceHierarchy from './buildPrecedenceHierarchy';
 
 export const parseExpression = (expression: string) => {
   try {
@@ -12,7 +13,8 @@ export const parseExpression = (expression: string) => {
       buildSubexpressions,
       buildFunctions,
       validateTokensList,
-      validateSymbols
+      validateSymbols,
+      buildPrecedenceHierarchy
     )(expression);
     return { parsedExpression, isValid: true };
   } catch (error) {

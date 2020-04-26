@@ -4,7 +4,6 @@ import validateTokensList from '../validateTokensList';
 
 describe('validateTokensList', () => {
   it('should work as identity function when tokens list is valid', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.SYMBOL, value: 'a' },
@@ -30,7 +29,6 @@ describe('validateTokensList', () => {
   });
 
   it('should NOT throw an error when there is a leading unary operator', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.OPERATOR, value: '-' },
@@ -45,7 +43,6 @@ describe('validateTokensList', () => {
   });
 
   it('should throw an error when there is a leading binary operator', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.OPERATOR, value: '*' },
@@ -62,7 +59,6 @@ describe('validateTokensList', () => {
   });
 
   it('should throw an error when there is a trailing binary operator', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.SYMBOL, value: '5' },
@@ -79,7 +75,6 @@ describe('validateTokensList', () => {
   });
 
   it('should throw an error when there are adjacent operators', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.SYMBOL, value: 'a' },
@@ -98,7 +93,6 @@ describe('validateTokensList', () => {
   });
 
   it('should throw an error when there is a subexpression adjacent to symbol', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       {
@@ -118,7 +112,6 @@ describe('validateTokensList', () => {
   });
 
   it('should throw an error when there is an error in subexpression', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.SYMBOL, value: '3' },
@@ -137,7 +130,6 @@ describe('validateTokensList', () => {
   });
 
   it('should throw an error when there is an error in function', () => {
-    expect(true).toEqual(true);
     // given
     const tokensList = [
       { type: tokens.SYMBOL, value: '3' },
