@@ -6,6 +6,8 @@ import validateTokensList from './validateTokensList';
 import validateSymbols from './validateSymbols';
 import buildPrecedenceHierarchy from './buildPrecedenceHierarchy';
 
+export { default as evaluateParsedExpression } from './evaluateParsedExpression';
+
 export const parseExpression = (expression: string) => {
   try {
     const parsedExpression = pipe(
@@ -23,8 +25,4 @@ export const parseExpression = (expression: string) => {
     }
     throw error;
   }
-};
-
-export const evaluateParsedExpression = (parsedExpression: Array<Object>) => {
-  // TODO
 };
