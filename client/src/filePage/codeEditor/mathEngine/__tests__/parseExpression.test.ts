@@ -6,17 +6,16 @@ describe('parseExpression', () => {
     const expressionToParse = 'E = m*c^2';
 
     // when
-    const {
-      expression,
-      parsedExpression,
-      symbol,
-      valid,
-      error,
-    } = parseExpression(expressionToParse);
+    const { result, symbol, valid, error } = parseExpression(
+      expressionToParse,
+      {
+        m: 1,
+        c: 2,
+      }
+    );
 
     // then
-    expect(expression).toEqual('m*c^2');
-    expect(parsedExpression).not.toEqual(null);
+    expect(result).not.toEqual(null);
     expect(symbol).toEqual('E');
     expect(valid).toEqual(true);
     expect(error).toEqual(null);
@@ -27,10 +26,12 @@ describe('parseExpression', () => {
     const expressionToParse = 'm*c^2';
 
     // when
-    const { expression, symbol, valid } = parseExpression(expressionToParse);
+    const { symbol, valid } = parseExpression(expressionToParse, {
+      m: 1,
+      c: 2,
+    });
 
     // then
-    expect(expression).toEqual('m*c^2');
     expect(symbol).toEqual(null);
     expect(valid).toEqual(true);
   });
@@ -40,7 +41,10 @@ describe('parseExpression', () => {
     const expressionToParse = 'E = m*c^2 = 2';
 
     // when
-    const { valid, error } = parseExpression(expressionToParse);
+    const { valid, error } = parseExpression(expressionToParse, {
+      m: 1,
+      c: 2,
+    });
 
     // then
     expect(valid).toEqual(false);
@@ -52,7 +56,10 @@ describe('parseExpression', () => {
     const expressionToParse = 'a + b = 5';
 
     // when
-    const { valid, error } = parseExpression(expressionToParse);
+    const { valid, error } = parseExpression(expressionToParse, {
+      m: 1,
+      c: 2,
+    });
 
     // then
     expect(valid).toEqual(false);

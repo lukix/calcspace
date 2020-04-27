@@ -29,22 +29,11 @@ const evaluateExpression = (
     });
   }
 
-  try {
-    if (typeof result !== 'number') {
-      throw new Error('Expression cannot be evaluated to number');
-    }
-    return createEvaluationResult({
-      result,
-      symbol,
-      expression,
-    });
-  } catch (e) {
-    return createEvaluationResult({
-      error: { type: ERROR_TYPES.UNDEFINED_VARIABLE, message: `${e}` },
-      symbol,
-      expression,
-    });
-  }
+  return createEvaluationResult({
+    result,
+    symbol,
+    expression,
+  });
 };
 
 export default evaluateExpression;
