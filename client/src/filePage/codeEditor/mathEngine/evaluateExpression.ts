@@ -1,7 +1,7 @@
 import parseExpression from './parseExpression';
 import ERROR_TYPES from './errorTypes';
 
-const createEvaluationResult = options => ({
+const createEvaluationResult = (options) => ({
   result: null,
   error: null,
   symbol: null,
@@ -13,13 +13,10 @@ const evaluateExpression = (
   expressionString: string,
   values: { [key: string]: number }
 ) => {
-  const {
-    symbol,
-    expression,
-    parsedExpression,
-    valid,
-    error,
-  } = parseExpression(expressionString);
+  const { symbol, expression, result, valid, error } = parseExpression(
+    expressionString,
+    values
+  );
 
   if (!valid) {
     return createEvaluationResult({
@@ -33,7 +30,6 @@ const evaluateExpression = (
   }
 
   try {
-    const result = parsedExpression.evaluate(values);
     if (typeof result !== 'number') {
       throw new Error('Expression cannot be evaluated to number');
     }
