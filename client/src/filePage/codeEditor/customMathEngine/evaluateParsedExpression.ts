@@ -26,7 +26,7 @@ const evaluateSymbol = (symbolToken, values) => {
     return Number(symbolToken.value);
   }
   const value = values[symbolToken.value];
-  if (typeof value !== 'number' || Number.isNaN(value)) {
+  if (typeof value !== 'number') {
     throw new Error(`Missing or invalid value for symbol ${symbolToken.value}`);
   }
   return values[symbolToken.value];
