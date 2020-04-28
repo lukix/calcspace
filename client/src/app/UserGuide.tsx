@@ -65,7 +65,7 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       </p>
       <pre className={styles.codeSnippet}>
         <span className={styles.tokenComment}>// This is a comment</span> <br />
-        3 * 3 * 3 * 3<span className={styles.tokenVirtual}> = 24</span>
+        3 * 3 * 3 * 3<span className={styles.tokenVirtual}> = 81</span>
         <br />
         <br />
         <span className={styles.tokenComment}>
