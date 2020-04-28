@@ -6,8 +6,8 @@ import {
 
 const ERRORS = {
   SINGLE_EQUAL_ALLOWED: 'Only a single equal sign is allowed',
-  SINGLE_SYMBOL_ON_THE_LEFT_ALLOWED:
-    'Only a single symbol is allowed on the left side of the equal sign',
+  INVALID_VALUE_ON_THE_LEFT_OF_EQUAL_SIGN:
+    'Invalid value on the left side of the equal sign',
 };
 
 const ALL_WHITESPACES_REGEX = /\s/g;
@@ -57,7 +57,7 @@ const parseExpression = (expressionToParse: string, values) => {
       : [null, splittedByEquals[0]];
 
   if (symbol !== null && !symbol.match(IS_SYMBOL_REGEX)) {
-    return createErrorResult(ERRORS.SINGLE_SYMBOL_ON_THE_LEFT_ALLOWED);
+    return createErrorResult(ERRORS.INVALID_VALUE_ON_THE_LEFT_OF_EQUAL_SIGN);
   }
 
   const { parsedExpression, isValid, errorMessage } = parse(expression);

@@ -8,7 +8,16 @@ export const tokens = {
 };
 
 const tokenizeLine = (values, expression) => {
-  if (expression.trimStart().substring(0, 2) === '//') {
+  const sanitizedExpression = expression.trimStart();
+
+  if (sanitizedExpression === '') {
+    return {
+      values,
+      tokenizedLine: [],
+    };
+  }
+
+  if (sanitizedExpression.substring(0, 2) === '//') {
     return {
       values,
       tokenizedLine: [{ value: expression, tags: [tokens.COMMENT] }],
@@ -29,6 +38,9 @@ const tokenizeLine = (values, expression) => {
     ...(resultString === ''
       ? []
       : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
+    ...(!error
+      ? []
+      : [{ value: `  ${error.message}`, tags: [tokens.VIRTUAL] }]),
   ];
 
   return {

@@ -43,21 +43,20 @@ describe('evaluateCode - tokenization test', () => {
 
     // then
     expect(evaluatedCode).toEqual([
-      [{ value: 'a = x', tags: [tokens.NORMAL, tokens.ERROR] }],
-      [{ value: 'a + 1', tags: [tokens.NORMAL, tokens.ERROR] }],
-    ]);
-  });
-
-  it('should not append result which is a function', () => {
-    // given
-    const code = 'sin';
-
-    // when
-    const evaluatedCode = evaluateCode(code);
-
-    // then
-    expect(evaluatedCode).toEqual([
-      [{ value: 'sin', tags: [tokens.NORMAL, tokens.ERROR] }],
+      [
+        { value: 'a = x', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '  Error: Missing or invalid value for symbol x',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+      [
+        { value: 'a + 1', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '  Error: Missing or invalid value for symbol a',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
     ]);
   });
 
@@ -100,13 +99,6 @@ describe('evaluateCode - tokenization test', () => {
     const evaluatedCode = evaluateCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([
-      [
-        {
-          value: '5 + 5 // comment must start at the beginning of the line',
-          tags: [tokens.NORMAL, tokens.ERROR],
-        },
-      ],
-    ]);
+    expect(evaluatedCode[0][0].tags).toContain(tokens.ERROR);
   });
 });

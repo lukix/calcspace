@@ -22,7 +22,7 @@ const evaluateExpression = (
     return createEvaluationResult({
       error: {
         type: ERROR_TYPES.INVALID_EXPRESSION,
-        message: `Invalid expression: ${error}`,
+        message: `Error: ${error}`,
       },
       symbol,
       expression,

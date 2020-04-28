@@ -63,8 +63,6 @@ describe('parseExpression', () => {
 
     // then
     expect(valid).toEqual(false);
-    expect(error).toEqual(
-      'Only a single symbol is allowed on the left side of the equal sign'
-    );
+    expect(error).toEqual('Invalid value on the left side of the equal sign');
   });
 });

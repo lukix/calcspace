@@ -19,6 +19,10 @@ const parseToPrimaryTokens = (
 ): Array<{ type: string; value: string }> => {
   const chars = removeWhitespaces(expressionString).split('');
 
+  if (chars.length === 0) {
+    throw new ParserError('Empty expression');
+  }
+
   const initialReducerState: {
     tokens: Array<{ type: string; value: string }>;
     currentString: string;

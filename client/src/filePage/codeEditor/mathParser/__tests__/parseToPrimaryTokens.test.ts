@@ -88,4 +88,15 @@ describe('parseToPrimaryTokens', () => {
       new ParserError('Invalid character `@`')
     );
   });
+
+  it('should throw an error for empty expression', () => {
+    // given
+    const expressionString = '';
+
+    // when
+    const parseFunction = () => parseToPrimaryTokens(expressionString);
+
+    // then
+    expect(parseFunction).toThrowError(new ParserError('Empty expression'));
+  });
 });
