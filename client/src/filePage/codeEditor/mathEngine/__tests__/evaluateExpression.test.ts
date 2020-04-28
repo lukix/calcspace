@@ -1,5 +1,4 @@
 import evaluateExpression from '../evaluateExpression';
-import ERROR_TYPES from '../errorTypes';
 
 describe('evaluateExpression', () => {
   it('should return correct value of expression without variables', () => {
@@ -42,7 +41,7 @@ describe('evaluateExpression', () => {
     );
 
     // then
-    expect(error).toMatchObject({ type: ERROR_TYPES.INVALID_EXPRESSION });
+    expect(error).not.toBeNull();
     expect(symbol).toEqual(null);
     expect(result).toEqual(null);
   });
@@ -56,7 +55,7 @@ describe('evaluateExpression', () => {
     const { result, error, symbol } = evaluateExpression(expression, values);
 
     // then
-    expect(error).toMatchObject({ type: ERROR_TYPES.UNDEFINED_VARIABLE });
+    expect(error).not.toBeNull();
     expect(symbol).toEqual(null);
     expect(result).toEqual(null);
   });

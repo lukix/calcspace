@@ -65,14 +65,54 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       </p>
       <pre className={styles.codeSnippet}>
         <span className={styles.tokenComment}>// This is a comment</span> <br />
-        1 * 2 * 3 * 4<span className={styles.tokenVirtual}> = 24</span>
+        3 * 3 * 3 * 3<span className={styles.tokenVirtual}> = 81</span>
         <br />
         <br />
         <span className={styles.tokenComment}>
           // And this is another comment
         </span>
         <br />
-        4!<span className={styles.tokenVirtual}> = 24</span>
+        3^4<span className={styles.tokenVirtual}> = 81</span>
+      </pre>
+      <h2>Constants and functions</h2>
+      <p>Right now there is only a single constant available:</p>
+      <pre className={styles.codeSnippet}>
+        PI<span className={styles.tokenVirtual}> = 3.141592653589793</span>
+      </pre>
+      <p>and a few functions:</p>
+      <pre className={styles.codeSnippet}>
+        <span className={styles.tokenComment}>// Square root:</span>
+        <br />
+        sqrt(4)<span className={styles.tokenVirtual}> = 2</span>
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// Natural logarithm:</span>
+        <br />
+        log(2.718281828459045)<span className={styles.tokenVirtual}> = 1</span>
+        <br />
+        <br />
+        <span className={styles.tokenComment}>
+          // Factorial: 3! = 1 * 2 * 3
+        </span>
+        <br />
+        factorial(3)<span className={styles.tokenVirtual}> = 6</span>
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// Trigonometric functions:</span>
+        <br />
+        sin(0)<span className={styles.tokenVirtual}> = 0</span>
+        <br />
+        asin(0)<span className={styles.tokenVirtual}> = 0</span>
+        <br />
+        <br />
+        cos(0)<span className={styles.tokenVirtual}> = 1</span>
+        <br />
+        acos(1)<span className={styles.tokenVirtual}> = 0</span>
+        <br />
+        <br />
+        tan(0)<span className={styles.tokenVirtual}> = 0</span>
+        <br />
+        atan(0)<span className={styles.tokenVirtual}> = 0</span>
       </pre>
     </div>
   );

@@ -1,4 +1,8 @@
-import parser from './parser';
+import factorial from 'math-factorial';
+import {
+  parseExpression as parse,
+  evaluateParsedExpression,
+} from '../mathParser';
 
 const ERRORS = {
   SINGLE_EQUAL_ALLOWED: 'Only a single equal sign is allowed',
@@ -9,23 +13,36 @@ const ERRORS = {
 const ALL_WHITESPACES_REGEX = /\s/g;
 const IS_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
 
-const createErrorResult = error => ({
+const functions = {
+  sqrt: Math.sqrt,
+  log: Math.log,
+  sin: Math.sin,
+  cos: Math.cos,
+  tan: Math.tan,
+  asin: Math.asin,
+  acos: Math.acos,
+  atan: Math.atan,
+  factorial,
+};
+
+const createErrorResult = (error) => ({
   valid: false,
   error,
   symbol: null,
   expression: null,
   parsedExpression: null,
+  result: null,
 });
 
-const createValidResult = (symbol, expression, parsedExpression) => ({
+const createValidResult = (symbol, expression, result) => ({
   valid: true,
   error: null,
   symbol,
   expression,
-  parsedExpression,
+  result,
 });
 
-const parseExpression = (expressionToParse: string) => {
+const parseExpression = (expressionToParse: string, values) => {
   const expressionWithoutWhitespaces = expressionToParse.replace(
     ALL_WHITESPACES_REGEX,
     ''
@@ -43,11 +60,18 @@ const parseExpression = (expressionToParse: string) => {
     return createErrorResult(ERRORS.SINGLE_SYMBOL_ON_THE_LEFT_ALLOWED);
   }
 
+  const { parsedExpression, isValid, errorMessage } = parse(expression);
+  if (!isValid) {
+    return createErrorResult(errorMessage);
+  }
   try {
-    const parsedExpression = parser.parse(expression);
-    return createValidResult(symbol, expression, parsedExpression);
-  } catch (parsingError) {
-    return createErrorResult(parsingError);
+    const result = evaluateParsedExpression(parsedExpression, {
+      values: { PI: Math.PI, ...values },
+      functions,
+    });
+    return createValidResult(symbol, expression, result);
+  } catch (error) {
+    return createErrorResult(error && error.message);
   }
 };
 
