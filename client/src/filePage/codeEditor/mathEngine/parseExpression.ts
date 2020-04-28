@@ -1,3 +1,4 @@
+import factorial from 'math-factorial';
 import {
   parseExpression as parse,
   evaluateParsedExpression,
@@ -21,6 +22,7 @@ const functions = {
   asin: Math.asin,
   acos: Math.acos,
   atan: Math.atan,
+  factorial,
 };
 
 const createErrorResult = (error) => ({
