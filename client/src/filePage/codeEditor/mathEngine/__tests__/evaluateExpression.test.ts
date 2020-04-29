@@ -59,4 +59,21 @@ describe('evaluateExpression', () => {
     expect(symbol).toEqual(null);
     expect(result).toEqual(null);
   });
+
+  it('should return an error when redefining a variable', () => {
+    // given
+    const invalidExpression = 'a = 5';
+    const values = { a: 3 };
+
+    // when
+    const { result, error, symbol } = evaluateExpression(
+      invalidExpression,
+      values
+    );
+
+    // then
+    expect(error).not.toBeNull();
+    expect(symbol).toEqual(null);
+    expect(result).toEqual(null);
+  });
 });

@@ -29,6 +29,17 @@ const evaluateExpression = (
     });
   }
 
+  if (values[symbol] !== undefined) {
+    return createEvaluationResult({
+      error: {
+        type: ERROR_TYPES.INVALID_EXPRESSION,
+        message: `Error: Variable "${symbol}" already exists. Variables cannot be redefined`,
+      },
+      symbol: null,
+      expression,
+    });
+  }
+
   return createEvaluationResult({
     result,
     symbol,

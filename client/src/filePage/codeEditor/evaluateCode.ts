@@ -51,7 +51,7 @@ const tokenizeLine = (values, expression) => {
 
 const evaluateCode = (code) => {
   const codeLines = code.split('\n');
-  const initialState = { values: {}, evaluatedLines: [] };
+  const initialState = { values: { PI: Math.PI }, evaluatedLines: [] };
   const { evaluatedLines } = codeLines.reduce((acc, expression) => {
     const { values, tokenizedLine } = tokenizeLine(acc.values, expression);
     return {

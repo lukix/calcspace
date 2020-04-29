@@ -66,7 +66,7 @@ const parseExpression = (expressionToParse: string, values) => {
   }
   try {
     const result = evaluateParsedExpression(parsedExpression, {
-      values: { PI: Math.PI, ...values },
+      values,
       functions,
     });
     return createValidResult(symbol, expression, result);
