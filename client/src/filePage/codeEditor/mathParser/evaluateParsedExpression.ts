@@ -1,4 +1,5 @@
 import tokens from './tokens';
+import { EvaluationError } from './errors';
 
 const evaluateSubexpression = (subexpressionToken, values, functions) => {
   return evaluateSum(subexpressionToken.value, values, functions);
@@ -7,7 +8,9 @@ const evaluateSubexpression = (subexpressionToken, values, functions) => {
 const evaluateFunction = (functionToken, values, functions) => {
   const func = functions[functionToken.name];
   if (typeof func !== 'function') {
-    throw new Error(`Missing or invalid function ${functionToken.name}`);
+    throw new EvaluationError(
+      `Missing or invalid function ${functionToken.name}`
+    );
   }
   const argumentValue = evaluateSum(
     functionToken.subexpressionContent,
@@ -16,7 +19,9 @@ const evaluateFunction = (functionToken, values, functions) => {
   );
   const result = func(argumentValue);
   if (typeof result !== 'number') {
-    throw new Error(`Invalid result type from function ${functionToken.name}`);
+    throw new EvaluationError(
+      `Invalid result type from function ${functionToken.name}`
+    );
   }
   return result;
 };
@@ -27,7 +32,9 @@ const evaluateSymbol = (symbolToken, values) => {
   }
   const value = values[symbolToken.value];
   if (typeof value !== 'number') {
-    throw new Error(`Missing or invalid value for symbol ${symbolToken.value}`);
+    throw new EvaluationError(
+      `Missing or invalid value for symbol ${symbolToken.value}`
+    );
   }
   return values[symbolToken.value];
 };
@@ -41,11 +48,14 @@ const evaluateToken = (token, values, functions) => {
     case tokens.FUNCTION:
       return evaluateFunction(token, values, functions);
     default:
-      throw new Error(`Unexpected token type '${token.type}'`);
+      throw new EvaluationError(`Unexpected token type '${token.type}'`);
   }
 };
 
 const evaluatePower = (elements, values, functions) => {
+  if (elements.length === 0) {
+    throw new EvaluationError(`Found empty subexpression`);
+  }
   const evaluatedElements = elements.map((element) =>
     evaluateToken(element, values, functions)
   );

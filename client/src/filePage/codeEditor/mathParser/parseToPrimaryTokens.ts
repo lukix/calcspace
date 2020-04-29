@@ -1,5 +1,5 @@
 import tokens from './tokens';
-import ParserError from './ParserError';
+import { ParserError } from './errors';
 
 const allowedSymbolChars = '.abcdefghijklmnoprstuwqxyz0123456789_'.split('');
 const allowedOperatorChars = '+-*/^()'.split('');
@@ -22,7 +22,6 @@ const parseToPrimaryTokens = (
   if (chars.length === 0) {
     throw new ParserError('Empty expression');
   }
-
   const initialReducerState: {
     tokens: Array<{ type: string; value: string }>;
     currentString: string;

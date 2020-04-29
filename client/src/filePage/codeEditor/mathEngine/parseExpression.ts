@@ -71,7 +71,11 @@ const parseExpression = (expressionToParse: string, values) => {
     });
     return createValidResult(symbol, expression, result);
   } catch (error) {
-    return createErrorResult(error && error.message);
+    if (error.isEvaluationError) {
+      return createErrorResult(error.message);
+    }
+    console.error(error);
+    return createErrorResult('Expression cannot be evaluated');
   }
 };
 

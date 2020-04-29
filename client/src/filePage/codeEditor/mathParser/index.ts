@@ -23,6 +23,7 @@ export const parseExpression = (expression: string) => {
     if (error.isParserError) {
       return { isValid: false, errorMessage: error.message };
     }
-    throw error;
+    console.error(error);
+    return { isValid: false, errorMessage: 'Expression cannot be parsed' };
   }
 };

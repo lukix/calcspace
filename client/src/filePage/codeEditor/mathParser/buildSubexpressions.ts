@@ -1,5 +1,5 @@
 import tokens from './tokens';
-import ParserError from './ParserError';
+import { ParserError } from './errors';
 
 const isOpeningParenthesis = (token) =>
   token.type === tokens.OPERATOR && token.value === '(';

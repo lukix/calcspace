@@ -1,5 +1,5 @@
 import tokens from '../tokens';
-import ParserError from '../ParserError';
+import { ParserError } from '../errors';
 import validateTokensList from '../validateTokensList';
 
 describe('validateTokensList', () => {

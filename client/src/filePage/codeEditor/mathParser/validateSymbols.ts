@@ -1,5 +1,5 @@
 import tokens from './tokens';
-import ParserError from './ParserError';
+import { ParserError } from './errors';
 
 const validateNonNumericSymbol = (value) => {
   if (!Number.isNaN(Number(value)) && !Number.isFinite(Number(value))) {

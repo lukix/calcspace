@@ -1,6 +1,6 @@
 import pipe from 'ramda.pipe';
 import tokens from './tokens';
-import ParserError from './ParserError';
+import { ParserError } from './errors';
 
 const createSymbol = (value: string) => ({ type: tokens.SYMBOL, value });
 const createOperator = (value: string) => ({ type: tokens.OPERATOR, value });
