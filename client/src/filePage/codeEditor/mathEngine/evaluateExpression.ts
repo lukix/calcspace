@@ -11,11 +11,13 @@ const createEvaluationResult = (options) => ({
 
 const evaluateExpression = (
   expressionString: string,
-  values: { [key: string]: number }
+  values: { [key: string]: number } = {},
+  functions: { [key: string]: Function } = {}
 ) => {
   const { symbol, expression, result, valid, error } = parseExpression(
     expressionString,
-    values
+    values,
+    functions
   );
 
   if (!valid) {
@@ -34,6 +36,17 @@ const evaluateExpression = (
       error: {
         type: ERROR_TYPES.INVALID_EXPRESSION,
         message: `Error: Variable "${symbol}" already exists. Variables cannot be redefined`,
+      },
+      symbol: null,
+      expression,
+    });
+  }
+
+  if (functions[symbol] !== undefined) {
+    return createEvaluationResult({
+      error: {
+        type: ERROR_TYPES.INVALID_EXPRESSION,
+        message: `Error: Variable cannot have the same name as an existing function "${symbol}"`,
       },
       symbol: null,
       expression,

@@ -1,4 +1,3 @@
-import factorial from 'math-factorial';
 import {
   parseExpression as parse,
   evaluateParsedExpression,
@@ -12,18 +11,6 @@ const ERRORS = {
 
 const ALL_WHITESPACES_REGEX = /\s/g;
 const IS_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
-
-const functions = {
-  sqrt: Math.sqrt,
-  log: Math.log,
-  sin: Math.sin,
-  cos: Math.cos,
-  tan: Math.tan,
-  asin: Math.asin,
-  acos: Math.acos,
-  atan: Math.atan,
-  factorial,
-};
 
 const createErrorResult = (error) => ({
   valid: false,
@@ -42,7 +29,11 @@ const createValidResult = (symbol, expression, result) => ({
   result,
 });
 
-const parseExpression = (expressionToParse: string, values) => {
+const parseExpression = (
+  expressionToParse: string,
+  values = {},
+  functions = {}
+) => {
   const expressionWithoutWhitespaces = expressionToParse.replace(
     ALL_WHITESPACES_REGEX,
     ''

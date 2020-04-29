@@ -1,3 +1,4 @@
+import factorial from 'math-factorial';
 import evaluateExpression from './mathEngine/evaluateExpression';
 
 export const tokens = {
@@ -5,6 +6,22 @@ export const tokens = {
   VIRTUAL: 'VIRTUAL',
   ERROR: 'ERROR',
   COMMENT: 'COMMENT',
+};
+
+const functions = {
+  sqrt: Math.sqrt,
+  log: Math.log,
+  sin: Math.sin,
+  cos: Math.cos,
+  tan: Math.tan,
+  asin: Math.asin,
+  acos: Math.acos,
+  atan: Math.atan,
+  factorial,
+};
+
+const constants = {
+  PI: Math.PI,
 };
 
 const tokenizeLine = (values, expression) => {
@@ -26,7 +43,8 @@ const tokenizeLine = (values, expression) => {
 
   const { result, error, symbol, expression: expStr } = evaluateExpression(
     expression,
-    values
+    values,
+    functions
   );
   const showResult = result !== null && expStr !== `${result}`;
   const resultString = showResult ? ` = ${result}` : '';
@@ -51,7 +69,7 @@ const tokenizeLine = (values, expression) => {
 
 const evaluateCode = (code) => {
   const codeLines = code.split('\n');
-  const initialState = { values: { PI: Math.PI }, evaluatedLines: [] };
+  const initialState = { values: constants, evaluatedLines: [] };
   const { evaluatedLines } = codeLines.reduce((acc, expression) => {
     const { values, tokenizedLine } = tokenizeLine(acc.values, expression);
     return {

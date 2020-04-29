@@ -60,15 +60,17 @@ describe('evaluateExpression', () => {
     expect(result).toEqual(null);
   });
 
-  it('should return an error when redefining a variable', () => {
+  it('should return an error when defining a variable with a name of an existing function', () => {
     // given
-    const invalidExpression = 'a = 5';
-    const values = { a: 3 };
+    const invalidExpression = 'sin = 5';
+    const values = {};
+    const functions = { sin: Math.sin };
 
     // when
     const { result, error, symbol } = evaluateExpression(
       invalidExpression,
-      values
+      values,
+      functions
     );
 
     // then
