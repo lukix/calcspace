@@ -136,6 +136,10 @@ describe('classifySymbols', () => {
       value: '25kg.s',
       description: 'should throw an error when unit has commas',
     },
+    {
+      value: 'Infinity',
+      description: 'should throw an error when symbol name is "Infinity"',
+    },
   ].forEach(({ value, description }) => {
     it(description, () => {
       // given

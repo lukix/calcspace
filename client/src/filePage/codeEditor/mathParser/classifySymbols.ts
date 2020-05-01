@@ -11,6 +11,9 @@ const classifySymbols = (tokensList) => {
     if (token.type !== tokens.SYMBOL) {
       return token;
     }
+    if (token.value === 'Infinity') {
+      throw new ParserError(`Variable cannot be named "Infinity"`);
+    }
     if (token.value.match(VARIABLE_SYMBOL_REGEX)) {
       return { ...token, symbolType: symbolTypes.VARIABLE };
     }

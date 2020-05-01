@@ -1,16 +1,20 @@
 import tokens from '../tokens';
+import symbolTypes from '../symbolTypes';
 import buildFunctions from '../buildFunctions';
+import { ParserError } from '../errors';
 
 describe('buildFunctions', () => {
-  it('should replace (SYMBOL, SUBEXPRESSION) pair with FUNCTION token', () => {
+  it('should replace (VARIABLE SYMBOL, SUBEXPRESSION) pair with FUNCTION token', () => {
     // given
     const tokensList = [
-      { type: tokens.SYMBOL, value: 'a' },
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
       { type: tokens.OPERATOR, value: '+' },
-      { type: tokens.SYMBOL, value: 'foo' },
+      { type: tokens.SYMBOL, value: 'foo', symbolType: symbolTypes.VARIABLE },
       {
         type: tokens.SUBEXPRESSION,
-        value: [{ type: tokens.SYMBOL, value: '9' }],
+        value: [
+          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+        ],
       },
     ];
 
@@ -19,12 +23,14 @@ describe('buildFunctions', () => {
 
     // then
     expect(tokensListWithFunctions).toEqual([
-      { type: tokens.SYMBOL, value: 'a' },
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
       { type: tokens.OPERATOR, value: '+' },
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        subexpressionContent: [{ type: tokens.SYMBOL, value: '9' }],
+        subexpressionContent: [
+          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+        ],
       },
     ]);
   });
@@ -32,15 +38,25 @@ describe('buildFunctions', () => {
   it('should build function nested in subexpressions', () => {
     // given
     const tokensList = [
-      { type: tokens.SYMBOL, value: 'a' },
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
       { type: tokens.OPERATOR, value: '+' },
       {
         type: tokens.SUBEXPRESSION,
         value: [
-          { type: tokens.SYMBOL, value: 'foo' },
+          {
+            type: tokens.SYMBOL,
+            value: 'foo',
+            symbolType: symbolTypes.VARIABLE,
+          },
           {
             type: tokens.SUBEXPRESSION,
-            value: [{ type: tokens.SYMBOL, value: 'c' }],
+            value: [
+              {
+                type: tokens.SYMBOL,
+                value: 'c',
+                symbolType: symbolTypes.VARIABLE,
+              },
+            ],
           },
         ],
       },
@@ -51,7 +67,7 @@ describe('buildFunctions', () => {
 
     // then
     expect(tokensListWithFunctions).toEqual([
-      { type: tokens.SYMBOL, value: 'a' },
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
       { type: tokens.OPERATOR, value: '+' },
       {
         type: tokens.SUBEXPRESSION,
@@ -59,7 +75,13 @@ describe('buildFunctions', () => {
           {
             type: tokens.FUNCTION,
             name: 'foo',
-            subexpressionContent: [{ type: tokens.SYMBOL, value: 'c' }],
+            subexpressionContent: [
+              {
+                type: tokens.SYMBOL,
+                value: 'c',
+                symbolType: symbolTypes.VARIABLE,
+              },
+            ],
           },
         ],
       },
@@ -69,11 +91,15 @@ describe('buildFunctions', () => {
   it('should build function nested in functions', () => {
     // given
     const tokensList = [
-      { type: tokens.SYMBOL, value: 'foo' },
+      { type: tokens.SYMBOL, value: 'foo', symbolType: symbolTypes.VARIABLE },
       {
         type: tokens.SUBEXPRESSION,
         value: [
-          { type: tokens.SYMBOL, value: 'bar' },
+          {
+            type: tokens.SYMBOL,
+            value: 'bar',
+            symbolType: symbolTypes.VARIABLE,
+          },
           {
             type: tokens.SUBEXPRESSION,
             value: [],
@@ -104,11 +130,13 @@ describe('buildFunctions', () => {
   it('should return unchanged input when there are no functions', () => {
     // given
     const tokensList = [
-      { type: tokens.SYMBOL, value: 'a' },
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
       { type: tokens.OPERATOR, value: '+' },
       {
         type: tokens.SUBEXPRESSION,
-        value: [{ type: tokens.SYMBOL, value: '9' }],
+        value: [
+          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+        ],
       },
     ];
 
@@ -117,5 +145,51 @@ describe('buildFunctions', () => {
 
     // then
     expect(tokensListWithFunctions).toEqual(tokensList);
+  });
+
+  it('should throw an error for (NUMERIC SYMBOL, SUBEXPRESSION) pair', () => {
+    // given
+    const tokensList = [
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
+      { type: tokens.OPERATOR, value: '+' },
+      { type: tokens.SYMBOL, value: '15', symbolType: symbolTypes.NUMERIC },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [
+          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+        ],
+      },
+    ];
+
+    // when
+    const testFunction = () => buildFunctions(tokensList);
+
+    // then
+    expect(testFunction).toThrowError(ParserError);
+  });
+
+  it('should throw an error for (NUMERIC SYMBOL WITH UNIT, SUBEXPRESSION) pair', () => {
+    // given
+    const tokensList = [
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
+      { type: tokens.OPERATOR, value: '+' },
+      {
+        type: tokens.SYMBOL,
+        value: '15kg',
+        symbolType: symbolTypes.NUMERIC_WITH_UNIT,
+      },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [
+          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+        ],
+      },
+    ];
+
+    // when
+    const testFunction = () => buildFunctions(tokensList);
+
+    // then
+    expect(testFunction).toThrowError(ParserError);
   });
 });

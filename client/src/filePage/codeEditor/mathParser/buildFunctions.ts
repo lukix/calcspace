@@ -1,4 +1,6 @@
 import tokens from './tokens';
+import symbolTypes from './symbolTypes';
+import { ParserError } from './errors';
 
 const createFunction = (symbol, subexpression) => ({
   type: tokens.FUNCTION,
@@ -26,6 +28,11 @@ const buildFunctions = (tokenList) => {
       currentToken.type === tokens.SUBEXPRESSION &&
       acc.previousToken?.type === tokens.SYMBOL;
     if (hasEncounteredFunction) {
+      if (acc.previousToken.symbolType !== symbolTypes.VARIABLE) {
+        throw new ParserError(
+          `"${acc.previousToken.value}" is not a valid function name`
+        );
+      }
       const subexpressionToken = {
         ...currentToken,
         value: buildFunctions(currentToken.value),
