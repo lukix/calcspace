@@ -8,10 +8,14 @@ import buildPrecedenceHierarchy from './buildPrecedenceHierarchy';
 
 export { default as evaluateParsedExpression } from './evaluateParsedExpression';
 
+const eliminateSpacesTemp = (tokensList) =>
+  tokensList.filter((token) => token.type !== 'SPACE');
+
 export const parseExpression = (expression: string) => {
   try {
     const parsedExpression = pipe(
       parseToPrimaryTokens,
+      eliminateSpacesTemp, // TODO: Remove
       buildSubexpressions,
       buildFunctions,
       validateTokensList,

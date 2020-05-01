@@ -1,33 +1,51 @@
-import tokens from './tokens';
+import tokenTypes from './tokens';
 import { ParserError } from './errors';
 
-const allowedSymbolChars = '.abcdefghijklmnoprstuwqxyz0123456789_'.split('');
-const allowedOperatorChars = '+-*/^()'.split('');
+const ALLOWED_SYMBOL_CHARS = '.abcdefghijklmnoprstuwqxyz0123456789_'.split('');
+const ALLOWED_OPERATOR_CHARS = '+-*/^()'.split('');
+
+const SPACE_CHAR = ' ';
 
 const isValidSymbolChar = (char) =>
-  allowedSymbolChars.includes(char.toLocaleLowerCase());
+  ALLOWED_SYMBOL_CHARS.includes(char.toLocaleLowerCase());
 const isValidOperatorChar = (char) =>
-  allowedOperatorChars.includes(char.toLocaleLowerCase());
+  ALLOWED_OPERATOR_CHARS.includes(char.toLocaleLowerCase());
 
-const createSymbol = (value: string) => ({ type: tokens.SYMBOL, value });
-const createOperator = (value: string) => ({ type: tokens.OPERATOR, value });
+const createSymbol = (value: string) => ({ type: tokenTypes.SYMBOL, value });
+const createOperator = (value: string) => ({
+  type: tokenTypes.OPERATOR,
+  value,
+});
+const createSpace = () => ({ type: tokenTypes.SPACE });
 
-const removeWhitespaces = (str: string) => str.replace(/\s/g, '');
+const eliminateMultipleWhitespaces = (str: string) =>
+  str.replace(/\s+/g, SPACE_CHAR);
 
 const parseToPrimaryTokens = (
   expressionString: string
-): Array<{ type: string; value: string }> => {
-  const chars = removeWhitespaces(expressionString).split('');
+): Array<{ type: string; value?: string }> => {
+  const chars = eliminateMultipleWhitespaces(expressionString.trim()).split('');
 
   if (chars.length === 0) {
     throw new ParserError('Empty expression');
   }
   const initialReducerState: {
-    tokens: Array<{ type: string; value: string }>;
+    tokens: Array<{ type: string; value?: string }>;
     currentString: string;
   } = { tokens: [], currentString: '' };
 
   const { tokens, currentString } = chars.reduce((acc, currentChar) => {
+    if (currentChar === SPACE_CHAR) {
+      const newTokens =
+        acc.currentString !== ''
+          ? [createSymbol(acc.currentString), createSpace()]
+          : [createSpace()];
+      return {
+        ...acc,
+        tokens: [...acc.tokens, ...newTokens],
+        currentString: '',
+      };
+    }
     if (isValidSymbolChar(currentChar)) {
       return { ...acc, currentString: acc.currentString + currentChar };
     }
