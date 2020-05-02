@@ -103,4 +103,21 @@ describe('evaluateParsedExpression', () => {
     // then
     expect(testFunction).toThrow();
   });
+
+  it('should evaluate expression with units', () => {
+    // given
+    const expression = '1kg/ms * 1min';
+    const { parsedExpression } = parseExpression(expression);
+    const unitsMap = new Map([
+      ['kg', { multiplier: 1, baseUnits: { unit: 'kg', power: 1 } }],
+      ['ms', { multiplier: 1e-3, baseUnits: { unit: 's', power: 1 } }],
+      ['min', { multiplier: 60, baseUnits: { unit: 's', power: 1 } }],
+    ]);
+
+    // when
+    const result = evaluateParsedExpression(parsedExpression, { unitsMap });
+
+    // then
+    expect(result).toEqual(60000);
+  });
 });

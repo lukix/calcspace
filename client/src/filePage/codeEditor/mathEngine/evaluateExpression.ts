@@ -12,12 +12,17 @@ const createEvaluationResult = (options) => ({
 const evaluateExpression = (
   expressionString: string,
   values: { [key: string]: number } = {},
-  functions: { [key: string]: Function } = {}
+  functions: { [key: string]: Function } = {},
+  unitsMap: Map<
+    string,
+    { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }
+  > = new Map()
 ) => {
   const { symbol, expression, result, valid, error } = parseExpression(
     expressionString,
     values,
-    functions
+    functions,
+    unitsMap
   );
 
   if (!valid) {

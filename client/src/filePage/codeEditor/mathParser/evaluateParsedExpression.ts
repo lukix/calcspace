@@ -1,17 +1,23 @@
 import tokens from './tokens';
 import symbolTypes from './symbolTypes';
 import { EvaluationError } from './errors';
+import parseUnits from './parseUnits';
 
-const evaluateSubexpression = (subexpressionToken, values, functions) => {
-  return evaluateSum(subexpressionToken.value, values, functions);
+const evaluateSubexpression = (subexpressionToken, values, functions, unitsMap) => {
+  return evaluateSum(subexpressionToken.value, values, functions, unitsMap);
 };
 
-const evaluateFunction = (functionToken, values, functions) => {
+const evaluateFunction = (functionToken, values, functions, unitsMap) => {
   const func = functions[functionToken.name];
   if (typeof func !== 'function') {
     throw new EvaluationError(`Missing or invalid function ${functionToken.name}`);
   }
-  const argumentValue = evaluateSum(functionToken.subexpressionContent, values, functions);
+  const argumentValue = evaluateSum(
+    functionToken.subexpressionContent,
+    values,
+    functions,
+    unitsMap
+  );
   const result = func(argumentValue);
   if (typeof result !== 'number') {
     throw new EvaluationError(`Invalid result type from function ${functionToken.name}`);
@@ -19,12 +25,24 @@ const evaluateFunction = (functionToken, values, functions) => {
   return result;
 };
 
-const evaluateSymbol = (symbolToken, values) => {
+const evaluateNumericSymbolWithUnit = (symbolToken, unitsMap) => {
+  const parsedSymbolUnits = parseUnits(symbolToken.unit);
+  const multipliers = parsedSymbolUnits.map(({ unit, power }) => {
+    if (!unitsMap.has(unit)) {
+      throw new EvaluationError(`Unknown unit "${unit}"`);
+    }
+    return unitsMap.get(unit).multiplier ** power;
+  });
+  const finalMultiplier = multipliers.reduce((acc, curr) => acc * curr);
+  return finalMultiplier * symbolToken.number;
+};
+
+const evaluateSymbol = (symbolToken, values, unitsMap) => {
   switch (symbolToken.symbolType) {
     case symbolTypes.NUMERIC:
       return symbolToken.number;
     case symbolTypes.NUMERIC_WITH_UNIT:
-      throw new EvaluationError(`Values with units are not supported yet`); // TODO
+      return evaluateNumericSymbolWithUnit(symbolToken, unitsMap);
     case symbolTypes.VARIABLE:
       const value = values[symbolToken.value];
       if (typeof value !== 'number') {
@@ -34,47 +52,52 @@ const evaluateSymbol = (symbolToken, values) => {
   }
 };
 
-const evaluateToken = (token, values, functions) => {
+const evaluateToken = (token, values, functions, unitsMap) => {
   switch (token.type) {
     case tokens.SYMBOL:
-      return evaluateSymbol(token, values);
+      return evaluateSymbol(token, values, unitsMap);
     case tokens.SUBEXPRESSION:
-      return evaluateSubexpression(token, values, functions);
+      return evaluateSubexpression(token, values, functions, unitsMap);
     case tokens.FUNCTION:
-      return evaluateFunction(token, values, functions);
+      return evaluateFunction(token, values, functions, unitsMap);
     default:
       throw new EvaluationError(`Unexpected token type '${token.type}'`);
   }
 };
 
-const evaluatePower = (elements, values, functions) => {
+const evaluatePower = (elements, values, functions, unitsMap) => {
   if (elements.length === 0) {
     throw new EvaluationError(`Found empty subexpression`);
   }
-  const evaluatedElements = elements.map((element) => evaluateToken(element, values, functions));
+  const evaluatedElements = elements.map((element) =>
+    evaluateToken(element, values, functions, unitsMap)
+  );
   return [...evaluatedElements].reverse().reduce((acc, currentValue) => currentValue ** acc);
 };
 
-const evaluateProduct = (elements, values, functions) => {
+const evaluateProduct = (elements, values, functions, unitsMap) => {
   const evaluatedElements = elements.map((element) =>
     Array.isArray(element)
-      ? evaluatePower(element, values, functions)
-      : evaluateToken(element, values, functions)
+      ? evaluatePower(element, values, functions, unitsMap)
+      : evaluateToken(element, values, functions, unitsMap)
   );
   return evaluatedElements.reduce((acc, currentValue) => acc * currentValue, 1);
 };
 
-const evaluateSum = (elements, values, functions) => {
+const evaluateSum = (elements, values, functions, unitsMap) => {
   const evaluatedElements = elements.map((element) =>
     Array.isArray(element)
-      ? evaluateProduct(element, values, functions)
-      : evaluateToken(element, values, functions)
+      ? evaluateProduct(element, values, functions, unitsMap)
+      : evaluateToken(element, values, functions, unitsMap)
   );
   return evaluatedElements.reduce((acc, currentValue) => acc + currentValue, 0);
 };
 
-const evaluateParsedExpression = (parsedExpression, { values = {}, functions = {} } = {}) => {
-  return evaluateSum(parsedExpression, values, functions);
+const evaluateParsedExpression = (
+  parsedExpression,
+  { values = {}, functions = {}, unitsMap = new Map() } = {}
+) => {
+  return evaluateSum(parsedExpression, values, functions, unitsMap);
 };
 
 export default evaluateParsedExpression;

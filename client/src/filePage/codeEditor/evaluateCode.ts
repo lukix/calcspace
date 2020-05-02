@@ -1,27 +1,11 @@
-import factorial from 'math-factorial';
 import evaluateExpression from './mathEngine/evaluateExpression';
+import { constants, functions, unitsMap } from './constants';
 
 export const tokens = {
   NORMAL: 'NORMAL',
   VIRTUAL: 'VIRTUAL',
   ERROR: 'ERROR',
   COMMENT: 'COMMENT',
-};
-
-const functions = {
-  sqrt: Math.sqrt,
-  log: Math.log,
-  sin: Math.sin,
-  cos: Math.cos,
-  tan: Math.tan,
-  asin: Math.asin,
-  acos: Math.acos,
-  atan: Math.atan,
-  factorial,
-};
-
-const constants = {
-  PI: Math.PI,
 };
 
 const tokenizeLine = (values, expression) => {
@@ -44,7 +28,8 @@ const tokenizeLine = (values, expression) => {
   const { result, error, symbol, expression: expStr } = evaluateExpression(
     expression,
     values,
-    functions
+    functions,
+    unitsMap
   );
   const showResult = result !== null && expStr !== `${result}`;
   const resultString = showResult ? ` = ${result}` : '';
@@ -53,12 +38,8 @@ const tokenizeLine = (values, expression) => {
       value: expression,
       tags: [tokens.NORMAL, ...(error ? [tokens.ERROR] : [])],
     },
-    ...(resultString === ''
-      ? []
-      : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
-    ...(!error
-      ? []
-      : [{ value: `  ${error.message}`, tags: [tokens.VIRTUAL] }]),
+    ...(resultString === '' ? [] : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
+    ...(!error ? [] : [{ value: `  ${error.message}`, tags: [tokens.VIRTUAL] }]),
   ];
 
   return {
