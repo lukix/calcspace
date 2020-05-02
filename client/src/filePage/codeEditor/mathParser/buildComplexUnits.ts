@@ -35,6 +35,9 @@ const buildComplexUnits = (tokensList) => {
             {
               ...acc.currentSymbolWithUnit,
               value: [acc.currentSymbolWithUnit, ...unitTokens].map(({ value }) => value).join(''),
+              unit: [acc.currentSymbolWithUnit.unit, ...unitTokens.map(({ value }) => value)].join(
+                ''
+              ),
             },
             ...notUnitTokens,
             currentToken,
