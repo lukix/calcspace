@@ -5,19 +5,19 @@ import buildSubexpressions from './buildSubexpressions';
 import buildFunctions from './buildFunctions';
 import validateTokensList from './validateTokensList';
 import buildPrecedenceHierarchy from './buildPrecedenceHierarchy';
+import buildComplexUnits from './buildComplexUnits';
 import tokens from './tokens';
 
 export { default as evaluateParsedExpression } from './evaluateParsedExpression';
 
-const removeSpaceTokens = (tokensList) =>
-  tokensList.filter((token) => token.type !== tokens.SPACE);
+const removeSpaceTokens = (tokensList) => tokensList.filter((token) => token.type !== tokens.SPACE);
 
 export const parseExpression = (expression: string) => {
   try {
     const parsedExpression = pipe(
       parseToPrimaryTokens,
       classifySymbols,
-      // TODO: Merge variables with units with following operators and symbols
+      buildComplexUnits, // Merge variables with units with following operators and symbols
       removeSpaceTokens,
       buildSubexpressions,
       buildFunctions,
