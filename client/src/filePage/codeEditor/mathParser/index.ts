@@ -17,7 +17,7 @@ export const parseExpression = (expression: string) => {
     const parsedExpression = pipe(
       parseToPrimaryTokens,
       classifySymbols,
-      buildComplexUnits, // Merge variables with units with following operators and symbols
+      buildComplexUnits,
       removeSpaceTokens,
       buildSubexpressions,
       buildFunctions,

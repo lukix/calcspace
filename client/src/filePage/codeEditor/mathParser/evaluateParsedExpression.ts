@@ -1,4 +1,5 @@
 import tokens from './tokens';
+import symbolTypes from './symbolTypes';
 import { EvaluationError } from './errors';
 
 const evaluateSubexpression = (subexpressionToken, values, functions) => {
@@ -8,35 +9,29 @@ const evaluateSubexpression = (subexpressionToken, values, functions) => {
 const evaluateFunction = (functionToken, values, functions) => {
   const func = functions[functionToken.name];
   if (typeof func !== 'function') {
-    throw new EvaluationError(
-      `Missing or invalid function ${functionToken.name}`
-    );
+    throw new EvaluationError(`Missing or invalid function ${functionToken.name}`);
   }
-  const argumentValue = evaluateSum(
-    functionToken.subexpressionContent,
-    values,
-    functions
-  );
+  const argumentValue = evaluateSum(functionToken.subexpressionContent, values, functions);
   const result = func(argumentValue);
   if (typeof result !== 'number') {
-    throw new EvaluationError(
-      `Invalid result type from function ${functionToken.name}`
-    );
+    throw new EvaluationError(`Invalid result type from function ${functionToken.name}`);
   }
   return result;
 };
 
 const evaluateSymbol = (symbolToken, values) => {
-  if (!Number.isNaN(Number(symbolToken.value))) {
-    return Number(symbolToken.value);
+  switch (symbolToken.symbolType) {
+    case symbolTypes.NUMERIC:
+      return symbolToken.number;
+    case symbolTypes.NUMERIC_WITH_UNIT:
+      throw new EvaluationError(`Values with units are not supported yet`); // TODO
+    case symbolTypes.VARIABLE:
+      const value = values[symbolToken.value];
+      if (typeof value !== 'number') {
+        throw new EvaluationError(`Missing or invalid value for symbol ${symbolToken.value}`);
+      }
+      return value;
   }
-  const value = values[symbolToken.value];
-  if (typeof value !== 'number') {
-    throw new EvaluationError(
-      `Missing or invalid value for symbol ${symbolToken.value}`
-    );
-  }
-  return values[symbolToken.value];
 };
 
 const evaluateToken = (token, values, functions) => {
@@ -56,12 +51,8 @@ const evaluatePower = (elements, values, functions) => {
   if (elements.length === 0) {
     throw new EvaluationError(`Found empty subexpression`);
   }
-  const evaluatedElements = elements.map((element) =>
-    evaluateToken(element, values, functions)
-  );
-  return [...evaluatedElements]
-    .reverse()
-    .reduce((acc, currentValue) => currentValue ** acc);
+  const evaluatedElements = elements.map((element) => evaluateToken(element, values, functions));
+  return [...evaluatedElements].reverse().reduce((acc, currentValue) => currentValue ** acc);
 };
 
 const evaluateProduct = (elements, values, functions) => {
@@ -82,10 +73,7 @@ const evaluateSum = (elements, values, functions) => {
   return evaluatedElements.reduce((acc, currentValue) => acc + currentValue, 0);
 };
 
-const evaluateParsedExpression = (
-  parsedExpression,
-  { values = {}, functions = {} } = {}
-) => {
+const evaluateParsedExpression = (parsedExpression, { values = {}, functions = {} } = {}) => {
   return evaluateSum(parsedExpression, values, functions);
 };
 

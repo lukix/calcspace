@@ -85,8 +85,7 @@ describe('evaluateParsedExpression', () => {
     const options = { values: { a: 5 } };
 
     // when
-    const testFunction = () =>
-      evaluateParsedExpression(parsedExpression, options);
+    const testFunction = () => evaluateParsedExpression(parsedExpression, options);
 
     // then
     expect(testFunction).toThrow();
@@ -99,8 +98,7 @@ describe('evaluateParsedExpression', () => {
     const options = { values: { a: 5 } };
 
     // when
-    const testFunction = () =>
-      evaluateParsedExpression(parsedExpression, options);
+    const testFunction = () => evaluateParsedExpression(parsedExpression, options);
 
     // then
     expect(testFunction).toThrow();
