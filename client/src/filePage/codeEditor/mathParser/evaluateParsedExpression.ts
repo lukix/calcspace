@@ -140,7 +140,7 @@ const evaluateSum = (elements, values, functions, unitsMap) => {
     const unitString = unitToString(unit);
     if (firstElementUnitString !== unitString) {
       throw new EvaluationError(
-        `Trying to add/subtract vales with incompatible units: "${firstElementUnitString}" and "${unitString}"`
+        `Trying to add/subtract values with incompatible units: "${firstElementUnitString}" and "${unitString}"`
       );
     }
   });
