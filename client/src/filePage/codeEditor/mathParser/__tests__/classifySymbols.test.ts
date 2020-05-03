@@ -37,6 +37,8 @@ describe('classifySymbols', () => {
       { type: tokens.SYMBOL, value: '0.234' },
       { type: tokens.SYMBOL, value: '2.34' },
       { type: tokens.SYMBOL, value: '2.0' },
+      { type: tokens.SYMBOL, value: '1' },
+      { type: tokens.SYMBOL, value: '0' },
     ];
 
     // when
@@ -52,6 +54,8 @@ describe('classifySymbols', () => {
       },
       { type: tokens.SYMBOL, value: '2.34', symbolType: NUMERIC, number: 2.34 },
       { type: tokens.SYMBOL, value: '2.0', symbolType: NUMERIC, number: 2.0 },
+      { type: tokens.SYMBOL, value: '1', symbolType: NUMERIC, number: 1 },
+      { type: tokens.SYMBOL, value: '0', symbolType: NUMERIC, number: 0 },
     ]);
   });
 
@@ -61,6 +65,7 @@ describe('classifySymbols', () => {
       { type: tokens.SYMBOL, value: '2kg' },
       { type: tokens.SYMBOL, value: '2.5m' },
       { type: tokens.SYMBOL, value: '0.3s' },
+      { type: tokens.SYMBOL, value: '0A' },
     ];
 
     // when
@@ -89,19 +94,28 @@ describe('classifySymbols', () => {
         number: 0.3,
         unit: 's',
       },
+      {
+        type: tokens.SYMBOL,
+        value: '0A',
+        symbolType: NUMERIC_WITH_UNIT,
+        number: 0,
+        unit: 'A',
+      },
     ]);
   });
 
   [
     {
       value: '3.4.',
-      description:
-        'should throw an error when there is a symbol with two commas',
+      description: 'should throw an error when there is a symbol with two commas',
+    },
+    {
+      value: '00',
+      description: 'should throw an error for double zeroes',
     },
     {
       value: '.5',
-      description:
-        'should throw an error when there is a symbol with leading comma',
+      description: 'should throw an error when there is a symbol with leading comma',
     },
     {
       value: '04.5',
@@ -110,23 +124,19 @@ describe('classifySymbols', () => {
     },
     {
       value: '045',
-      description:
-        'should throw an error when there is a symbol with leading zero and no comma',
+      description: 'should throw an error when there is a symbol with leading zero and no comma',
     },
     {
       value: '2a2',
-      description:
-        'should throw an error when there is a symbol with leading and trailing digits',
+      description: 'should throw an error when there is a symbol with leading and trailing digits',
     },
     {
       value: 'abc.def',
-      description:
-        'should throw an error when there is a variable symbol with comma',
+      description: 'should throw an error when there is a variable symbol with comma',
     },
     {
       value: '_a',
-      description:
-        'should throw an error when there is a variable symbol with leading underscore',
+      description: 'should throw an error when there is a variable symbol with leading underscore',
     },
     {
       value: '25kg_s',

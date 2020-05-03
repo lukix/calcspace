@@ -3,8 +3,8 @@ import symbolTypes from './symbolTypes';
 import { ParserError } from './errors';
 
 const VARIABLE_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
-const NUMERIC_SYMBOL_REGEX = /^((0\.[0-9]+)|([1-9]+[0-9]*\.?[0-9]*))$/;
-const NUMERIC_SYMBOL_WITH_UNIT_REGEX = /^(?<number>(0\.[0-9]+)|([1-9]+[0-9]*\.?[0-9]*))(?<unit>[A-Za-z]+)$/;
+const NUMERIC_SYMBOL_REGEX = /^((0)|(0\.[0-9]+)|([1-9]+[0-9]*\.?[0-9]*))$/;
+const NUMERIC_SYMBOL_WITH_UNIT_REGEX = /^(?<number>(0)|(0\.[0-9]+)|([1-9]+[0-9]*\.?[0-9]*))(?<unit>[A-Za-z]+)$/;
 
 const classifySymbols = (tokensList) => {
   return tokensList.map((token) => {
@@ -24,9 +24,7 @@ const classifySymbols = (tokensList) => {
         number: Number(token.value),
       };
     }
-    const numericWithUnitMatch = token.value.match(
-      NUMERIC_SYMBOL_WITH_UNIT_REGEX
-    );
+    const numericWithUnitMatch = token.value.match(NUMERIC_SYMBOL_WITH_UNIT_REGEX);
     if (numericWithUnitMatch) {
       const {
         groups: { number, unit },
