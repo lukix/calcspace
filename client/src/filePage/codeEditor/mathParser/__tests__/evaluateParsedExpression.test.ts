@@ -10,7 +10,7 @@ describe('evaluateParsedExpression', () => {
     const result = evaluateParsedExpression(parsedExpression);
 
     // then
-    expect(result).toEqual(25);
+    expect(result).toEqual({ number: 25, unit: [] });
   });
 
   it('should evaluate addition expression with symbols', () => {
@@ -20,11 +20,14 @@ describe('evaluateParsedExpression', () => {
 
     // when
     const result = evaluateParsedExpression(parsedExpression, {
-      values: { a: 2, b: 3 },
+      values: {
+        a: { number: 2, unit: [] },
+        b: { number: 3, unit: [] },
+      },
     });
 
     // then
-    expect(result).toEqual(6);
+    expect(result).toEqual({ number: 6, unit: [] });
   });
 
   it('should evaluate expression respecting operators precedence', () => {
@@ -36,7 +39,7 @@ describe('evaluateParsedExpression', () => {
     const result = evaluateParsedExpression(parsedExpression);
 
     // then
-    expect(result).toEqual(26);
+    expect(result).toEqual({ number: 26, unit: [] });
   });
 
   it('should evaluate expression with functions', () => {
@@ -46,12 +49,38 @@ describe('evaluateParsedExpression', () => {
 
     // when
     const result = evaluateParsedExpression(parsedExpression, {
-      values: { a: -1 },
-      functions: { foo: (v) => Math.sqrt(v) },
+      values: { a: { number: -1, unit: [] } },
+      functions: {
+        foo: (value) => ({
+          number: Math.sqrt(value.number),
+          unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),
+        }),
+      },
     });
 
     // then
-    expect(result).toEqual(4);
+    expect(result).toEqual({ number: 4, unit: [] });
+  });
+
+  it('should evaluate expression with functions operating on units', () => {
+    // given
+    const expression = 'foo(9m^2)';
+    const { parsedExpression } = parseExpression(expression);
+
+    // when
+    const result = evaluateParsedExpression(parsedExpression, {
+      values: { a: { number: -1, unit: [] } },
+      functions: {
+        foo: (value) => ({
+          number: Math.sqrt(value.number),
+          unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),
+        }),
+      },
+      unitsMap: new Map([['m', { multiplier: 1, baseUnits: [{ unit: 'm', power: 1 }] }]]),
+    });
+
+    // then
+    expect(result).toEqual({ number: 3, unit: [{ unit: 'm', power: 1 }] });
   });
 
   it('should evaluate expression with a chain of powers', () => {
@@ -63,7 +92,7 @@ describe('evaluateParsedExpression', () => {
     const result = evaluateParsedExpression(parsedExpression);
 
     // then
-    expect(result).toEqual(512);
+    expect(result).toEqual({ number: 512, unit: [] });
   });
 
   it('should evaluate expression with division', () => {
@@ -75,14 +104,14 @@ describe('evaluateParsedExpression', () => {
     const result = evaluateParsedExpression(parsedExpression);
 
     // then
-    expect(result).toEqual(4);
+    expect(result).toEqual({ number: 4, unit: [] });
   });
 
   it('should throw an error when there are undefined variables', () => {
     // given
     const expression = 'a + b';
     const { parsedExpression } = parseExpression(expression);
-    const options = { values: { a: 5 } };
+    const options = { values: { a: { number: 5, unit: [] } } };
 
     // when
     const testFunction = () => evaluateParsedExpression(parsedExpression, options);
@@ -95,7 +124,7 @@ describe('evaluateParsedExpression', () => {
     // given
     const expression = 'a + foo(3)';
     const { parsedExpression } = parseExpression(expression);
-    const options = { values: { a: 5 } };
+    const options = { values: { a: { number: 5, unit: [] } } };
 
     // when
     const testFunction = () => evaluateParsedExpression(parsedExpression, options);
@@ -104,20 +133,49 @@ describe('evaluateParsedExpression', () => {
     expect(testFunction).toThrow();
   });
 
+  it('should remove units with power 0', () => {
+    // given
+    const expression = '1s * 1s^(-1)';
+    const { parsedExpression } = parseExpression(expression);
+    const unitsMap = new Map([['s', { multiplier: 1, baseUnits: [{ unit: 's', power: 1 }] }]]);
+
+    // when
+    const result = evaluateParsedExpression(parsedExpression, { unitsMap });
+
+    // then
+    expect(result).toEqual({ number: 1, unit: [] });
+  });
+
   it('should evaluate expression with units', () => {
     // given
     const expression = '1kg/ms * 1min';
     const { parsedExpression } = parseExpression(expression);
     const unitsMap = new Map([
-      ['kg', { multiplier: 1, baseUnits: { unit: 'kg', power: 1 } }],
-      ['ms', { multiplier: 1e-3, baseUnits: { unit: 's', power: 1 } }],
-      ['min', { multiplier: 60, baseUnits: { unit: 's', power: 1 } }],
+      ['kg', { multiplier: 1, baseUnits: [{ unit: 'kg', power: 1 }] }],
+      ['ms', { multiplier: 1e-3, baseUnits: [{ unit: 's', power: 1 }] }],
+      ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
     ]);
 
     // when
     const result = evaluateParsedExpression(parsedExpression, { unitsMap });
 
     // then
-    expect(result).toEqual(60000);
+    expect(result).toEqual({ number: 60000, unit: [{ unit: 'kg', power: 1 }] });
+  });
+
+  it('should add two value with different but compatible units', () => {
+    // given
+    const expression = '1min + 10s';
+    const { parsedExpression } = parseExpression(expression);
+    const unitsMap = new Map([
+      ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
+      ['s', { multiplier: 1, baseUnits: [{ unit: 's', power: 1 }] }],
+    ]);
+
+    // when
+    const result = evaluateParsedExpression(parsedExpression, { unitsMap });
+
+    // then
+    expect(result).toEqual({ number: 70, unit: [{ unit: 's', power: 1 }] });
   });
 });

@@ -12,13 +12,13 @@ describe('evaluateExpression', () => {
     // then
     expect(error).toEqual(null);
     expect(symbol).toEqual('x');
-    expect(result).toEqual(5);
+    expect(result).toEqual({ number: 5, unit: [] });
   });
 
   it('should return correct value of expression with variables', () => {
     // given
     const expression = 'a + b * 2';
-    const values = { a: 2, b: 4 };
+    const values = { a: { number: 2, unit: [] }, b: { number: 4, unit: [] } };
 
     // when
     const { result, error, symbol } = evaluateExpression(expression, values);
@@ -26,7 +26,7 @@ describe('evaluateExpression', () => {
     // then
     expect(error).toEqual(null);
     expect(symbol).toEqual(null);
-    expect(result).toEqual(10);
+    expect(result).toEqual({ number: 10, unit: [] });
   });
 
   it('should return an error when given invalid expression', () => {
@@ -35,10 +35,7 @@ describe('evaluateExpression', () => {
     const values = {};
 
     // when
-    const { result, error, symbol } = evaluateExpression(
-      invalidExpression,
-      values
-    );
+    const { result, error, symbol } = evaluateExpression(invalidExpression, values);
 
     // then
     expect(error).not.toBeNull();
@@ -49,7 +46,7 @@ describe('evaluateExpression', () => {
   it('should return an error when given not enough values', () => {
     // given
     const expression = 'a + b';
-    const values = { a: 420 };
+    const values = { a: { number: 420, unit: [] } };
 
     // when
     const { result, error, symbol } = evaluateExpression(expression, values);
@@ -64,14 +61,10 @@ describe('evaluateExpression', () => {
     // given
     const invalidExpression = 'sin = 5';
     const values = {};
-    const functions = { sin: Math.sin };
+    const functions = { sin: ({ number, unit }) => ({ number: Math.sin(number), unit }) };
 
     // when
-    const { result, error, symbol } = evaluateExpression(
-      invalidExpression,
-      values,
-      functions
-    );
+    const { result, error, symbol } = evaluateExpression(invalidExpression, values, functions);
 
     // then
     expect(error).not.toBeNull();

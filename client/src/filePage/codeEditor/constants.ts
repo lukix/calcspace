@@ -1,19 +1,23 @@
-import factorial from 'math-factorial';
+// import factorial from 'math-factorial';
 
 export const functions = {
-  sqrt: Math.sqrt,
-  log: Math.log,
-  sin: Math.sin,
-  cos: Math.cos,
-  tan: Math.tan,
-  asin: Math.asin,
-  acos: Math.acos,
-  atan: Math.atan,
-  factorial,
+  sqrt: (value) => ({
+    number: Math.sqrt(value.number),
+    unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),
+  }),
+  // TODO
+  // log: Math.log,
+  // sin: Math.sin,
+  // cos: Math.cos,
+  // tan: Math.tan,
+  // asin: Math.asin,
+  // acos: Math.acos,
+  // atan: Math.atan,
+  // factorial,
 };
 
 export const constants = {
-  PI: Math.PI,
+  PI: { number: Math.PI, unit: [] },
 };
 
 export const unitsMap = new Map([

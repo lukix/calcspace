@@ -11,7 +11,7 @@ const createEvaluationResult = (options) => ({
 
 const evaluateExpression = (
   expressionString: string,
-  values: { [key: string]: number } = {},
+  values: { [key: string]: { number: number; unit: Array<{ unit: string; power: number }> } } = {},
   functions: { [key: string]: Function } = {},
   unitsMap: Map<
     string,

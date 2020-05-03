@@ -8,6 +8,9 @@ export const tokens = {
   COMMENT: 'COMMENT',
 };
 
+const valueWithUnitToString = ({ number, unit }) =>
+  `${number}${unit.map((u) => `${u.unit}${u.power === 1 ? '' : `^${u.power}`}`).join('*')}`;
+
 const tokenizeLine = (values, expression) => {
   const sanitizedExpression = expression.trimStart();
 
@@ -31,8 +34,8 @@ const tokenizeLine = (values, expression) => {
     functions,
     unitsMap
   );
-  const showResult = result !== null && expStr !== `${result}`;
-  const resultString = showResult ? ` = ${result}` : '';
+  const showResult = result !== null && expStr !== valueWithUnitToString(result);
+  const resultString = showResult ? ` = ${valueWithUnitToString(result)}` : '';
   const tokenizedLine = [
     {
       value: expression,

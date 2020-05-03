@@ -29,9 +29,7 @@ describe('evaluateCode - tokenization test', () => {
     const evaluatedCode = evaluateCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([
-      [{ value: 'x = 5', tags: [tokens.NORMAL] }],
-    ]);
+    expect(evaluatedCode).toEqual([[{ value: 'x = 5', tags: [tokens.NORMAL] }]]);
   });
 
   it('should tag expression with error if there are not evaluated symbols', () => {
@@ -46,14 +44,14 @@ describe('evaluateCode - tokenization test', () => {
       [
         { value: 'a = x', tags: [tokens.NORMAL, tokens.ERROR] },
         {
-          value: '  Error: Missing or invalid value for symbol x',
+          value: '  Error: Missing value for symbol x',
           tags: [tokens.VIRTUAL],
         },
       ],
       [
         { value: 'a + 1', tags: [tokens.NORMAL, tokens.ERROR] },
         {
-          value: '  Error: Missing or invalid value for symbol a',
+          value: '  Error: Missing value for symbol a',
           tags: [tokens.VIRTUAL],
         },
       ],
@@ -68,9 +66,7 @@ describe('evaluateCode - tokenization test', () => {
     const evaluatedCode = evaluateCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([
-      [{ value: '// this is a comment', tags: [tokens.COMMENT] }],
-    ]);
+    expect(evaluatedCode).toEqual([[{ value: '// this is a comment', tags: [tokens.COMMENT] }]]);
   });
 
   it('should allow spaces before comment slashes', () => {
