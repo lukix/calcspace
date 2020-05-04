@@ -19,15 +19,24 @@ describe('evaluateCode - raw result test', () => {
         c = a + b * 2 = 9
       `,
     },
-  ].forEach(testCaseData => {
+    {
+      it: 'should not treat symbols after space as units',
+      code: `
+        a = 5
+        10kg / a
+      `,
+      expectedResult: `
+        a = 5
+        10kg / a = 2kg
+      `,
+    },
+  ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when
       const result = evaluatedCodeToString(evaluateCode(testCaseData.code));
 
       // then
-      expect(trimIndentation(result)).toEqual(
-        trimIndentation(testCaseData.expectedResult)
-      );
+      expect(trimIndentation(result)).toEqual(trimIndentation(testCaseData.expectedResult));
     });
   });
 });

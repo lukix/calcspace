@@ -25,19 +25,22 @@ const createValidResult = (symbol, expression, result) => ({
   result,
 });
 
+const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
+
 const parseExpression = (
   expressionToParse: string,
   values = {},
   functions = {},
   unitsMap = new Map()
 ) => {
-  const expressionWithoutWhitespaces = expressionToParse.replace(ALL_WHITESPACES_REGEX, '');
-  const splittedByEquals = expressionWithoutWhitespaces.split('=');
+  const splittedByEquals = expressionToParse.split('=');
   if (splittedByEquals.length > 2) {
     return createErrorResult(ERRORS.SINGLE_EQUAL_ALLOWED);
   }
-  const [symbol, expression] =
+  const [symbolBeforeSanitization, expression] =
     splittedByEquals.length === 2 ? splittedByEquals : [null, splittedByEquals[0]];
+
+  const symbol = symbolBeforeSanitization ? sanitize(symbolBeforeSanitization) : null;
 
   if (symbol !== null && !symbol.match(IS_SYMBOL_REGEX)) {
     return createErrorResult(ERRORS.INVALID_VALUE_ON_THE_LEFT_OF_EQUAL_SIGN);
@@ -53,7 +56,7 @@ const parseExpression = (
       functions,
       unitsMap,
     });
-    return createValidResult(symbol, expression, result);
+    return createValidResult(symbol, sanitize(expression), result);
   } catch (error) {
     if (error.isEvaluationError) {
       return createErrorResult(error.message);
