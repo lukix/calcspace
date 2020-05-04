@@ -1,5 +1,6 @@
+import { unitToString } from './mathParser';
 import evaluateExpression from './mathEngine/evaluateExpression';
-import { constants, functions, unitsMap } from './constants';
+import { constants, functions, unitsMap, units } from './constants';
 
 export const tokens = {
   NORMAL: 'NORMAL',
@@ -8,8 +9,21 @@ export const tokens = {
   COMMENT: 'COMMENT',
 };
 
-const valueWithUnitToString = ({ number, unit }) =>
-  `${number}${unit.map((u) => `${u.unit}${u.power === 1 ? '' : `^${u.power}`}`).join('*')}`;
+const valueWithUnitToString = ({ number, unit }) => `${number}${unitToString(unit)}`;
+const convertToComprehendibleUnit = ({ number, unit }) => {
+  const unitString = unitToString(unit);
+  const replacementUnit = units.find(
+    ([symbol, { baseUnits }]) => unitToString(baseUnits) === unitString
+  );
+  if (!replacementUnit) {
+    return { number, unit };
+  }
+  const [symbol, { multiplier }] = replacementUnit;
+  return {
+    number: number / multiplier,
+    unit: [{ unit: symbol, power: 1 }],
+  };
+};
 
 const tokenizeLine = (values, expression) => {
   const sanitizedExpression = expression.trimStart();
@@ -35,7 +49,9 @@ const tokenizeLine = (values, expression) => {
     unitsMap
   );
   const showResult = result !== null && expStr !== valueWithUnitToString(result);
-  const resultString = showResult ? ` = ${valueWithUnitToString(result)}` : '';
+  const resultString = showResult
+    ? ` = ${valueWithUnitToString(convertToComprehendibleUnit(result))}`
+    : '';
   const tokenizedLine = [
     {
       value: expression,

@@ -1,10 +1,3 @@
-export const unitToString = (unitObjects: Array<{ unit: string; power: number }>): string => {
-  return [...unitObjects]
-    .sort((unitObjA, unitObjB) => unitObjA.unit.localeCompare(unitObjB.unit))
-    .map(({ unit, power }) => `${unit}^${power}`)
-    .join('');
-};
-
 export const mergeDuplicatedUnits = (unitObjects: Array<{ unit: string; power: number }>) => {
   const unitSymbols = [...new Set(unitObjects.map(({ unit }) => unit))];
   return unitSymbols.map((unitSymbol) => {

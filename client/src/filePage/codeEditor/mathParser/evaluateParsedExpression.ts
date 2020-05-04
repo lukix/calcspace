@@ -1,7 +1,8 @@
 import tokens from './tokens';
 import symbolTypes from './symbolTypes';
 import { EvaluationError } from './errors';
-import parseUnits, { mergeDuplicatedUnits, unitToString } from './parseUnits';
+import parseUnits, { mergeDuplicatedUnits } from './parseUnits';
+import unitToString from './unitToString';
 
 const evaluateSubexpression = (subexpressionToken, values, functions, unitsMap) => {
   return evaluateSum(subexpressionToken.value, values, functions, unitsMap);

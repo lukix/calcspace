@@ -31,16 +31,16 @@ type UnitMapTuple = [
   { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }
 ];
 
-const reverseConversionPriorityList = [
-  's',
-  'm',
-  'kg',
-  'A',
-  'K',
-  'mol',
-  'cd',
-  // TODO: Other SI secondary units
-];
+// const reverseConversionPriorityList = [
+//   's',
+//   'm',
+//   'kg',
+//   'A',
+//   'K',
+//   'mol',
+//   'cd',
+//   // TODO: Other SI secondary units
+// ];
 
 const getUnitsWithPrefixes = (symbol: string, baseUnits): Array<UnitMapTuple> => [
   [`G${symbol}`, { multiplier: 1e9, baseUnits }],
@@ -52,7 +52,7 @@ const getUnitsWithPrefixes = (symbol: string, baseUnits): Array<UnitMapTuple> =>
   [`n${symbol}`, { multiplier: 1e-9, baseUnits }],
 ];
 
-const units: Array<UnitMapTuple> = [
+export const units: Array<UnitMapTuple> = [
   // Base units:
   ...getUnitsWithPrefixes('s', [{ unit: 's', power: 1 }]),
   ...getUnitsWithPrefixes('m', [{ unit: 'm', power: 1 }]),
