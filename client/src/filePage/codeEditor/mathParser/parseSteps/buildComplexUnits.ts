@@ -1,5 +1,5 @@
-import tokens from './tokens';
-import symbolTypes from './symbolTypes';
+import tokens from '../tokens';
+import symbolTypes from '../symbolTypes';
 
 const buildComplexUnits = (tokensList) => {
   const initialReduceState = {

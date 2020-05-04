@@ -1,6 +1,6 @@
-import tokens from './tokens';
-import symbolTypes from './symbolTypes';
-import { ParserError } from './errors';
+import tokens from '../tokens';
+import symbolTypes from '../symbolTypes';
+import { ParserError } from '../errors';
 
 const VARIABLE_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
 const NUMERIC_SYMBOL_REGEX = /^((0)|(0\.[0-9]+)|([1-9]+[0-9]*\.?[0-9]*))$/;

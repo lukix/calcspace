@@ -1,5 +1,5 @@
-import tokens from '../tokens';
-import symbolTypes from '../symbolTypes';
+import tokens from '../../tokens';
+import symbolTypes from '../../symbolTypes';
 import buildComplexUnits from '../buildComplexUnits';
 
 describe('buildComplexUnits', () => {

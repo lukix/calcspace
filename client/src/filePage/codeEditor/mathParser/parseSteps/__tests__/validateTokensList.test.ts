@@ -1,5 +1,5 @@
-import tokens from '../tokens';
-import { ParserError } from '../errors';
+import tokens from '../../tokens';
+import { ParserError } from '../../errors';
 import validateTokensList from '../validateTokensList';
 
 describe('validateTokensList', () => {
@@ -53,9 +53,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrowError(
-      new ParserError('Encountered leading binary operator')
-    );
+    expect(testFunction).toThrowError(new ParserError('Encountered leading binary operator'));
   });
 
   it('should throw an error when there is a trailing binary operator', () => {
@@ -69,9 +67,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrowError(
-      new ParserError('Encountered trailing binary operator')
-    );
+    expect(testFunction).toThrowError(new ParserError('Encountered trailing binary operator'));
   });
 
   it('should throw an error when there are adjacent operators', () => {
@@ -87,9 +83,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrowError(
-      new ParserError('Encountered two adjacent operators')
-    );
+    expect(testFunction).toThrowError(new ParserError('Encountered two adjacent operators'));
   });
 
   it('should throw an error when there is a subexpression adjacent to symbol', () => {

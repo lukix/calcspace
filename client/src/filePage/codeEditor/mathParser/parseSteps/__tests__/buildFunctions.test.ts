@@ -1,7 +1,7 @@
-import tokens from '../tokens';
-import symbolTypes from '../symbolTypes';
+import tokens from '../../tokens';
+import symbolTypes from '../../symbolTypes';
 import buildFunctions from '../buildFunctions';
-import { ParserError } from '../errors';
+import { ParserError } from '../../errors';
 
 describe('buildFunctions', () => {
   it('should replace (VARIABLE SYMBOL, SUBEXPRESSION) pair with FUNCTION token', () => {
@@ -12,9 +12,7 @@ describe('buildFunctions', () => {
       { type: tokens.SYMBOL, value: 'foo', symbolType: symbolTypes.VARIABLE },
       {
         type: tokens.SUBEXPRESSION,
-        value: [
-          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
-        ],
+        value: [{ type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC }],
       },
     ];
 
@@ -134,9 +132,7 @@ describe('buildFunctions', () => {
       { type: tokens.OPERATOR, value: '+' },
       {
         type: tokens.SUBEXPRESSION,
-        value: [
-          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
-        ],
+        value: [{ type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC }],
       },
     ];
 
@@ -155,9 +151,7 @@ describe('buildFunctions', () => {
       { type: tokens.SYMBOL, value: '15', symbolType: symbolTypes.NUMERIC },
       {
         type: tokens.SUBEXPRESSION,
-        value: [
-          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
-        ],
+        value: [{ type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC }],
       },
     ];
 
@@ -180,9 +174,7 @@ describe('buildFunctions', () => {
       },
       {
         type: tokens.SUBEXPRESSION,
-        value: [
-          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
-        ],
+        value: [{ type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC }],
       },
     ];
 

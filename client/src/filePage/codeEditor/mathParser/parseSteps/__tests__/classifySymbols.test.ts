@@ -1,6 +1,6 @@
-import tokens from '../tokens';
-import symbolTypes from '../symbolTypes';
-import { ParserError } from '../errors';
+import tokens from '../../tokens';
+import symbolTypes from '../../symbolTypes';
+import { ParserError } from '../../errors';
 import classifySymbols from '../classifySymbols';
 
 const { VARIABLE, NUMERIC, NUMERIC_WITH_UNIT } = symbolTypes;

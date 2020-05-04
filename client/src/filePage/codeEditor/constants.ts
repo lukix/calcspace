@@ -26,21 +26,43 @@ export const constants = {
   PI: { number: Math.PI, unit: [] },
 };
 
-export const unitsMap = new Map([
-  ['s', { multiplier: 1, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['m', { multiplier: 1, baseUnits: [{ unit: 'm', power: 1 }] }],
+type UnitMapTuple = [
+  string,
+  { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }
+];
+
+const reverseConversionPriorityList = [
+  's',
+  'm',
+  'kg',
+  'A',
+  'K',
+  'mol',
+  'cd',
+  // TODO: Other SI secondary units
+];
+
+const getUnitsWithPrefixes = (symbol: string, baseUnits): Array<UnitMapTuple> => [
+  [`G${symbol}`, { multiplier: 1e9, baseUnits }],
+  [`M${symbol}`, { multiplier: 1e6, baseUnits }],
+  [`k${symbol}`, { multiplier: 1e3, baseUnits }],
+  [`${symbol}`, { multiplier: 1, baseUnits }],
+  [`m${symbol}`, { multiplier: 1e-3, baseUnits }],
+  [`u${symbol}`, { multiplier: 1e-6, baseUnits }],
+  [`n${symbol}`, { multiplier: 1e-9, baseUnits }],
+];
+
+const units: Array<UnitMapTuple> = [
+  // Base units:
+  ...getUnitsWithPrefixes('s', [{ unit: 's', power: 1 }]),
+  ...getUnitsWithPrefixes('m', [{ unit: 'm', power: 1 }]),
   ['kg', { multiplier: 1, baseUnits: [{ unit: 'kg', power: 1 }] }],
   ['A', { multiplier: 1, baseUnits: [{ unit: 'A', power: 1 }] }],
   ['K', { multiplier: 1, baseUnits: [{ unit: 'K', power: 1 }] }],
   ['mol', { multiplier: 1, baseUnits: [{ unit: 'mol', power: 1 }] }],
   ['cd', { multiplier: 1, baseUnits: [{ unit: 'cd', power: 1 }] }],
 
-  ['Gs', { multiplier: 1e9, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['Ms', { multiplier: 1e6, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['ks', { multiplier: 1e3, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['ms', { multiplier: 1e-3, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['us', { multiplier: 1e-6, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['ns', { multiplier: 1e-9, baseUnits: [{ unit: 's', power: 1 }] }],
+  // Other units:
   ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
   ['h', { multiplier: 3600, baseUnits: [{ unit: 's', power: 1 }] }],
 
@@ -106,4 +128,6 @@ export const unitsMap = new Map([
   // TODO: Sv
   // TODO: Gkat
   // TODO: Gy
-]);
+];
+
+export const unitsMap = new Map(units);

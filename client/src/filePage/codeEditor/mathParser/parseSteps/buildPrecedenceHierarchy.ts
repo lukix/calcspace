@@ -1,7 +1,7 @@
 import pipe from 'ramda.pipe';
-import tokens from './tokens';
-import symbolTypes from './symbolTypes';
-import { ParserError } from './errors';
+import tokens from '../tokens';
+import symbolTypes from '../symbolTypes';
+import { ParserError } from '../errors';
 
 const createNumericSymbol = (value: string) => ({
   type: tokens.SYMBOL,

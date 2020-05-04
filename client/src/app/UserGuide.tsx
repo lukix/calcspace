@@ -74,7 +74,7 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         <br />
         3^4<span className={styles.tokenVirtual}> = 81</span>
       </pre>
-      <h2>Constants and functions</h2>
+      <h2>Constants and Functions</h2>
       <p>Right now there is only a single constant available:</p>
       <pre className={styles.codeSnippet}>
         PI<span className={styles.tokenVirtual}> = 3.141592653589793</span>
@@ -113,6 +113,50 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         tan(0)<span className={styles.tokenVirtual}> = 0</span>
         <br />
         atan(0)<span className={styles.tokenVirtual}> = 0</span>
+      </pre>
+      <h2>Units</h2>
+      <p>TODO:</p>
+      <pre className={styles.codeSnippet}>
+        a = <i>2</i>
+        <br />
+        <i>14</i>/<i>7</i>
+        <span className={styles.tokenVirtual}>
+          {' '}
+          = <i>2</i>
+        </span>
+        <br />
+        <i>14</i>/a
+        <span className={styles.tokenVirtual}>
+          {' '}
+          = <i>7</i>
+        </span>
+        <br />
+        <i>14km/a</i>
+        <span className={styles.tokenVirtual}>
+          {'  '}
+          // <i>Error: "a" is not a unit</i>
+        </span>
+        <br />
+        <i>14km / a</i>
+        <span className={styles.tokenVirtual}>
+          {' '}
+          = <i>7km</i>
+        </span>
+        <br />m = <i>10kg</i>
+        <br />
+        v1 = <i>10m/s</i>
+        <br />
+        v2 = <i>72km/h</i>
+        <span className={styles.tokenVirtual}>
+          {' '}
+          = <i>20m/s</i>
+        </span>
+        <br />s = <i>5m</i>
+        <br />x = <i>20J</i> / s
+        <span className={styles.tokenVirtual}>
+          {' '}
+          = <i>4N</i>
+        </span>
       </pre>
     </div>
   );

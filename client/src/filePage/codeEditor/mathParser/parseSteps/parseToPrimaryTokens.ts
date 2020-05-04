@@ -1,15 +1,13 @@
-import tokenTypes from './tokens';
-import { ParserError } from './errors';
+import tokenTypes from '../tokens';
+import { ParserError } from '../errors';
 
 const ALLOWED_SYMBOL_CHARS = '.abcdefghijklmnoprstuwqxyz0123456789_'.split('');
 const ALLOWED_OPERATOR_CHARS = '+-*/^()'.split('');
 
 const SPACE_CHAR = ' ';
 
-const isValidSymbolChar = (char) =>
-  ALLOWED_SYMBOL_CHARS.includes(char.toLocaleLowerCase());
-const isValidOperatorChar = (char) =>
-  ALLOWED_OPERATOR_CHARS.includes(char.toLocaleLowerCase());
+const isValidSymbolChar = (char) => ALLOWED_SYMBOL_CHARS.includes(char.toLocaleLowerCase());
+const isValidOperatorChar = (char) => ALLOWED_OPERATOR_CHARS.includes(char.toLocaleLowerCase());
 
 const createSymbol = (value: string) => ({ type: tokenTypes.SYMBOL, value });
 const createOperator = (value: string) => ({
@@ -18,8 +16,7 @@ const createOperator = (value: string) => ({
 });
 const createSpace = () => ({ type: tokenTypes.SPACE });
 
-const eliminateMultipleWhitespaces = (str: string) =>
-  str.replace(/\s+/g, SPACE_CHAR);
+const eliminateMultipleWhitespaces = (str: string) => str.replace(/\s+/g, SPACE_CHAR);
 
 const parseToPrimaryTokens = (
   expressionString: string
@@ -63,9 +60,7 @@ const parseToPrimaryTokens = (
     throw new ParserError(`Invalid character \`${currentChar}\``);
   }, initialReducerState);
 
-  return currentString === ''
-    ? tokens
-    : [...tokens, createSymbol(currentString)];
+  return currentString === '' ? tokens : [...tokens, createSymbol(currentString)];
 };
 
 export default parseToPrimaryTokens;

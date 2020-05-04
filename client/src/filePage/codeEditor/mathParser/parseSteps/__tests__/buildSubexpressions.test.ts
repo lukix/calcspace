@@ -1,5 +1,5 @@
-import tokens from '../tokens';
-import { ParserError } from '../errors';
+import tokens from '../../tokens';
+import { ParserError } from '../../errors';
 import buildSubexpressions from '../buildSubexpressions';
 
 describe('buildSubexpressions', () => {
@@ -102,9 +102,7 @@ describe('buildSubexpressions', () => {
     const testFunction = () => buildSubexpressions(primaryTokensList);
 
     // then
-    expect(testFunction).toThrowError(
-      new ParserError('Encountered not closed parenthesis')
-    );
+    expect(testFunction).toThrowError(new ParserError('Encountered not closed parenthesis'));
   });
 
   it('should throw an error when there is a closing parenthesis without opening one', () => {

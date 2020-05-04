@@ -1,5 +1,5 @@
-import tokens from '../tokens';
-import { ParserError } from '../errors';
+import tokens from '../../tokens';
+import { ParserError } from '../../errors';
 import parseToPrimaryTokens from '../parseToPrimaryTokens';
 
 describe('parseToPrimaryTokens', () => {
@@ -84,9 +84,7 @@ describe('parseToPrimaryTokens', () => {
     const parseFunction = () => parseToPrimaryTokens(expressionString);
 
     // then
-    expect(parseFunction).toThrowError(
-      new ParserError('Invalid character `@`')
-    );
+    expect(parseFunction).toThrowError(new ParserError('Invalid character `@`'));
   });
 
   it('should ignore leading and trailing spaces', () => {
