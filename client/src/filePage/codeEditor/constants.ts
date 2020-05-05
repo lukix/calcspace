@@ -1,8 +1,9 @@
 import factorial from 'math-factorial';
+import { EvaluationError } from './mathParser';
 
-const createUnitlessFunction = (func) => ({ number, unit }) => {
+const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {
   if (unit.length !== 0) {
-    throw new Error(`Function doesn't accept values with units`);
+    throw new EvaluationError(`Function "${functionName}" doesn't accept values with units`);
   }
   return { number: func(number), unit };
 };
@@ -12,14 +13,14 @@ export const functions = {
     number: Math.sqrt(value.number),
     unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),
   }),
-  log: createUnitlessFunction(Math.log),
-  sin: createUnitlessFunction(Math.sin),
-  cos: createUnitlessFunction(Math.cos),
-  tan: createUnitlessFunction(Math.tan),
-  asin: createUnitlessFunction(Math.asin),
-  acos: createUnitlessFunction(Math.acos),
-  atan: createUnitlessFunction(Math.atan),
-  factorial: createUnitlessFunction(factorial),
+  log: createUnitlessFunction(Math.log, 'log'),
+  sin: createUnitlessFunction(Math.sin, 'sin'),
+  cos: createUnitlessFunction(Math.cos, 'cos'),
+  tan: createUnitlessFunction(Math.tan, 'tan'),
+  asin: createUnitlessFunction(Math.asin, 'asin'),
+  acos: createUnitlessFunction(Math.acos, 'acos'),
+  atan: createUnitlessFunction(Math.atan, 'atan'),
+  factorial: createUnitlessFunction(factorial, 'factorial'),
 };
 
 export const constants = {
