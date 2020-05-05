@@ -31,103 +31,145 @@ type UnitMapTuple = [
   { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }
 ];
 
-// const reverseConversionPriorityList = [
-//   's',
-//   'm',
-//   'kg',
-//   'A',
-//   'K',
-//   'mol',
-//   'cd',
-//   // TODO: Other SI secondary units
-// ];
-
-const getUnitsWithPrefixes = (symbol: string, baseUnits): Array<UnitMapTuple> => [
-  [`G${symbol}`, { multiplier: 1e9, baseUnits }],
-  [`M${symbol}`, { multiplier: 1e6, baseUnits }],
-  [`k${symbol}`, { multiplier: 1e3, baseUnits }],
-  [`${symbol}`, { multiplier: 1, baseUnits }],
-  [`m${symbol}`, { multiplier: 1e-3, baseUnits }],
-  [`u${symbol}`, { multiplier: 1e-6, baseUnits }],
-  [`n${symbol}`, { multiplier: 1e-9, baseUnits }],
+const getUnitsWithPrefixes = (
+  symbol: string,
+  baseUnits,
+  { baseMultiplier = 1 } = {}
+): Array<UnitMapTuple> => [
+  [`G${symbol}`, { multiplier: 1e9 * baseMultiplier, baseUnits }],
+  [`M${symbol}`, { multiplier: 1e6 * baseMultiplier, baseUnits }],
+  [`k${symbol}`, { multiplier: 1e3 * baseMultiplier, baseUnits }],
+  [`${symbol}`, { multiplier: 1 * baseMultiplier, baseUnits }],
+  [`m${symbol}`, { multiplier: 1e-3 * baseMultiplier, baseUnits }],
+  [`u${symbol}`, { multiplier: 1e-6 * baseMultiplier, baseUnits }],
+  [`n${symbol}`, { multiplier: 1e-9 * baseMultiplier, baseUnits }],
 ];
 
 export const units: Array<UnitMapTuple> = [
-  // Base units:
+  // SI base units:
   ...getUnitsWithPrefixes('s', [{ unit: 's', power: 1 }]),
   ...getUnitsWithPrefixes('m', [{ unit: 'm', power: 1 }]),
-  ['kg', { multiplier: 1, baseUnits: [{ unit: 'kg', power: 1 }] }],
-  ['A', { multiplier: 1, baseUnits: [{ unit: 'A', power: 1 }] }],
-  ['K', { multiplier: 1, baseUnits: [{ unit: 'K', power: 1 }] }],
-  ['mol', { multiplier: 1, baseUnits: [{ unit: 'mol', power: 1 }] }],
-  ['cd', { multiplier: 1, baseUnits: [{ unit: 'cd', power: 1 }] }],
+  ...getUnitsWithPrefixes('g', [{ unit: 'kg', power: 1 }], { baseMultiplier: 1e-3 }),
+  ...getUnitsWithPrefixes('A', [{ unit: 'A', power: 1 }]),
+  ...getUnitsWithPrefixes('K', [{ unit: 'K', power: 1 }]),
+  ...getUnitsWithPrefixes('mol', [{ unit: 'mol', power: 1 }]),
+  ...getUnitsWithPrefixes('cd', [{ unit: 'cd', power: 1 }]),
 
-  // Other units:
+  // "Convinient" units:
   ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
   ['h', { multiplier: 3600, baseUnits: [{ unit: 's', power: 1 }] }],
+  ['t', { multiplier: 1000, baseUnits: [{ unit: 'kg', power: 1 }] }],
 
-  ['km', { multiplier: 1e3, baseUnits: [{ unit: 'm', power: 1 }] }],
+  // SI derived units:
+  ...getUnitsWithPrefixes('Hz', [{ unit: 's', power: -1 }]),
+  ...getUnitsWithPrefixes('N', [
+    { unit: 'm', power: 1 },
+    { unit: 'kg', power: 1 },
+    { unit: 's', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('Pa', [
+    { unit: 'm', power: -1 },
+    { unit: 'kg', power: 1 },
+    { unit: 's', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('J', [
+    { unit: 'm', power: 2 },
+    { unit: 'kg', power: 1 },
+    { unit: 's', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('W', [
+    { unit: 'm', power: 2 },
+    { unit: 'kg', power: 1 },
+    { unit: 's', power: -3 },
+  ]),
+  ...getUnitsWithPrefixes('C', [
+    { unit: 's', power: 1 },
+    { unit: 'A', power: 1 },
+  ]),
+  ...getUnitsWithPrefixes('V', [
+    { unit: 'kg', power: 1 },
+    { unit: 'm', power: 2 },
+    { unit: 's', power: -3 },
+    { unit: 'A', power: -1 },
+  ]),
+  ...getUnitsWithPrefixes('F', [
+    { unit: 'kg', power: -1 },
+    { unit: 'm', power: -2 },
+    { unit: 's', power: 4 },
+    { unit: 'A', power: 2 },
+  ]),
+  ...getUnitsWithPrefixes('Ohm', [
+    { unit: 'kg', power: 1 },
+    { unit: 'm', power: 2 },
+    { unit: 's', power: -3 },
+    { unit: 'A', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('S', [
+    { unit: 'kg', power: -1 },
+    { unit: 'm', power: -2 },
+    { unit: 's', power: 3 },
+    { unit: 'A', power: 2 },
+  ]),
+  ...getUnitsWithPrefixes('Wb', [
+    { unit: 'kg', power: 1 },
+    { unit: 'm', power: 2 },
+    { unit: 's', power: -2 },
+    { unit: 'A', power: -1 },
+  ]),
+  ...getUnitsWithPrefixes('T', [
+    { unit: 'kg', power: 1 },
+    { unit: 's', power: -2 },
+    { unit: 'A', power: -1 },
+  ]),
+  ...getUnitsWithPrefixes('H', [
+    { unit: 'kg', power: 1 },
+    { unit: 'm', power: 2 },
+    { unit: 's', power: -2 },
+    { unit: 'A', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('lm', [{ unit: 'cd', power: 1 }]),
+  ...getUnitsWithPrefixes('lx', [
+    { unit: 'cd', power: 1 },
+    { unit: 'm', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('Bq', [{ unit: 's', power: -1 }]),
+  ...getUnitsWithPrefixes('Gy', [
+    { unit: 'm', power: 2 },
+    { unit: 's', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('Sv', [
+    { unit: 'm', power: 2 },
+    { unit: 's', power: -2 },
+  ]),
+  ...getUnitsWithPrefixes('kat', [
+    { unit: 's', power: -1 },
+    { unit: 'mol', power: 1 },
+  ]),
+];
 
-  ['Hz', { multiplier: 1, baseUnits: [{ unit: 's', power: -1 }] }],
-  [
-    'N',
-    {
-      multiplier: 1,
-      baseUnits: [
-        { unit: 'm', power: 1 },
-        { unit: 'kg', power: 1 },
-        { unit: 's', power: -2 },
-      ],
-    },
-  ],
-  [
-    'Pa',
-    {
-      multiplier: 1,
-      baseUnits: [
-        { unit: 'm', power: -1 },
-        { unit: 'kg', power: 1 },
-        { unit: 's', power: -2 },
-      ],
-    },
-  ],
-  [
-    'J',
-    {
-      multiplier: 1,
-      baseUnits: [
-        { unit: 'm', power: 2 },
-        { unit: 'kg', power: 1 },
-        { unit: 's', power: -2 },
-      ],
-    },
-  ],
-  [
-    'W',
-    {
-      multiplier: 1,
-      baseUnits: [
-        { unit: 'm', power: 2 },
-        { unit: 'kg', power: 1 },
-        { unit: 's', power: -3 },
-      ],
-    },
-  ],
-  // TODO: C
-  // TODO: V
-  // TODO: F
-  // TODO: Ohm
-  // TODO: S
-  // TODO: Wb
-  // TODO: T
-  // TODO: H
-  // TODO: lm
-  // TODO: lx
-  // TODO: Bq
-  // TODO: Gy
-  // TODO: Sv
-  // TODO: Gkat
-  // TODO: Gy
+export const unitsApplicableForResult = [
+  's',
+  'm',
+  'kg',
+  'A',
+  'K',
+  'mol',
+  'cd',
+  'Hz',
+  'N',
+  'Pa',
+  'J',
+  'W',
+  'C',
+  'V',
+  'F',
+  'Ohm',
+  'S',
+  'Wb',
+  'H',
+  'lx',
+  'Gy',
+  'kat',
 ];
 
 export const unitsMap = new Map(units);

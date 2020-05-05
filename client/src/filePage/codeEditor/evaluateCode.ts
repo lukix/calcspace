@@ -1,6 +1,6 @@
 import { unitToString } from './mathParser';
 import evaluateExpression from './mathEngine/evaluateExpression';
-import { constants, functions, unitsMap, units } from './constants';
+import { constants, functions, unitsMap, units, unitsApplicableForResult } from './constants';
 
 export const tokens = {
   NORMAL: 'NORMAL',
@@ -13,7 +13,8 @@ const valueWithUnitToString = ({ number, unit }) => `${number}${unitToString(uni
 const convertToComprehendibleUnit = ({ number, unit }) => {
   const unitString = unitToString(unit);
   const replacementUnit = units.find(
-    ([symbol, { baseUnits }]) => unitToString(baseUnits) === unitString
+    ([symbol, { baseUnits }]) =>
+      unitsApplicableForResult.includes(symbol) && unitToString(baseUnits) === unitString
   );
   if (!replacementUnit) {
     return { number, unit };
