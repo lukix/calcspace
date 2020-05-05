@@ -39,7 +39,11 @@ const getUnitsWithPrefixes = (
   [`G${symbol}`, { multiplier: 1e9 * baseMultiplier, baseUnits }],
   [`M${symbol}`, { multiplier: 1e6 * baseMultiplier, baseUnits }],
   [`k${symbol}`, { multiplier: 1e3 * baseMultiplier, baseUnits }],
+  [`h${symbol}`, { multiplier: 1e2 * baseMultiplier, baseUnits }],
+  [`da${symbol}`, { multiplier: 1e1 * baseMultiplier, baseUnits }],
   [`${symbol}`, { multiplier: 1 * baseMultiplier, baseUnits }],
+  [`d${symbol}`, { multiplier: 1e-1 * baseMultiplier, baseUnits }],
+  [`c${symbol}`, { multiplier: 1e-2 * baseMultiplier, baseUnits }],
   [`m${symbol}`, { multiplier: 1e-3 * baseMultiplier, baseUnits }],
   [`u${symbol}`, { multiplier: 1e-6 * baseMultiplier, baseUnits }],
   [`n${symbol}`, { multiplier: 1e-9 * baseMultiplier, baseUnits }],
@@ -54,11 +58,6 @@ export const units: Array<UnitMapTuple> = [
   ...getUnitsWithPrefixes('K', [{ unit: 'K', power: 1 }]),
   ...getUnitsWithPrefixes('mol', [{ unit: 'mol', power: 1 }]),
   ...getUnitsWithPrefixes('cd', [{ unit: 'cd', power: 1 }]),
-
-  // "Convinient" units:
-  ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['h', { multiplier: 3600, baseUnits: [{ unit: 's', power: 1 }] }],
-  ['t', { multiplier: 1000, baseUnits: [{ unit: 'kg', power: 1 }] }],
 
   // SI derived units:
   ...getUnitsWithPrefixes('Hz', [{ unit: 's', power: -1 }]),
@@ -145,6 +144,23 @@ export const units: Array<UnitMapTuple> = [
     { unit: 's', power: -1 },
     { unit: 'mol', power: 1 },
   ]),
+
+  // "Convinient" units:
+  ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
+  ['h', { multiplier: 3600, baseUnits: [{ unit: 's', power: 1 }] }],
+
+  ['Gt', { multiplier: 1e12, baseUnits: [{ unit: 'kg', power: 1 }] }],
+  ['Mt', { multiplier: 1e9, baseUnits: [{ unit: 'kg', power: 1 }] }],
+  ['kt', { multiplier: 1e6, baseUnits: [{ unit: 'kg', power: 1 }] }],
+  ['t', { multiplier: 1e3, baseUnits: [{ unit: 'kg', power: 1 }] }],
+  ['lb', { multiplier: 1e3, baseUnits: [{ unit: 'kg', power: 1 }] }],
+
+  ...getUnitsWithPrefixes('l', [{ unit: 'm', power: 3 }], { baseMultiplier: 1e-3 }),
+
+  ['in', { multiplier: 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
+  ['ft', { multiplier: 12 * 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
+  ['yd', { multiplier: 3 * 12 * 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
+  ['mi', { multiplier: 1609.344, baseUnits: [{ unit: 'm', power: 1 }] }],
 ];
 
 export const unitsApplicableForResult = [
