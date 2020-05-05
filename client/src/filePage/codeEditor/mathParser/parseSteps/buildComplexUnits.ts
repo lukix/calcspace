@@ -1,6 +1,15 @@
 import tokens from '../tokens';
 import symbolTypes from '../symbolTypes';
 
+const isOperatorToken = (token, oparatorChars) =>
+  token?.type === tokens.OPERATOR && oparatorChars.includes(token?.value);
+const isVariableToken = (token) =>
+  token?.type === tokens.SYMBOL && token?.symbolType === symbolTypes.VARIABLE;
+const isNumberToken = (token) =>
+  token?.type === tokens.SYMBOL && token?.symbolType === symbolTypes.NUMERIC;
+const isNumberWithUnitToken = (token) =>
+  token?.type === tokens.SYMBOL && token?.symbolType === symbolTypes.NUMERIC_WITH_UNIT;
+
 const buildComplexUnits = (tokensList) => {
   const initialReduceState = {
     tokensList: [],
@@ -12,13 +21,10 @@ const buildComplexUnits = (tokensList) => {
       if (acc.currentSymbolWithUnit) {
         const previousToken = acc.temporaryTokens[acc.temporaryTokens.length - 1];
         if (
-          (currentToken.type === tokens.OPERATOR && ['*', '/', '^'].includes(currentToken.value)) ||
-          (currentToken.type === tokens.SYMBOL &&
-            currentToken.symbolType === symbolTypes.VARIABLE &&
-            !(previousToken?.type === tokens.OPERATOR && previousToken?.value === '^')) ||
-          (previousToken?.type === tokens.OPERATOR &&
-            previousToken?.value === '^' &&
-            currentToken.symbolType === symbolTypes.NUMERIC)
+          isOperatorToken(currentToken, ['*', '/', '^']) ||
+          (!isOperatorToken(previousToken, ['^']) && isVariableToken(currentToken)) ||
+          (isOperatorToken(previousToken, ['^', '-']) && isNumberToken(currentToken)) ||
+          (isOperatorToken(previousToken, ['^']) && isOperatorToken(currentToken, ['-']))
         ) {
           return { ...acc, temporaryTokens: [...acc.temporaryTokens, currentToken] };
         }
@@ -46,10 +52,7 @@ const buildComplexUnits = (tokensList) => {
           temporaryTokens: [],
         };
       }
-      if (
-        currentToken.type === tokens.SYMBOL &&
-        currentToken.symbolType === symbolTypes.NUMERIC_WITH_UNIT
-      ) {
+      if (isNumberWithUnitToken(currentToken)) {
         return {
           ...acc,
           currentSymbolWithUnit: currentToken,

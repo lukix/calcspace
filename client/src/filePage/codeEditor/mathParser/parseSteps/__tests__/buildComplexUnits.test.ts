@@ -286,4 +286,32 @@ describe('buildComplexUnits', () => {
       { type: tokens.OPERATOR, value: ')' },
     ]);
   });
+
+  it('should support units with negative powers"', () => {
+    // given
+    const tokensList = [
+      {
+        type: tokens.SYMBOL,
+        value: '5m',
+        symbolType: symbolTypes.NUMERIC_WITH_UNIT,
+        unit: 'm',
+      },
+      { type: tokens.OPERATOR, value: '^' },
+      { type: tokens.OPERATOR, value: '-' },
+      { type: tokens.SYMBOL, value: '2', number: 2, symbolType: symbolTypes.NUMERIC },
+    ];
+
+    // when
+    const result = buildComplexUnits(tokensList);
+
+    // then
+    expect(result).toEqual([
+      {
+        type: tokens.SYMBOL,
+        value: '5m^-2',
+        symbolType: symbolTypes.NUMERIC_WITH_UNIT,
+        unit: 'm^-2',
+      },
+    ]);
+  });
 });
