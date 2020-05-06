@@ -8,32 +8,28 @@ const UserGuide: React.FC<UserGuideProps> = () => {
     <div className={styles.userGuide}>
       <h2>Introduction</h2>
       <p>
-        Welcome! Math IDE lets you write sequences of math expressions and
-        instantly evaluate them for any input data that you provide.{' '}
-        <b>
-          Select a file in the left panel to start writing your own math
-          expressions
-        </b>{' '}
-        or continue reading this guide to get familiar with how Math IDE works.
+        Welcome! Math IDE lets you write sequences of math expressions and instantly evaluate them
+        for any input data that you provide.{' '}
+        <b>Select a file in the left panel to start writing your own math expressions</b> or
+        continue reading this guide to get familiar with how Math IDE works.
       </p>
       <h2>Beta Disclaimer</h2>
       <p>
-        Please note that this is a beta version and the syntax described below
-        may change in the future.
+        Please note that this is a beta version and the syntax described below may change in the
+        future.
       </p>
       <h2>Getting Started</h2>
       <p>
-        In the left panel, you can create multiple files. Each file is an
-        independent environment where you can write sequences of math
-        expressions. Let's start with a simple addition:
+        In the left panel, you can create multiple files. Each file is an independent environment
+        where you can write sequences of math expressions. Let's start with a simple addition:
       </p>
       <pre className={styles.codeSnippet}>
         14 + 7<span className={styles.tokenVirtual}> = 21</span>
       </pre>
       <p>
-        Note how the result of this expression is slightly faded. It means that
-        it has been automatically generated and cannot be edited. You can enter
-        multiple expressions - each in a new line. Here is an example:
+        Note how the result of this expression is slightly faded. It means that it has been
+        automatically generated and cannot be edited. You can enter multiple expressions - each in a
+        new line. Here is an example:
       </p>
       <pre className={styles.codeSnippet}>
         2 + 2 * 2<span className={styles.tokenVirtual}> = 6</span>
@@ -52,29 +48,25 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       <pre className={styles.codeSnippet}>
         m = 10
         <br />v = 2 * 3<span className={styles.tokenVirtual}> = 6</span>
-        <br />E = (m * v ^ 2) / 2
-        <span className={styles.tokenVirtual}> = 180</span>
+        <br />E = (m * v ^ 2) / 2<span className={styles.tokenVirtual}> = 180</span>
       </pre>
       <h2>Comments</h2>
       <p>
-        Besides regular mathematical expressions, you may want to write some
-        text to make your calculations easier to understand. To do that, start a
-        line with <span className={styles.inlineCode}>//</span>. The line will
-        be marked as a comment and the program won't treat it as a math
-        expression.
+        Besides regular mathematical expressions, you may want to write some text to make your
+        calculations easier to understand. To do that, start a line with{' '}
+        <span className={styles.inlineCode}>//</span>. The line will be marked as a comment and the
+        program won't treat it as a math expression.
       </p>
       <pre className={styles.codeSnippet}>
-        <span className={styles.tokenComment}>// This is a comment</span> <br />
-        3 * 3 * 3 * 3<span className={styles.tokenVirtual}> = 81</span>
+        <span className={styles.tokenComment}>// This is a comment</span> <br />3 * 3 * 3 * 3
+        <span className={styles.tokenVirtual}> = 81</span>
         <br />
         <br />
-        <span className={styles.tokenComment}>
-          // And this is another comment
-        </span>
+        <span className={styles.tokenComment}>// And this is another comment</span>
         <br />
         3^4<span className={styles.tokenVirtual}> = 81</span>
       </pre>
-      <h2>Constants and functions</h2>
+      <h2>Constants and Functions</h2>
       <p>Right now there is only a single constant available:</p>
       <pre className={styles.codeSnippet}>
         PI<span className={styles.tokenVirtual}> = 3.141592653589793</span>
@@ -91,9 +83,7 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         log(2.718281828459045)<span className={styles.tokenVirtual}> = 1</span>
         <br />
         <br />
-        <span className={styles.tokenComment}>
-          // Factorial: 3! = 1 * 2 * 3
-        </span>
+        <span className={styles.tokenComment}>// Factorial: 3! = 1 * 2 * 3</span>
         <br />
         factorial(3)<span className={styles.tokenVirtual}> = 6</span>
         <br />
@@ -113,6 +103,67 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         tan(0)<span className={styles.tokenVirtual}> = 0</span>
         <br />
         atan(0)<span className={styles.tokenVirtual}> = 0</span>
+      </pre>
+      <h2>Units</h2>
+      <p>
+        Math IDE supports values with units. Unit symbol needs to be placed right after the number,
+        without separating space character. For example:
+      </p>
+      <pre className={styles.codeSnippet}>
+        15kg
+        <br />
+        2.54m
+        <br />
+        60s
+      </pre>
+      <p>You can also use complex units, such as:</p>
+      <pre className={styles.codeSnippet}>
+        10kg*m
+        <br />
+        36m/s
+        <br />
+        9.81m/s^2
+        <br />
+        9.81m/s/s
+        <br />
+        9.81m*s^-2
+      </pre>
+      <p>Keep in mind that spaces are important:</p>
+      <pre className={styles.codeSnippet}>
+        <span className={styles.tokenComment}>// 10 meters per second:</span>
+        <br />
+        10m/s
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// 10 meters devided by variable "s":</span>
+        <br />
+        10m / s
+      </pre>
+      <p>
+        All operations such as addition, subtraction, multiplication, etc. are possible for values
+        with units:
+      </p>
+      <pre className={styles.codeSnippet}>
+        2kg + 500g<span className={styles.tokenVirtual}> = 2.5kg</span>
+        <br />
+        10N / 2.5m^2<span className={styles.tokenVirtual}> = 4Pa</span>
+        <br />
+        (1m * 4m)^2<span className={styles.tokenVirtual}> = 16m^4</span>
+      </pre>
+      <p>Trying to add or subtract values with incompatibe units will result in an error:</p>
+      <pre className={styles.codeSnippet}>
+        <span className={styles.tokenError}>4m + 4s</span>
+        <span className={styles.tokenVirtual}>
+          {' '}
+          Error: Trying to add/subtract values with incompatible units: "m" and "s"
+        </span>
+        <br />
+        <span className={styles.tokenError}>7s - 5s - 2kg</span>
+        <span className={styles.tokenVirtual}>
+          {' '}
+          Error: Trying to add/subtract values with incompatible units: "s" and "kg"
+        </span>
+        <br />
       </pre>
     </div>
   );

@@ -1,8 +1,14 @@
 import pipe from 'ramda.pipe';
-import tokens from './tokens';
-import { ParserError } from './errors';
+import tokens from '../tokens';
+import symbolTypes from '../symbolTypes';
+import { ParserError } from '../errors';
 
-const createSymbol = (value: string) => ({ type: tokens.SYMBOL, value });
+const createNumericSymbol = (value: string) => ({
+  type: tokens.SYMBOL,
+  value,
+  symbolType: symbolTypes.NUMERIC,
+  number: Number(value),
+});
 const createOperator = (value: string) => ({ type: tokens.OPERATOR, value });
 
 const splitPowerElements = (tokensList) => {
@@ -10,9 +16,7 @@ const splitPowerElements = (tokensList) => {
   const { array, tempTokens } = tokensList.reduce((acc, currentToken) => {
     if (currentToken.type === tokens.OPERATOR && currentToken.value === '^') {
       if (acc.tempTokens.length > 1) {
-        throw new ParserError(
-          'Found unexpected number of elements when spliting power elements'
-        );
+        throw new ParserError('Found unexpected number of elements when spliting power elements');
       }
       return {
         array: [...acc.array, ...acc.tempTokens],
@@ -25,9 +29,7 @@ const splitPowerElements = (tokensList) => {
     };
   }, initialReduceState);
   if (tempTokens.length > 1) {
-    throw new ParserError(
-      'Found unexpected number of elements when spliting power elements'
-    );
+    throw new ParserError('Found unexpected number of elements when spliting power elements');
   }
   return [...array, ...tempTokens];
 };
@@ -41,41 +43,32 @@ const splitProductElements = (tokensList) => {
             value: buildPrecedenceHierarchy(tempTokens),
           },
           createOperator('^'),
-          createSymbol('-1'),
+          createNumericSymbol('-1'),
         ]
       : tempTokens;
   const initialReduceState = { array: [], tempTokens: [], divisionFlag: false };
-  const { array, tempTokens, divisionFlag } = tokensList.reduce(
-    (acc, currentToken) => {
-      if (currentToken.type === tokens.OPERATOR && currentToken.value === '*') {
-        return {
-          ...acc,
-          array: [
-            ...acc.array,
-            createProductElement(acc.tempTokens, acc.divisionFlag),
-          ],
-          tempTokens: [],
-          divisionFlag: false,
-        };
-      }
-      if (currentToken.type === tokens.OPERATOR && currentToken.value === '/') {
-        return {
-          ...acc,
-          array: [
-            ...acc.array,
-            createProductElement(acc.tempTokens, acc.divisionFlag),
-          ],
-          tempTokens: [],
-          divisionFlag: true,
-        };
-      }
+  const { array, tempTokens, divisionFlag } = tokensList.reduce((acc, currentToken) => {
+    if (currentToken.type === tokens.OPERATOR && currentToken.value === '*') {
       return {
         ...acc,
-        tempTokens: [...acc.tempTokens, currentToken],
+        array: [...acc.array, createProductElement(acc.tempTokens, acc.divisionFlag)],
+        tempTokens: [],
+        divisionFlag: false,
       };
-    },
-    initialReduceState
-  );
+    }
+    if (currentToken.type === tokens.OPERATOR && currentToken.value === '/') {
+      return {
+        ...acc,
+        array: [...acc.array, createProductElement(acc.tempTokens, acc.divisionFlag)],
+        tempTokens: [],
+        divisionFlag: true,
+      };
+    }
+    return {
+      ...acc,
+      tempTokens: [...acc.tempTokens, currentToken],
+    };
+  }, initialReduceState);
   return [...array, createProductElement(tempTokens, divisionFlag)];
 };
 
@@ -90,11 +83,8 @@ const splitSumElements = (tokensList) => {
     }
     if (currentToken.type === tokens.OPERATOR && currentToken.value === '-') {
       return {
-        array:
-          acc.tempTokens.length === 0
-            ? acc.array
-            : [...acc.array, acc.tempTokens],
-        tempTokens: [createSymbol('-1'), createOperator('*')],
+        array: acc.tempTokens.length === 0 ? acc.array : [...acc.array, acc.tempTokens],
+        tempTokens: [createNumericSymbol('-1'), createOperator('*')],
       };
     }
     return {
@@ -116,9 +106,7 @@ const buildPrecedenceHierarchy = (tokensList) => {
     if (token.type === tokens.FUNCTION) {
       return {
         ...token,
-        subexpressionContent: buildPrecedenceHierarchy(
-          token.subexpressionContent
-        ),
+        subexpressionContent: buildPrecedenceHierarchy(token.subexpressionContent),
       };
     }
     return token;
@@ -126,8 +114,7 @@ const buildPrecedenceHierarchy = (tokensList) => {
 
   return pipe(
     splitSumElements,
-    (sumElements) =>
-      sumElements.map((element) => splitProductElements(element)),
+    (sumElements) => sumElements.map((element) => splitProductElements(element)),
     (sumElements) =>
       sumElements.map((productElements) =>
         productElements.map((element) => splitPowerElements(element))

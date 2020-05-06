@@ -1,11 +1,11 @@
-import tokens from '../tokens';
-import { ParserError } from '../errors';
+import tokens from '../../tokens';
+import { ParserError } from '../../errors';
 import parseToPrimaryTokens from '../parseToPrimaryTokens';
 
 describe('parseToPrimaryTokens', () => {
   it('should parse expression into a list of tokens', () => {
     // given
-    const expressionString = 'acc + 50 * c - 16 / 2^4';
+    const expressionString = 'acc+50*c-16/2^4';
 
     // when
     const tokensList = parseToPrimaryTokens(expressionString);
@@ -28,7 +28,7 @@ describe('parseToPrimaryTokens', () => {
 
   it('should handle underscore characters in symbols', () => {
     // given
-    const expressionString = 'a_1 + b_n';
+    const expressionString = 'a_1+b_n';
 
     // when
     const tokensList = parseToPrimaryTokens(expressionString);
@@ -43,7 +43,7 @@ describe('parseToPrimaryTokens', () => {
 
   it('should support brackets', () => {
     // given
-    const expressionString = 'a * (b + c)';
+    const expressionString = 'a*(b+c)';
 
     // when
     const tokensList = parseToPrimaryTokens(expressionString);
@@ -78,15 +78,51 @@ describe('parseToPrimaryTokens', () => {
 
   it('should throw an error when encountered invalid character', () => {
     // given
-    const expressionString = 'abc + @d';
+    const expressionString = 'abc+@d';
 
     // when
     const parseFunction = () => parseToPrimaryTokens(expressionString);
 
     // then
-    expect(parseFunction).toThrowError(
-      new ParserError('Invalid character `@`')
-    );
+    expect(parseFunction).toThrowError(new ParserError('Invalid character `@`'));
+  });
+
+  it('should ignore leading and trailing spaces', () => {
+    // given
+    const expressionString = ' 5+4+3  ';
+
+    // when
+    const tokensList = parseToPrimaryTokens(expressionString);
+
+    // then
+    expect(tokensList).toEqual([
+      { type: tokens.SYMBOL, value: '5' },
+      { type: tokens.OPERATOR, value: '+' },
+      { type: tokens.SYMBOL, value: '4' },
+      { type: tokens.OPERATOR, value: '+' },
+      { type: tokens.SYMBOL, value: '3' },
+    ]);
+  });
+
+  it('should replace multiple adjacent spaces with a single space', () => {
+    // given
+    const expressionString = '5 +  4 +   3';
+
+    // when
+    const tokensList = parseToPrimaryTokens(expressionString);
+
+    // then
+    expect(tokensList).toEqual([
+      { type: tokens.SYMBOL, value: '5' },
+      { type: tokens.SPACE },
+      { type: tokens.OPERATOR, value: '+' },
+      { type: tokens.SPACE },
+      { type: tokens.SYMBOL, value: '4' },
+      { type: tokens.SPACE },
+      { type: tokens.OPERATOR, value: '+' },
+      { type: tokens.SPACE },
+      { type: tokens.SYMBOL, value: '3' },
+    ]);
   });
 
   it('should throw an error for empty expression', () => {

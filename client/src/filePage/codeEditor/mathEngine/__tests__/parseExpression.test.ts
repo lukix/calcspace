@@ -6,13 +6,10 @@ describe('parseExpression', () => {
     const expressionToParse = 'E = m*c^2';
 
     // when
-    const { result, symbol, valid, error } = parseExpression(
-      expressionToParse,
-      {
-        m: 1,
-        c: 2,
-      }
-    );
+    const { result, symbol, valid, error } = parseExpression(expressionToParse, {
+      m: { number: 1, unit: [] },
+      c: { number: 2, unit: [] },
+    });
 
     // then
     expect(result).not.toEqual(null);
@@ -27,8 +24,8 @@ describe('parseExpression', () => {
 
     // when
     const { symbol, valid } = parseExpression(expressionToParse, {
-      m: 1,
-      c: 2,
+      m: { number: 1, unit: [] },
+      c: { number: 2, unit: [] },
     });
 
     // then
@@ -42,8 +39,8 @@ describe('parseExpression', () => {
 
     // when
     const { valid, error } = parseExpression(expressionToParse, {
-      m: 1,
-      c: 2,
+      m: { number: 1, unit: [] },
+      c: { number: 2, unit: [] },
     });
 
     // then
@@ -57,8 +54,8 @@ describe('parseExpression', () => {
 
     // when
     const { valid, error } = parseExpression(expressionToParse, {
-      m: 1,
-      c: 2,
+      m: { number: 1, unit: [] },
+      c: { number: 2, unit: [] },
     });
 
     // then

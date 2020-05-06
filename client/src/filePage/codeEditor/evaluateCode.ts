@@ -1,5 +1,6 @@
-import factorial from 'math-factorial';
+import { unitToString } from './mathParser';
 import evaluateExpression from './mathEngine/evaluateExpression';
+import { constants, functions, unitsMap, units, unitsApplicableForResult } from './constants';
 
 export const tokens = {
   NORMAL: 'NORMAL',
@@ -8,20 +9,21 @@ export const tokens = {
   COMMENT: 'COMMENT',
 };
 
-const functions = {
-  sqrt: Math.sqrt,
-  log: Math.log,
-  sin: Math.sin,
-  cos: Math.cos,
-  tan: Math.tan,
-  asin: Math.asin,
-  acos: Math.acos,
-  atan: Math.atan,
-  factorial,
-};
-
-const constants = {
-  PI: Math.PI,
+const valueWithUnitToString = ({ number, unit }) => `${number}${unitToString(unit)}`;
+const convertToComprehendibleUnit = ({ number, unit }) => {
+  const unitString = unitToString(unit);
+  const replacementUnit = units.find(
+    ([symbol, { baseUnits }]) =>
+      unitsApplicableForResult.includes(symbol) && unitToString(baseUnits) === unitString
+  );
+  if (!replacementUnit) {
+    return { number, unit };
+  }
+  const [symbol, { multiplier }] = replacementUnit;
+  return {
+    number: number / multiplier,
+    unit: [{ unit: symbol, power: 1 }],
+  };
 };
 
 const tokenizeLine = (values, expression) => {
@@ -44,21 +46,21 @@ const tokenizeLine = (values, expression) => {
   const { result, error, symbol, expression: expStr } = evaluateExpression(
     expression,
     values,
-    functions
+    functions,
+    unitsMap
   );
-  const showResult = result !== null && expStr !== `${result}`;
-  const resultString = showResult ? ` = ${result}` : '';
+  const showResult =
+    result !== null && expStr !== valueWithUnitToString(convertToComprehendibleUnit(result));
+  const resultString = showResult
+    ? ` = ${valueWithUnitToString(convertToComprehendibleUnit(result))}`
+    : '';
   const tokenizedLine = [
     {
       value: expression,
       tags: [tokens.NORMAL, ...(error ? [tokens.ERROR] : [])],
     },
-    ...(resultString === ''
-      ? []
-      : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
-    ...(!error
-      ? []
-      : [{ value: `  ${error.message}`, tags: [tokens.VIRTUAL] }]),
+    ...(resultString === '' ? [] : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
+    ...(!error ? [] : [{ value: `  ${error.message}`, tags: [tokens.VIRTUAL] }]),
   ];
 
   return {

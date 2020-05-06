@@ -1,5 +1,5 @@
-import tokens from './tokens';
-import { ParserError } from './errors';
+import tokens from '../tokens';
+import { ParserError } from '../errors';
 
 const createAdjacentPairs = (tokensList) => {
   const { pairs, previousToken: lastToken } = tokensList.reduce(
@@ -44,9 +44,7 @@ const validateTokensList = (tokensList) => {
 
     if (currentToken && currentToken.type !== tokens.OPERATOR) {
       if (previousToken && previousToken.type !== tokens.OPERATOR) {
-        throw new ParserError(
-          `Expected an operator but encountered ${currentToken.type} instead`
-        );
+        throw new ParserError(`Expected an operator but encountered ${currentToken.type} instead`);
       }
     }
   });

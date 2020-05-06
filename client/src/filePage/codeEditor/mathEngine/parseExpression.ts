@@ -1,12 +1,8 @@
-import {
-  parseExpression as parse,
-  evaluateParsedExpression,
-} from '../mathParser';
+import { parseExpression as parse, evaluateParsedExpression } from '../mathParser';
 
 const ERRORS = {
   SINGLE_EQUAL_ALLOWED: 'Only a single equal sign is allowed',
-  INVALID_VALUE_ON_THE_LEFT_OF_EQUAL_SIGN:
-    'Invalid value on the left side of the equal sign',
+  INVALID_VALUE_ON_THE_LEFT_OF_EQUAL_SIGN: 'Invalid value on the left side of the equal sign',
 };
 
 const ALL_WHITESPACES_REGEX = /\s/g;
@@ -29,23 +25,22 @@ const createValidResult = (symbol, expression, result) => ({
   result,
 });
 
+const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
+
 const parseExpression = (
   expressionToParse: string,
   values = {},
-  functions = {}
+  functions = {},
+  unitsMap = new Map()
 ) => {
-  const expressionWithoutWhitespaces = expressionToParse.replace(
-    ALL_WHITESPACES_REGEX,
-    ''
-  );
-  const splittedByEquals = expressionWithoutWhitespaces.split('=');
+  const splittedByEquals = expressionToParse.split('=');
   if (splittedByEquals.length > 2) {
     return createErrorResult(ERRORS.SINGLE_EQUAL_ALLOWED);
   }
-  const [symbol, expression] =
-    splittedByEquals.length === 2
-      ? splittedByEquals
-      : [null, splittedByEquals[0]];
+  const [symbolBeforeSanitization, expression] =
+    splittedByEquals.length === 2 ? splittedByEquals : [null, splittedByEquals[0]];
+
+  const symbol = symbolBeforeSanitization ? sanitize(symbolBeforeSanitization) : null;
 
   if (symbol !== null && !symbol.match(IS_SYMBOL_REGEX)) {
     return createErrorResult(ERRORS.INVALID_VALUE_ON_THE_LEFT_OF_EQUAL_SIGN);
@@ -59,8 +54,9 @@ const parseExpression = (
     const result = evaluateParsedExpression(parsedExpression, {
       values,
       functions,
+      unitsMap,
     });
-    return createValidResult(symbol, expression, result);
+    return createValidResult(symbol, sanitize(expression), result);
   } catch (error) {
     if (error.isEvaluationError) {
       return createErrorResult(error.message);
