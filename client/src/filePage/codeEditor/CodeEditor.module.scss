@@ -2,13 +2,8 @@
 
 $expression-font-family: 'Courier New', Courier, monospace;
 
-.codeEditor {
-  height: 100%;
-}
-
 .codeWrapper {
   position: relative;
-  height: 100%;
   margin-top: 20px;
 }
 
@@ -33,7 +28,8 @@ $expression-font-family: 'Courier New', Courier, monospace;
   background: transparent;
   color: transparent;
   caret-color: $font-light-color;
-  min-height: 100%;
+  min-height: calc(100vh - 150px);
+  margin-bottom: 15px;
 
   &::placeholder {
     color: white;
