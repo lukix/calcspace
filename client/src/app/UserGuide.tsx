@@ -8,32 +8,28 @@ const UserGuide: React.FC<UserGuideProps> = () => {
     <div className={styles.userGuide}>
       <h2>Introduction</h2>
       <p>
-        Welcome! Math IDE lets you write sequences of math expressions and
-        instantly evaluate them for any input data that you provide.{' '}
-        <b>
-          Select a file in the left panel to start writing your own math
-          expressions
-        </b>{' '}
-        or continue reading this guide to get familiar with how Math IDE works.
+        Welcome! Math IDE lets you write sequences of math expressions and instantly evaluate them
+        for any input data that you provide.{' '}
+        <b>Select a file in the left panel to start writing your own math expressions</b> or
+        continue reading this guide to get familiar with how Math IDE works.
       </p>
       <h2>Beta Disclaimer</h2>
       <p>
-        Please note that this is a beta version and the syntax described below
-        may change in the future.
+        Please note that this is a beta version and the syntax described below may change in the
+        future.
       </p>
       <h2>Getting Started</h2>
       <p>
-        In the left panel, you can create multiple files. Each file is an
-        independent environment where you can write sequences of math
-        expressions. Let's start with a simple addition:
+        In the left panel, you can create multiple files. Each file is an independent environment
+        where you can write sequences of math expressions. Let's start with a simple addition:
       </p>
       <pre className={styles.codeSnippet}>
         14 + 7<span className={styles.tokenVirtual}> = 21</span>
       </pre>
       <p>
-        Note how the result of this expression is slightly faded. It means that
-        it has been automatically generated and cannot be edited. You can enter
-        multiple expressions - each in a new line. Here is an example:
+        Note how the result of this expression is slightly faded. It means that it has been
+        automatically generated and cannot be edited. You can enter multiple expressions - each in a
+        new line. Here is an example:
       </p>
       <pre className={styles.codeSnippet}>
         2 + 2 * 2<span className={styles.tokenVirtual}> = 6</span>
@@ -52,25 +48,21 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       <pre className={styles.codeSnippet}>
         m = 10
         <br />v = 2 * 3<span className={styles.tokenVirtual}> = 6</span>
-        <br />E = (m * v ^ 2) / 2
-        <span className={styles.tokenVirtual}> = 180</span>
+        <br />E = (m * v ^ 2) / 2<span className={styles.tokenVirtual}> = 180</span>
       </pre>
       <h2>Comments</h2>
       <p>
-        Besides regular mathematical expressions, you may want to write some
-        text to make your calculations easier to understand. To do that, start a
-        line with <span className={styles.inlineCode}>//</span>. The line will
-        be marked as a comment and the program won't treat it as a math
-        expression.
+        Besides regular mathematical expressions, you may want to write some text to make your
+        calculations easier to understand. To do that, start a line with{' '}
+        <span className={styles.inlineCode}>//</span>. The line will be marked as a comment and the
+        program won't treat it as a math expression.
       </p>
       <pre className={styles.codeSnippet}>
-        <span className={styles.tokenComment}>// This is a comment</span> <br />
-        3 * 3 * 3 * 3<span className={styles.tokenVirtual}> = 81</span>
+        <span className={styles.tokenComment}>// This is a comment</span> <br />3 * 3 * 3 * 3
+        <span className={styles.tokenVirtual}> = 81</span>
         <br />
         <br />
-        <span className={styles.tokenComment}>
-          // And this is another comment
-        </span>
+        <span className={styles.tokenComment}>// And this is another comment</span>
         <br />
         3^4<span className={styles.tokenVirtual}> = 81</span>
       </pre>
@@ -91,9 +83,7 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         log(2.718281828459045)<span className={styles.tokenVirtual}> = 1</span>
         <br />
         <br />
-        <span className={styles.tokenComment}>
-          // Factorial: 3! = 1 * 2 * 3
-        </span>
+        <span className={styles.tokenComment}>// Factorial: 3! = 1 * 2 * 3</span>
         <br />
         factorial(3)<span className={styles.tokenVirtual}> = 6</span>
         <br />
@@ -117,46 +107,29 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       <h2>Units</h2>
       <p>TODO:</p>
       <pre className={styles.codeSnippet}>
-        a = <i>2</i>
+        a = 2
         <br />
-        <i>14</i>/<i>7</i>
-        <span className={styles.tokenVirtual}>
-          {' '}
-          = <i>2</i>
-        </span>
+        14/7
+        <span className={styles.tokenVirtual}> = 2</span>
         <br />
-        <i>14</i>/a
-        <span className={styles.tokenVirtual}>
-          {' '}
-          = <i>7</i>
-        </span>
+        14/a
+        <span className={styles.tokenVirtual}> = 7</span>
         <br />
-        <i>14km/a</i>
+        14km/a
         <span className={styles.tokenVirtual}>
           {'  '}
-          // <i>Error: "a" is not a unit</i>
+          // Error: "a" is not a unit
         </span>
         <br />
-        <i>14km / a</i>
-        <span className={styles.tokenVirtual}>
-          {' '}
-          = <i>7km</i>
-        </span>
-        <br />m = <i>10kg</i>
+        14km / a<span className={styles.tokenVirtual}> = 7km</span>
+        <br />m = 10kg
         <br />
-        v1 = <i>10m/s</i>
+        v1 = 10m/s
         <br />
-        v2 = <i>72km/h</i>
-        <span className={styles.tokenVirtual}>
-          {' '}
-          = <i>20m/s</i>
-        </span>
-        <br />s = <i>5m</i>
-        <br />x = <i>20J</i> / s
-        <span className={styles.tokenVirtual}>
-          {' '}
-          = <i>4N</i>
-        </span>
+        v2 = 72km/h
+        <span className={styles.tokenVirtual}> = 20m/s</span>
+        <br />s = 5m
+        <br />x = 20J / s<span className={styles.tokenVirtual}> = 4N</span>
       </pre>
     </div>
   );
