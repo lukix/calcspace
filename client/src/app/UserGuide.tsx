@@ -105,31 +105,65 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         atan(0)<span className={styles.tokenVirtual}> = 0</span>
       </pre>
       <h2>Units</h2>
-      <p>TODO:</p>
+      <p>
+        Math IDE supports values with units. Unit symbol needs to be placed right after the number,
+        without separating space character. For example:
+      </p>
       <pre className={styles.codeSnippet}>
-        a = 2
+        15kg
         <br />
-        14/7
-        <span className={styles.tokenVirtual}> = 2</span>
+        2.54m
         <br />
-        14/a
-        <span className={styles.tokenVirtual}> = 7</span>
+        60s
+      </pre>
+      <p>You can also use complex units, such as:</p>
+      <pre className={styles.codeSnippet}>
+        10kg*m
         <br />
-        14km/a
+        36m/s
+        <br />
+        9.81m/s^2
+        <br />
+        9.81m/s/s
+        <br />
+        9.81m*s^-2
+      </pre>
+      <p>Keep in mind that spaces are important:</p>
+      <pre className={styles.codeSnippet}>
+        <span className={styles.tokenComment}>// 10 meters per second:</span>
+        <br />
+        10m/s
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// 10 meters devided by variable "s":</span>
+        <br />
+        10m / s
+      </pre>
+      <p>
+        All operations such as addition, subtraction, multiplication, etc. are possible for values
+        with units:
+      </p>
+      <pre className={styles.codeSnippet}>
+        2kg + 500g<span className={styles.tokenVirtual}> = 2.5kg</span>
+        <br />
+        10N / 2.5m^2<span className={styles.tokenVirtual}> = 4Pa</span>
+        <br />
+        (1m * 4m)^2<span className={styles.tokenVirtual}> = 16m^4</span>
+      </pre>
+      <p>Trying to add or subtract values with incompatibe units will result in an error:</p>
+      <pre className={styles.codeSnippet}>
+        <span className={styles.tokenError}>4m + 4s</span>
         <span className={styles.tokenVirtual}>
-          {'  '}
-          // Error: "a" is not a unit
+          {' '}
+          Error: Trying to add/subtract values with incompatible units: "m" and "s"
         </span>
         <br />
-        14km / a<span className={styles.tokenVirtual}> = 7km</span>
-        <br />m = 10kg
+        <span className={styles.tokenError}>7s - 5s - 2kg</span>
+        <span className={styles.tokenVirtual}>
+          {' '}
+          Error: Trying to add/subtract values with incompatible units: "s" and "kg"
+        </span>
         <br />
-        v1 = 10m/s
-        <br />
-        v2 = 72km/h
-        <span className={styles.tokenVirtual}> = 20m/s</span>
-        <br />s = 5m
-        <br />x = 20J / s<span className={styles.tokenVirtual}> = 4N</span>
       </pre>
     </div>
   );
