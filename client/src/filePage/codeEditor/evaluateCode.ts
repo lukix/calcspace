@@ -49,7 +49,8 @@ const tokenizeLine = (values, expression) => {
     functions,
     unitsMap
   );
-  const showResult = result !== null && expStr !== valueWithUnitToString(result);
+  const showResult =
+    result !== null && expStr !== valueWithUnitToString(convertToComprehendibleUnit(result));
   const resultString = showResult
     ? ` = ${valueWithUnitToString(convertToComprehendibleUnit(result))}`
     : '';
