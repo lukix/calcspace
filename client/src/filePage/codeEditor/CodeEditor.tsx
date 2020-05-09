@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import evaluateCode from './evaluateCode';
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons/RadioButtons';
-import evaluatedCodeToString from './evaluatedCodeToString';
+import { evaluateCode, evaluatedCodeToString } from './codeTokenizer';
 import styles from './CodeEditor.module.scss';
 
 interface CodeEditorProps {
@@ -29,7 +28,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const [mode, setMode] = useState(modes.EDIT_MODE);
   const [code, setCode] = useState(initialCode);
 
-  const onCodeChange = e => {
+  const onCodeChange = (e) => {
     const value = e.target.value;
     setCode(value);
     onChange(value);
@@ -40,9 +39,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const isInViewMode = mode === modes.VIEW_MODE;
   const codeWithResults = evaluatedCodeToString(evaluatedCode);
 
-  const longestLineLength = Math.max(
-    ...codeWithResults.split('\n').map(line => line.length)
-  );
+  const longestLineLength = Math.max(...codeWithResults.split('\n').map((line) => line.length));
 
   return (
     <div className={styles.codeEditor}>
@@ -61,9 +58,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
             height: `${code.split('\n').length * 1.2}rem`,
             width: `${longestLineLength}ch`,
           }}
-          placeholder={
-            isInViewMode ? 'File is empty' : 'Type a math expression...'
-          }
+          placeholder={isInViewMode ? 'File is empty' : 'Type a math expression...'}
           readOnly={isInViewMode}
         />
         <pre

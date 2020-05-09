@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
-import { tokens as availableTokens } from './evaluateCode';
+import { tokens as availableTokens } from './codeTokenizer';
 import styles from './CodeEditor.module.scss';
 
 const HighlightedLine = ({ tokens }) => {

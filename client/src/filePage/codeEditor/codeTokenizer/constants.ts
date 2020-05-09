@@ -1,5 +1,5 @@
 import factorial from 'math-factorial';
-import { EvaluationError } from './mathParser';
+import { EvaluationError } from '../mathParser';
 
 const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {
   if (unit.length !== 0) {

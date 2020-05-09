@@ -1,5 +1,5 @@
-import { unitToString } from './mathParser';
-import evaluateExpression from './mathEngine/evaluateExpression';
+import { unitToString } from '../mathParser';
+import evaluateExpression from './evaluateExpression';
 import { constants, functions, unitsMap, units, unitsApplicableForResult } from './constants';
 
 export const tokens = {
