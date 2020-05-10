@@ -1,5 +1,5 @@
 import tokenizeCode from '../tokenizeCode';
-import { tokens } from '../tokenizeLine';
+import { tokens } from '../constants';
 
 describe('tokenizeCode - tokenization test', () => {
   it('should return tokenized structure with results', () => {
