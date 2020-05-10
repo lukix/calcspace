@@ -4,6 +4,7 @@ import { EvaluationError } from '../mathParser';
 export const tokens = {
   NORMAL: 'NORMAL',
   VIRTUAL: 'VIRTUAL',
+  ERROR_SOURCE: 'ERROR_SOURCE',
   ERROR: 'ERROR',
   COMMENT: 'COMMENT',
 };

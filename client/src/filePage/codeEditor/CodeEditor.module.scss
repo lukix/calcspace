@@ -43,6 +43,10 @@ $expression-font-family: 'Courier New', Courier, monospace;
 
   &:not(.withoutHighlighting) {
     .tokenError {
+      color: #dcc;
+    }
+
+    .tokenErrorSource {
       color: #f44;
     }
 

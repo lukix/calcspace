@@ -9,6 +9,7 @@ const HighlightedLine = ({ tokens }) => {
       [styles.tokenVirtual]: tags.includes(availableTokens.VIRTUAL),
       [styles.tokenComment]: tags.includes(availableTokens.COMMENT),
       [styles.tokenError]: tags.includes(availableTokens.ERROR),
+      [styles.tokenErrorSource]: tags.includes(availableTokens.ERROR_SOURCE),
     });
     return (
       <span key={index} className={className}>

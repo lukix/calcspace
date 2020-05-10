@@ -23,15 +23,29 @@ const convertToComprehendibleUnit = ({ number, unit }) => {
   };
 };
 
-const createTokenizedLineWithError = ({ values, lineString, errorMessage }) => ({
+const createTokenizedLineWithError = ({
+  values,
+  lineString,
+  errorMessage,
+  start = 0,
+  end = lineString.length,
+}) => ({
   values,
   tokenizedLine: [
     {
-      value: lineString,
+      value: lineString.substring(0, start),
+      tags: [tokens.NORMAL, tokens.ERROR],
+    },
+    {
+      value: lineString.substring(start, end),
+      tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+    },
+    {
+      value: lineString.substring(end),
       tags: [tokens.NORMAL, tokens.ERROR],
     },
     { value: `  Error: ${errorMessage}`, tags: [tokens.VIRTUAL] },
-  ],
+  ].filter(({ value }) => value !== ''),
 });
 
 const tokenizeLine = (values, lineString) => {
@@ -57,6 +71,7 @@ const tokenizeLine = (values, lineString) => {
       values,
       lineString,
       errorMessage: 'Only a single equal sign is allowed',
+      start: splittedByEquals[0].length + splittedByEquals[1].length,
     });
   }
   const [symbolBeforeSanitization, expression] =
@@ -70,6 +85,7 @@ const tokenizeLine = (values, lineString) => {
         values,
         lineString,
         errorMessage: 'Invalid value on the left side of the equal sign',
+        end: lineString.indexOf('='),
       });
     }
 
@@ -78,6 +94,7 @@ const tokenizeLine = (values, lineString) => {
         values,
         lineString,
         errorMessage: `Variable "${symbol}" already exists. Variables cannot be redefined`,
+        end: lineString.indexOf('='),
       });
     }
 
@@ -86,6 +103,7 @@ const tokenizeLine = (values, lineString) => {
         values,
         lineString,
         errorMessage: `Variable cannot have the same name as an existing function "${symbol}"`,
+        end: lineString.indexOf('='),
       });
     }
   }
