@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons/RadioButtons';
-import { evaluateCode, evaluatedCodeToString } from './codeTokenizer';
+import { tokenizeCode, tokenizedCodeToString } from './codeTokenizer';
 import styles from './CodeEditor.module.scss';
 
 interface CodeEditorProps {
@@ -34,10 +34,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
     onChange(value);
   };
 
-  const evaluatedCode = evaluateCode(code);
+  const evaluatedCode = tokenizeCode(code);
 
   const isInViewMode = mode === modes.VIEW_MODE;
-  const codeWithResults = evaluatedCodeToString(evaluatedCode);
+  const codeWithResults = tokenizedCodeToString(evaluatedCode);
 
   const longestLineLength = Math.max(...codeWithResults.split('\n').map((line) => line.length));
 

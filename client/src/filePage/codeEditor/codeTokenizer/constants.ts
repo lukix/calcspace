@@ -1,6 +1,13 @@
 import factorial from 'math-factorial';
 import { EvaluationError } from '../mathParser';
 
+export const tokens = {
+  NORMAL: 'NORMAL',
+  VIRTUAL: 'VIRTUAL',
+  ERROR: 'ERROR',
+  COMMENT: 'COMMENT',
+};
+
 const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {
   if (unit.length !== 0) {
     throw new EvaluationError(`Function "${functionName}" doesn't accept values with units`);

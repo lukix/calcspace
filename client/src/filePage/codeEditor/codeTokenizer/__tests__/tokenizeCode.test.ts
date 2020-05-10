@@ -1,15 +1,16 @@
-import evaluateCode, { tokens } from '../evaluateCode';
+import tokenizeCode from '../tokenizeCode';
+import { tokens } from '../tokenizeLine';
 
-describe('evaluateCode - tokenization test', () => {
+describe('tokenizeCode - tokenization test', () => {
   it('should return tokenized structure with results', () => {
     // given
     const code = 'x = 2 + 3\ny = x + 2';
 
     // when
-    const evaluatedCode = evaluateCode(code);
+    const tokenizedCode = tokenizeCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([
+    expect(tokenizedCode).toEqual([
       [
         { value: 'x = 2 + 3', tags: [tokens.NORMAL] },
         { value: ' = 5', tags: [tokens.VIRTUAL] },
@@ -26,10 +27,10 @@ describe('evaluateCode - tokenization test', () => {
     const code = 'x = 5';
 
     // when
-    const evaluatedCode = evaluateCode(code);
+    const tokenizedCode = tokenizeCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([[{ value: 'x = 5', tags: [tokens.NORMAL] }]]);
+    expect(tokenizedCode).toEqual([[{ value: 'x = 5', tags: [tokens.NORMAL] }]]);
   });
 
   it('should tag expression with error if there are not evaluated symbols', () => {
@@ -37,10 +38,10 @@ describe('evaluateCode - tokenization test', () => {
     const code = 'a = x\na + 1';
 
     // when
-    const evaluatedCode = evaluateCode(code);
+    const tokenizedCode = tokenizeCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([
+    expect(tokenizedCode).toEqual([
       [
         { value: 'a = x', tags: [tokens.NORMAL, tokens.ERROR] },
         {
@@ -63,10 +64,10 @@ describe('evaluateCode - tokenization test', () => {
     const code = '// this is a comment';
 
     // when
-    const evaluatedCode = evaluateCode(code);
+    const tokenizedCode = tokenizeCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([[{ value: '// this is a comment', tags: [tokens.COMMENT] }]]);
+    expect(tokenizedCode).toEqual([[{ value: '// this is a comment', tags: [tokens.COMMENT] }]]);
   });
 
   it('should allow spaces before comment slashes', () => {
@@ -74,10 +75,10 @@ describe('evaluateCode - tokenization test', () => {
     const code = '  // this is a comment with leading spaces';
 
     // when
-    const evaluatedCode = evaluateCode(code);
+    const tokenizedCode = tokenizeCode(code);
 
     // then
-    expect(evaluatedCode).toEqual([
+    expect(tokenizedCode).toEqual([
       [
         {
           value: '  // this is a comment with leading spaces',
@@ -92,9 +93,9 @@ describe('evaluateCode - tokenization test', () => {
     const code = '5 + 5 // comment must start at the beginning of the line';
 
     // when
-    const evaluatedCode = evaluateCode(code);
+    const tokenizedCode = tokenizeCode(code);
 
     // then
-    expect(evaluatedCode[0][0].tags).toContain(tokens.ERROR);
+    expect(tokenizedCode[0][0].tags).toContain(tokens.ERROR);
   });
 });

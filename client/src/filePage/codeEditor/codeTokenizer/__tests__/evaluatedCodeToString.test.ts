@@ -1,7 +1,7 @@
-import evaluatedCodeToString from '../evaluatedCodeToString';
+import tokenizedCodeToString from '../tokenizedCodeToString';
 import { trimIndentation } from '../testUtils';
 
-describe('evaluatedCodeToString', () => {
+describe('tokenizedCodeToString', () => {
   it('should convert list of token sequences to raw string', () => {
     // given
     const evaluatedCode = [
@@ -19,7 +19,7 @@ describe('evaluatedCodeToString', () => {
     `);
 
     // when
-    const str = evaluatedCodeToString(evaluatedCode);
+    const str = tokenizedCodeToString(evaluatedCode);
 
     // then
     expect(str).toEqual(expectedString);

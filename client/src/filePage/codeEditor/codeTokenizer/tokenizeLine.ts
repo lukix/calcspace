@@ -1,13 +1,6 @@
 import { unitToString } from '../mathParser';
 import evaluateExpression from './evaluateExpression';
-import { constants, functions, unitsMap, units, unitsApplicableForResult } from './constants';
-
-export const tokens = {
-  NORMAL: 'NORMAL',
-  VIRTUAL: 'VIRTUAL',
-  ERROR: 'ERROR',
-  COMMENT: 'COMMENT',
-};
+import { tokens, functions, unitsMap, units, unitsApplicableForResult } from './constants';
 
 const valueWithUnitToString = ({ number, unit }) => `${number}${unitToString(unit)}`;
 const convertToComprehendibleUnit = ({ number, unit }) => {
@@ -69,17 +62,4 @@ const tokenizeLine = (values, expression) => {
   };
 };
 
-const evaluateCode = (code) => {
-  const codeLines = code.split('\n');
-  const initialState = { values: constants, evaluatedLines: [] };
-  const { evaluatedLines } = codeLines.reduce((acc, expression) => {
-    const { values, tokenizedLine } = tokenizeLine(acc.values, expression);
-    return {
-      values: { ...acc.values, ...values },
-      evaluatedLines: [...acc.evaluatedLines, tokenizedLine],
-    };
-  }, initialState);
-  return evaluatedLines;
-};
-
-export default evaluateCode;
+export default tokenizeLine;
