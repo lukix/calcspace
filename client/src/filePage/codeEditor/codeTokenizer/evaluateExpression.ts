@@ -1,12 +1,13 @@
-import parseExpression from './parseExpression';
-import ERROR_TYPES from './errorTypes';
+import { parseExpression as parse, evaluateParsedExpression } from '../mathParser';
 
-const createEvaluationResult = (options) => ({
+const createErrorResult = (error) => ({
+  error,
   result: null,
+});
+
+const createValidResult = (result) => ({
   error: null,
-  symbol: null,
-  expression: null,
-  ...options,
+  result,
 });
 
 const evaluateExpression = (
@@ -18,51 +19,24 @@ const evaluateExpression = (
     { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }
   > = new Map()
 ) => {
-  const { symbol, expression, result, valid, error } = parseExpression(
-    expressionString,
-    values,
-    functions,
-    unitsMap
-  );
-
-  if (!valid) {
-    return createEvaluationResult({
-      error: {
-        type: ERROR_TYPES.INVALID_EXPRESSION,
-        message: `Error: ${error}`,
-      },
-      symbol,
-      expression,
-    });
+  const { parsedExpression, isValid, errorMessage } = parse(expressionString);
+  if (!isValid) {
+    return createErrorResult(errorMessage);
   }
-
-  if (values[symbol] !== undefined) {
-    return createEvaluationResult({
-      error: {
-        type: ERROR_TYPES.INVALID_EXPRESSION,
-        message: `Error: Variable "${symbol}" already exists. Variables cannot be redefined`,
-      },
-      symbol: null,
-      expression,
+  try {
+    const result = evaluateParsedExpression(parsedExpression, {
+      values,
+      functions,
+      unitsMap,
     });
+    return createValidResult(result);
+  } catch (error) {
+    if (error.isEvaluationError) {
+      return createErrorResult(error.message);
+    }
+    console.error(error);
+    return createErrorResult('Expression cannot be evaluated');
   }
-
-  if (functions[symbol] !== undefined) {
-    return createEvaluationResult({
-      error: {
-        type: ERROR_TYPES.INVALID_EXPRESSION,
-        message: `Error: Variable cannot have the same name as an existing function "${symbol}"`,
-      },
-      symbol: null,
-      expression,
-    });
-  }
-
-  return createEvaluationResult({
-    result,
-    symbol,
-    expression,
-  });
 };
 
 export default evaluateExpression;

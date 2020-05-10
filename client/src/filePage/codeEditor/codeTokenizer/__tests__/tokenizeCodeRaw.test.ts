@@ -30,6 +30,19 @@ describe('tokenizeCode - raw result test', () => {
         10kg / a = 2kg
       `,
     },
+    {
+      it: 'should support comments',
+      code: `
+        a = 3
+        // a = 5
+        a
+      `,
+      expectedResult: `
+        a = 3
+        // a = 5
+        a = 3
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when
