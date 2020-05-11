@@ -3,16 +3,10 @@ export class ParserError extends Error {
   startCharIndex: number | null = null;
   endCharIndex: number | null = null;
 
-  constructor(
-    message,
-    { start = null, end = null }: { start: number | null; end: number | null } = {
-      start: null,
-      end: null,
-    }
-  ) {
+  constructor(message, { start, end }: { start?: number; end?: number } = {}) {
     super(message);
-    this.startCharIndex = start;
-    this.endCharIndex = end;
+    this.startCharIndex = start === undefined ? null : start;
+    this.endCharIndex = end === undefined ? null : end;
   }
 }
 
