@@ -29,22 +29,35 @@ const validateTokensList = (tokensList) => {
   adjacentPairs.forEach(([previousToken, currentToken]) => {
     if (previousToken && !currentToken) {
       if (previousToken.type === tokens.OPERATOR) {
-        throw new ParserError('Encountered trailing binary operator');
+        throw new ParserError(`Encountered trailing "${previousToken.value}" operator`, {
+          start: previousToken.position,
+        });
       }
     }
 
     if (currentToken && currentToken.type === tokens.OPERATOR) {
       if (!previousToken && currentToken.value !== '-') {
-        throw new ParserError('Encountered leading binary operator');
+        throw new ParserError(`Encountered leading "${currentToken.value}" operator`, {
+          end: currentToken.position + currentToken.value.length,
+        });
       }
       if (previousToken && previousToken.type === tokens.OPERATOR) {
-        throw new ParserError('Encountered two adjacent operators');
+        throw new ParserError('Encountered two adjacent operators', {
+          start: previousToken.position,
+          end: currentToken.position + currentToken.value.length,
+        });
       }
     }
 
     if (currentToken && currentToken.type !== tokens.OPERATOR) {
       if (previousToken && previousToken.type !== tokens.OPERATOR) {
-        throw new ParserError(`Expected an operator but encountered ${currentToken.type} instead`);
+        throw new ParserError(
+          `Expected an operator but encountered "${currentToken.value}" instead`,
+          {
+            start: currentToken.position,
+            end: currentToken.position + currentToken.value.length,
+          }
+        );
       }
     }
   });

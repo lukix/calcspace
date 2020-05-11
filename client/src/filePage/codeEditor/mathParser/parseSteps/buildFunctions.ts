@@ -24,7 +24,10 @@ const buildFunctions = (tokenList) => {
         currentToken.type === tokens.SUBEXPRESSION && acc.previousToken?.type === tokens.SYMBOL;
       if (hasEncounteredFunction) {
         if (acc.previousToken.symbolType !== symbolTypes.VARIABLE) {
-          throw new ParserError(`"${acc.previousToken.value}" is not a valid function name`);
+          throw new ParserError(`"${acc.previousToken.value}" is not a valid function name`, {
+            start: acc.previousToken.position,
+            end: acc.previousToken.position + acc.previousToken.value.length,
+          });
         }
         const subexpressionToken = {
           ...currentToken,

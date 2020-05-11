@@ -53,7 +53,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrowError(new ParserError('Encountered leading binary operator'));
+    expect(testFunction).toThrowError(new ParserError('Encountered leading "*" operator'));
   });
 
   it('should throw an error when there is a trailing binary operator', () => {
@@ -67,7 +67,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrowError(new ParserError('Encountered trailing binary operator'));
+    expect(testFunction).toThrowError(new ParserError('Encountered trailing "*" operator'));
   });
 
   it('should throw an error when there are adjacent operators', () => {
@@ -101,7 +101,7 @@ describe('validateTokensList', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new ParserError('Expected an operator but encountered SYMBOL instead')
+      new ParserError('Expected an operator but encountered "3" instead')
     );
   });
 
