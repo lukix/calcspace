@@ -31,7 +31,7 @@ const parseToPrimaryTokens = (
     currentString: string;
   } = { tokens: [], currentString: '' };
 
-  const { tokens, currentString } = chars.reduce((acc, currentChar) => {
+  const { tokens, currentString } = chars.reduce((acc, currentChar, index) => {
     if (currentChar === SPACE_CHAR) {
       const newTokens =
         acc.currentString !== ''
@@ -57,7 +57,7 @@ const parseToPrimaryTokens = (
         currentString: '',
       };
     }
-    throw new ParserError(`Invalid character \`${currentChar}\``);
+    throw new ParserError(`Invalid character \`${currentChar}\``, { start: index, end: index + 1 });
   }, initialReducerState);
 
   return currentString === '' ? tokens : [...tokens, createSymbol(currentString)];

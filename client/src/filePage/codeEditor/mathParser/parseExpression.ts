@@ -25,7 +25,12 @@ const parseExpression = (expression: string) => {
     return { parsedExpression, isValid: true };
   } catch (error) {
     if (error.isParserError) {
-      return { isValid: false, errorMessage: error.message };
+      return {
+        isValid: false,
+        errorMessage: error.message,
+        startCharIndex: error.startCharIndex,
+        endCharIndex: error.endCharIndex,
+      };
     }
     console.error(error);
     return { isValid: false, errorMessage: 'Expression cannot be parsed' };

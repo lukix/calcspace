@@ -27,26 +27,30 @@ const createTokenizedLineWithError = ({
   values,
   lineString,
   errorMessage,
-  start = 0,
-  end = lineString.length,
-}) => ({
-  values,
-  tokenizedLine: [
-    {
-      value: lineString.substring(0, start),
-      tags: [tokens.NORMAL, tokens.ERROR],
-    },
-    {
-      value: lineString.substring(start, end),
-      tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
-    },
-    {
-      value: lineString.substring(end),
-      tags: [tokens.NORMAL, tokens.ERROR],
-    },
-    { value: `  Error: ${errorMessage}`, tags: [tokens.VIRTUAL] },
-  ].filter(({ value }) => value !== ''),
-});
+  start = null,
+  end = null,
+}) => {
+  const errorSourceStart = start === null ? 0 : start;
+  const errorSourceEnd = end === null ? lineString.length : end;
+  return {
+    values,
+    tokenizedLine: [
+      {
+        value: lineString.substring(0, errorSourceStart),
+        tags: [tokens.NORMAL, tokens.ERROR],
+      },
+      {
+        value: lineString.substring(start, errorSourceEnd),
+        tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+      },
+      {
+        value: lineString.substring(errorSourceEnd),
+        tags: [tokens.NORMAL, tokens.ERROR],
+      },
+      { value: `  Error: ${errorMessage}`, tags: [tokens.VIRTUAL] },
+    ].filter(({ value }) => value !== ''),
+  };
+};
 
 const tokenizeLine = (values, lineString) => {
   const sanitizedExpression = lineString.trimStart();
@@ -108,13 +112,20 @@ const tokenizeLine = (values, lineString) => {
     }
   }
 
-  const { result, error } = evaluateExpression(expression, values, functions, unitsMap);
+  const { result, error, startCharIndex, endCharIndex } = evaluateExpression(
+    expression,
+    values,
+    functions,
+    unitsMap
+  );
 
   if (error) {
     return createTokenizedLineWithError({
       values,
       lineString,
       errorMessage: error,
+      start: startCharIndex,
+      end: endCharIndex,
     });
   }
 

@@ -1,13 +1,17 @@
 import { parseExpression as parse, evaluateParsedExpression } from '../mathParser';
 
-const createErrorResult = (error) => ({
+const createErrorResult = (error, { startCharIndex = null, endCharIndex = null } = {}) => ({
   error,
   result: null,
+  startCharIndex,
+  endCharIndex,
 });
 
 const createValidResult = (result) => ({
   error: null,
   result,
+  startCharIndex: null,
+  endCharIndex: null,
 });
 
 const evaluateExpression = (
@@ -19,9 +23,11 @@ const evaluateExpression = (
     { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }
   > = new Map()
 ) => {
-  const { parsedExpression, isValid, errorMessage } = parse(expressionString);
+  const { parsedExpression, isValid, errorMessage, startCharIndex, endCharIndex } = parse(
+    expressionString
+  );
   if (!isValid) {
-    return createErrorResult(errorMessage);
+    return createErrorResult(errorMessage, { startCharIndex, endCharIndex });
   }
   try {
     const result = evaluateParsedExpression(parsedExpression, {
