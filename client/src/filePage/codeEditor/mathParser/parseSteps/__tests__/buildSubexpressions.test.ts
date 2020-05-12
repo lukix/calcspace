@@ -30,6 +30,7 @@ describe('buildSubexpressions', () => {
           { type: tokens.SYMBOL, value: 'c', position: 5 },
         ],
         position: 2,
+        positionEnd: 7,
       },
     ]);
   });
@@ -68,9 +69,11 @@ describe('buildSubexpressions', () => {
               { type: tokens.SYMBOL, value: 'c', position: 6 },
             ],
             position: 3,
+            positionEnd: 8,
           },
         ],
         position: 0,
+        positionEnd: 9,
       },
       { type: tokens.OPERATOR, value: '*', position: 9 },
       { type: tokens.SYMBOL, value: 'd', position: 10 },

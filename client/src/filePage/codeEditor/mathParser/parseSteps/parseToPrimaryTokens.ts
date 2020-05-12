@@ -12,11 +12,13 @@ const createSymbol = (value: string, position: number) => ({
   type: tokenTypes.SYMBOL,
   value,
   position,
+  positionEnd: position + value.length,
 });
 const createOperator = (value: string, position: number) => ({
   type: tokenTypes.OPERATOR,
   value,
   position,
+  positionEnd: position + value.length,
 });
 const createSpace = () => ({ type: tokenTypes.SPACE });
 

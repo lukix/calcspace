@@ -120,12 +120,13 @@ const tokenizeLine = (values, lineString) => {
   );
 
   if (error) {
+    const equalSignPosition = lineString.indexOf('=') === -1 ? 0 : lineString.indexOf('=') + 1;
     return createTokenizedLineWithError({
       values,
       lineString,
       errorMessage: error,
-      start: startCharIndex,
-      end: endCharIndex,
+      start: (startCharIndex || 0) + equalSignPosition,
+      end: endCharIndex ? endCharIndex + equalSignPosition : null,
     });
   }
 

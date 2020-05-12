@@ -2,10 +2,12 @@ import tokens from '../tokens';
 import symbolTypes from '../symbolTypes';
 import { ParserError } from '../errors';
 
-const createFunction = (symbol, subexpression) => ({
+const createFunction = (symbol, subexpression, position, positionEnd) => ({
   type: tokens.FUNCTION,
   name: symbol.value,
   subexpressionContent: subexpression.value,
+  position,
+  positionEnd,
 });
 
 const buildFunctions = (tokenList) => {
@@ -33,9 +35,14 @@ const buildFunctions = (tokenList) => {
           ...currentToken,
           value: buildFunctions(currentToken.value),
         };
+        const position = acc.previousToken.position;
+        const positionEnd = currentToken.positionEnd;
         return {
           previousToken: null,
-          tokensList: [...acc.tokensList, createFunction(acc.previousToken, subexpressionToken)],
+          tokensList: [
+            ...acc.tokensList,
+            createFunction(acc.previousToken, subexpressionToken, position, positionEnd),
+          ],
         };
       }
 

@@ -43,14 +43,19 @@ describe('tokenizeCode - tokenization test', () => {
     // then
     expect(tokenizedCode).toEqual([
       [
-        { value: 'a = x', tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE] },
+        { value: 'a = ', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: 'x',
+          tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+        },
         {
           value: '  Error: Missing value for symbol x',
           tags: [tokens.VIRTUAL],
         },
       ],
       [
-        { value: 'a + 1', tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE] },
+        { value: 'a', tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE] },
+        { value: ' + 1', tags: [tokens.NORMAL, tokens.ERROR] },
         {
           value: '  Error: Missing value for symbol a',
           tags: [tokens.VIRTUAL],

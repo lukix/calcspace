@@ -38,7 +38,10 @@ const evaluateExpression = (
     return createValidResult(result);
   } catch (error) {
     if (error.isEvaluationError) {
-      return createErrorResult(error.message);
+      return createErrorResult(error.message, {
+        startCharIndex: error.startCharIndex,
+        endCharIndex: error.endCharIndex,
+      });
     }
     console.error(error);
     return createErrorResult('Expression cannot be evaluated');

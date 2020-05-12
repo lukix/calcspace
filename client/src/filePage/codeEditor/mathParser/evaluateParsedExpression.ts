@@ -11,7 +11,10 @@ const evaluateSubexpression = (subexpressionToken, values, functions, unitsMap) 
 const evaluateFunction = (functionToken, values, functions, unitsMap) => {
   const func = functions[functionToken.name];
   if (typeof func !== 'function') {
-    throw new EvaluationError(`Missing or invalid function ${functionToken.name}`);
+    throw new EvaluationError(`Missing or invalid function ${functionToken.name}`, {
+      start: functionToken.position,
+      end: functionToken.positionEnd,
+    });
   }
   const argumentValue = evaluateSum(
     functionToken.subexpressionContent,
@@ -21,9 +24,11 @@ const evaluateFunction = (functionToken, values, functions, unitsMap) => {
   );
   const { number, unit } = func(argumentValue);
   if (typeof number !== 'number') {
+    // TODO: Replace with typescript definition
     throw new EvaluationError(`Invalid result type from function ${functionToken.name}`);
   }
   if (!Array.isArray(unit)) {
+    // TODO: Replace with typescript definition
     throw new EvaluationError(`Invalid result unit type from function ${functionToken.name}`);
   }
   return { number, unit };
@@ -33,7 +38,10 @@ const evaluateNumericSymbolWithUnit = (symbolToken, unitsMap) => {
   const parsedSymbolUnits = parseUnits(symbolToken.unit);
   const multipliers = parsedSymbolUnits.map(({ unit, power }) => {
     if (!unitsMap.has(unit)) {
-      throw new EvaluationError(`Unknown unit "${unit}"`);
+      throw new EvaluationError(`Unknown unit "${unit}"`, {
+        start: symbolToken.position,
+        end: symbolToken.positionEnd,
+      });
     }
     return unitsMap.get(unit).multiplier ** power;
   });
@@ -66,12 +74,17 @@ const evaluateSymbol = (
     case symbolTypes.VARIABLE:
       const variableValue = values[symbolToken.value];
       if (!variableValue) {
-        throw new EvaluationError(`Missing value for symbol ${symbolToken.value}`);
+        throw new EvaluationError(`Missing value for symbol ${symbolToken.value}`, {
+          start: symbolToken.position,
+          end: symbolToken.positionEnd,
+        });
       }
       if (typeof variableValue.number !== 'number') {
+        // TODO: Replace with typescript definition
         throw new EvaluationError(`Missing or invalid value for symbol ${symbolToken.value}`);
       }
       if (!Array.isArray(variableValue.unit)) {
+        // TODO: Replace with typescript definition
         throw new EvaluationError(`Missing or invalid value for symbol unit ${symbolToken.value}`);
       }
       return variableValue;
@@ -103,7 +116,10 @@ const evaluatePower = (elements, values, functions, unitsMap) => {
   const [firstElement, ...restElements] = evaluatedElements;
   restElements.forEach(({ unit }) => {
     if (unit.length > 0) {
-      throw new EvaluationError(`Powers with units are not supported`);
+      throw new EvaluationError(`Powers with units are not supported`, {
+        start: elements[0].position,
+        end: elements[elements.length - 1].positionEnd || null,
+      });
     }
   });
   const effectivePower = [...restElements]

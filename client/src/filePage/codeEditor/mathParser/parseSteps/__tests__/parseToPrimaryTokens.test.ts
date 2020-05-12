@@ -12,17 +12,17 @@ describe('parseToPrimaryTokens', () => {
 
     // then
     expect(tokensList).toEqual([
-      { type: tokens.SYMBOL, value: 'acc', position: 0 },
-      { type: tokens.OPERATOR, value: '+', position: 3 },
-      { type: tokens.SYMBOL, value: '50', position: 4 },
-      { type: tokens.OPERATOR, value: '*', position: 6 },
-      { type: tokens.SYMBOL, value: 'c', position: 7 },
-      { type: tokens.OPERATOR, value: '-', position: 8 },
-      { type: tokens.SYMBOL, value: '16', position: 9 },
-      { type: tokens.OPERATOR, value: '/', position: 11 },
-      { type: tokens.SYMBOL, value: '2', position: 12 },
-      { type: tokens.OPERATOR, value: '^', position: 13 },
-      { type: tokens.SYMBOL, value: '4', position: 14 },
+      { type: tokens.SYMBOL, value: 'acc', position: 0, positionEnd: 3 },
+      { type: tokens.OPERATOR, value: '+', position: 3, positionEnd: 4 },
+      { type: tokens.SYMBOL, value: '50', position: 4, positionEnd: 6 },
+      { type: tokens.OPERATOR, value: '*', position: 6, positionEnd: 7 },
+      { type: tokens.SYMBOL, value: 'c', position: 7, positionEnd: 8 },
+      { type: tokens.OPERATOR, value: '-', position: 8, positionEnd: 9 },
+      { type: tokens.SYMBOL, value: '16', position: 9, positionEnd: 11 },
+      { type: tokens.OPERATOR, value: '/', position: 11, positionEnd: 12 },
+      { type: tokens.SYMBOL, value: '2', position: 12, positionEnd: 13 },
+      { type: tokens.OPERATOR, value: '^', position: 13, positionEnd: 14 },
+      { type: tokens.SYMBOL, value: '4', position: 14, positionEnd: 15 },
     ]);
   });
 
@@ -35,9 +35,9 @@ describe('parseToPrimaryTokens', () => {
 
     // then
     expect(tokensList).toEqual([
-      { type: tokens.SYMBOL, value: 'a_1', position: 0 },
-      { type: tokens.OPERATOR, value: '+', position: 3 },
-      { type: tokens.SYMBOL, value: 'b_n', position: 4 },
+      { type: tokens.SYMBOL, value: 'a_1', position: 0, positionEnd: 3 },
+      { type: tokens.OPERATOR, value: '+', position: 3, positionEnd: 4 },
+      { type: tokens.SYMBOL, value: 'b_n', position: 4, positionEnd: 7 },
     ]);
   });
 
@@ -50,13 +50,13 @@ describe('parseToPrimaryTokens', () => {
 
     // then
     expect(tokensList).toEqual([
-      { type: tokens.SYMBOL, value: 'a', position: 0 },
-      { type: tokens.OPERATOR, value: '*', position: 1 },
-      { type: tokens.OPERATOR, value: '(', position: 2 },
-      { type: tokens.SYMBOL, value: 'b', position: 3 },
-      { type: tokens.OPERATOR, value: '+', position: 4 },
-      { type: tokens.SYMBOL, value: 'c', position: 5 },
-      { type: tokens.OPERATOR, value: ')', position: 6 },
+      { type: tokens.SYMBOL, value: 'a', position: 0, positionEnd: 1 },
+      { type: tokens.OPERATOR, value: '*', position: 1, positionEnd: 2 },
+      { type: tokens.OPERATOR, value: '(', position: 2, positionEnd: 3 },
+      { type: tokens.SYMBOL, value: 'b', position: 3, positionEnd: 4 },
+      { type: tokens.OPERATOR, value: '+', position: 4, positionEnd: 5 },
+      { type: tokens.SYMBOL, value: 'c', position: 5, positionEnd: 6 },
+      { type: tokens.OPERATOR, value: ')', position: 6, positionEnd: 7 },
     ]);
   });
 
@@ -69,10 +69,10 @@ describe('parseToPrimaryTokens', () => {
 
     // then
     expect(tokensList).toEqual([
-      { type: tokens.SYMBOL, value: 'sqrt', position: 0 },
-      { type: tokens.OPERATOR, value: '(', position: 4 },
-      { type: tokens.SYMBOL, value: '42.0', position: 5 },
-      { type: tokens.OPERATOR, value: ')', position: 9 },
+      { type: tokens.SYMBOL, value: 'sqrt', position: 0, positionEnd: 4 },
+      { type: tokens.OPERATOR, value: '(', position: 4, positionEnd: 5 },
+      { type: tokens.SYMBOL, value: '42.0', position: 5, positionEnd: 9 },
+      { type: tokens.OPERATOR, value: ')', position: 9, positionEnd: 10 },
     ]);
   });
 
@@ -96,11 +96,11 @@ describe('parseToPrimaryTokens', () => {
 
     // then
     expect(tokensList).toEqual([
-      { type: tokens.SYMBOL, value: '5', position: 1 },
-      { type: tokens.OPERATOR, value: '+', position: 2 },
-      { type: tokens.SYMBOL, value: '4', position: 3 },
-      { type: tokens.OPERATOR, value: '+', position: 4 },
-      { type: tokens.SYMBOL, value: '3', position: 5 },
+      { type: tokens.SYMBOL, value: '5', position: 1, positionEnd: 2 },
+      { type: tokens.OPERATOR, value: '+', position: 2, positionEnd: 3 },
+      { type: tokens.SYMBOL, value: '4', position: 3, positionEnd: 4 },
+      { type: tokens.OPERATOR, value: '+', position: 4, positionEnd: 5 },
+      { type: tokens.SYMBOL, value: '3', position: 5, positionEnd: 6 },
     ]);
   });
 

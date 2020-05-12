@@ -4,10 +4,15 @@ import { ParserError } from '../errors';
 const isOpeningParenthesis = (token) => token.type === tokens.OPERATOR && token.value === '(';
 const isClosingParenthesis = (token) => token.type === tokens.OPERATOR && token.value === ')';
 
-const createSubexpression = (value: Array<{ type: string; value: any }>, position: number) => ({
+const createSubexpression = (
+  value: Array<{ type: string; value: any }>,
+  position: number,
+  positionEnd: number
+) => ({
   type: tokens.SUBEXPRESSION,
   value,
   position,
+  positionEnd,
 });
 
 const appendToLastSubexpressionInStack = (subexpressionsStack, token) => [
@@ -46,7 +51,8 @@ const buildSubexpressions = (
       }
       const subexpressionToken = createSubexpression(
         getLastItemFromStack(subexpressionsStack).tokens,
-        getLastItemFromStack(subexpressionsStack).position
+        getLastItemFromStack(subexpressionsStack).position,
+        currentToken.position + 1
       );
       return appendToLastSubexpressionInStack(
         removeLastItemFromStack(subexpressionsStack),
