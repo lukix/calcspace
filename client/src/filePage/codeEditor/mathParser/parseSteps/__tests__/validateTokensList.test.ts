@@ -105,6 +105,59 @@ describe('validateTokensList', () => {
     );
   });
 
+  it('should throw an error when there are two adjacent subexpressions', () => {
+    // given
+    const tokensList = [
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [{ type: tokens.SYMBOL, value: '1' }],
+      },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [
+          { type: tokens.SYMBOL, value: '2' },
+          { type: tokens.OPERATOR, value: '*' },
+          { type: tokens.SYMBOL, value: '3' },
+        ],
+      },
+    ];
+
+    // when
+    const testFunction = () => validateTokensList(tokensList);
+
+    // then
+    expect(testFunction).toThrowError(
+      new ParserError('Expected an operator but encountered subexpression instead')
+    );
+  });
+
+  it('should throw an error when there a function adjacent to subexpression', () => {
+    // given
+    const tokensList = [
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [{ type: tokens.SYMBOL, value: '1' }],
+      },
+      {
+        type: tokens.FUNCTION,
+        name: 'sin',
+        subexpressionContent: [
+          { type: tokens.SYMBOL, value: '2' },
+          { type: tokens.OPERATOR, value: '*' },
+          { type: tokens.SYMBOL, value: '3' },
+        ],
+      },
+    ];
+
+    // when
+    const testFunction = () => validateTokensList(tokensList);
+
+    // then
+    expect(testFunction).toThrowError(
+      new ParserError('Expected an operator but encountered function instead')
+    );
+  });
+
   it('should throw an error when there is an error in subexpression', () => {
     // given
     const tokensList = [

@@ -51,12 +51,20 @@ const validateTokensList = (tokensList) => {
 
     if (currentToken && currentToken.type !== tokens.OPERATOR) {
       if (previousToken && previousToken.type !== tokens.OPERATOR) {
+        const encounteredString =
+          currentToken.type === tokens.SYMBOL
+            ? `"${currentToken.value}"`
+            : currentToken.type.toLowerCase();
+        const errorRange =
+          currentToken.type === tokens.SYMBOL
+            ? {
+                start: currentToken.position,
+                end: currentToken.position + currentToken.value.length,
+              }
+            : {};
         throw new ParserError(
-          `Expected an operator but encountered "${currentToken.value}" instead`,
-          {
-            start: currentToken.position,
-            end: currentToken.position + currentToken.value.length,
-          }
+          `Expected an operator but encountered ${encounteredString} instead`,
+          errorRange
         );
       }
     }
