@@ -16,8 +16,13 @@ const createValidResult = (result) => ({
 
 const evaluateExpression = (
   expressionString: string,
-  values: { [key: string]: { number: number; unit: Array<{ unit: string; power: number }> } } = {},
-  functions: { [key: string]: Function } = {},
+  values: { [name: string]: { number: number; unit: Array<{ unit: string; power: number }> } } = {},
+  functions: {
+    [name: string]: (value: {
+      number: number;
+      unit: Array<{ unit: string; power: number }>;
+    }) => { number: number; unit: Array<{ unit: string; power: number }> };
+  } = {},
   unitsMap: Map<
     string,
     { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }

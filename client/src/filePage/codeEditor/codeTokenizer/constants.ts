@@ -16,7 +16,12 @@ const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {
   return { number: func(number), unit };
 };
 
-export const functions = {
+export const functions: {
+  [name: string]: (value: {
+    number: number;
+    unit: Array<{ unit: string; power: number }>;
+  }) => { number: number; unit: Array<{ unit: string; power: number }> };
+} = {
   sqrt: (value) => ({
     number: Math.sqrt(value.number),
     unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),

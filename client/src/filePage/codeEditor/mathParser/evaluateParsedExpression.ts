@@ -23,14 +23,6 @@ const evaluateFunction = (functionToken, values, functions, unitsMap) => {
     unitsMap
   );
   const { number, unit } = func(argumentValue);
-  if (typeof number !== 'number') {
-    // TODO: Replace with typescript definition
-    throw new EvaluationError(`Invalid result type from function ${functionToken.name}`);
-  }
-  if (!Array.isArray(unit)) {
-    // TODO: Replace with typescript definition
-    throw new EvaluationError(`Invalid result unit type from function ${functionToken.name}`);
-  }
   return { number, unit };
 };
 
@@ -78,14 +70,6 @@ const evaluateSymbol = (
           start: symbolToken.position,
           end: symbolToken.positionEnd,
         });
-      }
-      if (typeof variableValue.number !== 'number') {
-        // TODO: Replace with typescript definition
-        throw new EvaluationError(`Missing or invalid value for symbol ${symbolToken.value}`);
-      }
-      if (!Array.isArray(variableValue.unit)) {
-        // TODO: Replace with typescript definition
-        throw new EvaluationError(`Missing or invalid value for symbol unit ${symbolToken.value}`);
       }
       return variableValue;
     default:
@@ -169,8 +153,21 @@ const evaluateSum = (elements, values, functions, unitsMap) => {
 
 const evaluateParsedExpression = (
   parsedExpression,
-  { values = {}, functions = {}, unitsMap = new Map() } = {}
+  context: {
+    values?: { [name: string]: { number: number; unit: Array<{ unit: string; power: number }> } };
+    functions?: {
+      [name: string]: (value: {
+        number: number;
+        unit: Array<{ unit: string; power: number }>;
+      }) => { number: number; unit: Array<{ unit: string; power: number }> };
+    };
+    unitsMap?: Map<
+      string,
+      { multiplier: number; baseUnits: Array<{ unit: string; power: number }> }
+    >;
+  } = {}
 ) => {
+  const { values = {}, functions = {}, unitsMap = new Map() } = context;
   const { number, unit } = evaluateSum(parsedExpression, values, functions, unitsMap);
   return { number, unit: unit.filter(({ power }) => power !== 0) };
 };
