@@ -4,14 +4,23 @@ import { ParserError } from '../errors';
 const isOpeningParenthesis = (token) => token.type === tokens.OPERATOR && token.value === '(';
 const isClosingParenthesis = (token) => token.type === tokens.OPERATOR && token.value === ')';
 
-const createSubexpression = (value: Array<{ type: string; value: any }>) => ({
+const createSubexpression = (
+  value: Array<{ type: string; value: any }>,
+  position: number,
+  positionEnd: number
+) => ({
   type: tokens.SUBEXPRESSION,
   value,
+  position,
+  positionEnd,
 });
 
 const appendToLastSubexpressionInStack = (subexpressionsStack, token) => [
   ...subexpressionsStack.slice(0, -1),
-  [...subexpressionsStack[subexpressionsStack.length - 1], token],
+  {
+    ...subexpressionsStack[subexpressionsStack.length - 1],
+    tokens: [...subexpressionsStack[subexpressionsStack.length - 1].tokens, token],
+  },
 ];
 
 const pushToStack = (stack, value) => [...stack, value];
@@ -19,21 +28,32 @@ const removeLastItemFromStack = (stack) => stack.slice(0, -1);
 const getLastItemFromStack = (stack) => stack[stack.length - 1];
 
 const buildSubexpressions = (
-  primaryTokensList: Array<{ type: string; value: any }>
+  primaryTokensList: Array<{ type: string; value: any; position: number }>
 ): Array<{ type: string; value: any }> => {
-  const initialSubexpressionsStack: Array<Array<{
-    type: string;
-    value: any;
-  }>> = [[]];
+  const initialSubexpressionsStack: Array<{
+    position: number;
+    tokens: Array<{
+      type: string;
+      value: any;
+      position?: number;
+    }>;
+  }> = [{ tokens: [], position: 0 }];
   const subexpressionsStack = primaryTokensList.reduce((subexpressionsStack, currentToken) => {
     if (isOpeningParenthesis(currentToken)) {
-      return pushToStack(subexpressionsStack, []);
+      return pushToStack(subexpressionsStack, { tokens: [], position: currentToken.position });
     }
     if (isClosingParenthesis(currentToken)) {
       if (subexpressionsStack.length <= 1) {
-        throw new ParserError('Encountered closing parenthesis without opening one');
+        throw new ParserError('Encountered closing parenthesis without opening one', {
+          start: currentToken.position,
+          end: currentToken.position + 1,
+        });
       }
-      const subexpressionToken = createSubexpression(getLastItemFromStack(subexpressionsStack));
+      const subexpressionToken = createSubexpression(
+        getLastItemFromStack(subexpressionsStack).tokens,
+        getLastItemFromStack(subexpressionsStack).position,
+        currentToken.position + 1
+      );
       return appendToLastSubexpressionInStack(
         removeLastItemFromStack(subexpressionsStack),
         subexpressionToken
@@ -44,10 +64,12 @@ const buildSubexpressions = (
   }, initialSubexpressionsStack);
 
   if (subexpressionsStack.length > 1) {
-    throw new ParserError('Encountered not closed parenthesis');
+    throw new ParserError('Encountered not closed parenthesis', {
+      start: subexpressionsStack[1].position,
+    });
   }
 
-  return subexpressionsStack[0];
+  return subexpressionsStack[0].tokens;
 };
 
 export default buildSubexpressions;

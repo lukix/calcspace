@@ -53,7 +53,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrowError(new ParserError('Encountered leading binary operator'));
+    expect(testFunction).toThrowError(new ParserError('Encountered leading "*" operator'));
   });
 
   it('should throw an error when there is a trailing binary operator', () => {
@@ -67,7 +67,7 @@ describe('validateTokensList', () => {
     const testFunction = () => validateTokensList(tokensList);
 
     // then
-    expect(testFunction).toThrowError(new ParserError('Encountered trailing binary operator'));
+    expect(testFunction).toThrowError(new ParserError('Encountered trailing "*" operator'));
   });
 
   it('should throw an error when there are adjacent operators', () => {
@@ -101,7 +101,60 @@ describe('validateTokensList', () => {
 
     // then
     expect(testFunction).toThrowError(
-      new ParserError('Expected an operator but encountered SYMBOL instead')
+      new ParserError('Expected an operator but encountered "3" instead')
+    );
+  });
+
+  it('should throw an error when there are two adjacent subexpressions', () => {
+    // given
+    const tokensList = [
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [{ type: tokens.SYMBOL, value: '1' }],
+      },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [
+          { type: tokens.SYMBOL, value: '2' },
+          { type: tokens.OPERATOR, value: '*' },
+          { type: tokens.SYMBOL, value: '3' },
+        ],
+      },
+    ];
+
+    // when
+    const testFunction = () => validateTokensList(tokensList);
+
+    // then
+    expect(testFunction).toThrowError(
+      new ParserError('Expected an operator but encountered subexpression instead')
+    );
+  });
+
+  it('should throw an error when there a function adjacent to subexpression', () => {
+    // given
+    const tokensList = [
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [{ type: tokens.SYMBOL, value: '1' }],
+      },
+      {
+        type: tokens.FUNCTION,
+        name: 'sin',
+        subexpressionContent: [
+          { type: tokens.SYMBOL, value: '2' },
+          { type: tokens.OPERATOR, value: '*' },
+          { type: tokens.SYMBOL, value: '3' },
+        ],
+      },
+    ];
+
+    // when
+    const testFunction = () => validateTokensList(tokensList);
+
+    // then
+    expect(testFunction).toThrowError(
+      new ParserError('Expected an operator but encountered function instead')
     );
   });
 

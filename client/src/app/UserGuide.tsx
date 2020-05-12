@@ -90,7 +90,7 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         <br />
         <span className={styles.tokenComment}>// Trigonometric functions:</span>
         <br />
-        sin(0)<span className={styles.tokenVirtual}> = 0</span>
+        sin(PI/2)<span className={styles.tokenVirtual}> = 1</span>
         <br />
         asin(0)<span className={styles.tokenVirtual}> = 0</span>
         <br />

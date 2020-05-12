@@ -29,22 +29,43 @@ const validateTokensList = (tokensList) => {
   adjacentPairs.forEach(([previousToken, currentToken]) => {
     if (previousToken && !currentToken) {
       if (previousToken.type === tokens.OPERATOR) {
-        throw new ParserError('Encountered trailing binary operator');
+        throw new ParserError(`Encountered trailing "${previousToken.value}" operator`, {
+          start: previousToken.position,
+        });
       }
     }
 
     if (currentToken && currentToken.type === tokens.OPERATOR) {
       if (!previousToken && currentToken.value !== '-') {
-        throw new ParserError('Encountered leading binary operator');
+        throw new ParserError(`Encountered leading "${currentToken.value}" operator`, {
+          end: currentToken.position + currentToken.value.length,
+        });
       }
       if (previousToken && previousToken.type === tokens.OPERATOR) {
-        throw new ParserError('Encountered two adjacent operators');
+        throw new ParserError('Encountered two adjacent operators', {
+          start: previousToken.position,
+          end: currentToken.position + currentToken.value.length,
+        });
       }
     }
 
     if (currentToken && currentToken.type !== tokens.OPERATOR) {
       if (previousToken && previousToken.type !== tokens.OPERATOR) {
-        throw new ParserError(`Expected an operator but encountered ${currentToken.type} instead`);
+        const encounteredString =
+          currentToken.type === tokens.SYMBOL
+            ? `"${currentToken.value}"`
+            : currentToken.type.toLowerCase();
+        const errorRange =
+          currentToken.type === tokens.SYMBOL
+            ? {
+                start: currentToken.position,
+                end: currentToken.position + currentToken.value.length,
+              }
+            : {};
+        throw new ParserError(
+          `Expected an operator but encountered ${encounteredString} instead`,
+          errorRange
+        );
       }
     }
   });

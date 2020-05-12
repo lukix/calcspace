@@ -12,7 +12,10 @@ const classifySymbols = (tokensList) => {
       return token;
     }
     if (token.value === 'Infinity') {
-      throw new ParserError(`Variable cannot be named "Infinity"`);
+      throw new ParserError(`Variable cannot be named "Infinity"`, {
+        start: token.position,
+        end: token.position + token.value.length,
+      });
     }
     if (token.value.match(VARIABLE_SYMBOL_REGEX)) {
       return { ...token, symbolType: symbolTypes.VARIABLE };
@@ -36,7 +39,10 @@ const classifySymbols = (tokensList) => {
         unit,
       };
     }
-    throw new ParserError(`Invalid symbol "${token.value}"`);
+    throw new ParserError(`Invalid symbol "${token.value}"`, {
+      start: token.position,
+      end: token.position + token.value.length,
+    });
   });
 };
 

@@ -1,8 +1,8 @@
-import evaluateCode from '../evaluateCode';
-import evaluatedCodeToString from '../evaluatedCodeToString';
+import tokenizeCode from '../tokenizeCode';
+import tokenizedCodeToString from '../tokenizedCodeToString';
 import { trimIndentation } from '../testUtils';
 
-describe('evaluateCode - raw result test', () => {
+describe('tokenizeCode - raw result test', () => {
   [
     {
       it: 'should respect operators precedence',
@@ -30,10 +30,23 @@ describe('evaluateCode - raw result test', () => {
         10kg / a = 2kg
       `,
     },
+    {
+      it: 'should support comments',
+      code: `
+        a = 3
+        // a = 5
+        a
+      `,
+      expectedResult: `
+        a = 3
+        // a = 5
+        a = 3
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when
-      const result = evaluatedCodeToString(evaluateCode(testCaseData.code));
+      const result = tokenizedCodeToString(tokenizeCode(testCaseData.code));
 
       // then
       expect(trimIndentation(result)).toEqual(trimIndentation(testCaseData.expectedResult));

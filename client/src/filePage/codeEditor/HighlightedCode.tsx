@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
-import { tokens as availableTokens } from './evaluateCode';
+import { tokens as availableTokens } from './codeTokenizer';
 import styles from './CodeEditor.module.scss';
 
 const HighlightedLine = ({ tokens }) => {
@@ -9,6 +9,7 @@ const HighlightedLine = ({ tokens }) => {
       [styles.tokenVirtual]: tags.includes(availableTokens.VIRTUAL),
       [styles.tokenComment]: tags.includes(availableTokens.COMMENT),
       [styles.tokenError]: tags.includes(availableTokens.ERROR),
+      [styles.tokenErrorSource]: tags.includes(availableTokens.ERROR_SOURCE),
     });
     return (
       <span key={index} className={className}>
