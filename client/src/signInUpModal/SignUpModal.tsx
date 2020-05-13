@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { FaRegCheckCircle } from 'react-icons/fa';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
-import Modal from './modal/Modal';
+import Modal from '../shared/modal/Modal';
 import ModalFormField from './ModalFormField';
 import AppDescription from './AppDescription';
 import styles from './SignInUpModal.module.scss';
@@ -20,14 +20,9 @@ const validationSchema = yup.object().shape({
     .test(
       'leading-trailing-spaces',
       'Leading and trailing spaces are not allowed',
-      value => (value || '').trim() === value
+      (value) => (value || '').trim() === value
     ),
-  password: yup
-    .string()
-    .label('Password')
-    .min(6)
-    .max(72)
-    .required(),
+  password: yup.string().label('Password').min(6).max(72).required(),
   repeatPassword: yup
     .mixed()
     .label('Repeat password')
@@ -41,9 +36,7 @@ const addedUserAction = ({ username, password }) =>
 interface SignUpModalProps {}
 
 const SignUpModal: React.FC<SignUpModalProps> = () => {
-  const [addUser, addedUser, isAddingUser, addUserError] = useAsyncAction(
-    addedUserAction
-  );
+  const [addUser, addedUser, isAddingUser, addUserError] = useAsyncAction(addedUserAction);
 
   const formik = useFormik({
     initialValues: {
@@ -58,10 +51,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
           `users/username-availability/${username}`
         );
         if (!isUsernameAvailable) {
-          formikProps.setFieldError(
-            'username',
-            'This username is already taken'
-          );
+          formikProps.setFieldError('username', 'This username is already taken');
           return;
         }
       } catch (err) {
@@ -78,18 +68,8 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
       <div className={styles.signInModal}>
         {!addedUser ? (
           <form onSubmit={formik.handleSubmit}>
-            <ModalFormField
-              type="text"
-              name="username"
-              label="Username"
-              formikProps={formik}
-            />
-            <ModalFormField
-              type="password"
-              name="password"
-              label="Password"
-              formikProps={formik}
-            />
+            <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
+            <ModalFormField type="password" name="password" label="Password" formikProps={formik} />
             <ModalFormField
               type="password"
               name="repeatPassword"
@@ -116,8 +96,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
           <div className={styles.signUpSuccessMessage}>
             <FaRegCheckCircle />
             <p>
-              You have successfully signed up! You can{' '}
-              <Link to="/log-in">Log in</Link> now.
+              You have successfully signed up! You can <Link to="/log-in">Log in</Link> now.
             </p>
           </div>
         )}

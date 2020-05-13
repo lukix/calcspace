@@ -53,15 +53,7 @@ const FilesList: React.FC<FilesListProps> = ({
   const filesList = (
     <ul className={styles.filesList}>
       {files.map(
-        ({
-          id,
-          name,
-          isModified,
-          isCreating,
-          isDeleting,
-          isRenaming,
-          isSynchronizing,
-        }) => (
+        ({ id, name, isModified, isCreating, isDeleting, isRenaming, isSynchronizing }) => (
           <FileItem
             key={id}
             id={id}
@@ -101,7 +93,7 @@ const FilesList: React.FC<FilesListProps> = ({
 };
 
 export default connect(
-  state => ({
+  (state) => ({
     isFilesPanelVisible: selectors.isFilesPanelVisible(state),
     files: selectors.files(state),
     isFetchingFiles: selectors.isFetchingFiles(state),

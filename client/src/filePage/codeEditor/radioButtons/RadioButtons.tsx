@@ -9,15 +9,10 @@ interface RadioButtonsProps {
   className?: string;
 }
 
-const RadioButtons: React.FC<RadioButtonsProps> = ({
-  items,
-  value,
-  onChange,
-  className = '',
-}) => {
+const RadioButtons: React.FC<RadioButtonsProps> = ({ items, value, onChange, className = '' }) => {
   return (
     <div className={classNames(styles.radioButtons, className)}>
-      {items.map(item => (
+      {items.map((item) => (
         <div
           key={item.value}
           className={classNames(styles.item, {

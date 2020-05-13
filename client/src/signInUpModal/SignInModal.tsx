@@ -4,20 +4,14 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
-import Modal from './modal/Modal';
+import Modal from '../shared/modal/Modal';
 import ModalFormField from './ModalFormField';
 import AppDescription from './AppDescription';
 import styles from './SignInUpModal.module.scss';
 
 const validationSchema = yup.object().shape({
-  username: yup
-    .string()
-    .label('Username')
-    .required(),
-  password: yup
-    .string()
-    .label('Password')
-    .required(),
+  username: yup.string().label('Username').required(),
+  password: yup.string().label('Password').required(),
 });
 
 const INVALID_CREDENTIALS_STATUS = 'INVALID_CREDENTIALS_STATUS';
@@ -59,18 +53,8 @@ const LogInModal: React.FC<LogInModalProps> = () => {
       <div className={styles.signInModal}>
         <Spinner show={isRedirecting} centered>
           <form onSubmit={formik.handleSubmit}>
-            <ModalFormField
-              type="text"
-              name="username"
-              label="Username"
-              formikProps={formik}
-            />
-            <ModalFormField
-              type="password"
-              name="password"
-              label="Password"
-              formikProps={formik}
-            />
+            <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
+            <ModalFormField type="password" name="password" label="Password" formikProps={formik} />
             <div className={styles.formField}>
               <input
                 type="submit"
@@ -82,14 +66,10 @@ const LogInModal: React.FC<LogInModalProps> = () => {
               </p>
             </div>
             {formik.status === INVALID_CREDENTIALS_STATUS && (
-              <p className={styles.errorMessage}>
-                Invalid username or password.
-              </p>
+              <p className={styles.errorMessage}>Invalid username or password.</p>
             )}
             {formik.status === OTHER_ERROR_STATUS && (
-              <p className={styles.errorMessage}>
-                Unexpected error has occurred.
-              </p>
+              <p className={styles.errorMessage}>Unexpected error has occurred.</p>
             )}
           </form>
         </Spinner>
