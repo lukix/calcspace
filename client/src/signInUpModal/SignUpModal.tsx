@@ -5,8 +5,7 @@ import * as yup from 'yup';
 import { FaRegCheckCircle } from 'react-icons/fa';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
-import Modal from '../shared/modal/Modal';
-import ModalFormField from './ModalFormField';
+import { Modal, ModalFormField } from '../shared/modal';
 import AppDescription from './AppDescription';
 import styles from './SignInUpModal.module.scss';
 
@@ -76,7 +75,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
               label="Repeat password"
               formikProps={formik}
             />
-            <div className={styles.formField}>
+            <div className={styles.submitButtonWrapper}>
               <input
                 type="submit"
                 value={isAddingUser ? 'Signing Up...' : 'Sign Up'}

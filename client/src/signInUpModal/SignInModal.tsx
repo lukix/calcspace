@@ -4,8 +4,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
-import Modal from '../shared/modal/Modal';
-import ModalFormField from './ModalFormField';
+import { Modal, ModalFormField } from '../shared/modal';
 import AppDescription from './AppDescription';
 import styles from './SignInUpModal.module.scss';
 
@@ -55,7 +54,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
           <form onSubmit={formik.handleSubmit}>
             <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
             <ModalFormField type="password" name="password" label="Password" formikProps={formik} />
-            <div className={styles.formField}>
+            <div className={styles.submitButtonWrapper}>
               <input
                 type="submit"
                 value={formik.isSubmitting ? 'Logging in...' : 'Log in'}

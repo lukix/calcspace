@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
-import Modal from '../shared/modal/Modal';
 import HeaderBar from '../headerBar/HeaderBar';
 import FilePage from '../filePage/FilePage';
 import FilesList from '../filesList/FilesList';
 import UserGuide from './UserGuide';
+import UserProfileModal from './UserProfileModal';
 import { actions as reduxActions, selectors } from './store';
 import styles from './App.module.scss';
 
@@ -55,9 +55,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
           </Switch>
         </div>
       </div>
-      <Modal visible={isUserModalVisible} onHide={hideUserModal}>
-        TODO: Changing password
-      </Modal>
+      <UserProfileModal visible={isUserModalVisible} onHide={hideUserModal} />
     </div>
   );
 };
