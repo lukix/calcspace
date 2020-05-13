@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
+import Modal from '../shared/modal/Modal';
 import HeaderBar from '../headerBar/HeaderBar';
 import FilePage from '../filePage/FilePage';
 import FilesList from '../filesList/FilesList';
@@ -26,6 +27,10 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
     fetchLoggedInUser();
   }, [fetchLoggedInUser]);
 
+  const [isUserModalVisible, setIsUserModalVisible] = useState(false);
+  const showUserModal = () => setIsUserModalVisible(true);
+  const hideUserModal = () => setIsUserModalVisible(false);
+
   if (fetchingUserError) {
     return <Redirect to="/log-in" />;
   }
@@ -36,7 +41,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
 
   return (
     <div className={styles.app}>
-      <HeaderBar username={user && user.username} />
+      <HeaderBar username={user && user.username} onAvatarClick={showUserModal} />
       <div className={styles.contentContainer}>
         <FilesList />
         <div className={styles.content}>
@@ -50,12 +55,15 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
           </Switch>
         </div>
       </div>
+      <Modal visible={isUserModalVisible} onHide={hideUserModal}>
+        TODO: Changing password
+      </Modal>
     </div>
   );
 };
 
 export default connect(
-  state => ({
+  (state) => ({
     user: selectors.user(state),
     isFetchingUser: selectors.isFetchingUser(state),
     fetchingUserError: selectors.fetchingUserError(state),

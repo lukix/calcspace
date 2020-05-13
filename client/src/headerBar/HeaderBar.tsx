@@ -9,6 +9,7 @@ import styles from './HeaderBar.module.scss';
 
 interface HeaderBarProps {
   username: string | null;
+  onAvatarClick: () => void;
 
   isFilesPanelVisible: boolean;
   isSynchronizingAnyFile: boolean;
@@ -19,6 +20,7 @@ interface HeaderBarProps {
 
 const HeaderBar: React.FC<HeaderBarProps> = ({
   username,
+  onAvatarClick,
   isFilesPanelVisible,
   isSynchronizingAnyFile,
   areThereAnyChangesToBeSaved,
@@ -39,10 +41,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
           title="Toggle files panel visibility"
         />
         <Link to="/">Math IDE</Link>
-        <Spinner
-          size={18}
-          show={isSynchronizingAnyFile || areThereAnyChangesToBeSaved}
-        />
+        <Spinner size={18} show={isSynchronizingAnyFile || areThereAnyChangesToBeSaved} />
         {showError && (
           <FaExclamationCircle
             title="Saving changes failed. Edit unsaved files to retry."
@@ -54,20 +53,18 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
         <a href={SIGN_OUT_URL} className={styles.signOutLink}>
           Log Out
         </a>
-        {username && <FaUserCircle title={`Logged in as "${username}"`} />}
+        {username && <FaUserCircle title={`Logged in as "${username}"`} onClick={onAvatarClick} />}
       </div>
     </div>
   );
 };
 
 export default connect(
-  state => ({
+  (state) => ({
     isFilesPanelVisible: selectors.isFilesPanelVisible(state),
     isSynchronizingAnyFile: selectors.isSynchronizingAnyFile(state),
     areThereAnyChangesToBeSaved: selectors.areThereAnyChangesToBeSaved(state),
-    areThereAnySynchronizationErrors: selectors.areThereAnySynchronizationErrors(
-      state
-    ),
+    areThereAnySynchronizationErrors: selectors.areThereAnySynchronizationErrors(state),
   }),
   {
     setFilesPanelVisible: actions.setFilesPanelVisible,
