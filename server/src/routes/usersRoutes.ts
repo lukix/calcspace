@@ -24,19 +24,12 @@ export default ({ dbClient }) => {
       const user = await dbClient
         .query('SELECT id, password FROM users WHERE name = $1', [username])
         .then(({ rows }) => rows[0]);
-      if (!user) {
-        return AUTH_FAILED_RESPONSE;
-      }
-      if (!(await bcrypt.compare(password, user.password))) {
+      if (!user || !(await bcrypt.compare(password, user.password))) {
         return AUTH_FAILED_RESPONSE;
       }
 
       const jwtTokenCookie = getJwtTokenCookie(user.id, username);
-      res.cookie(
-        jwtTokenCookie.name,
-        jwtTokenCookie.value,
-        jwtTokenCookie.options
-      );
+      res.cookie(jwtTokenCookie.name, jwtTokenCookie.value, jwtTokenCookie.options);
       return { response: { username } };
     },
   };
@@ -86,10 +79,10 @@ export default ({ dbClient }) => {
       const {
         id,
       } = await dbClient
-        .query(
-          'INSERT INTO users (name, password) VALUES ($1, $2) RETURNING id',
-          [username, hashedPassword]
-        )
+        .query('INSERT INTO users (name, password) VALUES ($1, $2) RETURNING id', [
+          username,
+          hashedPassword,
+        ])
         .then(({ rows }) => rows[0]);
       return { status: 200, response: { id } };
     },
@@ -117,11 +110,5 @@ export default ({ dbClient }) => {
     },
   };
 
-  return [
-    authenticate,
-    signOut,
-    addUser,
-    getUsernameAvailability,
-    getCurrentlyLoggedInUser,
-  ];
+  return [authenticate, signOut, addUser, getUsernameAvailability, getCurrentlyLoggedInUser];
 };

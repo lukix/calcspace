@@ -14,14 +14,8 @@ import usersRoutes from './routes/usersRoutes';
 import filesRoutes from './routes/filesRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
-import {
-  DB_NAME,
-  DB_USER,
-  DB_HOST,
-  DB_PASSWORD,
-  PORT,
-  CLIENT_URL,
-} from './config';
+import { DB_NAME, DB_USER, DB_HOST, DB_PASSWORD, PORT, CLIENT_URL } from './config';
+import userSettingsRoutes from './routes/userSettingsRoutes';
 
 (async () => {
   await setupDatabase();
@@ -60,15 +54,16 @@ import {
     ...nestRoutes('/users', usersRoutes({ dbClient })),
     ...applyMiddlewares(
       [authorizationMiddleware],
-      nestRoutes('/files', filesRoutes({ dbClient }))
+      [
+        ...nestRoutes('/user-settings', userSettingsRoutes({ dbClient })),
+        ...nestRoutes('/files', filesRoutes({ dbClient })),
+      ]
     ),
   ]);
 
   const rootRouter = createRouterFromRouteObjects(routesDefinitions);
 
-  console.log(
-    routesDefinitions.map(({ path, method }) => `${path} (${method})`)
-  );
+  console.log(routesDefinitions.map(({ path, method }) => `${path} (${method})`));
 
   app.use(rootRouter);
 

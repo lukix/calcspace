@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SignInUpModal.module.scss';
+import styles from './Modal.module.scss';
 
 interface ModalFormFieldProps {
   name: string;
@@ -14,26 +14,19 @@ interface ModalFormFieldProps {
   };
 }
 
-const ModalFormField: React.FC<ModalFormFieldProps> = ({
-  name,
-  type,
-  label,
-  formikProps,
-}) => {
+const ModalFormField: React.FC<ModalFormFieldProps> = ({ name, type, label, formikProps }) => {
   const { handleChange, handleBlur, values, errors, touched } = formikProps;
   return (
     <div className={styles.formField}>
       <div className={styles.label}>
         <label>{label}:</label>
-        <span className={styles.errorMessage}>
-          {touched[name] && errors[name]}
-        </span>
+        <span className={styles.errorMessage}>{touched[name] && errors[name]}</span>
       </div>
       <input
         type={type}
         name={name}
-        onChange={e => handleChange(e)}
-        onBlur={e => handleBlur(e)}
+        onChange={(e) => handleChange(e)}
+        onBlur={(e) => handleBlur(e)}
         value={values[name]}
       />
     </div>

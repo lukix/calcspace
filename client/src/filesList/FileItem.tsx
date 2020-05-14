@@ -1,13 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-import {
-  FaTrash,
-  FaPen,
-  FaRegCircle,
-  FaRegDotCircle,
-  FaHourglassEnd,
-} from 'react-icons/fa';
+import { FaTrash, FaPen, FaRegCircle, FaRegDotCircle, FaHourglassEnd } from 'react-icons/fa';
 import styles from './FilesList.module.scss';
 
 interface StatusIconProps {
@@ -16,11 +10,7 @@ interface StatusIconProps {
   size: number;
 }
 
-const StatusIcon: React.FC<StatusIconProps> = ({
-  isSynchronizing,
-  isModified,
-  size,
-}) => {
+const StatusIcon: React.FC<StatusIconProps> = ({ isSynchronizing, isModified, size }) => {
   if (isSynchronizing) {
     return <FaHourglassEnd size={size} title="Synchronizing..." />;
   }
@@ -70,13 +60,13 @@ const FileItem: React.FC<FileItemProps> = ({
     }
   }, [isInRenamingMode]);
 
-  const selectEnterPresses = func => e => {
+  const selectEnterPresses = (func) => (e) => {
     if (e.key === 'Enter') {
       func(e);
     }
   };
 
-  const saveNewName = e => {
+  const saveNewName = (e) => {
     setIsInRenamingMode(false);
     const newName = e.target.value.trim();
     if (newName) {
@@ -88,7 +78,7 @@ const FileItem: React.FC<FileItemProps> = ({
   const isBusy = isCreating || isDeleting || isRenaming;
   const isSelected = path === pathname;
 
-  const conditionalLinkDisabling = e => {
+  const conditionalLinkDisabling = (e) => {
     if (isBusy) {
       e.preventDefault();
     }
