@@ -55,7 +55,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
           </Switch>
         </div>
       </div>
-      <UserProfileModal visible={isUserModalVisible} onHide={hideUserModal} />
+      {isUserModalVisible && <UserProfileModal onHide={hideUserModal} />}
     </div>
   );
 };

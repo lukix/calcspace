@@ -6,6 +6,7 @@ import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
 import { Modal, ModalFormField } from '../shared/modal';
 import AppDescription from './AppDescription';
+import sharedStyles from '../shared/shared.module.scss';
 import styles from './SignInUpModal.module.scss';
 
 const validationSchema = yup.object().shape({
@@ -65,10 +66,10 @@ const LogInModal: React.FC<LogInModalProps> = () => {
               </p>
             </div>
             {formik.status === INVALID_CREDENTIALS_STATUS && (
-              <p className={styles.errorMessage}>Invalid username or password.</p>
+              <p className={sharedStyles.errorMessage}>Invalid username or password.</p>
             )}
             {formik.status === OTHER_ERROR_STATUS && (
-              <p className={styles.errorMessage}>Unexpected error has occurred.</p>
+              <p className={sharedStyles.errorMessage}>Unexpected error has occurred.</p>
             )}
           </form>
         </Spinner>

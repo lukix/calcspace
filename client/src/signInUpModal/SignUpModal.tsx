@@ -7,6 +7,7 @@ import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
 import { Modal, ModalFormField } from '../shared/modal';
 import AppDescription from './AppDescription';
+import sharedStyles from '../shared/shared.module.scss';
 import styles from './SignInUpModal.module.scss';
 
 const validationSchema = yup.object().shape({
@@ -86,7 +87,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
               </p>
             </div>
             {addUserError && (
-              <p className={styles.errorMessage}>
+              <p className={sharedStyles.errorMessage}>
                 Unexpected error has occured. Signing up failed.
               </p>
             )}
