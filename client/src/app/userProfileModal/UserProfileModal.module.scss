@@ -1,0 +1,9 @@
+.section:not(:first-child) {
+  margin-top: 60px;
+}
+
+.deleteAccountButton {
+  input[type="submit"] {
+    background: #c83214;
+  }
+}

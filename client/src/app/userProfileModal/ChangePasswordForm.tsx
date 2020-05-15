@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import httpRequest from '../shared/httpRequest';
-import { Modal, ModalFormField, SubmitButton } from '../shared/modal';
-import sharedStyles from '../shared/shared.module.scss';
+import httpRequest from '../../shared/httpRequest';
+import { ModalFormField, SubmitButton } from '../../shared/modal';
+import sharedStyles from '../../shared/shared.module.scss';
+import styles from './UserProfileModal.module.scss';
 
 const validationSchema = yup.object().shape({
   currentPassword: yup.string().label('Current Password').required(),
@@ -19,11 +20,9 @@ const INVALID_CREDENTIALS_STATUS = 'INVALID_CREDENTIALS_STATUS';
 const OTHER_ERROR_STATUS = 'OTHER_ERROR_STATUS';
 const SUCCESS_STATUS = 'SUCCESS_STATUS';
 
-interface UserProfileModalProps {
-  onHide: () => void;
-}
+interface ChangePasswordFormProps {}
 
-const UserProfileModal: React.FC<UserProfileModalProps> = ({ onHide }) => {
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = () => {
   const formik = useFormik({
     initialValues: {
       currentPassword: '',
@@ -51,7 +50,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ onHide }) => {
   });
 
   return (
-    <Modal visible onHide={onHide}>
+    <div className={styles.section}>
       <h2>Change Password</h2>
       <form onSubmit={formik.handleSubmit}>
         <ModalFormField
@@ -86,8 +85,8 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ onHide }) => {
           <p className={sharedStyles.successMessage}>Password has been changed.</p>
         )}
       </form>
-    </Modal>
+    </div>
   );
 };
 
-export default UserProfileModal;
+export default ChangePasswordForm;
