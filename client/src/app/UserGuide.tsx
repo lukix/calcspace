@@ -135,7 +135,7 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         10m/s
         <br />
         <br />
-        <span className={styles.tokenComment}>// 10 meters devided by variable "s":</span>
+        <span className={styles.tokenComment}>// 10 meters divided by variable "s":</span>
         <br />
         10m / s
       </pre>

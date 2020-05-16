@@ -53,7 +53,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
         <a href={SIGN_OUT_URL} className={styles.signOutLink}>
           Log Out
         </a>
-        {username && <FaUserCircle title={`Logged in as "${username}"`} onClick={onAvatarClick} />}
+        {username && <FaUserCircle title="Account Settings" onClick={onAvatarClick} />}
       </div>
     </div>
   );
