@@ -16,7 +16,7 @@ const splitPowerElements = (tokensList) => {
   const { array, tempTokens } = tokensList.reduce((acc, currentToken) => {
     if (currentToken.type === tokens.OPERATOR && currentToken.value === '^') {
       if (acc.tempTokens.length > 1) {
-        throw new ParserError('Found unexpected number of elements when spliting power elements');
+        throw new ParserError('Found unexpected number of elements when splitting power elements');
       }
       return {
         array: [...acc.array, ...acc.tempTokens],
@@ -29,7 +29,7 @@ const splitPowerElements = (tokensList) => {
     };
   }, initialReduceState);
   if (tempTokens.length > 1) {
-    throw new ParserError('Found unexpected number of elements when spliting power elements');
+    throw new ParserError('Found unexpected number of elements when splitting power elements');
   }
   return [...array, ...tempTokens];
 };
@@ -40,7 +40,7 @@ const splitProductElements = (tokensList) => {
       ? [
           {
             type: tokens.SUBEXPRESSION,
-            value: buildPrecedenceHierarchy(tempTokens),
+            value: buildPrecedenceHierarchy(tempTokens, false),
           },
           createOperator('^'),
           createNumericSymbol('-1'),
@@ -95,22 +95,24 @@ const splitSumElements = (tokensList) => {
   return [...array, tempTokens];
 };
 
-const buildPrecedenceHierarchy = (tokensList) => {
-  const tokensListWithResolvedSubexpressions = tokensList.map((token) => {
-    if (token.type === tokens.SUBEXPRESSION) {
-      return {
-        ...token,
-        value: buildPrecedenceHierarchy(token.value),
-      };
-    }
-    if (token.type === tokens.FUNCTION) {
-      return {
-        ...token,
-        subexpressionContent: buildPrecedenceHierarchy(token.subexpressionContent),
-      };
-    }
-    return token;
-  });
+const buildPrecedenceHierarchy = (tokensList, processSubexpressions = true) => {
+  const tokensListWithResolvedSubexpressions = processSubexpressions
+    ? tokensList.map((token) => {
+        if (token.type === tokens.SUBEXPRESSION) {
+          return {
+            ...token,
+            value: buildPrecedenceHierarchy(token.value),
+          };
+        }
+        if (token.type === tokens.FUNCTION) {
+          return {
+            ...token,
+            subexpressionContent: buildPrecedenceHierarchy(token.subexpressionContent),
+          };
+        }
+        return token;
+      })
+    : tokensList;
 
   return pipe(
     splitSumElements,

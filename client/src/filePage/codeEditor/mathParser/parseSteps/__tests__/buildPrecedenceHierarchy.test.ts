@@ -174,4 +174,44 @@ describe('buildPrecedenceHierarchy', () => {
       ],
     ]);
   });
+
+  it('should handle "/" operator followed by subexpression', () => {
+    // given
+    const tokensList = [
+      { type: tokens.SYMBOL, value: '2', symbolType: symbolTypes.NUMERIC },
+      { type: tokens.OPERATOR, value: '/' },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [{ type: tokens.SYMBOL, value: '3', symbolType: symbolTypes.NUMERIC }],
+      },
+    ];
+
+    // when
+    const result = buildPrecedenceHierarchy(tokensList);
+
+    // then
+    expect(result).toEqual([
+      [
+        [{ type: tokens.SYMBOL, value: '2', symbolType: symbolTypes.NUMERIC }],
+        [
+          {
+            type: tokens.SUBEXPRESSION,
+            value: [
+              [
+                [
+                  {
+                    type: tokens.SUBEXPRESSION,
+                    value: [
+                      [[{ type: tokens.SYMBOL, value: '3', symbolType: symbolTypes.NUMERIC }]],
+                    ],
+                  },
+                ],
+              ],
+            ],
+          },
+          { type: tokens.SYMBOL, value: '-1', symbolType: symbolTypes.NUMERIC, number: -1 },
+        ],
+      ],
+    ]);
+  });
 });
