@@ -60,6 +60,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
           }}
           placeholder={isInViewMode ? 'File is empty' : 'Type a math expression...'}
           readOnly={isInViewMode}
+          spellCheck={false}
+          autoCapitalize="off"
+          autoCorrect="off"
         />
         <pre
           className={classNames(styles.formattedCode, {
