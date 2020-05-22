@@ -43,6 +43,42 @@ describe('tokenizeCode - raw result test', () => {
         a = 3
       `,
     },
+    {
+      it: 'should show result in default unit',
+      code: `
+        10kN / 5m^2
+      `,
+      expectedResult: `
+        10kN / 5m^2 = 2000Pa
+      `,
+    },
+    {
+      it: 'should show result in default unit when declaring varaible',
+      code: `
+        energy = 500N * 3m
+      `,
+      expectedResult: `
+        energy = 500N * 3m = 1500J
+      `,
+    },
+    {
+      it: 'should allow specifying result unit',
+      code: `
+        10kN / 5m^2 = ?kPa
+      `,
+      expectedResult: `
+        10kN / 5m^2 = ?kPa = 2kPa
+      `,
+    },
+    {
+      it: 'should allow specifying result unit when declaring varaible',
+      code: `
+        energy = 500N * 3m = ?N*m
+      `,
+      expectedResult: `
+        energy = 500N * 3m = ?N*m = 1500m*N
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when

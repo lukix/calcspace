@@ -1,6 +1,11 @@
-import { unitToString } from '../mathParser';
+import {
+  unitToString,
+  translateToBaseUnits,
+  calculateEffectiveUnitMultiplier,
+} from '../mathParser';
 import evaluateExpression from './evaluateExpression';
 import { tokens, functions, unitsMap, units, unitsApplicableForResult } from './constants';
+import getUnitFromResultUnitString from './getUnitFromResultUnitString';
 
 const ALL_WHITESPACES_REGEX = /\s/g;
 const IS_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
@@ -21,6 +26,19 @@ const convertToComprehendibleUnit = ({ number, unit }) => {
     number: number / multiplier,
     unit: [{ unit: symbol, power: 1 }],
   };
+};
+
+const convertToDesiredUnit = ({ number, unit }, desiredUnit) => {
+  const desiredUnitInBaseUnits = translateToBaseUnits(desiredUnit, unitsMap);
+  const unitString = unitToString(translateToBaseUnits(unit, unitsMap));
+  const desiredUnitString = unitToString(desiredUnitInBaseUnits);
+  if (unitString !== desiredUnitString) {
+    throw new Error(`"${unitString}" cannot be converted to "${unitToString(desiredUnit)}"`);
+  }
+  const unitMultiplier = calculateEffectiveUnitMultiplier(unit, unitsMap);
+  const desiredUnitMultiplier = calculateEffectiveUnitMultiplier(desiredUnit, unitsMap);
+  const multiplier = unitMultiplier / desiredUnitMultiplier;
+  return { number: number * multiplier, unit: desiredUnit };
 };
 
 const createTokenizedLineWithError = ({
@@ -52,6 +70,18 @@ const createTokenizedLineWithError = ({
   };
 };
 
+const classifyPartsSplittedByEqualSigns = (parts: Array<string>) => {
+  if (parts.length === 1) {
+    return { symbolBeforeSanitization: null, expression: parts[0], resultUnitPart: null };
+  }
+  if (parts[parts.length - 1].split('').includes('?')) {
+    return parts.length === 2
+      ? { symbolBeforeSanitization: null, expression: parts[0], resultUnitPart: parts[1] }
+      : { symbolBeforeSanitization: parts[0], expression: parts[1], resultUnitPart: parts[2] };
+  }
+  return { symbolBeforeSanitization: parts[0], expression: parts[1], resultUnitPart: null };
+};
+
 const tokenizeLine = (values, lineString) => {
   const sanitizedExpression = lineString.trimStart();
 
@@ -69,17 +99,37 @@ const tokenizeLine = (values, lineString) => {
     };
   }
 
-  const splittedByEquals = lineString.split('=');
-  if (splittedByEquals.length > 2) {
+  const partsSplittedByEqualSigns = lineString.split('=');
+  if (partsSplittedByEqualSigns.length > 3) {
     return createTokenizedLineWithError({
       values,
       lineString,
-      errorMessage: 'Only a single equal sign is allowed',
-      start: splittedByEquals[0].length + splittedByEquals[1].length,
+      errorMessage: 'Too many equal signs',
+      start:
+        partsSplittedByEqualSigns[0].length +
+        partsSplittedByEqualSigns[1].length +
+        partsSplittedByEqualSigns[2].length,
     });
   }
-  const [symbolBeforeSanitization, expression] =
-    splittedByEquals.length === 2 ? splittedByEquals : [null, splittedByEquals[0]];
+  if (
+    partsSplittedByEqualSigns.length === 3 &&
+    !partsSplittedByEqualSigns[2].split('').includes('?')
+  ) {
+    return createTokenizedLineWithError({
+      values,
+      lineString,
+      errorMessage: 'Expected "?" character after last "="',
+      start:
+        partsSplittedByEqualSigns[0].length +
+        partsSplittedByEqualSigns[1].length +
+        partsSplittedByEqualSigns[2].length,
+    });
+  }
+  const {
+    symbolBeforeSanitization,
+    expression,
+    resultUnitPart,
+  } = classifyPartsSplittedByEqualSigns(partsSplittedByEqualSigns);
 
   const symbol = symbolBeforeSanitization ? sanitize(symbolBeforeSanitization) : null;
 
@@ -112,6 +162,30 @@ const tokenizeLine = (values, lineString) => {
     }
   }
 
+  const { unit: resultUnit, error: resultUnitError } = resultUnitPart
+    ? getUnitFromResultUnitString(resultUnitPart)
+    : { unit: null, error: null };
+  if (resultUnitError) {
+    return createTokenizedLineWithError({
+      values,
+      lineString,
+      errorMessage: resultUnitError,
+      start: lineString.lastIndexOf('=') + 1,
+    });
+  }
+
+  if (resultUnit) {
+    const unknownUnit = resultUnit.find(({ unit }) => !unitsMap.has(unit));
+    if (unknownUnit) {
+      return createTokenizedLineWithError({
+        values,
+        lineString,
+        errorMessage: `Unknown unit "${unknownUnit.unit}"`,
+        start: lineString.lastIndexOf('=') + 1,
+      });
+    }
+  }
+
   const { result, error, startCharIndex, endCharIndex } = evaluateExpression(
     expression,
     values,
@@ -130,12 +204,22 @@ const tokenizeLine = (values, lineString) => {
     });
   }
 
-  const showResult =
-    result !== null &&
-    sanitize(expression) !== valueWithUnitToString(convertToComprehendibleUnit(result));
-  const resultString = showResult
-    ? ` = ${valueWithUnitToString(convertToComprehendibleUnit(result))}`
-    : '';
+  let resultValueString;
+  try {
+    resultValueString = valueWithUnitToString(
+      resultUnit ? convertToDesiredUnit(result, resultUnit) : convertToComprehendibleUnit(result)
+    );
+  } catch (error) {
+    return createTokenizedLineWithError({
+      values,
+      lineString,
+      errorMessage: error.message,
+      start: lineString.lastIndexOf('=') + 1,
+    });
+  }
+
+  const showResult = result !== null && sanitize(expression) !== resultValueString;
+  const resultString = showResult ? ` = ${resultValueString}` : '';
 
   const tokenizedLine = [
     {
