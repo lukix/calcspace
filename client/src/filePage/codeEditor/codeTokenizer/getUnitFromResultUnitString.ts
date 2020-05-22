@@ -5,7 +5,6 @@ const UNITS_REGEX = /^([A-Za-z]+(\^[1-9]+[0-9]*)?(\/|\*))*([A-Za-z]+(\^[1-9]+[0-
 const getUnitFromResultUnitString = (resultUnitString) => {
   const trimmedResultUnitString = resultUnitString.trim();
 
-  // TODO: what about other whitespaces?
   if (trimmedResultUnitString.replace(/\s/g) !== trimmedResultUnitString) {
     return { unit: null, error: 'Encountered unexpected whitespaces' };
   }
