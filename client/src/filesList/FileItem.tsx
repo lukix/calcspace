@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, ReactElement } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import { FaTrash, FaPen, FaRegCircle, FaRegDotCircle, FaHourglassEnd } from 'react-icons/fa';
@@ -18,6 +18,24 @@ const StatusIcon: React.FC<StatusIconProps> = ({ isSynchronizing, isModified, si
     return <FaRegDotCircle size={size} title="Unsaved changes" />;
   }
   return <FaRegCircle size={size} title="Synchronized" />;
+};
+
+interface ConditionalLinkProps {
+  children: ReactElement;
+  enabled: boolean;
+  onClick: Function;
+  to: string;
+}
+
+const ConditionalLink: React.FC<ConditionalLinkProps> = ({ children, enabled, to, onClick }) => {
+  if (enabled) {
+    return (
+      <Link to={to} onClick={onClick}>
+        {children}
+      </Link>
+    );
+  }
+  return <>{children}</>;
 };
 
 interface FileItemProps {
@@ -98,7 +116,7 @@ const FileItem: React.FC<FileItemProps> = ({
         [styles.isBusy]: isBusy,
       })}
     >
-      <Link to={path} onClick={conditionalLinkDisabling}>
+      <ConditionalLink enabled={!isInRenamingMode} to={path} onClick={conditionalLinkDisabling}>
         <div className={styles.fileName}>
           <StatusIcon
             size={12}
@@ -119,7 +137,7 @@ const FileItem: React.FC<FileItemProps> = ({
             <span>{name}</span>
           )}
         </div>
-      </Link>
+      </ConditionalLink>
       <div className={styles.fileActionIcons}>
         <FaPen title="Rename File" onClick={() => setIsInRenamingMode(true)} />
         <FaTrash title="Delete File" onClick={deleteHandler} />
