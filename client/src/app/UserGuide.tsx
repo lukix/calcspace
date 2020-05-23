@@ -165,10 +165,10 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         </span>
         <br />
       </pre>
-      <p>You can specify a result unit by using this notation:</p>
+      <p>You can specify a result unit by using question mark notation:</p>
       <pre className={styles.codeSnippet}>
         2.5kg = ?g<span className={styles.tokenVirtual}> = 2500g</span>
-        <br />E = 1500J = ?m*N<span className={styles.tokenVirtual}> = 1500m*N</span>
+        <br />E = 1500J = ?N*m<span className={styles.tokenVirtual}> = 1500N*m</span>
         <br />E = ?kJ<span className={styles.tokenVirtual}> = 1.5kJ</span>
         <br />E = <span className={styles.tokenError}>?kg</span>
         <span className={styles.tokenVirtual}>

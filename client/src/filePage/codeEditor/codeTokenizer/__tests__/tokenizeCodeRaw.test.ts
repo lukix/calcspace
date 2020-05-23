@@ -76,7 +76,25 @@ describe('tokenizeCode - raw result test', () => {
         energy = 500N * 3m = ?N*m
       `,
       expectedResult: `
-        energy = 500N * 3m = ?N*m = 1500m*N
+        energy = 500N * 3m = ?N*m = 1500N*m
+      `,
+    },
+    {
+      it: 'should always show result when using question mark notation',
+      code: `
+        5m = ?m
+      `,
+      expectedResult: `
+        5m = ?m = 5m
+      `,
+    },
+    {
+      it: 'should display result unit it the same notation as specified',
+      code: `
+        5cm*m = ?m*cm
+      `,
+      expectedResult: `
+        5cm*m = ?m*cm = 5m*cm
       `,
     },
   ].forEach((testCaseData) => {

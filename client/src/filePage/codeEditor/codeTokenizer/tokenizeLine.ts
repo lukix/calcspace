@@ -206,9 +206,9 @@ const tokenizeLine = (values, lineString) => {
 
   let resultValueString;
   try {
-    resultValueString = valueWithUnitToString(
-      resultUnit ? convertToDesiredUnit(result, resultUnit) : convertToComprehendibleUnit(result)
-    );
+    resultValueString = resultUnit
+      ? `${convertToDesiredUnit(result, resultUnit).number}${resultUnitPart?.trim().substring(1)}`
+      : valueWithUnitToString(convertToComprehendibleUnit(result));
   } catch (error) {
     return createTokenizedLineWithError({
       values,
@@ -218,7 +218,7 @@ const tokenizeLine = (values, lineString) => {
     });
   }
 
-  const showResult = result !== null && sanitize(expression) !== resultValueString;
+  const showResult = result !== null && (sanitize(expression) !== resultValueString || resultUnit);
   const resultString = showResult ? ` = ${resultValueString}` : '';
 
   const tokenizedLine = [
