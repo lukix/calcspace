@@ -3,6 +3,8 @@ import symbolTypes from './symbolTypes';
 import { EvaluationError } from './errors';
 import parseUnits, { mergeDuplicatedUnits } from './parseUnits';
 import unitToString from './unitToString';
+import translateToBaseUnits from './translateToBaseUnits';
+import calculateEffectiveUnitMultiplier from './calculateEffectiveUnitMultiplier';
 
 const evaluateSubexpression = (subexpressionToken, values, functions, unitsMap) => {
   return evaluateSum(subexpressionToken.value, values, functions, unitsMap);
@@ -28,25 +30,16 @@ const evaluateFunction = (functionToken, values, functions, unitsMap) => {
 
 const evaluateNumericSymbolWithUnit = (symbolToken, unitsMap) => {
   const parsedSymbolUnits = parseUnits(symbolToken.unit);
-  const multipliers = parsedSymbolUnits.map(({ unit, power }) => {
+  parsedSymbolUnits.forEach(({ unit }) => {
     if (!unitsMap.has(unit)) {
       throw new EvaluationError(`Unknown unit "${unit}"`, {
         start: symbolToken.position,
         end: symbolToken.positionEnd,
       });
     }
-    return unitsMap.get(unit).multiplier ** power;
   });
-  const finalMultiplier = multipliers.reduce((acc, curr) => acc * curr);
-  const baseUnitsTranslation = parsedSymbolUnits
-    .map(({ unit, power }) => {
-      const unitDefinition = unitsMap.get(unit);
-      return unitDefinition.baseUnits.map((baseUnit) => ({
-        ...baseUnit,
-        power: baseUnit.power * power,
-      }));
-    })
-    .flat();
+  const finalMultiplier = calculateEffectiveUnitMultiplier(parsedSymbolUnits, unitsMap);
+  const baseUnitsTranslation = translateToBaseUnits(parsedSymbolUnits, unitsMap);
   return {
     number: finalMultiplier * symbolToken.number,
     unit: baseUnitsTranslation,
