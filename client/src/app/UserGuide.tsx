@@ -88,6 +88,22 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         factorial(3)<span className={styles.tokenVirtual}> = 6</span>
         <br />
         <br />
+        <span className={styles.tokenComment}>// Absolute value:</span>
+        <br />
+        abs(-5)<span className={styles.tokenVirtual}> = 5</span>
+        <br />
+        abs(5)<span className={styles.tokenVirtual}> = 5</span>
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// Sign function:</span>
+        <br />
+        sign(-5)<span className={styles.tokenVirtual}> = -1</span>
+        <br />
+        sign(0)<span className={styles.tokenVirtual}> = 0</span>
+        <br />
+        sign(5)<span className={styles.tokenVirtual}> = 1</span>
+        <br />
+        <br />
         <span className={styles.tokenComment}>// Trigonometric functions:</span>
         <br />
         sin(PI/2)<span className={styles.tokenVirtual}> = 1</span>

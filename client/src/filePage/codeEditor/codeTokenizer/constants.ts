@@ -26,6 +26,14 @@ export const functions: {
     number: Math.sqrt(value.number),
     unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),
   }),
+  abs: (value) => ({
+    number: Math.abs(value.number),
+    unit: value.unit,
+  }),
+  sign: (value) => ({
+    number: Math.sign(value.number),
+    unit: [],
+  }),
   log: createUnitlessFunction(Math.log, 'log'),
   sin: createUnitlessFunction(Math.sin, 'sin'),
   cos: createUnitlessFunction(Math.cos, 'cos'),
