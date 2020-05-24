@@ -36,7 +36,7 @@ const NewFilePage: React.FC<NewFilePageProps> = ({ isCreatingFile, files }) => {
   }, [historyPush, isCreatingFile, files]);
 
   if (!isCreatingFile) {
-    return <Redirect to="/log-in" />;
+    return <Redirect to="/" />;
   }
 
   return <Spinner centered />;
