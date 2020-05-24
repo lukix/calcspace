@@ -39,6 +39,11 @@ describe('classifySymbols', () => {
       { type: tokens.SYMBOL, value: '2.0' },
       { type: tokens.SYMBOL, value: '1' },
       { type: tokens.SYMBOL, value: '0' },
+      { type: tokens.SYMBOL, value: '2e3' },
+      { type: tokens.SYMBOL, value: '0.1e3' },
+      { type: tokens.SYMBOL, value: '0.1e10' },
+      { type: tokens.SYMBOL, value: '0.2e0' },
+      { type: tokens.SYMBOL, value: '0.3e-2' },
     ];
 
     // when
@@ -56,6 +61,11 @@ describe('classifySymbols', () => {
       { type: tokens.SYMBOL, value: '2.0', symbolType: NUMERIC, number: 2.0 },
       { type: tokens.SYMBOL, value: '1', symbolType: NUMERIC, number: 1 },
       { type: tokens.SYMBOL, value: '0', symbolType: NUMERIC, number: 0 },
+      { type: tokens.SYMBOL, value: '2e3', symbolType: NUMERIC, number: 2e3 },
+      { type: tokens.SYMBOL, value: '0.1e3', symbolType: NUMERIC, number: 0.1e3 },
+      { type: tokens.SYMBOL, value: '0.1e10', symbolType: NUMERIC, number: 0.1e10 },
+      { type: tokens.SYMBOL, value: '0.2e0', symbolType: NUMERIC, number: 0.2 },
+      { type: tokens.SYMBOL, value: '0.3e-2', symbolType: NUMERIC, number: 0.3e-2 },
     ]);
   });
 
@@ -66,6 +76,11 @@ describe('classifySymbols', () => {
       { type: tokens.SYMBOL, value: '2.5m' },
       { type: tokens.SYMBOL, value: '0.3s' },
       { type: tokens.SYMBOL, value: '0A' },
+      { type: tokens.SYMBOL, value: '2e3kg' },
+      { type: tokens.SYMBOL, value: '0.1e3m' },
+      { type: tokens.SYMBOL, value: '0.1e10km' },
+      { type: tokens.SYMBOL, value: '0.2e0s' },
+      { type: tokens.SYMBOL, value: '0.3e-2h' },
     ];
 
     // when
@@ -100,6 +115,41 @@ describe('classifySymbols', () => {
         symbolType: NUMERIC_WITH_UNIT,
         number: 0,
         unit: 'A',
+      },
+      {
+        type: tokens.SYMBOL,
+        value: '2e3kg',
+        symbolType: NUMERIC_WITH_UNIT,
+        number: 2e3,
+        unit: 'kg',
+      },
+      {
+        type: tokens.SYMBOL,
+        value: '0.1e3m',
+        symbolType: NUMERIC_WITH_UNIT,
+        number: 0.1e3,
+        unit: 'm',
+      },
+      {
+        type: tokens.SYMBOL,
+        value: '0.1e10km',
+        symbolType: NUMERIC_WITH_UNIT,
+        number: 0.1e10,
+        unit: 'km',
+      },
+      {
+        type: tokens.SYMBOL,
+        value: '0.2e0s',
+        symbolType: NUMERIC_WITH_UNIT,
+        number: 0.2,
+        unit: 's',
+      },
+      {
+        type: tokens.SYMBOL,
+        value: '0.3e-2h',
+        symbolType: NUMERIC_WITH_UNIT,
+        number: 0.3e-2,
+        unit: 'h',
       },
     ]);
   });
@@ -149,6 +199,14 @@ describe('classifySymbols', () => {
     {
       value: 'Infinity',
       description: 'should throw an error when symbol name is "Infinity"',
+    },
+    {
+      value: '2e3.4',
+      description: 'should throw an error when exponent is not an integer',
+    },
+    {
+      value: '2e3.4m',
+      description: 'should throw an error when exponent is not an integer for a symbol with unit',
     },
   ].forEach(({ value, description }) => {
     it(description, () => {
