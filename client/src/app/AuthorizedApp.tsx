@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
 import HeaderBar from '../headerBar/HeaderBar';
 import FilePage from '../filePage/FilePage';
+import NewFilePage from '../newFilePage/NewFilePage';
 import FilesList from '../filesList/FilesList';
 import UserGuide from './UserGuide';
 import { UserProfileModal } from './userProfileModal';
@@ -46,6 +47,9 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
         <FilesList />
         <div className={styles.content}>
           <Switch>
+            <Route path="/new-file">
+              <NewFilePage />
+            </Route>
             <Route path="/file/:fileId">
               <FilePage />
             </Route>

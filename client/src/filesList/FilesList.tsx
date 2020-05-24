@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa';
 import classNames from 'classnames';
 import Spinner from '../shared/spinner';
@@ -42,6 +43,8 @@ const FilesList: React.FC<FilesListProps> = ({
   deleteFile,
   renameFile,
 }) => {
+  const { push: historyPush } = useHistory();
+
   useEffect(() => {
     fetchFiles();
   }, [fetchFiles]);
@@ -49,6 +52,11 @@ const FilesList: React.FC<FilesListProps> = ({
   if (!isFilesPanelVisible) {
     return null;
   }
+
+  const createNewFile = () => {
+    addFile();
+    historyPush('/new-file');
+  };
 
   const filesList = (
     <ul className={styles.filesList}>
@@ -77,7 +85,7 @@ const FilesList: React.FC<FilesListProps> = ({
         className={classNames(styles.addFileButton, {
           [styles.addFileDisabled]: isCreatingFile,
         })}
-        onClick={isCreatingFile ? noop : () => addFile()}
+        onClick={isCreatingFile ? noop : createNewFile}
       >
         <FaPlus title="New File" />
         Add New File
