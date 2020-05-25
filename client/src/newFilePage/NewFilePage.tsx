@@ -9,26 +9,24 @@ interface NewFilePageProps {
   files: Array<{ createdDate?: Date; id: string }>;
 }
 
-const compareDates = (dateA: Date | undefined, dateB: Date | undefined) => {
-  if (dateA === dateB) {
-    return 0;
-  }
-  if (typeof dateA === 'undefined') {
-    return 1;
-  }
-  if (typeof dateB === 'undefined') {
-    return -1;
-  }
-  return dateA < dateB ? 1 : -1;
+interface File {
+  id: string;
+}
+interface FileWithDate {
+  id: string;
+  createdDate: Date;
+}
+const hasDate = (file: File | FileWithDate): file is FileWithDate => {
+  return (file as FileWithDate).createdDate !== undefined;
 };
 
 const NewFilePage: React.FC<NewFilePageProps> = ({ isCreatingFile, files }) => {
   const { push: historyPush } = useHistory();
   useEffect(() => {
     if (!isCreatingFile) {
-      const recentlyCreatedFile = [...files].sort((fileA, fileB) =>
-        compareDates(fileA.createdDate, fileB.createdDate)
-      )[0];
+      const recentlyCreatedFile = [...files]
+        .filter(hasDate)
+        .sort((fileA, fileB) => (fileA.createdDate < fileB.createdDate ? 1 : -1))[0];
       if (recentlyCreatedFile) {
         historyPush(`/file/${recentlyCreatedFile.id}`);
       }
