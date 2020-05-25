@@ -97,6 +97,15 @@ describe('tokenizeCode - raw result test', () => {
         5cm*m = [m*cm] = 5m*cm
       `,
     },
+    {
+      it: 'should display an error when unit after simplification is empty',
+      code: `
+        5 = [km/m]
+      `,
+      expectedResult: `
+        5 = [km/m]  Error: Desired result unit is empty after simplification
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when
