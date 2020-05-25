@@ -8,10 +8,16 @@ const getUnitFromResultUnitString = (resultUnitString) => {
   if (trimmedResultUnitString.replace(/\s/g) !== trimmedResultUnitString) {
     return { unit: null, error: 'Encountered unexpected whitespaces' };
   }
-  if (trimmedResultUnitString[0] !== '?') {
-    return { unit: null, error: 'There must not be any characters before "?"' };
+  if (
+    trimmedResultUnitString[0] !== '[' ||
+    trimmedResultUnitString[trimmedResultUnitString.length - 1] !== ']'
+  ) {
+    return {
+      unit: null,
+      error: 'There must not be any characters before or afrer square brackets',
+    };
   }
-  const unitString = trimmedResultUnitString.substring(1);
+  const unitString = trimmedResultUnitString.substring(1, trimmedResultUnitString.length - 1);
   if (!unitString.match(UNITS_REGEX)) {
     return { unit: null, error: 'Invalid desired result unit' };
   }
