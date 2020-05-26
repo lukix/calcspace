@@ -58,6 +58,11 @@ const getUnitsWithPrefixes = (
   baseUnits,
   { baseMultiplier = 1 } = {}
 ): Array<UnitMapTuple> => [
+  [`Y${symbol}`, { multiplier: 1e24 * baseMultiplier, baseUnits }],
+  [`Z${symbol}`, { multiplier: 1e21 * baseMultiplier, baseUnits }],
+  [`E${symbol}`, { multiplier: 1e18 * baseMultiplier, baseUnits }],
+  [`P${symbol}`, { multiplier: 1e15 * baseMultiplier, baseUnits }],
+  [`T${symbol}`, { multiplier: 1e12 * baseMultiplier, baseUnits }],
   [`G${symbol}`, { multiplier: 1e9 * baseMultiplier, baseUnits }],
   [`M${symbol}`, { multiplier: 1e6 * baseMultiplier, baseUnits }],
   [`k${symbol}`, { multiplier: 1e3 * baseMultiplier, baseUnits }],
@@ -69,6 +74,11 @@ const getUnitsWithPrefixes = (
   [`m${symbol}`, { multiplier: 1e-3 * baseMultiplier, baseUnits }],
   [`u${symbol}`, { multiplier: 1e-6 * baseMultiplier, baseUnits }],
   [`n${symbol}`, { multiplier: 1e-9 * baseMultiplier, baseUnits }],
+  [`p${symbol}`, { multiplier: 1e-12 * baseMultiplier, baseUnits }],
+  [`f${symbol}`, { multiplier: 1e-15 * baseMultiplier, baseUnits }],
+  [`a${symbol}`, { multiplier: 1e-18 * baseMultiplier, baseUnits }],
+  [`z${symbol}`, { multiplier: 1e-21 * baseMultiplier, baseUnits }],
+  [`y${symbol}`, { multiplier: 1e-24 * baseMultiplier, baseUnits }],
 ];
 
 export const units: Array<UnitMapTuple> = [
