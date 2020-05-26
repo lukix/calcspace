@@ -106,10 +106,60 @@ describe('tokenizeCode - raw result test', () => {
         5 = [km/m]  Error: Desired result unit is empty after simplification
       `,
     },
+    {
+      it: 'should show full number when exponential notation is off',
+      code: `
+        1000000 * 2
+      `,
+      options: { exponentialNotation: false },
+      expectedResult: `
+        1000000 * 2 = 2000000
+      `,
+    },
+    {
+      it: 'should use exponential notation when exponential notation is on',
+      code: `
+        1000000 * 2
+      `,
+      options: { exponentialNotation: true },
+      expectedResult: `
+        1000000 * 2 = 2e6
+      `,
+    },
+    {
+      it: 'should use exponential notation for numbers smaller than 1',
+      code: `
+        0.000002
+      `,
+      options: { exponentialNotation: true },
+      expectedResult: `
+        0.000002 = 2e-6
+      `,
+    },
+    {
+      it: 'should not use exponential notation for positive numbers smaller than 10000',
+      code: `
+        4500 * 2
+      `,
+      options: { exponentialNotation: true },
+      expectedResult: `
+        4500 * 2 = 9000
+      `,
+    },
+    {
+      it: 'should not use exponential notation for negative numbers larger or equal 0.0001',
+      code: `
+        0.0001
+      `,
+      options: { exponentialNotation: true },
+      expectedResult: `
+        0.0001
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when
-      const result = tokenizedCodeToString(tokenizeCode(testCaseData.code));
+      const result = tokenizedCodeToString(tokenizeCode(testCaseData.code, testCaseData.options));
 
       // then
       expect(trimIndentation(result)).toEqual(trimIndentation(testCaseData.expectedResult));

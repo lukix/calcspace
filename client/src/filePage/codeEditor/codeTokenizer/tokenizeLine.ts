@@ -11,7 +11,17 @@ const ALL_WHITESPACES_REGEX = /\s/g;
 const IS_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
 
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
-const valueWithUnitToString = ({ number, unit }) => `${number}${unitToString(unit)}`;
+const numberToString = (number: number, exponentialNotation: boolean) => {
+  if (exponentialNotation && (number >= 1e4 || number < 1e-4)) {
+    const orderOfMagnitude = Math.floor(Math.log10(number));
+    return `${number}`.split('').includes('e')
+      ? `${number}`
+      : `${number / 10 ** orderOfMagnitude}e${orderOfMagnitude}`;
+  }
+  return `${number}`;
+};
+const valueWithUnitToString = ({ number, unit }, exponentialNotation) =>
+  `${numberToString(number, exponentialNotation)}${unitToString(unit)}`;
 const convertToComprehendibleUnit = ({ number, unit }) => {
   const unitString = unitToString(unit);
   const replacementUnit = units.find(
@@ -88,7 +98,7 @@ const classifyPartsSplittedByEqualSigns = (parts: Array<string>) => {
   return { symbolBeforeSanitization: parts[0], expression: parts[1], resultUnitPart: null };
 };
 
-const tokenizeLine = (values, lineString) => {
+const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
   const sanitizedExpression = lineString.trimStart();
 
   if (sanitizedExpression === '') {
@@ -216,10 +226,11 @@ const tokenizeLine = (values, lineString) => {
   let resultValueString;
   try {
     resultValueString = resultUnit
-      ? `${convertToDesiredUnit(result, resultUnit).number}${resultUnitPart
-          ?.trim()
-          .substring(1, resultUnitPart?.trim().length - 1)}`
-      : valueWithUnitToString(convertToComprehendibleUnit(result));
+      ? `${numberToString(
+          convertToDesiredUnit(result, resultUnit).number,
+          exponentialNotation
+        )}${resultUnitPart?.trim().substring(1, resultUnitPart?.trim().length - 1)}`
+      : valueWithUnitToString(convertToComprehendibleUnit(result), exponentialNotation);
   } catch (error) {
     return createTokenizedLineWithError({
       values,

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import HighlightedCode from './HighlightedCode';
-import RadioButtons from './radioButtons/RadioButtons';
+import RadioButtons from './radioButtons';
+import ToggleButton from './toggleButton';
 import { tokenizeCode, tokenizedCodeToString } from './codeTokenizer';
 import styles from './CodeEditor.module.scss';
 
@@ -26,6 +27,9 @@ const modeOptions = [
 
 const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const [mode, setMode] = useState(modes.EDIT_MODE);
+  const [exponentialNotation, setExponentialNotation] = useState(
+    localStorage.getItem('exponentialNotation') === 'true'
+  );
   const [code, setCode] = useState(initialCode);
 
   const onCodeChange = (e) => {
@@ -34,7 +38,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
     onChange(value);
   };
 
-  const evaluatedCode = tokenizeCode(code);
+  useEffect(() => {
+    localStorage.setItem('exponentialNotation', `${exponentialNotation}`);
+  }, [exponentialNotation]);
+
+  const evaluatedCode = tokenizeCode(code, { exponentialNotation });
 
   const isInViewMode = mode === modes.VIEW_MODE;
   const codeWithResults = tokenizedCodeToString(evaluatedCode);
@@ -44,10 +52,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   return (
     <div className={styles.codeEditor}>
       <RadioButtons
-        className={styles.radioButtons}
+        className={styles.buttons}
         items={modeOptions}
         value={mode}
         onChange={setMode}
+      />
+      <ToggleButton
+        className={styles.buttons}
+        label="Exponential notation"
+        value={exponentialNotation}
+        onChange={setExponentialNotation}
+        description={
+          exponentialNotation
+            ? 'Exponential notation is on. Results greater or equal to 10000 will be displayed using exponential notation (for example 2.5e4 instead of 25000)'
+            : 'Exponential notation is off'
+        }
       />
       <div className={styles.codeWrapper}>
         <textarea
