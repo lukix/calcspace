@@ -162,6 +162,18 @@ describe('tokenizeCode - raw result test', () => {
         0.0001
       `,
     },
+    {
+      it: 'should not use exponential notation for Infinity',
+      code: `
+        1.5e400
+        -1.5e400
+      `,
+      options: { exponentialNotation: true },
+      expectedResult: `
+        1.5e400 = Infinity
+        -1.5e400 = -Infinity
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when
