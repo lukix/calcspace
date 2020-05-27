@@ -13,7 +13,7 @@ const IS_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
 const numberToString = (number: number, exponentialNotation: boolean) => {
   if (exponentialNotation && (number >= 1e4 || number < 1e-4)) {
-    const orderOfMagnitude = Math.floor(Math.log10(number));
+    const orderOfMagnitude = Math.floor(Math.log10(Math.abs(number)));
     return `${number}`.split('').includes('e')
       ? `${number}`
       : `${number / 10 ** orderOfMagnitude}e${orderOfMagnitude}`;

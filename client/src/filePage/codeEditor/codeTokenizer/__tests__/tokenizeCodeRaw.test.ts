@@ -110,30 +110,36 @@ describe('tokenizeCode - raw result test', () => {
       it: 'should show full number when exponential notation is off',
       code: `
         1000000 * 2
+        -1000000 * 2
       `,
       options: { exponentialNotation: false },
       expectedResult: `
         1000000 * 2 = 2000000
+        -1000000 * 2 = -2000000
       `,
     },
     {
       it: 'should use exponential notation when exponential notation is on',
       code: `
         1000000 * 2
+        -1000000 * 2
       `,
       options: { exponentialNotation: true },
       expectedResult: `
         1000000 * 2 = 2e6
+        -1000000 * 2 = -2e6
       `,
     },
     {
       it: 'should use exponential notation for numbers smaller than 1',
       code: `
         0.000002
+        -0.000002
       `,
       options: { exponentialNotation: true },
       expectedResult: `
         0.000002 = 2e-6
+        -0.000002 = -2e-6
       `,
     },
     {
