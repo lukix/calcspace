@@ -63,6 +63,12 @@ const createTokenizedLineWithError = ({
   errorMessage,
   start = null,
   end = null,
+}: {
+  values: any;
+  lineString: string;
+  errorMessage: string;
+  start?: number | null;
+  end?: number | null;
 }) => {
   const errorSourceStart = start === null ? 0 : start;
   const errorSourceEnd = end === null ? lineString.length : end;
@@ -74,7 +80,7 @@ const createTokenizedLineWithError = ({
         tags: [tokens.NORMAL, tokens.ERROR],
       },
       {
-        value: lineString.substring(start, errorSourceEnd),
+        value: lineString.substring(errorSourceStart, errorSourceEnd),
         tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
       },
       {
@@ -133,7 +139,7 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
   if (
     partsSplittedByEqualSigns.length === 3 &&
     !(
-      partsSplittedByEqualSigns[2].split('').includes('[') ||
+      partsSplittedByEqualSigns[2].split('').includes('[') &&
       partsSplittedByEqualSigns[2].split('').includes(']')
     )
   ) {
@@ -141,10 +147,7 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
       values,
       lineString,
       errorMessage: 'Expected square brackets [...] after last "="',
-      start:
-        partsSplittedByEqualSigns[0].length +
-        partsSplittedByEqualSigns[1].length +
-        partsSplittedByEqualSigns[2].length,
+      start: partsSplittedByEqualSigns[0].length + partsSplittedByEqualSigns[1].length + 2,
     });
   }
   const {
@@ -184,6 +187,10 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
     }
   }
 
+  const expressionPartBeginningIndex = symbolBeforeSanitization
+    ? symbolBeforeSanitization.length + 1
+    : 0;
+
   const { unit: resultUnit, error: resultUnitError } = resultUnitPart
     ? getUnitFromResultUnitString(resultUnitPart)
     : { unit: null, error: null };
@@ -192,7 +199,7 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
       values,
       lineString,
       errorMessage: resultUnitError,
-      start: lineString.lastIndexOf('=') + 1,
+      start: expressionPartBeginningIndex,
     });
   }
 
@@ -216,13 +223,12 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
   );
 
   if (error) {
-    const equalSignPosition = lineString.indexOf('=') === -1 ? 0 : lineString.indexOf('=') + 1;
     return createTokenizedLineWithError({
       values,
       lineString,
       errorMessage: error,
-      start: (startCharIndex || 0) + equalSignPosition,
-      end: endCharIndex ? endCharIndex + equalSignPosition : null,
+      start: (startCharIndex || 0) + expressionPartBeginningIndex,
+      end: endCharIndex ? (endCharIndex || 0) + expressionPartBeginningIndex : null,
     });
   }
 
@@ -239,7 +245,7 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
       values,
       lineString,
       errorMessage: error.message,
-      start: lineString.lastIndexOf('=') + 1,
+      start: expressionPartBeginningIndex,
     });
   }
 
