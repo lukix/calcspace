@@ -1,6 +1,7 @@
 import pipe from 'ramda.pipe';
 import parseToPrimaryTokens from './parseSteps/parseToPrimaryTokens';
 import classifySymbols from './parseSteps/classifySymbols';
+import buildSymbolsWithExponentialNotation from './parseSteps/buildSymbolsWithExponentialNotation';
 import buildSubexpressions from './parseSteps/buildSubexpressions';
 import buildFunctions from './parseSteps/buildFunctions';
 import validateTokensList from './parseSteps/validateTokensList';
@@ -16,6 +17,7 @@ const parseExpression = (expression: string) => {
       parseToPrimaryTokens,
       classifySymbols,
       buildComplexUnits,
+      buildSymbolsWithExponentialNotation,
       removeSpaceTokens,
       buildSubexpressions,
       buildFunctions,

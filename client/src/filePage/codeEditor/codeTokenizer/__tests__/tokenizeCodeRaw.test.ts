@@ -174,6 +174,15 @@ describe('tokenizeCode - raw result test', () => {
         -1.5e400 = -Infinity
       `,
     },
+    {
+      it: 'should support negative powers for exponential notation',
+      code: `
+        2e-1
+      `,
+      expectedResult: `
+        2e-1 = 0.2
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when
