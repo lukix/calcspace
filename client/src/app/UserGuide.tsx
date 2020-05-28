@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './UserGuide.module.scss';
 
 interface UserGuideProps {}
@@ -122,8 +123,8 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       </pre>
       <h2>Units</h2>
       <p>
-        Math IDE supports values with units. Unit symbol needs to be placed right after the number,
-        without separating space character. For example:
+        Math IDE supports values with <Link to="/units-list">units</Link>. Unit symbol needs to be
+        placed right after the number, without separating space character. For example:
       </p>
       <pre className={styles.codeSnippet}>
         15kg
@@ -192,6 +193,9 @@ const UserGuide: React.FC<UserGuideProps> = () => {
           Error: "kg*m^2/s^2" cannot be converted to "kg"
         </span>
       </pre>
+      <p>
+        Here is a list of all available units: <Link to="/units-list">Units List</Link>.
+      </p>
     </div>
   );
 };

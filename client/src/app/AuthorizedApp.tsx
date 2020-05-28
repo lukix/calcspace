@@ -7,6 +7,7 @@ import FilePage from '../filePage/FilePage';
 import NewFilePage from '../newFilePage/NewFilePage';
 import FilesList from '../filesList/FilesList';
 import UserGuide from './UserGuide';
+import UnitsList from './UnitsList';
 import { UserProfileModal } from './userProfileModal';
 import { actions as reduxActions, selectors } from './store';
 import styles from './App.module.scss';
@@ -52,6 +53,9 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
             </Route>
             <Route path="/file/:fileId">
               <FilePage />
+            </Route>
+            <Route path="/units-list">
+              <UnitsList />
             </Route>
             <Route path="/">
               <UserGuide />
