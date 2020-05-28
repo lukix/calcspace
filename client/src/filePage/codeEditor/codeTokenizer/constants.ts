@@ -185,7 +185,7 @@ export const units: Array<UnitMapTuple> = [
   ['Mt', { multiplier: 1e9, baseUnits: [{ unit: 'kg', power: 1 }] }],
   ['kt', { multiplier: 1e6, baseUnits: [{ unit: 'kg', power: 1 }] }],
   ['t', { multiplier: 1e3, baseUnits: [{ unit: 'kg', power: 1 }] }],
-  ['lb', { multiplier: 1e3, baseUnits: [{ unit: 'kg', power: 1 }] }],
+  ['lb', { multiplier: 0.45359237, baseUnits: [{ unit: 'kg', power: 1 }] }],
 
   ...getUnitsWithPrefixes('l', [{ unit: 'm', power: 3 }], { baseMultiplier: 1e-3 }),
 
