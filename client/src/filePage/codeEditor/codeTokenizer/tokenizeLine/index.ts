@@ -1,111 +1,17 @@
-import {
-  unitToString,
-  translateToBaseUnits,
-  calculateEffectiveUnitMultiplier,
-} from '../mathParser';
-import evaluateExpression from './evaluateExpression';
-import { tokens, functions, unitsMap, units, unitsApplicableForResult } from './constants';
-import getUnitFromResultUnitString from './getUnitFromResultUnitString';
+import evaluateExpression from '../evaluateExpression';
+import { tokens, functions, unitsMap } from '../constants';
+import getUnitFromResultUnitString from '../getUnitFromResultUnitString';
+import numberToString from './numberToString';
+import valueWithUnitToString from './valueWithUnitToString';
+import convertToComprehendibleUnit from './convertToComprehendibleUnit';
+import convertToDesiredUnit from './convertToDesiredUnit';
+import createTokenizedLineWithError from './createTokenizedLineWithError';
+import classifyPartsSplittedByEqualSigns from './classifyPartsSplittedByEqualSigns';
 
 const ALL_WHITESPACES_REGEX = /\s/g;
 const IS_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
 
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
-const numberToString = (number: number, exponentialNotation: boolean) => {
-  if (!Number.isFinite(number)) {
-    return `${number}`;
-  }
-  if (exponentialNotation && (number >= 1e4 || number < 1e-4)) {
-    const orderOfMagnitude = Math.floor(Math.log10(Math.abs(number)));
-    return `${number}`.split('').includes('e')
-      ? `${number}`
-      : `${number / 10 ** orderOfMagnitude}e${orderOfMagnitude}`;
-  }
-  return `${number}`;
-};
-const valueWithUnitToString = ({ number, unit }, exponentialNotation) =>
-  `${numberToString(number, exponentialNotation)}${unitToString(unit)}`;
-const convertToComprehendibleUnit = ({ number, unit }) => {
-  const unitString = unitToString(unit);
-  const replacementUnit = units.find(
-    ([symbol, { baseUnits }]) =>
-      unitsApplicableForResult.includes(symbol) && unitToString(baseUnits) === unitString
-  );
-  if (!replacementUnit) {
-    return { number, unit };
-  }
-  const [symbol, { multiplier }] = replacementUnit;
-  return {
-    number: number / multiplier,
-    unit: [{ unit: symbol, power: 1 }],
-  };
-};
-
-const convertToDesiredUnit = ({ number, unit }, desiredUnit) => {
-  const desiredUnitInBaseUnits = translateToBaseUnits(desiredUnit, unitsMap);
-  const unitString = unitToString(translateToBaseUnits(unit, unitsMap));
-  const desiredUnitString = unitToString(desiredUnitInBaseUnits);
-  if (desiredUnitString === '') {
-    throw new Error('Desired result unit is empty after simplification');
-  }
-  if (unitString !== desiredUnitString) {
-    throw new Error(`"${unitString}" cannot be converted to "${unitToString(desiredUnit)}"`);
-  }
-  const unitMultiplier = calculateEffectiveUnitMultiplier(unit, unitsMap);
-  const desiredUnitMultiplier = calculateEffectiveUnitMultiplier(desiredUnit, unitsMap);
-  const multiplier = unitMultiplier / desiredUnitMultiplier;
-  return { number: number * multiplier, unit: desiredUnit };
-};
-
-const createTokenizedLineWithError = ({
-  values,
-  lineString,
-  errorMessage,
-  start = null,
-  end = null,
-}: {
-  values: any;
-  lineString: string;
-  errorMessage: string;
-  start?: number | null;
-  end?: number | null;
-}) => {
-  const errorSourceStart = start === null ? 0 : start;
-  const errorSourceEnd = end === null ? lineString.length : end;
-  return {
-    values,
-    tokenizedLine: [
-      {
-        value: lineString.substring(0, errorSourceStart),
-        tags: [tokens.NORMAL, tokens.ERROR],
-      },
-      {
-        value: lineString.substring(errorSourceStart, errorSourceEnd),
-        tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
-      },
-      {
-        value: lineString.substring(errorSourceEnd),
-        tags: [tokens.NORMAL, tokens.ERROR],
-      },
-      { value: `  Error: ${errorMessage}`, tags: [tokens.VIRTUAL] },
-    ].filter(({ value }) => value !== ''),
-  };
-};
-
-const classifyPartsSplittedByEqualSigns = (parts: Array<string>) => {
-  if (parts.length === 1) {
-    return { symbolBeforeSanitization: null, expression: parts[0], resultUnitPart: null };
-  }
-  if (
-    parts[parts.length - 1].split('').includes('[') &&
-    parts[parts.length - 1].split('').includes(']')
-  ) {
-    return parts.length === 2
-      ? { symbolBeforeSanitization: null, expression: parts[0], resultUnitPart: parts[1] }
-      : { symbolBeforeSanitization: parts[0], expression: parts[1], resultUnitPart: parts[2] };
-  }
-  return { symbolBeforeSanitization: parts[0], expression: parts[1], resultUnitPart: null };
-};
 
 const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
   const sanitizedExpression = lineString.trimStart();
