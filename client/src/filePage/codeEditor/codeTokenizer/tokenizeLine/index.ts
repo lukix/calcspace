@@ -7,10 +7,10 @@ import convertToComprehendibleUnit from './convertToComprehendibleUnit';
 import convertToDesiredUnit from './convertToDesiredUnit';
 import createTokenizedLineWithError from './createTokenizedLineWithError';
 import classifyPartsSplittedByEqualSigns from './classifyPartsSplittedByEqualSigns';
+import validateSplittedParts from './validateSplittedParts';
+import validateSymbol from './validateSymbol';
 
 const ALL_WHITESPACES_REGEX = /\s/g;
-const IS_SYMBOL_REGEX = /^[A-Za-z]\w*$/;
-
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
 
 const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
@@ -31,30 +31,13 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
   }
 
   const partsSplittedByEqualSigns = lineString.split('=');
-  if (partsSplittedByEqualSigns.length > 3) {
-    return createTokenizedLineWithError({
-      values,
-      lineString,
-      errorMessage: 'Too many equal signs',
-      start:
-        partsSplittedByEqualSigns[0].length +
-        partsSplittedByEqualSigns[1].length +
-        partsSplittedByEqualSigns[2].length,
-    });
-  }
-  if (
-    partsSplittedByEqualSigns.length === 3 &&
-    !(
-      partsSplittedByEqualSigns[2].split('').includes('[') &&
-      partsSplittedByEqualSigns[2].split('').includes(']')
-    )
-  ) {
-    return createTokenizedLineWithError({
-      values,
-      lineString,
-      errorMessage: 'Expected square brackets [...] after last "="',
-      start: partsSplittedByEqualSigns[0].length + partsSplittedByEqualSigns[1].length + 2,
-    });
+  const splittedPartsValidationError = validateSplittedParts({
+    partsSplittedByEqualSigns,
+    values,
+    lineString,
+  });
+  if (splittedPartsValidationError) {
+    return splittedPartsValidationError;
   }
   const {
     symbolBeforeSanitization,
@@ -64,33 +47,9 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
 
   const symbol = symbolBeforeSanitization ? sanitize(symbolBeforeSanitization) : null;
 
-  if (symbol !== null) {
-    if (!symbol.match(IS_SYMBOL_REGEX)) {
-      return createTokenizedLineWithError({
-        values,
-        lineString,
-        errorMessage: 'Invalid value on the left side of the equal sign',
-        end: lineString.indexOf('='),
-      });
-    }
-
-    if (values[symbol] !== undefined) {
-      return createTokenizedLineWithError({
-        values,
-        lineString,
-        errorMessage: `Variable "${symbol}" already exists. Variables cannot be redefined`,
-        end: lineString.indexOf('='),
-      });
-    }
-
-    if (functions[symbol] !== undefined) {
-      return createTokenizedLineWithError({
-        values,
-        lineString,
-        errorMessage: `Variable cannot have the same name as an existing function "${symbol}"`,
-        end: lineString.indexOf('='),
-      });
-    }
+  const symbolValidationError = validateSymbol({ symbol, values, lineString, functions });
+  if (symbolValidationError) {
+    return symbolValidationError;
   }
 
   const expressionPartBeginningIndex = symbolBeforeSanitization
