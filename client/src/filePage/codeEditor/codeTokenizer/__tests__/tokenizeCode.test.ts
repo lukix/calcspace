@@ -103,4 +103,144 @@ describe('tokenizeCode - tokenization test', () => {
     // then
     expect(tokenizedCode[0][0].tags).toContain(tokens.ERROR);
   });
+
+  it('should correctly mark incorrect part when there are no equal characters', () => {
+    // given
+    const code = '2 + 3b + 4';
+
+    // when
+    const tokenizedCode = tokenizeCode(code);
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        { value: '2 + ', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '3b',
+          tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+        },
+        { value: ' + 4', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '  Error: Unknown unit "b"',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
+
+  it('should correctly mark incorrect expression part in assignment', () => {
+    // given
+    const code = 'x = 2 + 3b + 4';
+
+    // when
+    const tokenizedCode = tokenizeCode(code);
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        { value: 'x = 2 + ', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '3b',
+          tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+        },
+        { value: ' + 4', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '  Error: Unknown unit "b"',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
+
+  it('should correctly mark incorrect symbol part in assignment', () => {
+    // given
+    const code = '8 + 9 = 2 + 3 + 4';
+
+    // when
+    const tokenizedCode = tokenizeCode(code);
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        {
+          value: '8 + 9 ',
+          tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+        },
+        { value: '= 2 + 3 + 4', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '  Error: Invalid value on the left side of the equal sign',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
+
+  it('should correctly mark incorrect symbol part in assignment with desired unit', () => {
+    // given
+    const code = '8 + 9 = 2 + 3 + 4 = [kg]';
+
+    // when
+    const tokenizedCode = tokenizeCode(code);
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        {
+          value: '8 + 9 ',
+          tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+        },
+        { value: '= 2 + 3 + 4 = [kg]', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: '  Error: Invalid value on the left side of the equal sign',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
+
+  it('should correctly mark incorrect desired unit part in assignment', () => {
+    // given
+    const code = 'a = 2kg + 300g = [kg';
+
+    // when
+    const tokenizedCode = tokenizeCode(code);
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        { value: 'a = 2kg + 300g =', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: ' [kg',
+          tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+        },
+        {
+          value: '  Error: Expected square brackets [...] after last "="',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
+
+  it('should correctly mark incorrect desired unit part in expression', () => {
+    // given
+    const code = '2kg + 300g = [kg';
+
+    // when
+    const tokenizedCode = tokenizeCode(code);
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        { value: '2kg + 300g =', tags: [tokens.NORMAL, tokens.ERROR] },
+        {
+          value: ' [kg',
+          tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
+        },
+        {
+          value: '  Error: Found opening square bracket "[" without a closing one "]"',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
 });

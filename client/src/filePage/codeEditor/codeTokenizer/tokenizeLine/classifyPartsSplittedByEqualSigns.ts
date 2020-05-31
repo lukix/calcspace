@@ -3,7 +3,7 @@ const classifyPartsSplittedByEqualSigns = (parts: Array<string>) => {
     return { symbolBeforeSanitization: null, expression: parts[0], resultUnitPart: null };
   }
   if (
-    parts[parts.length - 1].split('').includes('[') &&
+    parts[parts.length - 1].split('').includes('[') ||
     parts[parts.length - 1].split('').includes(']')
   ) {
     return parts.length === 2

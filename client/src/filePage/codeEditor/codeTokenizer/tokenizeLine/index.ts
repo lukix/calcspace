@@ -56,6 +56,10 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
     ? symbolBeforeSanitization.length + 1
     : 0;
 
+  const resultUnitPartBeginningIndex =
+    (symbolBeforeSanitization ? symbolBeforeSanitization.length + 1 : 0) +
+    (expression ? expression.length + 1 : 0);
+
   const { unit: resultUnit, error: resultUnitError } = resultUnitPart
     ? getUnitFromResultUnitString(resultUnitPart)
     : { unit: null, error: null };
@@ -64,7 +68,7 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
       values,
       lineString,
       errorMessage: resultUnitError,
-      start: expressionPartBeginningIndex,
+      start: resultUnitPartBeginningIndex,
     });
   }
 
