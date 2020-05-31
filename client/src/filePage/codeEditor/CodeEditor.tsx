@@ -30,6 +30,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const [exponentialNotation, setExponentialNotation] = useState(
     localStorage.getItem('exponentialNotation') === 'true'
   );
+  const [showResultUnit, setShowResultUnit] = useState(
+    localStorage.getItem('showResultUnit') === 'true'
+  );
   const [code, setCode] = useState(initialCode);
 
   const onCodeChange = (e) => {
@@ -42,9 +45,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
     localStorage.setItem('exponentialNotation', `${exponentialNotation}`);
   }, [exponentialNotation]);
 
-  const evaluatedCode = tokenizeCode(code, { exponentialNotation });
+  useEffect(() => {
+    localStorage.setItem('showResultUnit', `${showResultUnit}`);
+  }, [showResultUnit]);
 
   const isInViewMode = mode === modes.VIEW_MODE;
+
+  const evaluatedCode = tokenizeCode(code, {
+    exponentialNotation,
+    showResultUnit: !isInViewMode || showResultUnit,
+  });
+
   const codeWithResults = tokenizedCodeToString(evaluatedCode);
 
   const longestLineLength = Math.max(...codeWithResults.split('\n').map((line) => line.length));
@@ -68,6 +79,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
             : 'Exponential notation is off'
         }
       />
+      {isInViewMode && (
+        <ToggleButton
+          className={styles.buttons}
+          label="Show result unit"
+          value={showResultUnit}
+          onChange={setShowResultUnit}
+          description={showResultUnit ? 'Showing result unit is on' : 'Showing result unit is off'}
+        />
+      )}
       <div className={styles.codeWrapper}>
         <textarea
           className={styles.editorTextarea}

@@ -254,11 +254,30 @@ describe('tokenizeCode - tokenization test', () => {
     // then
     expect(tokenizedCode).toEqual([
       [
-        { value: 'x = 2kg + 300g =', tags: [tokens.NORMAL] },
+        { value: 'x = 2kg + 300g ', tags: [tokens.NORMAL] },
         {
-          value: ' [kg]',
+          value: '= [kg]',
           tags: [tokens.NORMAL, tokens.DESIRED_UNIT],
         },
+        {
+          value: ' = 2.3kg',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
+
+  it('should not include desired unit part when showResultUnit is false', () => {
+    // given
+    const code = 'x = 2kg + 300g = [kg]';
+
+    // when
+    const tokenizedCode = tokenizeCode(code, { showResultUnit: false });
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        { value: 'x = 2kg + 300g', tags: [tokens.NORMAL] },
         {
           value: ' = 2.3kg',
           tags: [tokens.VIRTUAL],

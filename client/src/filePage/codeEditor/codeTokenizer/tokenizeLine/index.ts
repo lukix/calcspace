@@ -13,7 +13,11 @@ import validateSymbol from './validateSymbol';
 const ALL_WHITESPACES_REGEX = /\s/g;
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
 
-const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
+const tokenizeLine = (
+  values,
+  lineString,
+  { exponentialNotation = false, showResultUnit = true }
+) => {
   const sanitizedExpression = lineString.trimStart();
 
   if (sanitizedExpression === '') {
@@ -123,11 +127,15 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
 
   const tokenizedLine = [
     {
-      value: resultUnitPart ? lineString.substring(0, resultUnitPartBeginningIndex) : lineString,
+      value: resultUnitPart
+        ? showResultUnit
+          ? lineString.substring(0, resultUnitPartBeginningIndex - 1)
+          : lineString.substring(0, resultUnitPartBeginningIndex - 1).trimEnd()
+        : lineString,
       tags: [tokens.NORMAL],
     },
-    ...(resultUnitPart
-      ? [{ value: resultUnitPart, tags: [tokens.NORMAL, tokens.DESIRED_UNIT] }]
+    ...(resultUnitPart && showResultUnit
+      ? [{ value: `=${resultUnitPart}`, tags: [tokens.NORMAL, tokens.DESIRED_UNIT] }]
       : []),
     ...(resultString === '' ? [] : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
   ];
