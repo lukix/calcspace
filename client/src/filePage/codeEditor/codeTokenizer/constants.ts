@@ -7,6 +7,7 @@ export const tokens = {
   ERROR_SOURCE: 'ERROR_SOURCE',
   ERROR: 'ERROR',
   COMMENT: 'COMMENT',
+  DESIRED_UNIT: 'DESIRED_UNIT',
 };
 
 const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {

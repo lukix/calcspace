@@ -8,6 +8,7 @@ const HighlightedLine = ({ tokens }) => {
     const className = classNames({
       [styles.tokenVirtual]: tags.includes(availableTokens.VIRTUAL),
       [styles.tokenComment]: tags.includes(availableTokens.COMMENT),
+      [styles.tokenDesiredUnit]: tags.includes(availableTokens.DESIRED_UNIT),
       [styles.tokenError]: tags.includes(availableTokens.ERROR),
       [styles.tokenErrorSource]: tags.includes(availableTokens.ERROR_SOURCE),
     });

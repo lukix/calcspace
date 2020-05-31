@@ -54,7 +54,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
       color: #999;
     }
 
-    .tokenComment {
+    .tokenComment, .tokenDesiredUnit {
       color: $accent-color;
     }
   }

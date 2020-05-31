@@ -123,9 +123,12 @@ const tokenizeLine = (values, lineString, { exponentialNotation = false }) => {
 
   const tokenizedLine = [
     {
-      value: lineString,
+      value: resultUnitPart ? lineString.substring(0, resultUnitPartBeginningIndex) : lineString,
       tags: [tokens.NORMAL],
     },
+    ...(resultUnitPart
+      ? [{ value: resultUnitPart, tags: [tokens.NORMAL, tokens.DESIRED_UNIT] }]
+      : []),
     ...(resultString === '' ? [] : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
   ];
 
