@@ -67,9 +67,11 @@
   .fileName {
     display: flex;
     align-items: center;
+    max-width: calc(100% - 50px);
 
     svg {
       margin-right: 5px;
+      flex-shrink: 0;
     }
 
     span {
@@ -90,6 +92,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    max-width: 100%;
+
+    a {
+      max-width: calc(100% - 52px);
+    }
+
+    .fileName {
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
 
     &:not(.isBusy):hover {
       background: rgba(0, 0, 0, 0.3);
