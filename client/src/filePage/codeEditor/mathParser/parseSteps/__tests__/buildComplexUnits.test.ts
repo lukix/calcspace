@@ -1,6 +1,7 @@
 import tokens from '../../tokens';
 import symbolTypes from '../../symbolTypes';
 import buildComplexUnits from '../buildComplexUnits';
+import { ParserError } from '../../errors';
 
 describe('buildComplexUnits', () => {
   it('should attach following units to "numeric symbol with unit"', () => {
@@ -313,5 +314,43 @@ describe('buildComplexUnits', () => {
         unit: 'm^-2',
       },
     ]);
+  });
+
+  it('should throw an error when the unit is invalid', () => {
+    // given
+    const tokensList = [
+      {
+        type: tokens.SYMBOL,
+        symbolType: symbolTypes.NUMERIC_WITH_UNIT,
+        name: '15N',
+        position: 0,
+        positionEnd: 3,
+      },
+      {
+        type: tokens.OPERATOR,
+        name: '*',
+        position: 3,
+        positionEnd: 4,
+      },
+      {
+        type: tokens.OPERATOR,
+        name: '*',
+        position: 4,
+        positionEnd: 5,
+      },
+      {
+        type: tokens.SYMBOL,
+        symbolType: symbolTypes.VARIABLE,
+        name: 'm',
+        position: 5,
+        positionEnd: 6,
+      },
+    ];
+
+    // when
+    const testFunction = () => buildComplexUnits(tokensList);
+
+    // then
+    expect(testFunction).toThrowError(new ParserError('Invalid unit'));
   });
 });
