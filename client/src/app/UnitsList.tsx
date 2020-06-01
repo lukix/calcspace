@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styles from './UserGuide.module.scss';
 
 const createUnitWithPrefixes = (symbol) => [
@@ -98,12 +98,12 @@ interface UnitsListProps {}
 
 const UnitsList: React.FC<UnitsListProps> = () => {
   const mapUnits = (units) =>
-    units.map(({ unit, equivaluent }) => (
-      <>
+    units.map(({ unit, equivaluent }, index) => (
+      <Fragment key={`${unit}-${index}`}>
         {unit}
         <span className={styles.tokenVirtual}> = {equivaluent}</span>
         <br />
-      </>
+      </Fragment>
     ));
   return (
     <div className={styles.userGuide}>

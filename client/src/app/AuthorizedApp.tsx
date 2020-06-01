@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import Spinner from '../shared/spinner';
 import HeaderBar from '../headerBar/HeaderBar';
 import FilePage from '../filePage/FilePage';
@@ -29,6 +29,15 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
     fetchLoggedInUser();
   }, [fetchLoggedInUser]);
 
+  const { pathname } = useLocation();
+  const scrollableContentElement = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollableContentElement && scrollableContentElement.current) {
+      scrollableContentElement.current.scrollTo(0, 0);
+    }
+  }, [pathname]);
+
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const showUserModal = () => setIsUserModalVisible(true);
   const hideUserModal = () => setIsUserModalVisible(false);
@@ -46,7 +55,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
       <HeaderBar username={user && user.username} onAvatarClick={showUserModal} />
       <div className={styles.contentContainer}>
         <FilesList />
-        <div className={styles.content}>
+        <div className={styles.content} ref={scrollableContentElement}>
           <Switch>
             <Route path="/new-file">
               <NewFilePage />
