@@ -98,6 +98,16 @@ describe('tokenizeCode - raw result test', () => {
       `,
     },
     {
+      it: 'should accept result units with negative powers',
+      code: `
+        15m/s = [m*s^-1]
+      `,
+      options: { exponentialNotation: true },
+      expectedResult: `
+        15m/s = [m*s^-1] = 15m*s^-1
+      `,
+    },
+    {
       it: 'should display an error when unit after simplification is empty',
       code: `
         5 = [km/m]

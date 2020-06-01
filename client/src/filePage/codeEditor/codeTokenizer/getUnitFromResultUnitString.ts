@@ -1,6 +1,6 @@
 import { parseUnits } from '../mathParser';
 
-const UNITS_REGEX = /^([A-Za-z]+(\^[1-9]+[0-9]*)?(\/|\*))*([A-Za-z]+(\^[1-9]+[0-9]*)?)$/;
+const UNITS_REGEX = /^([A-Za-z]+(\^[1-9]+[0-9]*)?(\/|\*))*([A-Za-z]+(\^(-?[1-9])+[0-9]*)?)$/;
 
 const getUnitFromResultUnitString = (resultUnitString) => {
   const trimmedResultUnitString = resultUnitString.trim();
