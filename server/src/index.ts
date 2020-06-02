@@ -14,7 +14,7 @@ import usersRoutes from './routes/usersRoutes';
 import filesRoutes from './routes/filesRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
-import { DB_NAME, DB_USER, DB_HOST, DB_PASSWORD, PORT, CLIENT_URL } from './config';
+import { DATABASE_URL, PORT, CLIENT_URL } from './config';
 import userSettingsRoutes from './routes/userSettingsRoutes';
 
 (async () => {
@@ -28,10 +28,7 @@ import userSettingsRoutes from './routes/userSettingsRoutes';
   app.use(cookieParser());
 
   const dbClient = new Client({
-    user: DB_USER,
-    host: DB_HOST,
-    database: DB_NAME,
-    password: DB_PASSWORD,
+    connectionString: DATABASE_URL,
   });
 
   try {

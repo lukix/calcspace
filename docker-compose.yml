@@ -25,9 +25,7 @@ services:
     environment:
       - PORT=${PORT}
       - CLIENT_URL=${CLIENT_URL}
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - TOKEN_EXPIRATION_DURATION_MS=${TOKEN_EXPIRATION_DURATION_MS}
   postgres:

@@ -1,6 +1,6 @@
 import { Client } from 'pg';
 
-import { DB_NAME, DB_USER, DB_HOST, DB_PASSWORD } from './config';
+import { DATABASE_URL } from './config';
 
 const queries = [
   {
@@ -35,10 +35,7 @@ const queries = [
 
 const setupDatabase = async () => {
   const client = new Client({
-    user: DB_USER,
-    host: DB_HOST,
-    database: DB_NAME,
-    password: DB_PASSWORD,
+    connectionString: DATABASE_URL,
   });
   await client.connect();
   try {
