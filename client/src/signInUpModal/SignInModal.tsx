@@ -48,33 +48,43 @@ const LogInModal: React.FC<LogInModalProps> = () => {
   });
 
   return (
-    <Modal visible title="Log In">
-      <AppDescription />
-      <div className={styles.signInModal}>
-        <Spinner show={isRedirecting} centered>
-          <form onSubmit={formik.handleSubmit}>
-            <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
-            <ModalFormField type="password" name="password" label="Password" formikProps={formik} />
-            <div className={styles.submitButtonWrapper}>
-              <input
-                type="submit"
-                value={formik.isSubmitting ? 'Logging in...' : 'Log in'}
-                disabled={formik.isSubmitting}
+    <div className={styles.pageContainer}>
+      <Modal visible title="Log In" floating={false}>
+        <AppDescription />
+        <div className={styles.signInModal}>
+          <Spinner show={isRedirecting} centered>
+            <form onSubmit={formik.handleSubmit}>
+              <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
+              <ModalFormField
+                type="password"
+                name="password"
+                label="Password"
+                formikProps={formik}
               />
-              <p className={styles.signUpMessage}>
-                Don't have an account? <Link to="/sign-up">Sign up</Link>.
-              </p>
-            </div>
-            {formik.status === INVALID_CREDENTIALS_STATUS && (
-              <p className={sharedStyles.errorMessage}>Invalid username or password.</p>
-            )}
-            {formik.status === OTHER_ERROR_STATUS && (
-              <p className={sharedStyles.errorMessage}>Unexpected error has occurred.</p>
-            )}
-          </form>
-        </Spinner>
+              <div className={styles.submitButtonWrapper}>
+                <input
+                  type="submit"
+                  value={formik.isSubmitting ? 'Logging in...' : 'Log in'}
+                  disabled={formik.isSubmitting}
+                />
+                <p className={styles.signUpMessage}>
+                  Don't have an account? <Link to="/sign-up">Sign up</Link>.
+                </p>
+              </div>
+              {formik.status === INVALID_CREDENTIALS_STATUS && (
+                <p className={sharedStyles.errorMessage}>Invalid username or password.</p>
+              )}
+              {formik.status === OTHER_ERROR_STATUS && (
+                <p className={sharedStyles.errorMessage}>Unexpected error has occurred.</p>
+              )}
+            </form>
+          </Spinner>
+        </div>
+      </Modal>
+      <div className={styles.noAccountButtonWrapper}>
+        <button>Try without an account</button>
       </div>
-    </Modal>
+    </div>
   );
 };
 

@@ -63,45 +63,52 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
   });
 
   return (
-    <Modal visible title="Create An Account">
-      <AppDescription />
-      <div className={styles.signInModal}>
-        {!addedUser ? (
-          <form onSubmit={formik.handleSubmit}>
-            <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
-            <ModalFormField type="password" name="password" label="Password" formikProps={formik} />
-            <ModalFormField
-              type="password"
-              name="repeatPassword"
-              label="Repeat password"
-              formikProps={formik}
-            />
-            <div className={styles.submitButtonWrapper}>
-              <input
-                type="submit"
-                value={isAddingUser ? 'Signing Up...' : 'Sign Up'}
-                disabled={isAddingUser}
+    <div className={styles.pageContainer}>
+      <Modal visible title="Create An Account" floating={false}>
+        <AppDescription />
+        <div className={styles.signInModal}>
+          {!addedUser ? (
+            <form onSubmit={formik.handleSubmit}>
+              <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
+              <ModalFormField
+                type="password"
+                name="password"
+                label="Password"
+                formikProps={formik}
               />
-              <p className={styles.signUpMessage}>
-                Already have an account? <Link to="/log-in">Log in</Link>.
+              <ModalFormField
+                type="password"
+                name="repeatPassword"
+                label="Repeat password"
+                formikProps={formik}
+              />
+              <div className={styles.submitButtonWrapper}>
+                <input
+                  type="submit"
+                  value={isAddingUser ? 'Signing Up...' : 'Sign Up'}
+                  disabled={isAddingUser}
+                />
+                <p className={styles.signUpMessage}>
+                  Already have an account? <Link to="/log-in">Log in</Link>.
+                </p>
+              </div>
+              {addUserError && (
+                <p className={sharedStyles.errorMessage}>
+                  Unexpected error has occured. Signing up failed.
+                </p>
+              )}
+            </form>
+          ) : (
+            <div className={styles.signUpSuccessMessage}>
+              <FaRegCheckCircle />
+              <p>
+                You have successfully signed up! You can <Link to="/log-in">Log in</Link> now.
               </p>
             </div>
-            {addUserError && (
-              <p className={sharedStyles.errorMessage}>
-                Unexpected error has occured. Signing up failed.
-              </p>
-            )}
-          </form>
-        ) : (
-          <div className={styles.signUpSuccessMessage}>
-            <FaRegCheckCircle />
-            <p>
-              You have successfully signed up! You can <Link to="/log-in">Log in</Link> now.
-            </p>
-          </div>
-        )}
-      </div>
-    </Modal>
+          )}
+        </div>
+      </Modal>
+    </div>
   );
 };
 
