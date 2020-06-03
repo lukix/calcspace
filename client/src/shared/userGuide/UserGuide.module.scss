@@ -1,0 +1,45 @@
+@import '../../style/colors.scss';
+
+$expression-font-family: 'Courier New', Courier, monospace;
+
+@mixin formattedCode {
+  font-family: $expression-font-family;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  color: $font-light-color;
+
+  .tokenError {
+    color: #f44;
+  }
+
+  .tokenVirtual {
+    color: #999;
+  }
+
+  .tokenComment {
+    color: $accent-color;
+  }
+}
+
+.userGuide {
+  max-width: 800px;
+  font-size: 1.2rem;
+
+  h2:first-child {
+    margin-top: 15px;
+  }
+}
+
+.codeSnippet {
+  @include formattedCode;
+
+  margin-left: 10px;
+  padding: 10px;
+  border-left: 2px solid $accent-color;
+}
+
+.inlineCode {
+  color: $accent-color;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0 5px;
+}

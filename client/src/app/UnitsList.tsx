@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import styles from './UserGuide.module.scss';
+import styles from './UnitsList.module.scss';
 
 const createUnitWithPrefixes = (symbol) => [
   { unit: `1Y${symbol}`, equivaluent: `1e24${symbol}` },
@@ -106,7 +106,7 @@ const UnitsList: React.FC<UnitsListProps> = () => {
       </Fragment>
     ));
   return (
-    <div className={styles.userGuide}>
+    <div className={styles.unitsList}>
       <h2>List of available units</h2>
       <h3>Mass</h3>
       <pre className={styles.codeSnippet}>

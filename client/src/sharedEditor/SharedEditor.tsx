@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './SharedEditor.module.scss';
 
-import CodeEditor from '../filePage/codeEditor/CodeEditor';
-import UserGuide from '../app/UserGuide';
+import CodeEditor from '../shared/codeEditor';
+import UserGuide from '../shared/userGuide';
 
 interface SharedEditorProps {}
 
