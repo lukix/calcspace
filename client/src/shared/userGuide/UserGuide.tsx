@@ -135,8 +135,9 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
       </pre>
       <h2>Units</h2>
       <p>
-        Math IDE supports values with <Link to="/units-list">units</Link>. Unit symbol needs to be
-        placed right after the number, without separating space character. For example:
+        Math IDE supports values with {isSignedIn ? <Link to="/units-list">units</Link> : 'units'}.
+        Unit symbol needs to be placed right after the number, without separating space character.
+        For example:
       </p>
       <pre className={styles.codeSnippet}>
         15kg
@@ -206,7 +207,11 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
         </span>
       </pre>
       <p>
-        Here is a list of all available units: <Link to="/units-list">Units List</Link>.
+        {isSignedIn && (
+          <>
+            Here is a list of all available units: <Link to="/units-list">Units List</Link>.
+          </>
+        )}
       </p>
     </div>
   );
