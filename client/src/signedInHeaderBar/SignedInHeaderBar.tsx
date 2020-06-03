@@ -5,9 +5,10 @@ import { FaBars, FaUserCircle, FaExclamationCircle } from 'react-icons/fa';
 import { SIGN_OUT_URL } from '../config';
 import Spinner from '../shared/spinner';
 import { selectors, actions } from '../shared/filesStore';
-import styles from './HeaderBar.module.scss';
+import HeaderBar from '../shared/headerBar';
+import styles from './SignedInHeaderBar.module.scss';
 
-interface HeaderBarProps {
+interface SignedInHeaderBarProps {
   username: string | null;
   onAvatarClick: () => void;
 
@@ -18,7 +19,7 @@ interface HeaderBarProps {
   setFilesPanelVisible: Function;
 }
 
-const HeaderBar: React.FC<HeaderBarProps> = ({
+const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
   username,
   onAvatarClick,
   isFilesPanelVisible,
@@ -33,29 +34,33 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     setFilesPanelVisible(!isFilesPanelVisible);
   };
   return (
-    <div className={styles.headerBar}>
-      <div className={styles.headerTitle}>
-        <FaBars
-          className={styles.menuToggleButton}
-          onClick={toggleFilesPanel}
-          title="Toggle files panel visibility"
-        />
-        <Link to="/">Math IDE</Link>
-        <Spinner size={18} show={isSynchronizingAnyFile || areThereAnyChangesToBeSaved} />
-        {showError && (
-          <FaExclamationCircle
-            title="Saving changes failed. Edit unsaved files to retry."
-            className={styles.errorIcon}
+    <HeaderBar
+      headerTitle={
+        <>
+          <FaBars
+            className={styles.menuToggleButton}
+            onClick={toggleFilesPanel}
+            title="Toggle files panel visibility"
           />
-        )}
-      </div>
-      <div className={styles.icons}>
-        <a href={SIGN_OUT_URL} className={styles.signOutLink}>
-          Log Out
-        </a>
-        {username && <FaUserCircle title="Account Settings" onClick={onAvatarClick} />}
-      </div>
-    </div>
+          <Link to="/">Math IDE</Link>
+          <Spinner size={18} show={isSynchronizingAnyFile || areThereAnyChangesToBeSaved} />
+          {showError && (
+            <FaExclamationCircle
+              title="Saving changes failed. Edit unsaved files to retry."
+              className={styles.errorIcon}
+            />
+          )}
+        </>
+      }
+      icons={
+        <>
+          <a href={SIGN_OUT_URL} className={styles.signOutLink}>
+            Log Out
+          </a>
+          {username && <FaUserCircle title="Account Settings" onClick={onAvatarClick} />}
+        </>
+      }
+    />
   );
 };
 
@@ -69,4 +74,4 @@ export default connect(
   {
     setFilesPanelVisible: actions.setFilesPanelVisible,
   }
-)(HeaderBar);
+)(SignedInHeaderBar);

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import Spinner from '../shared/spinner';
-import HeaderBar from '../headerBar/HeaderBar';
+import SignedInHeaderBar from '../signedInHeaderBar';
 import FilePage from '../filePage/FilePage';
 import NewFilePage from '../newFilePage/NewFilePage';
 import FilesList from '../filesList/FilesList';
@@ -52,7 +52,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
 
   return (
     <div className={styles.app}>
-      <HeaderBar username={user && user.username} onAvatarClick={showUserModal} />
+      <SignedInHeaderBar username={user && user.username} onAvatarClick={showUserModal} />
       <div className={styles.contentContainer}>
         <FilesList />
         <div className={styles.content} ref={scrollableContentElement}>
