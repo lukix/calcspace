@@ -67,7 +67,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
               <UnitsList />
             </Route>
             <Route path="/">
-              <UserGuide />
+              <UserGuide isSignedIn />
             </Route>
           </Switch>
         </div>

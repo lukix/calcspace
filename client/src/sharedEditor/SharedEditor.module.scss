@@ -1,0 +1,42 @@
+@import '../style/colors.scss';
+
+.sharedEditor {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-height: 100vh;
+  overflow-x: hidden;
+}
+
+.editorWrapper {
+  padding: 15px;
+  overflow: auto;
+  flex-grow: 1;
+  border-right: 1px solid $accent-color;
+}
+
+.guideWrapper {
+  overflow: auto;
+  width: 900px;
+  padding-left: 15px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1200px) {
+  .sharedEditor {
+    flex-direction: column;
+  }
+
+  .editorWrapper {
+    min-height: 300px;
+    border-right: none;
+
+    textarea {
+      min-height: 200px;
+    }
+  }
+
+  .guideWrapper {
+    width: 100%;
+  }
+}

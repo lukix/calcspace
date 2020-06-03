@@ -82,7 +82,9 @@ const LogInModal: React.FC<LogInModalProps> = () => {
         </div>
       </Modal>
       <div className={styles.noAccountButtonWrapper}>
-        <button>Try without an account</button>
+        <Link to="/editor">
+          <button>Try without an account</button>
+        </Link>
       </div>
     </div>
   );
