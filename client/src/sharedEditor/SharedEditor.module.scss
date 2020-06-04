@@ -1,11 +1,18 @@
 @import '../style/colors.scss';
 
-.sharedEditor {
+.sharedEditorPage {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.sharedEditorSectionsWrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-height: 100vh;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .editorWrapper {
@@ -23,13 +30,15 @@
 }
 
 @media (max-width: 1200px) {
-  .sharedEditor {
+  .sharedEditorSectionsWrapper {
     flex-direction: column;
   }
 
   .editorWrapper {
     min-height: 300px;
+    max-height: 300px;
     border-right: none;
+    overflow: auto;
 
     textarea {
       min-height: 200px;
@@ -38,5 +47,7 @@
 
   .guideWrapper {
     width: 100%;
+    flex: 1;
+    overflow: auto;
   }
 }

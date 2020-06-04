@@ -20,7 +20,7 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
           </>
         ) : (
           <>
-            On the left side of the screen (top on small screens) there is a text field where you
+            On the left side of the screen (top on smaller screens) there is a text field where you
             can enter your math expressions. Continue reading this guide to get familiar with how
             Math IDE works.
           </>
