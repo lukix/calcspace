@@ -2,17 +2,29 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './UserGuide.module.scss';
 
-interface UserGuideProps {}
+interface UserGuideProps {
+  isSignedIn: boolean;
+}
 
-const UserGuide: React.FC<UserGuideProps> = () => {
+const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
   return (
     <div className={styles.userGuide}>
       <h2>Introduction</h2>
       <p>
         Welcome! Math IDE lets you write sequences of math expressions and instantly evaluate them
         for any input data that you provide.{' '}
-        <b>Select a file in the left panel to start writing your own math expressions</b> or
-        continue reading this guide to get familiar with how Math IDE works.
+        {isSignedIn ? (
+          <>
+            <b>Select a file in the left panel to start writing your own math expressions</b> or
+            continue reading this guide to get familiar with how Math IDE works.
+          </>
+        ) : (
+          <>
+            On the left side of the screen (top on smaller screens) there is a text field where you
+            can enter your math expressions. Continue reading this guide to get familiar with how
+            Math IDE works.
+          </>
+        )}
       </p>
       <h2>Beta Disclaimer</h2>
       <p>
@@ -123,8 +135,9 @@ const UserGuide: React.FC<UserGuideProps> = () => {
       </pre>
       <h2>Units</h2>
       <p>
-        Math IDE supports values with <Link to="/units-list">units</Link>. Unit symbol needs to be
-        placed right after the number, without separating space character. For example:
+        Math IDE supports values with {isSignedIn ? <Link to="/units-list">units</Link> : 'units'}.
+        Unit symbol needs to be placed right after the number, without separating space character.
+        For example:
       </p>
       <pre className={styles.codeSnippet}>
         15kg
@@ -194,7 +207,11 @@ const UserGuide: React.FC<UserGuideProps> = () => {
         </span>
       </pre>
       <p>
-        Here is a list of all available units: <Link to="/units-list">Units List</Link>.
+        {isSignedIn && (
+          <>
+            Here is a list of all available units: <Link to="/units-list">Units List</Link>.
+          </>
+        )}
       </p>
     </div>
   );

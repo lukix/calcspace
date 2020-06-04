@@ -1,4 +1,4 @@
-@import '../style/colors.scss';
+@import '../../style/colors.scss';
 
 .headerBar {
   height: 40px;
@@ -30,10 +30,6 @@
   }
 }
 
-.signOutLink {
-  font-size: 1rem;
-}
-
 .icons {
   height: 100%;
   display: flex;
@@ -43,22 +39,4 @@
     margin: 0 10px;
     cursor: pointer;
   }
-}
-
-.contentContainer {
-  max-width: 1024px;
-  margin: 0px auto;
-}
-
-.errorIcon {
-  color: red;
-  opacity: 0.7;
-  position: relative;
-  top: -1px;
-}
-
-.menuToggleButton {
-  padding-left: 5px;
-  padding-right: 15px;
-  cursor: pointer;
 }

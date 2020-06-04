@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import Spinner from '../shared/spinner';
-import HeaderBar from '../headerBar/HeaderBar';
+import SignedInHeaderBar from '../signedInHeaderBar';
 import FilePage from '../filePage/FilePage';
 import NewFilePage from '../newFilePage/NewFilePage';
 import FilesList from '../filesList/FilesList';
-import UserGuide from './UserGuide';
+import UserGuide from '../shared/userGuide';
 import UnitsList from './UnitsList';
 import { UserProfileModal } from './userProfileModal';
 import { actions as reduxActions, selectors } from './store';
@@ -52,7 +52,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
 
   return (
     <div className={styles.app}>
-      <HeaderBar username={user && user.username} onAvatarClick={showUserModal} />
+      <SignedInHeaderBar username={user && user.username} onAvatarClick={showUserModal} />
       <div className={styles.contentContainer}>
         <FilesList />
         <div className={styles.content} ref={scrollableContentElement}>
@@ -67,7 +67,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
               <UnitsList />
             </Route>
             <Route path="/">
-              <UserGuide />
+              <UserGuide isSignedIn />
             </Route>
           </Switch>
         </div>
