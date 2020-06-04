@@ -13,6 +13,10 @@
   flex-direction: row;
   justify-content: space-between;
   overflow: hidden;
+
+  textarea {
+    min-height: calc(100vh - 200px);
+  }
 }
 
 .editorWrapper {
