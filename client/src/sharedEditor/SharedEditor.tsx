@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { Switch, Case, Default } from 'react-when-then';
 import { FaExclamationCircle } from 'react-icons/fa';
 
 import CodeEditor from '../shared/codeEditor';
@@ -75,11 +76,24 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
       />
       <div className={styles.sharedEditorSectionsWrapper}>
         <div className={styles.editorWrapper}>
-          {isFetchingFile && <Spinner centered />}
-          {!isFetchingFile && fetchingFileError && <div>Error occured when fetching the file.</div>}
-          {!isFetchingFile && !fetchingFileError && (
-            <CodeEditor initialCode={file ? file.code : ''} onChange={onCodeChange} />
-          )}
+          <Switch>
+            <Case when={isFetchingFile}>
+              <Spinner centered />
+            </Case>
+            <Case when={fetchingFileError}>
+              <div>
+                Couldn't load the file. It may be due to one of these reasons:
+                <ul>
+                  <li>The URL is incorrect.</li>
+                  <li>The file has been removed due to not being visited for more than 30 days.</li>
+                  <li>Some other unexpected error has occured.</li>
+                </ul>
+              </div>
+            </Case>
+            <Default>
+              <CodeEditor initialCode={file ? file.code : ''} onChange={onCodeChange} />
+            </Default>
+          </Switch>
         </div>
         <div className={styles.guideWrapper}>
           <UserGuide isSignedIn={false} />
