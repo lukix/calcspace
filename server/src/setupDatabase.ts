@@ -43,6 +43,13 @@ const queries = [
       ADD COLUMN IF NOT EXISTS shared_view_enabled BOOLEAN DEFAULT FALSE
     `,
   },
+  {
+    name: 'addLastOpenedColumn',
+    sql: `
+      ALTER TABLE files
+      ADD COLUMN IF NOT EXISTS last_opened timestamptz DEFAULT NULL
+    `,
+  },
 ];
 
 const setupDatabase = async () => {

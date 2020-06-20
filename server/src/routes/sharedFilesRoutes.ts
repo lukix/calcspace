@@ -18,6 +18,10 @@ export default ({ dbClient }) => {
         return { status: 404 };
       }
 
+      await dbClient.query('UPDATE files SET last_opened = NOW() WHERE shared_edit_id = $1', [
+        sharedEditId,
+      ]);
+
       return {
         response: foundFile,
       };
