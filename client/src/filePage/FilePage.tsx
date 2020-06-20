@@ -6,7 +6,7 @@ import httpRequest from '../shared/httpRequest';
 import { actions } from '../shared/filesStore';
 import Spinner from '../shared/spinner';
 import CodeEditor from '../shared/codeEditor';
-import SyncService from './syncService';
+import SyncService from '../shared/syncService';
 import sharedStyles from '../shared/shared.module.scss';
 
 interface FilePageProps {
