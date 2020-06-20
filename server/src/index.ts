@@ -12,6 +12,7 @@ import {
 
 import usersRoutes from './routes/usersRoutes';
 import filesRoutes from './routes/filesRoutes';
+import sharedFilesRoutes from './routes/sharedFilesRoutes';
 import authorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
 import { DATABASE_URL, PORT, CLIENT_URL } from './config';
@@ -49,6 +50,7 @@ import userSettingsRoutes from './routes/userSettingsRoutes';
   const routesDefinitions = nestRoutes('/api', [
     testRoute,
     ...nestRoutes('/users', usersRoutes({ dbClient })),
+    ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient })),
     ...applyMiddlewares(
       [authorizationMiddleware],
       [

@@ -26,6 +26,16 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
           </>
         )}
       </p>
+      {!isSignedIn && (
+        <>
+          <h2>Saving changes and sharing</h2>
+          <p>
+            Any changes you make are automatically saved and are available under this URL:{' '}
+            <span className={styles.inlineCode}>{window.location.href}</span>. Anyone who has access
+            to this URL can see and edit the calculatons.
+          </p>
+        </>
+      )}
       <h2>Beta Disclaimer</h2>
       <p>
         Please note that this is a beta version and the syntax described below may change in the

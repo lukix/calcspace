@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
 import { Modal, ModalFormField } from '../shared/modal';
+import useAsyncAction from '../shared/useAsyncAction';
 import AppDescription from './AppDescription';
 import sharedStyles from '../shared/shared.module.scss';
 import styles from './SignInUpModal.module.scss';
+
+const createSharedFileAction = () => httpRequest.post(`shared-files`);
 
 const validationSchema = yup.object().shape({
   username: yup.string().label('Username').required(),
@@ -47,6 +50,25 @@ const LogInModal: React.FC<LogInModalProps> = () => {
     },
   });
 
+  const [
+    createSharedFile,
+    sharedFile,
+    isCreatingSharedFile,
+    creatingSharedFileError,
+  ] = useAsyncAction(createSharedFileAction);
+
+  const openNewSharedFile = async () => {
+    createSharedFile();
+  };
+
+  const { push: historyPush } = useHistory();
+
+  useEffect(() => {
+    if (sharedFile) {
+      historyPush(`shared/edit/${sharedFile.sharedEditId}`);
+    }
+  }, [historyPush, sharedFile]);
+
   return (
     <div className={styles.pageContainer}>
       <Modal visible title="Log In" floating={false}>
@@ -82,9 +104,10 @@ const LogInModal: React.FC<LogInModalProps> = () => {
         </div>
       </Modal>
       <div className={styles.noAccountButtonWrapper}>
-        <Link to="/editor">
-          <button>Try without an account</button>
-        </Link>
+        <button onClick={openNewSharedFile}>
+          {isCreatingSharedFile ? 'Redirecting...' : 'Try without an account'}
+          {creatingSharedFileError && !isCreatingSharedFile && 'Error occured. Click to try again.'}
+        </button>
       </div>
     </div>
   );

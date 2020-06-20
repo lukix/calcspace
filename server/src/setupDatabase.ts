@@ -31,6 +31,18 @@ const queries = [
       )
     `,
   },
+  {
+    name: 'addColumnsForSharingFiles',
+    sql: `
+      ALTER TABLE files
+      ALTER COLUMN user_id DROP NOT NULL,
+      ALTER COLUMN user_id SET DEFAULT NULL,
+      ADD COLUMN IF NOT EXISTS shared_edit_id UUID UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
+      ADD COLUMN IF NOT EXISTS shared_view_id UUID UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
+      ADD COLUMN IF NOT EXISTS shared_edit_enabled BOOLEAN DEFAULT FALSE,
+      ADD COLUMN IF NOT EXISTS shared_view_enabled BOOLEAN DEFAULT FALSE
+    `,
+  },
 ];
 
 const setupDatabase = async () => {
