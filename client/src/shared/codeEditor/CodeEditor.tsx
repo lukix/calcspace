@@ -7,8 +7,9 @@ import { tokenizeCode, tokenizedCodeToString } from './codeTokenizer';
 import styles from './CodeEditor.module.scss';
 
 interface CodeEditorProps {
-  initialCode: string;
+  code: string;
   onChange: Function;
+  textareaRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
 }
 
 const modes = {
@@ -25,7 +26,7 @@ const modeOptions = [
   },
 ];
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange, textareaRef }) => {
   const [mode, setMode] = useState(modes.EDIT_MODE);
   const [exponentialNotation, setExponentialNotation] = useState(
     localStorage.getItem('exponentialNotation') === 'true'
@@ -33,11 +34,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
   const [showResultUnit, setShowResultUnit] = useState(
     localStorage.getItem('showResultUnit') === 'true'
   );
-  const [code, setCode] = useState(initialCode);
 
   const onCodeChange = (e) => {
     const value = e.target.value;
-    setCode(value);
     onChange(value);
   };
 
@@ -93,6 +92,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialCode, onChange }) => {
           className={styles.editorTextarea}
           value={isInViewMode ? codeWithResults : code}
           onChange={onCodeChange}
+          ref={textareaRef}
           style={{
             height: `${code.split('\n').length * 1.2}rem`,
             width: `${longestLineLength}ch`,

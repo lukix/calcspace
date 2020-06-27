@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
+    "diff": "^4.0.2",
     "formik": "^2.1.4",
     "lodash.debounce": "^4.0.8",
     "math-factorial": "^1.0.0",

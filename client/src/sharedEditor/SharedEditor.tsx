@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Switch, Case, Default } from 'react-when-then';
 import socketIO from 'socket.io-client';
+import * as diff from 'diff';
 
+import { SOCKETS_URL } from '../config';
 import CodeEditor from '../shared/codeEditor';
 import UserGuide from '../shared/userGuide';
 
@@ -13,6 +15,7 @@ import Spinner from '../shared/spinner';
 
 import SharedEditorHeaderBar from './SharedEditorHeaderBar';
 import { syncStatuses } from './constants';
+import findNewCursorPosition from './findNewCursorPosition';
 import styles from './SharedEditor.module.scss';
 
 const fetchFileAction = (id) => httpRequest.get(`shared-files/edit/${id}`);
@@ -25,19 +28,53 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
     fetchFileAction
   );
   const [syncStatus, setSyncStatus] = useState(syncStatuses.SYNCED);
+  const [code, setCode] = useState('');
+  const [socket, setSocket] = useState<any>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     fetchFile(sharedEditId);
   }, [fetchFile, sharedEditId]);
 
   useEffect(() => {
-    const socket = socketIO('http://localhost:3001'); // TODO
-    socket.emit('subscribe-to-file', { sharedEditId });
-    socket.on('change', (data) => {
-      console.log(data);
-    });
+    if (initialFileCommit) {
+      setCode(initialFileCommit.code);
+    }
+  }, [initialFileCommit]);
 
-    return () => socket.disconnect();
+  const handleSocketChangeMessage = useCallback(
+    (data) => {
+      if (!textareaRef.current) {
+        return;
+      }
+      const { selectionStart, selectionEnd } = textareaRef.current;
+      const diffResult = diff.diffChars(code, data.code);
+      const newSelectionStart = findNewCursorPosition(diffResult, selectionStart);
+      const newSelectionEnd = findNewCursorPosition(diffResult, selectionEnd);
+
+      setCode(data.code);
+      textareaRef.current.setSelectionRange(newSelectionStart, newSelectionEnd);
+    },
+    [code]
+  );
+
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+    socket.on('change', handleSocketChangeMessage);
+    return () => socket.off('change');
+  }, [socket, handleSocketChangeMessage]);
+
+  useEffect(() => {
+    const newSocket = socketIO(SOCKETS_URL);
+    newSocket.emit('subscribe-to-file', { sharedEditId });
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+      setSocket(null);
+    };
   }, [sharedEditId]);
 
   const syncService = useMemo(() => {
@@ -52,6 +89,7 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
   }, [sharedEditId]);
 
   const onCodeChange = (value) => {
+    setCode(value);
     setSyncStatus(syncStatuses.DIRTY);
     syncService.pushChanges({ code: value, commitId: initialFileCommit.commitId });
   };
@@ -76,10 +114,7 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
               </div>
             </Case>
             <Default>
-              <CodeEditor
-                initialCode={initialFileCommit ? initialFileCommit.code : ''}
-                onChange={onCodeChange}
-              />
+              <CodeEditor code={code} onChange={onCodeChange} textareaRef={textareaRef} />
             </Default>
           </Switch>
         </div>

@@ -15,17 +15,11 @@ describe('CodeEditor component', () => {
     const code = 'x = 4\ny = 5';
 
     // when
-    const { queryAllByText } = render(
-      <CodeEditor {...defaultProps} initialCode={code} />
-    );
+    const { queryAllByText } = render(<CodeEditor {...defaultProps} code={code} />);
 
     // then
-    expect(
-      queryAllByText('x = 4', { exact: false }).length
-    ).toBeGreaterThanOrEqual(1);
-    expect(
-      queryAllByText('y = 5', { exact: false }).length
-    ).toBeGreaterThanOrEqual(1);
+    expect(queryAllByText('x = 4', { exact: false }).length).toBeGreaterThanOrEqual(1);
+    expect(queryAllByText('y = 5', { exact: false }).length).toBeGreaterThanOrEqual(1);
   });
 
   it('should display result of an expression', () => {
@@ -33,9 +27,7 @@ describe('CodeEditor component', () => {
     const code = 'x = 4 + 2';
 
     // when
-    const { queryByText } = render(
-      <CodeEditor {...defaultProps} initialCode={code} />
-    );
+    const { queryByText } = render(<CodeEditor {...defaultProps} code={code} />);
 
     // then
     expect(queryByText('= 6', { exact: false })).not.toEqual(null);
