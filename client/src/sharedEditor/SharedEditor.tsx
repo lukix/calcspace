@@ -42,6 +42,25 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
     }
   }, [initialFileCommit]);
 
+  const syncService = useMemo(() => {
+    return SyncService({
+      synchronize: ({ code, commitId }) =>
+        httpRequest.put(`shared-files/edit/${sharedEditId}`, { code, commitId }),
+      debounceTimeout: 1500,
+      onSyncStart: () => setSyncStatus(syncStatuses.STARTED),
+      onSyncSuccess: () => setSyncStatus(syncStatuses.SYNCED),
+      onSyncError: () => setSyncStatus(syncStatuses.FAILED),
+    });
+  }, [sharedEditId]);
+
+  useEffect(() => {
+    if (initialFileCommit) {
+      setSyncStatus(syncStatuses.DIRTY);
+      syncService.pushChanges({ code, commitId: initialFileCommit.commitId });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code, syncService]);
+
   const handleSocketChangeMessage = useCallback(
     (data) => {
       if (!textareaRef.current) {
@@ -77,21 +96,8 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
     };
   }, [sharedEditId]);
 
-  const syncService = useMemo(() => {
-    return SyncService({
-      synchronize: ({ code, commitId }) =>
-        httpRequest.put(`shared-files/edit/${sharedEditId}`, { code, commitId }),
-      debounceTimeout: 1500,
-      onSyncStart: () => setSyncStatus(syncStatuses.STARTED),
-      onSyncSuccess: () => setSyncStatus(syncStatuses.SYNCED),
-      onSyncError: () => setSyncStatus(syncStatuses.FAILED),
-    });
-  }, [sharedEditId]);
-
   const onCodeChange = (value) => {
     setCode(value);
-    setSyncStatus(syncStatuses.DIRTY);
-    syncService.pushChanges({ code: value, commitId: initialFileCommit.commitId });
   };
 
   return (
