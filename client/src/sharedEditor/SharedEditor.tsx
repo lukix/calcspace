@@ -16,6 +16,7 @@ import Spinner from '../shared/spinner';
 import SharedEditorHeaderBar from './SharedEditorHeaderBar';
 import { syncStatuses } from './constants';
 import findNewCursorPosition from './findNewCursorPosition';
+import mergeChanges from './mergeChanges';
 import styles from './SharedEditor.module.scss';
 
 const fetchFileAction = (id) => httpRequest.get(`shared-files/edit/${id}`);
@@ -29,6 +30,7 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
   );
   const [syncStatus, setSyncStatus] = useState(syncStatuses.SYNCED);
   const [code, setCode] = useState('');
+  const [commit, setCommit] = useState({ commitId: null, code: null });
   const [socket, setSocket] = useState<any>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -39,6 +41,7 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
   useEffect(() => {
     if (initialFileCommit) {
       setCode(initialFileCommit.code);
+      setCommit(initialFileCommit);
     }
   }, [initialFileCommit]);
 
@@ -54,9 +57,9 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
   }, [sharedEditId]);
 
   useEffect(() => {
-    if (initialFileCommit) {
+    if (commit) {
       setSyncStatus(syncStatuses.DIRTY);
-      syncService.pushChanges({ code, commitId: initialFileCommit.commitId });
+      syncService.pushChanges({ code, commitId: commit.commitId });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, syncService]);
@@ -66,15 +69,19 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
       if (!textareaRef.current) {
         return;
       }
+
+      const newCode = mergeChanges(commit.code, code, data.code);
       const { selectionStart, selectionEnd } = textareaRef.current;
-      const diffResult = diff.diffChars(code, data.code);
+      const diffResult = diff.diffChars(code, newCode);
       const newSelectionStart = findNewCursorPosition(diffResult, selectionStart);
       const newSelectionEnd = findNewCursorPosition(diffResult, selectionEnd);
 
-      setCode(data.code);
+      setCode(newCode);
+      setCommit({ commitId: data.commitId, code: data.code });
+
       textareaRef.current.setSelectionRange(newSelectionStart, newSelectionEnd);
     },
-    [code]
+    [commit, code]
   );
 
   useEffect(() => {

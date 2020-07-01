@@ -56,4 +56,18 @@ describe('mergeChanges', () => {
     // then
     expect(mergeResult).toEqual(expectedResult);
   });
+
+  it('should accept either change when merging two identical remove changes', () => {
+    // given
+    const commonVersionText = '123';
+    const currentText = '1';
+    const incomingText = '1';
+    const expectedResult = '1';
+
+    // when
+    const mergeResult = mergeChanges(commonVersionText, currentText, incomingText);
+
+    // then
+    expect(mergeResult).toEqual(expectedResult);
+  });
 });

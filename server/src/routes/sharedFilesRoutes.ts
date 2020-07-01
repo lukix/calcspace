@@ -81,7 +81,10 @@ export default ({ dbClient, io }) => {
         [mergedCode, sharedEditId]
       );
 
-      io.to(`shared/edit/${sharedEditId}`).emit('change', { code: mergedCode });
+      io.to(`shared/edit/${sharedEditId}`).emit('change', {
+        code: newCommit.code,
+        commitId: newCommit.commitId,
+      });
 
       return { status: result.rowCount === 0 ? 404 : 200 };
     },

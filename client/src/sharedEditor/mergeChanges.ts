@@ -47,7 +47,9 @@ const mergeChanges = (commonVersionText, currentText, incomingText) => {
       currentChar?.changeType === incomingChar?.changeType &&
       (currentChar?.changeType !== changeTypes.ADDED || currentChar?.char === incomingChar?.char)
     ) {
-      result += currentChar.char;
+      if (currentChar?.changeType !== changeTypes.REMOVED) {
+        result += currentChar.char;
+      }
       currentDiffIndex += 1;
       incomingDiffIndex += 1;
       continue;
