@@ -1,49 +1,35 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import { Switch, Case, Default } from 'react-when-then';
 import socketIO from 'socket.io-client';
 import * as diff from 'diff';
 
 import { SOCKETS_URL } from '../config';
 import CodeEditor from '../shared/codeEditor';
-import UserGuide from '../shared/userGuide';
 
-import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
 import SyncService from '../shared/syncService';
-import Spinner from '../shared/spinner';
 
-import SharedEditorHeaderBar from './SharedEditorHeaderBar';
 import { syncStatuses } from './constants';
 import findNewCursorPosition from './findNewCursorPosition';
 import mergeChanges from './mergeChanges';
-import styles from './SharedEditor.module.scss';
 
-const fetchFileAction = (id) => httpRequest.get(`shared-files/edit/${id}`);
+interface SharedEditorProps {
+  sharedEditId: string;
+  setSyncStatus: Function;
+  initialFileCommit: { commitId: string; code: string };
+}
 
-interface SharedEditorProps {}
-
-const SharedEditor: React.FC<SharedEditorProps> = () => {
-  const { sharedEditId } = useParams();
-  const [fetchFile, initialFileCommit, isFetchingFile, fetchingFileError] = useAsyncAction(
-    fetchFileAction
-  );
-  const [syncStatus, setSyncStatus] = useState(syncStatuses.SYNCED);
-  const [code, setCode] = useState('');
-  const [commit, setCommit] = useState({ commitId: null, code: null });
+const SharedEditor: React.FC<SharedEditorProps> = ({
+  sharedEditId,
+  setSyncStatus,
+  initialFileCommit,
+}) => {
+  const [code, setCode] = useState(initialFileCommit.code);
+  const [commit, setCommit] = useState({
+    commitId: initialFileCommit.commitId,
+    code: initialFileCommit.code,
+  });
   const [socket, setSocket] = useState<any>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    fetchFile(sharedEditId);
-  }, [fetchFile, sharedEditId]);
-
-  useEffect(() => {
-    if (initialFileCommit) {
-      setCode(initialFileCommit.code);
-      setCommit(initialFileCommit);
-    }
-  }, [initialFileCommit]);
 
   const syncService = useMemo(() => {
     return SyncService({
@@ -54,7 +40,7 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
       onSyncSuccess: () => setSyncStatus(syncStatuses.SYNCED),
       onSyncError: () => setSyncStatus(syncStatuses.FAILED),
     });
-  }, [sharedEditId]);
+  }, [setSyncStatus, sharedEditId]);
 
   useEffect(() => {
     if (commit) {
@@ -103,40 +89,7 @@ const SharedEditor: React.FC<SharedEditorProps> = () => {
     };
   }, [sharedEditId]);
 
-  const onCodeChange = (value) => {
-    setCode(value);
-  };
-
-  return (
-    <div className={styles.sharedEditorPage}>
-      <SharedEditorHeaderBar syncStatus={syncStatus} />
-      <div className={styles.sharedEditorSectionsWrapper}>
-        <div className={styles.editorWrapper}>
-          <Switch>
-            <Case when={isFetchingFile}>
-              <Spinner centered />
-            </Case>
-            <Case when={fetchingFileError}>
-              <div>
-                Couldn't load the file. It may be due to one of these reasons:
-                <ul>
-                  <li>The URL is incorrect.</li>
-                  <li>The file has been removed due to not being visited for more than 30 days.</li>
-                  <li>Some other unexpected error has occured.</li>
-                </ul>
-              </div>
-            </Case>
-            <Default>
-              <CodeEditor code={code} onChange={onCodeChange} textareaRef={textareaRef} />
-            </Default>
-          </Switch>
-        </div>
-        <div className={styles.guideWrapper}>
-          <UserGuide isSignedIn={false} />
-        </div>
-      </div>
-    </div>
-  );
+  return <CodeEditor code={code} onChange={setCode} textareaRef={textareaRef} />;
 };
 
 export default SharedEditor;

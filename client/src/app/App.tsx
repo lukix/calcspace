@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { SignInModal, SignUpModal } from '../signInUpModal';
-import SharedEditor from '../sharedEditor/SharedEditor';
+import SharedEditorDataProvider from '../sharedEditor/SharedEditorDataProvider';
 import AuthorizedApp from './AuthorizedApp';
 
 interface AppProps {}
@@ -17,7 +17,7 @@ const App: React.FC<AppProps> = () => {
           <SignUpModal />
         </Route>
         <Route path="/shared/edit/:sharedEditId">
-          <SharedEditor />
+          <SharedEditorDataProvider />
         </Route>
         <Route path="/">
           <AuthorizedApp />

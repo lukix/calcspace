@@ -1,9 +1,5 @@
-import { useReducer, useCallback } from 'react';
-import {
-  createReducer,
-  createAsyncActionTypes,
-  createAsyncActionHandlers,
-} from './reduxHelpers';
+import { useReducer, useCallback, useState } from 'react';
+import { createReducer, createAsyncActionTypes, createAsyncActionHandlers } from './reduxHelpers';
 
 const actionTypes = createAsyncActionTypes('ASYNC_ACTION');
 
@@ -24,10 +20,12 @@ const reducer = createReducer({
   },
 });
 
-const useAsyncAction = asyncAction => {
+const useAsyncAction = (asyncAction) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [isDirty, setIsDirty] = useState(false);
   const execute = useCallback(
     async (...props) => {
+      setIsDirty(true);
       dispatch({ type: actionTypes.START });
       try {
         const result = await asyncAction(...props);
@@ -39,7 +37,7 @@ const useAsyncAction = asyncAction => {
     [asyncAction]
   );
 
-  return [execute, state.result, state.isPending, state.hasFailed];
+  return [execute, state.result, state.isPending, state.hasFailed, isDirty];
 };
 
 export default useAsyncAction;
