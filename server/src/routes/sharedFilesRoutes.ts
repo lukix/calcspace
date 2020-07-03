@@ -42,7 +42,7 @@ export default ({ dbClient, io }) => {
       }
 
       const newCommit = { commitId: uuid(), date: new Date(), code: foundFile.code as string };
-      const newFileCommits = [newCommit];
+      const newFileCommits = [newCommit]; // TODO
       filesMemory.set(sharedEditId, newFileCommits);
 
       await dbClient.query('UPDATE files SET last_opened = NOW() WHERE shared_edit_id = $1', [
@@ -69,8 +69,13 @@ export default ({ dbClient, io }) => {
 
       const fileCommits = filesMemory.get(sharedEditId) || [];
       const commonCommit = fileCommits.find((commit) => commit.commitId === commitId);
-      const mergeCode = (oldCode, newCode) => newCode; // TODO
-      const mergedCode = mergeCode(commonCommit && commonCommit.code, code);
+      const latestCommit = fileCommits[fileCommits.length - 1];
+      const mergeCode = (commonCode, currentCode, incomingCode) => incomingCode; // TODO
+      const mergedCode = mergeCode(
+        commonCommit ? commonCommit.code : '',
+        latestCommit ? latestCommit.code : '',
+        code
+      );
 
       const newCommit = { commitId: uuid(), date: new Date(), code: mergedCode };
       const newFileCommits = [...fileCommits, newCommit];
