@@ -6,7 +6,7 @@ import { SOCKETS_URL } from '../config';
 import CodeEditor from '../shared/codeEditor';
 
 import httpRequest from '../shared/httpRequest';
-import SyncService from '../shared/syncService';
+import SyncService, { requestLimiterMethods } from '../shared/syncService';
 
 import { syncStatuses } from './constants';
 import findNewCursorPosition from './findNewCursorPosition';
@@ -35,7 +35,8 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
     return SyncService({
       synchronize: ({ code, commitId }) =>
         httpRequest.put(`shared-files/edit/${sharedEditId}`, { code, commitId }),
-      debounceTimeout: 1500,
+      requestLimiterTimeout: 600,
+      requestLimiterMethod: requestLimiterMethods.THROTTLE,
       onSyncStart: () => setSyncStatus(syncStatuses.STARTED),
       onSyncSuccess: () => setSyncStatus(syncStatuses.SYNCED),
       onSyncError: () => setSyncStatus(syncStatuses.FAILED),

@@ -1,14 +1,24 @@
 import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
+
+export const requestLimiterMethods = {
+  DEBOUNCE: 'DEBOUNCE',
+  THROTTLE: 'THROTTLE',
+};
 
 const SyncService = ({
   synchronize,
-  debounceTimeout = 400,
+  requestLimiterTimeout = 400,
+  requestLimiterMethod = requestLimiterMethods.DEBOUNCE,
   onSyncStart = () => {},
   onSyncSuccess = () => {},
   onSyncError = () => {},
 }) => {
   let waitingChanges = null;
-  const trySynchronizingDebounced = debounce(trySynchronizing, debounceTimeout);
+  const trySynchronizingLimited =
+    requestLimiterMethod === requestLimiterMethods.THROTTLE
+      ? throttle(trySynchronizing, requestLimiterTimeout)
+      : debounce(trySynchronizing, requestLimiterTimeout);
 
   async function trySynchronizing() {
     if (waitingChanges === null) {
@@ -27,13 +37,13 @@ const SyncService = ({
       onSyncError();
     }
 
-    trySynchronizingDebounced();
+    trySynchronizingLimited();
   }
 
-  const pushChanges = changes => {
+  const pushChanges = (changes) => {
     waitingChanges = changes;
 
-    trySynchronizingDebounced();
+    trySynchronizingLimited();
   };
 
   return { pushChanges };

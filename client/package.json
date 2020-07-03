@@ -8,6 +8,7 @@
     "diff": "^4.0.2",
     "formik": "^2.1.4",
     "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
     "math-factorial": "^1.0.0",
     "node-sass": "^4.13.1",
     "ramda.pipe": "^0.26.1",

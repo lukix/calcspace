@@ -41,7 +41,7 @@ const FilePage: React.FC<FilePageProps> = ({
   const syncService = useMemo(() => {
     return SyncService({
       synchronize: (code) => httpRequest.put(`files/${fileId}/code`, { code }),
-      debounceTimeout: 1500,
+      requestLimiterTimeout: 1000,
       onSyncStart: () => markSyncingStart({ id: fileId }),
       onSyncSuccess: () => markSyncingSuccess({ id: fileId }),
       onSyncError: () => markSyncingFailure({ id: fileId }),
