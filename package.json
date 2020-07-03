@@ -15,5 +15,6 @@
     "hooks": {
       "pre-push": "yarn run pre-push"
     }
-  }
+  },
+  "dependencies": {}
 }

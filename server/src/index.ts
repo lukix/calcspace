@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { Client } from 'pg';
+import socketIO from 'socket.io';
 
 import {
   createRouterFromRouteObjects,
@@ -41,6 +42,9 @@ import userSettingsRoutes from './routes/userSettingsRoutes';
 
   console.log('Connected successfully to the DB server');
 
+  const http = app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
+  const io = socketIO(http);
+
   const testRoute = {
     path: '/',
     method: 'get',
@@ -50,7 +54,7 @@ import userSettingsRoutes from './routes/userSettingsRoutes';
   const routesDefinitions = nestRoutes('/api', [
     testRoute,
     ...nestRoutes('/users', usersRoutes({ dbClient })),
-    ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient })),
+    ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient, io })),
     ...applyMiddlewares(
       [authorizationMiddleware],
       [
@@ -65,8 +69,6 @@ import userSettingsRoutes from './routes/userSettingsRoutes';
   console.log(routesDefinitions.map(({ path, method }) => `${path} (${method})`));
 
   app.use(rootRouter);
-
-  app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 
   process.on('SIGINT', async () => {
     dbClient.end();

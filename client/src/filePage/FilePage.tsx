@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import useAsyncAction from '../shared/useAsyncAction';
@@ -26,15 +26,22 @@ const FilePage: React.FC<FilePageProps> = ({
 }) => {
   const { fileId } = useParams();
   const [fetchFile, file, isFetchingFile, fetchingFileError] = useAsyncAction(fetchFileAction);
+  const [code, setCode] = useState('');
 
   useEffect(() => {
     fetchFile(fileId);
   }, [fetchFile, fileId]);
 
+  useEffect(() => {
+    if (file) {
+      setCode(file.code);
+    }
+  }, [file]);
+
   const syncService = useMemo(() => {
     return SyncService({
       synchronize: (code) => httpRequest.put(`files/${fileId}/code`, { code }),
-      debounceTimeout: 1500,
+      requestLimiterTimeout: 1000,
       onSyncStart: () => markSyncingStart({ id: fileId }),
       onSyncSuccess: () => markSyncingSuccess({ id: fileId }),
       onSyncError: () => markSyncingFailure({ id: fileId }),
@@ -42,6 +49,7 @@ const FilePage: React.FC<FilePageProps> = ({
   }, [markSyncingStart, markSyncingSuccess, markSyncingFailure, fileId]);
 
   const onCodeChange = (value) => {
+    setCode(value);
     dirtyFile({ id: fileId });
     syncService.pushChanges(value);
   };
@@ -54,7 +62,7 @@ const FilePage: React.FC<FilePageProps> = ({
     return <Spinner centered />;
   }
 
-  return <CodeEditor initialCode={file.code} onChange={onCodeChange} />;
+  return <CodeEditor code={code} onChange={onCodeChange} />;
 };
 
 export default connect(null, {
