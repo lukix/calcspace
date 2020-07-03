@@ -33,9 +33,7 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
             Any changes you make are automatically saved and are available under this URL:{' '}
             <span className={styles.inlineCode}>{window.location.href}</span>.{' '}
             <b>Anyone who has access to this URL can see and edit the calculatons.</b> When the URL
-            is not visited for at least 30 days, it may get deactivated. Making changes under the
-            same URL by more than one person is not being handler well yet, so please avoid doing
-            that (it will be improved in the future).
+            is not visited for at least 30 days, it may get deactivated.
           </p>
         </>
       )}
