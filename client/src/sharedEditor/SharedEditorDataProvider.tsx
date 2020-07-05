@@ -56,7 +56,12 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
         id={id}
         viewOnly={viewOnly}
         setSyncStatus={setSyncStatus}
-        initialFileCommit={initialFileCommit}
+        initialFileCommit={
+          initialFileCommit && {
+            code: initialFileCommit.code,
+            commitId: initialFileCommit.commitId,
+          }
+        }
       />
     );
   };
@@ -67,7 +72,11 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
       <div className={styles.sharedEditorSectionsWrapper}>
         <div className={styles.editorWrapper}>{renderContent()}</div>
         <div className={styles.guideWrapper}>
-          <UserGuide isSignedIn={false} />
+          <UserGuide
+            isSignedIn={false}
+            viewId={viewOnly ? id : initialFileCommit?.sharedViewId || undefined}
+            editId={!viewOnly ? id : undefined}
+          />
         </div>
       </div>
     </div>

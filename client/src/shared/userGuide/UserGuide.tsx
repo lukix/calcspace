@@ -1,12 +1,64 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './UserGuide.module.scss';
+import routes from '../routes';
+
+const getUrlToShare = (path, id) => `${window.location.origin}${path.replace(':id', id)}`;
+
+const getSharedUrlsDescription = ({ viewUrl, editUrl }) => {
+  if (editUrl && viewUrl) {
+    return (
+      <>
+        <h2>Saving changes and sharing</h2>
+        <p>
+          Any changes you make are automatically saved and are available for read-only use under
+          this URL: <span className={styles.inlineCode}>{viewUrl}</span>. Editing is possible via
+          another URL: <span className={styles.inlineCode}>{editUrl}</span>.{' '}
+          <b>Anyone who has access to this URL can see and edit the calculatons.</b> When the URL is
+          not visited for at least 30 days, it may get deactivated.
+        </p>
+      </>
+    );
+  }
+  if (editUrl && !viewUrl) {
+    return (
+      <>
+        <h2>Saving changes and sharing</h2>
+        <p>
+          Any changes you make are automatically saved and are available under this URL:{' '}
+          <span className={styles.inlineCode}>{editUrl}</span>.{' '}
+          <b>Anyone who has access to this URL can see and edit the calculatons.</b> When the URL is
+          not visited for at least 30 days, it may get deactivated.
+        </p>
+      </>
+    );
+  }
+
+  if (!editUrl && viewUrl) {
+    return (
+      <>
+        <h2>You are in a read-only mode</h2>
+        <p>
+          You got access to this page by following a read-only sharable URL:
+          <span className={styles.inlineCode}>{viewUrl}</span>. You cannot make any changes. When
+          the URL is not visited for at least 30 days, it may get deactivated.
+        </p>
+      </>
+    );
+  }
+
+  return null;
+};
 
 interface UserGuideProps {
   isSignedIn: boolean;
+  editId?: string;
+  viewId?: string;
 }
 
-const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
+const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId }) => {
+  const editUrl = editId ? getUrlToShare(routes.sharedEditFile.path, editId) : null;
+  const viewUrl = viewId ? getUrlToShare(routes.sharedViewFile.path, viewId) : null;
   return (
     <div className={styles.userGuide}>
       <h2>Introduction</h2>
@@ -26,17 +78,7 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn }) => {
           </>
         )}
       </p>
-      {!isSignedIn && (
-        <>
-          <h2>Saving changes and sharing</h2>
-          <p>
-            Any changes you make are automatically saved and are available under this URL:{' '}
-            <span className={styles.inlineCode}>{window.location.href}</span>.{' '}
-            <b>Anyone who has access to this URL can see and edit the calculatons.</b> When the URL
-            is not visited for at least 30 days, it may get deactivated.
-          </p>
-        </>
-      )}
+      {!isSignedIn && getSharedUrlsDescription({ viewUrl, editUrl })}
       <h2>Beta Disclaimer</h2>
       <p>
         Please note that this is a beta version and the syntax described below may change in the

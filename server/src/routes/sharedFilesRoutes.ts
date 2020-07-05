@@ -29,16 +29,18 @@ export default ({ dbClient, io }) => {
     handler: async ({ params }) => {
       const { sharedEditId } = params;
 
-      const fileCommits = filesMemory.get(sharedEditId) || null;
-      if (fileCommits && fileCommits.length > 0) {
-        const response = fileCommits[fileCommits.length - 1];
-        return { response };
-      }
+      // const fileCommits = filesMemory.get(sharedEditId) || null;
+      // if (fileCommits && fileCommits.length > 0) {
+      //   const response = fileCommits[fileCommits.length - 1];
+      //   return { response };
+      // }
 
       const foundFile = await dbClient // TODO: There is a risk of something being inserted to the Map while requesting DB
-        .query('SELECT code FROM files WHERE shared_edit_id = $1 AND shared_edit_enabled = TRUE', [
-          sharedEditId,
-        ])
+        .query(
+          `SELECT code, shared_view_id, shared_view_enabled
+          FROM files WHERE shared_edit_id = $1 AND shared_edit_enabled = TRUE`,
+          [sharedEditId]
+        )
         .then(({ rows }) => rows[0]);
 
       if (!foundFile) {
@@ -54,7 +56,10 @@ export default ({ dbClient, io }) => {
       ]);
 
       return {
-        response: newCommit,
+        response: {
+          ...newCommit,
+          sharedViewId: foundFile.shared_view_enabled ? foundFile.shared_view_id : null,
+        },
       };
     },
   };
@@ -108,7 +113,7 @@ export default ({ dbClient, io }) => {
       );
 
       const newCommit = { commitId: uuid(), date: new Date(), code: mergedCode };
-      const newFileCommits = [...fileCommits, newCommit];
+      const newFileCommits = [...fileCommits, newCommit].slice(-100);
       filesMemory.set(sharedEditId, newFileCommits);
 
       const result = await dbClient.query(
@@ -139,7 +144,9 @@ export default ({ dbClient, io }) => {
       const fileCode = '';
       const newFile = await dbClient
         .query(
-          'INSERT INTO files (name, code, shared_edit_enabled) VALUES ($1, $2, TRUE) RETURNING shared_edit_id',
+          `INSERT INTO files (name, code, shared_edit_enabled, shared_view_enabled)
+          VALUES ($1, $2, TRUE, TRUE)
+          RETURNING shared_edit_id`,
           [fileName, fileCode]
         )
         .then(({ rows }) => rows[0]);
