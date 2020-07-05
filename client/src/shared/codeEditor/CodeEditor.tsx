@@ -104,7 +104,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
             height: `${code.split('\n').length * 1.2}rem`,
             width: `${longestLineLength}ch`,
           }}
-          placeholder={isInViewMode ? 'File is empty' : 'Type a math expression...'}
+          placeholder={isInViewMode || viewOnly ? 'File is empty' : 'Type a math expression...'}
           readOnly={isInViewMode || viewOnly}
           spellCheck={false}
           autoCapitalize="off"
