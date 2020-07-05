@@ -10,23 +10,30 @@ interface CodeEditorProps {
   code: string;
   onChange: Function;
   textareaRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
+  viewOnly?: boolean;
 }
 
 const modes = {
   EDIT_MODE: 'EDIT_MODE',
   VIEW_MODE: 'VIEW_MODE',
 };
-const modeOptions = [
-  { value: modes.EDIT_MODE, label: 'Edit Mode' },
+const getModeOptions = (viewOnly) => [
+  { value: modes.EDIT_MODE, label: viewOnly ? 'Rich Mode' : 'Edit Mode' },
   {
     value: modes.VIEW_MODE,
-    label: 'View Mode',
-    description:
-      'View Mode lets you select and copy any fragment of the code - even automatically generated results',
+    label: viewOnly ? 'Raw Mode' : 'View Mode',
+    description: `${
+      viewOnly ? 'Raw Mode' : 'View Mode'
+    } lets you select and copy any fragment of the code - even automatically generated results`,
   },
 ];
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange, textareaRef }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  code,
+  onChange,
+  textareaRef,
+  viewOnly = false,
+}) => {
   const [mode, setMode] = useState(modes.EDIT_MODE);
   const [exponentialNotation, setExponentialNotation] = useState(
     localStorage.getItem('exponentialNotation') === 'true'
@@ -63,7 +70,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange, textareaRef }) 
     <div className={styles.codeEditor}>
       <RadioButtons
         className={styles.buttons}
-        items={modeOptions}
+        items={getModeOptions(viewOnly)}
         value={mode}
         onChange={setMode}
       />
@@ -98,7 +105,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange, textareaRef }) 
             width: `${longestLineLength}ch`,
           }}
           placeholder={isInViewMode ? 'File is empty' : 'Type a math expression...'}
-          readOnly={isInViewMode}
+          readOnly={isInViewMode || viewOnly}
           spellCheck={false}
           autoCapitalize="off"
           autoCorrect="off"

@@ -16,8 +16,11 @@ const App: React.FC<AppProps> = () => {
         <Route path="/sign-up">
           <SignUpModal />
         </Route>
-        <Route path="/shared/edit/:sharedEditId">
+        <Route path="/shared/edit/:id">
           <SharedEditorDataProvider />
+        </Route>
+        <Route path="/shared/view/:id">
+          <SharedEditorDataProvider viewOnly />
         </Route>
         <Route path="/">
           <AuthorizedApp />

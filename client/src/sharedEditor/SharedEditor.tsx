@@ -13,13 +13,15 @@ import findNewCursorPosition from './findNewCursorPosition';
 import mergeChanges from './mergeChanges';
 
 interface SharedEditorProps {
-  sharedEditId: string;
+  id: string;
+  viewOnly: boolean;
   setSyncStatus: Function;
   initialFileCommit: { commitId: string; code: string };
 }
 
 const SharedEditor: React.FC<SharedEditorProps> = ({
-  sharedEditId,
+  id,
+  viewOnly,
   setSyncStatus,
   initialFileCommit,
 }) => {
@@ -34,22 +36,22 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
   const syncService = useMemo(() => {
     return SyncService({
       synchronize: ({ code, commitId }) =>
-        httpRequest.put(`shared-files/edit/${sharedEditId}`, { code, commitId }),
+        httpRequest.put(`shared-files/edit/${id}`, { code, commitId }),
       requestLimiterTimeout: 600,
       requestLimiterMethod: requestLimiterMethods.THROTTLE,
       onSyncStart: () => setSyncStatus(syncStatuses.STARTED),
       onSyncSuccess: () => setSyncStatus(syncStatuses.SYNCED),
       onSyncError: () => setSyncStatus(syncStatuses.FAILED),
     });
-  }, [setSyncStatus, sharedEditId]);
+  }, [setSyncStatus, id]);
 
   useEffect(() => {
-    if (commit) {
+    if (commit && !viewOnly) {
       setSyncStatus(syncStatuses.DIRTY);
       syncService.pushChanges({ code, commitId: commit.commitId });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code, syncService]);
+  }, [code, viewOnly, syncService]);
 
   const handleSocketChangeMessage = useCallback(
     (data) => {
@@ -57,7 +59,7 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
         return;
       }
 
-      const newCode = mergeChanges(commit.code, code, data.code);
+      const newCode = viewOnly ? data.code : mergeChanges(commit.code, code, data.code);
       const { selectionStart, selectionEnd } = textareaRef.current;
       const diffResult = diff.diffChars(code, newCode);
       const newSelectionStart = findNewCursorPosition(diffResult, selectionStart);
@@ -68,7 +70,7 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
 
       textareaRef.current.setSelectionRange(newSelectionStart, newSelectionEnd);
     },
-    [commit, code]
+    [commit, code, viewOnly]
   );
 
   useEffect(() => {
@@ -81,16 +83,20 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
 
   useEffect(() => {
     const newSocket = socketIO(SOCKETS_URL);
-    newSocket.emit('subscribe-to-file', { sharedEditId });
+    newSocket.emit(viewOnly ? 'subscribe-to-file/by-view-id' : 'subscribe-to-file/by-edit-id', {
+      id,
+    });
     setSocket(newSocket);
 
     return () => {
       newSocket.disconnect();
       setSocket(null);
     };
-  }, [sharedEditId]);
+  }, [id, viewOnly]);
 
-  return <CodeEditor code={code} onChange={setCode} textareaRef={textareaRef} />;
+  return (
+    <CodeEditor code={code} onChange={setCode} textareaRef={textareaRef} viewOnly={viewOnly} />
+  );
 };
 
 export default SharedEditor;

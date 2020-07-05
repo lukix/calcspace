@@ -9,8 +9,12 @@ export default ({ dbClient, io }) => {
     connectedUsers++;
     console.log(`users connected: ${connectedUsers}`);
 
-    socket.on('subscribe-to-file', (data) => {
-      socket.join(`shared/edit/${data.sharedEditId}`);
+    socket.on('subscribe-to-file/by-edit-id', (data) => {
+      socket.join(`shared/edit/${data.id}`);
+    });
+
+    socket.on('subscribe-to-file/by-view-id', (data) => {
+      socket.join(`shared/view/${data.id}`);
     });
 
     socket.on('disconnect', () => {
@@ -55,6 +59,32 @@ export default ({ dbClient, io }) => {
     },
   };
 
+  const getFileBySharedViewId = {
+    path: '/view/:sharedViewId',
+    method: 'get',
+    handler: async ({ params }) => {
+      const { sharedViewId } = params;
+
+      const foundFile = await dbClient
+        .query('SELECT code FROM files WHERE shared_view_id = $1 AND shared_view_enabled = TRUE', [
+          sharedViewId,
+        ])
+        .then(({ rows }) => rows[0]);
+
+      if (!foundFile) {
+        return { status: 404 };
+      }
+
+      await dbClient.query('UPDATE files SET last_opened = NOW() WHERE shared_view_id = $1', [
+        sharedViewId,
+      ]);
+
+      return {
+        response: { code: foundFile.code, commitId: null },
+      };
+    },
+  };
+
   const updateFileBySharedEditId = {
     path: '/edit/:sharedEditId',
     method: 'put',
@@ -82,7 +112,7 @@ export default ({ dbClient, io }) => {
       filesMemory.set(sharedEditId, newFileCommits);
 
       const result = await dbClient.query(
-        'UPDATE files SET code = $1 WHERE shared_edit_id = $2 AND shared_edit_enabled = TRUE',
+        'UPDATE files SET code = $1 WHERE shared_edit_id = $2 AND shared_edit_enabled = TRUE RETURNING shared_view_id, shared_view_enabled',
         [mergedCode, sharedEditId]
       );
 
@@ -91,6 +121,12 @@ export default ({ dbClient, io }) => {
         commitId: newCommit.commitId,
       });
 
+      if (result.rows[0] && result.rows[0].shared_view_enabled) {
+        io.to(`shared/view/${result.rows[0].shared_view_id}`).emit('change', {
+          code: newCommit.code,
+          commitId: newCommit.commitId,
+        });
+      }
       return { status: result.rowCount === 0 ? 404 : 200 };
     },
   };
@@ -114,5 +150,5 @@ export default ({ dbClient, io }) => {
     },
   };
 
-  return [getFileBySharedEditId, updateFileBySharedEditId, addSharedFile];
+  return [getFileBySharedEditId, getFileBySharedViewId, updateFileBySharedEditId, addSharedFile];
 };

@@ -11,12 +11,17 @@ import { syncStatuses } from './constants';
 import SharedEditor from './SharedEditor';
 import styles from './SharedEditor.module.scss';
 
-const fetchFileAction = (id) => httpRequest.get(`shared-files/edit/${id}`);
+const fetchFileAction = (id, viewOnly) =>
+  httpRequest.get(`shared-files/${viewOnly ? 'view' : 'edit'}/${id}`);
 
-interface SharedEditorDataProviderProps {}
+interface SharedEditorDataProviderProps {
+  viewOnly?: boolean;
+}
 
-const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = () => {
-  const { sharedEditId } = useParams();
+const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
+  viewOnly = false,
+}) => {
+  const { id } = useParams();
   const [
     fetchFile,
     initialFileCommit,
@@ -27,8 +32,8 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = () => 
   const [syncStatus, setSyncStatus] = useState(syncStatuses.SYNCED);
 
   useEffect(() => {
-    fetchFile(sharedEditId);
-  }, [fetchFile, sharedEditId]);
+    fetchFile(id, viewOnly);
+  }, [fetchFile, id, viewOnly]);
 
   const renderContent = () => {
     if (isFetchingFile || !hasPerformedInitialFetch) {
@@ -48,7 +53,8 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = () => 
     }
     return (
       <SharedEditor
-        sharedEditId={sharedEditId}
+        id={id}
+        viewOnly={viewOnly}
         setSyncStatus={setSyncStatus}
         initialFileCommit={initialFileCommit}
       />
