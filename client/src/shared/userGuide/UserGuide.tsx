@@ -2,8 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './UserGuide.module.scss';
 import routes from '../routes';
-
-const getUrlToShare = (path, id) => `${window.location.origin}${path.replace(':id', id)}`;
+import getUrlToShare from '../getUrlToShare';
 
 const getSharedUrlsDescription = ({ viewUrl, editUrl }) => {
   if (editUrl && viewUrl) {

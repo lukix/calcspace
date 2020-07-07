@@ -19,6 +19,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "react-spinners": "^0.8.1",
+    "react-toggle": "^4.1.1",
     "react-when-then": "^0.1.14",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",

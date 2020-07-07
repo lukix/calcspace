@@ -62,7 +62,17 @@ const FilePage: React.FC<FilePageProps> = ({
     return <Spinner centered />;
   }
 
-  return <CodeEditor code={code} onChange={onCodeChange} />;
+  return (
+    <CodeEditor
+      code={code}
+      onChange={onCodeChange}
+      sharedViewId={file && file.sharedViewId}
+      sharedEditId={file && file.sharedEditId}
+      initialSharedViewEnabled={Boolean(file && file.sharedViewEnabled)}
+      initialSharedEditEnabled={Boolean(file && file.sharedEditEnabled)}
+      fileId={fileId}
+    />
+  );
 };
 
 export default connect(null, {

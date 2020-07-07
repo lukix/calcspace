@@ -6,9 +6,7 @@ export default ({ dbClient }) => {
     path: '/',
     method: 'get',
     handler: async ({ user }) => {
-      const {
-        rows: files,
-      } = await dbClient.query(
+      const { rows: files } = await dbClient.query(
         'SELECT id, name FROM files WHERE user_id = $1',
         [user.userId]
       );
@@ -24,10 +22,17 @@ export default ({ dbClient }) => {
       const { fileId } = params;
 
       const foundFile = await dbClient
-        .query('SELECT name, code FROM files WHERE id = $1 AND user_id = $2', [
-          fileId,
-          user.userId,
-        ])
+        .query(
+          `SELECT
+            name,
+            code,
+            shared_view_enabled as "sharedViewEnabled",
+            shared_edit_enabled as "sharedEditEnabled",
+            shared_view_id as "sharedViewId",
+            shared_edit_id as "sharedEditId"
+          FROM files WHERE id = $1 AND user_id = $2`,
+          [fileId, user.userId]
+        )
         .then(({ rows }) => rows[0]);
 
       if (!foundFile) {
@@ -65,10 +70,7 @@ export default ({ dbClient }) => {
     handler: async ({ user, params }) => {
       const { fileId } = params;
       await dbClient
-        .query('DELETE FROM files WHERE id = $1 AND user_id = $2', [
-          fileId,
-          user.userId,
-        ])
+        .query('DELETE FROM files WHERE id = $1 AND user_id = $2', [fileId, user.userId])
         .then(({ rows }) => rows[0]);
     },
   };
@@ -111,6 +113,44 @@ export default ({ dbClient }) => {
     },
   };
 
+  const updateFileSharedViewEnabledFlag = {
+    path: '/:fileId/shared-view-enabled',
+    method: 'put',
+    validate: validateBodyWithYup(
+      yup.object({
+        enabled: yup.boolean(),
+      })
+    ),
+    handler: async ({ body, user, params }) => {
+      const { fileId } = params;
+      const { enabled } = body;
+      const result = await dbClient.query(
+        'UPDATE files SET shared_view_enabled = $1 WHERE id = $2 AND user_id = $3',
+        [enabled, fileId, user.userId]
+      );
+      return { status: result.rowCount === 0 ? 404 : 200 };
+    },
+  };
+
+  const updateFileSharedEditEnabledFlag = {
+    path: '/:fileId/shared-edit-enabled',
+    method: 'put',
+    validate: validateBodyWithYup(
+      yup.object({
+        enabled: yup.boolean(),
+      })
+    ),
+    handler: async ({ body, user, params }) => {
+      const { fileId } = params;
+      const { enabled } = body;
+      const result = await dbClient.query(
+        'UPDATE files SET shared_edit_enabled = $1 WHERE id = $2 AND user_id = $3',
+        [enabled, fileId, user.userId]
+      );
+      return { status: result.rowCount === 0 ? 404 : 200 };
+    },
+  };
+
   return [
     getFiles,
     getFileById,
@@ -118,5 +158,7 @@ export default ({ dbClient }) => {
     deleteFile,
     updateFileCode,
     updateFileName,
+    updateFileSharedViewEnabledFlag,
+    updateFileSharedEditEnabledFlag,
   ];
 };

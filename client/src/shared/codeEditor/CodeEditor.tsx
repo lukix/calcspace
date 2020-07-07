@@ -4,6 +4,7 @@ import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons';
 import ToggleButton from './toggleButton';
 import { tokenizeCode, tokenizedCodeToString } from './codeTokenizer';
+import SharingModal from './SharingModal';
 import styles from './CodeEditor.module.scss';
 
 interface CodeEditorProps {
@@ -11,6 +12,11 @@ interface CodeEditorProps {
   onChange: Function;
   textareaRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
   viewOnly?: boolean;
+  sharedViewId?: string;
+  sharedEditId?: string;
+  initialSharedViewEnabled?: boolean;
+  initialSharedEditEnabled?: boolean;
+  fileId?: string;
 }
 
 const modes = {
@@ -33,6 +39,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   onChange,
   textareaRef,
   viewOnly = false,
+  sharedViewId,
+  sharedEditId,
+  initialSharedViewEnabled,
+  initialSharedEditEnabled,
+  fileId,
 }) => {
   const [mode, setMode] = useState(modes.EDIT_MODE);
   const [exponentialNotation, setExponentialNotation] = useState(
@@ -41,6 +52,18 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [showResultUnit, setShowResultUnit] = useState(
     localStorage.getItem('showResultUnit') === 'true'
   );
+  const [sharingModalVisible, setSharingModalVisible] = useState(false);
+  const showSharingModal = () => setSharingModalVisible(true);
+  const hideSharingModal = () => setSharingModalVisible(false);
+
+  const [sharedViewEnabled, setSharedViewEnabled] = useState(Boolean(initialSharedViewEnabled));
+  const [sharedEditEnabled, setSharedEditEnabled] = useState(Boolean(initialSharedEditEnabled));
+  useEffect(() => setSharedViewEnabled(Boolean(initialSharedViewEnabled)), [
+    initialSharedViewEnabled,
+  ]);
+  useEffect(() => setSharedEditEnabled(Boolean(initialSharedEditEnabled)), [
+    initialSharedEditEnabled,
+  ]);
 
   const onCodeChange = (e) => {
     const value = e.target.value;
@@ -94,6 +117,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           description={showResultUnit ? 'Showing result unit is on' : 'Showing result unit is off'}
         />
       )}
+      {(sharedViewId || sharedEditId) && (
+        <ToggleButton
+          className={styles.buttons}
+          label="Sharing"
+          value={sharedViewEnabled || sharedEditEnabled}
+          onChange={showSharingModal}
+          description={showResultUnit ? 'Sharing is on' : 'Sharing is off'}
+        />
+      )}
       <div className={styles.codeWrapper}>
         <textarea
           className={styles.editorTextarea}
@@ -118,6 +150,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           <HighlightedCode tokenizedLines={evaluatedCode} />
         </pre>
       </div>
+      <SharingModal
+        visible={sharingModalVisible}
+        hide={hideSharingModal}
+        sharedViewId={sharedViewId}
+        sharedEditId={sharedEditId}
+        sharedViewEnabled={sharedViewEnabled}
+        sharedEditEnabled={sharedEditEnabled}
+        setSharedViewEnabled={setSharedViewEnabled}
+        setSharedEditEnabled={setSharedEditEnabled}
+        fileId={fileId}
+      />
     </div>
   );
 };
