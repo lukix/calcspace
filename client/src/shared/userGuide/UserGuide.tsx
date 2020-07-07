@@ -4,7 +4,10 @@ import styles from './UserGuide.module.scss';
 import routes from '../routes';
 import getUrlToShare from '../getUrlToShare';
 
-const getSharedUrlsDescription = ({ viewUrl, editUrl }) => {
+const getSharedUrlsDescription = ({ viewUrl, editUrl, userManaged }) => {
+  const deleteInfo = userManaged
+    ? ' This file is managed by a user with an account and it can be deleted at any time.'
+    : ' When the URL is not visited for at least 30 days, it may get deactivated.';
   if (editUrl && viewUrl) {
     return (
       <>
@@ -13,8 +16,8 @@ const getSharedUrlsDescription = ({ viewUrl, editUrl }) => {
           Any changes you make are automatically saved and are available for read-only use under
           this URL: <span className={styles.inlineCode}>{viewUrl}</span>. Editing is possible via
           another URL: <span className={styles.inlineCode}>{editUrl}</span>.{' '}
-          <b>Anyone who has access to this URL can see and edit the calculatons.</b> When the URL is
-          not visited for at least 30 days, it may get deactivated.
+          <b>Anyone who has access to this URL can see and edit the calculatons.</b>
+          {deleteInfo}
         </p>
       </>
     );
@@ -26,8 +29,8 @@ const getSharedUrlsDescription = ({ viewUrl, editUrl }) => {
         <p>
           Any changes you make are automatically saved and are available under this URL:{' '}
           <span className={styles.inlineCode}>{editUrl}</span>.{' '}
-          <b>Anyone who has access to this URL can see and edit the calculatons.</b> When the URL is
-          not visited for at least 30 days, it may get deactivated.
+          <b>Anyone who has access to this URL can see and edit the calculatons.</b>
+          {deleteInfo}
         </p>
       </>
     );
@@ -39,8 +42,8 @@ const getSharedUrlsDescription = ({ viewUrl, editUrl }) => {
         <h2>You are in a read-only mode</h2>
         <p>
           You got access to this page by following a read-only sharable URL:
-          <span className={styles.inlineCode}>{viewUrl}</span>. You cannot make any changes. When
-          the URL is not visited for at least 30 days, it may get deactivated.
+          <span className={styles.inlineCode}>{viewUrl}</span>. You cannot make any changes.
+          {deleteInfo}
         </p>
       </>
     );
@@ -51,11 +54,12 @@ const getSharedUrlsDescription = ({ viewUrl, editUrl }) => {
 
 interface UserGuideProps {
   isSignedIn: boolean;
+  userManaged?: boolean;
   editId?: string;
   viewId?: string;
 }
 
-const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId }) => {
+const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId, userManaged }) => {
   const editUrl = editId ? getUrlToShare(routes.sharedEditFile.path, editId) : null;
   const viewUrl = viewId ? getUrlToShare(routes.sharedViewFile.path, viewId) : null;
   return (
@@ -77,7 +81,7 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId }) => 
           </>
         )}
       </p>
-      {!isSignedIn && getSharedUrlsDescription({ viewUrl, editUrl })}
+      {!isSignedIn && getSharedUrlsDescription({ viewUrl, editUrl, userManaged })}
       <h2>Beta Disclaimer</h2>
       <p>
         Please note that this is a beta version and the syntax described below may change in the

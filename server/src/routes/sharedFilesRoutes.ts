@@ -37,7 +37,7 @@ export default ({ dbClient, io }) => {
 
       const foundFile = await dbClient // TODO: There is a risk of something being inserted to the Map while requesting DB
         .query(
-          `SELECT code, shared_view_id, shared_view_enabled
+          `SELECT code, shared_view_id, shared_view_enabled, (user_id is not NULL) as "userManaged"
           FROM files WHERE shared_edit_id = $1 AND shared_edit_enabled = TRUE`,
           [sharedEditId]
         )
@@ -58,7 +58,11 @@ export default ({ dbClient, io }) => {
       return {
         response: {
           ...newCommit,
-          sharedViewId: foundFile.shared_view_enabled ? foundFile.shared_view_id : null,
+          sharedViewId:
+            foundFile.shared_view_enabled && !foundFile.userManaged
+              ? foundFile.shared_view_id
+              : null,
+          userManaged: foundFile.userManaged,
         },
       };
     },
@@ -71,9 +75,11 @@ export default ({ dbClient, io }) => {
       const { sharedViewId } = params;
 
       const foundFile = await dbClient
-        .query('SELECT code FROM files WHERE shared_view_id = $1 AND shared_view_enabled = TRUE', [
-          sharedViewId,
-        ])
+        .query(
+          `SELECT code, (user_id is not NULL) as "userManaged"
+          FROM files WHERE shared_view_id = $1 AND shared_view_enabled = TRUE`,
+          [sharedViewId]
+        )
         .then(({ rows }) => rows[0]);
 
       if (!foundFile) {
@@ -85,7 +91,7 @@ export default ({ dbClient, io }) => {
       ]);
 
       return {
-        response: { code: foundFile.code, commitId: null },
+        response: { code: foundFile.code, commitId: null, userManaged: foundFile.userManaged },
       };
     },
   };
