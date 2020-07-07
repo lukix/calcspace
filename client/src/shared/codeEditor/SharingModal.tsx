@@ -73,7 +73,7 @@ const SharingModal: React.FC<SharingModalProps> = ({
               />
               <span>
                 <Spinner size={16} color="#2B3A45" show={isUpdatingViewFlag}>
-                  Link for view-only access is {sharedViewEnabled ? 'enabled' : 'disabled'}
+                  Link for read-only access is {sharedViewEnabled ? 'enabled' : 'disabled'}
                 </Spinner>
               </span>
             </label>
