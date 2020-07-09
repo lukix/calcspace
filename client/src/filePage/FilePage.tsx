@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import useAsyncAction from '../shared/useAsyncAction';
@@ -7,6 +7,7 @@ import { actions } from '../shared/filesStore';
 import Spinner from '../shared/spinner';
 import CodeEditor from '../shared/codeEditor';
 import SyncService from '../shared/syncService';
+import useSharedFileChangeListener from '../shared/sharedFilesUtils/useSharedFileChangeListener';
 import sharedStyles from '../shared/shared.module.scss';
 
 interface FilePageProps {
@@ -27,6 +28,26 @@ const FilePage: React.FC<FilePageProps> = ({
   const { fileId } = useParams();
   const [fetchFile, file, isFetchingFile, fetchingFileError] = useAsyncAction(fetchFileAction);
   const [code, setCode] = useState('');
+  const [commit, setCommit] = useState({
+    commitId: null,
+    code: '',
+  });
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useSharedFileChangeListener({
+    socketSubscribePath: 'subscribe-to-file/by-main-id',
+    id: fileId,
+    commit,
+    code,
+    selectionStart: textareaRef.current?.selectionStart,
+    selectionEnd: textareaRef.current?.selectionEnd,
+    changeHandler: useCallback(({ data, newCode, newSelectionStart, newSelectionEnd }) => {
+      setCode(newCode);
+      setCommit({ commitId: data.commitId, code: data.code });
+      textareaRef.current?.setSelectionRange(newSelectionStart, newSelectionEnd);
+    }, []),
+  });
 
   useEffect(() => {
     fetchFile(fileId);
@@ -35,13 +56,14 @@ const FilePage: React.FC<FilePageProps> = ({
   useEffect(() => {
     if (file) {
       setCode(file.code);
+      setCommit({ commitId: null, code: file.code });
     }
   }, [file]);
 
   const syncService = useMemo(() => {
     return SyncService({
       synchronize: (code) => httpRequest.put(`files/${fileId}/code`, { code }),
-      requestLimiterTimeout: 1000,
+      requestLimiterTimeout: 600,
       onSyncStart: () => markSyncingStart({ id: fileId }),
       onSyncSuccess: () => markSyncingSuccess({ id: fileId }),
       onSyncError: () => markSyncingFailure({ id: fileId }),
@@ -66,6 +88,7 @@ const FilePage: React.FC<FilePageProps> = ({
     <CodeEditor
       code={code}
       onChange={onCodeChange}
+      textareaRef={textareaRef}
       sharedViewId={file && file.sharedViewId}
       sharedEditId={file && file.sharedEditId}
       initialSharedViewEnabled={Boolean(file && file.sharedViewEnabled)}

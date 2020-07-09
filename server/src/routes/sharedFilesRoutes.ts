@@ -2,26 +2,8 @@ import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
-export default ({ dbClient, io }) => {
-  const filesMemory = new Map<string, Array<{ commitId: string; date: Date; code: string }>>();
-  let connectedUsers = 0;
-  io.on('connection', (socket) => {
-    connectedUsers++;
-    console.log(`users connected: ${connectedUsers}`);
-
-    socket.on('subscribe-to-file/by-edit-id', (data) => {
-      socket.join(`shared/edit/${data.id}`);
-    });
-
-    socket.on('subscribe-to-file/by-view-id', (data) => {
-      socket.join(`shared/view/${data.id}`);
-    });
-
-    socket.on('disconnect', () => {
-      connectedUsers--;
-      console.log(`users connected: ${connectedUsers}`);
-    });
-  });
+export default ({ dbClient, sharedFilesManager }) => {
+  // ...
 
   const getFileBySharedEditId = {
     path: '/edit/:sharedEditId',
@@ -49,7 +31,7 @@ export default ({ dbClient, io }) => {
 
       const newCommit = { commitId: uuid(), date: new Date(), code: foundFile.code as string };
       const newFileCommits = [newCommit]; // TODO
-      filesMemory.set(sharedEditId, newFileCommits);
+      sharedFilesManager.setFileCommits(sharedEditId, newFileCommits);
 
       await dbClient.query('UPDATE files SET last_opened = NOW() WHERE shared_edit_id = $1', [
         sharedEditId,
@@ -108,7 +90,7 @@ export default ({ dbClient, io }) => {
       const { sharedEditId } = params;
       const { code, commitId } = body;
 
-      const fileCommits = filesMemory.get(sharedEditId) || [];
+      const fileCommits = sharedFilesManager.getFileCommits(sharedEditId) || [];
       const commonCommit = fileCommits.find((commit) => commit.commitId === commitId);
       const latestCommit = fileCommits[fileCommits.length - 1];
       const mergeCode = (commonCode, currentCode, incomingCode) => incomingCode; // TODO
@@ -120,24 +102,23 @@ export default ({ dbClient, io }) => {
 
       const newCommit = { commitId: uuid(), date: new Date(), code: mergedCode };
       const newFileCommits = [...fileCommits, newCommit].slice(-100);
-      filesMemory.set(sharedEditId, newFileCommits);
+      sharedFilesManager.setFileCommits(sharedEditId, newFileCommits);
 
       const result = await dbClient.query(
-        'UPDATE files SET code = $1 WHERE shared_edit_id = $2 AND shared_edit_enabled = TRUE RETURNING shared_view_id, shared_view_enabled',
+        'UPDATE files SET code = $1 WHERE shared_edit_id = $2 AND shared_edit_enabled = TRUE RETURNING id, shared_view_id, shared_view_enabled',
         [mergedCode, sharedEditId]
       );
 
-      io.to(`shared/edit/${sharedEditId}`).emit('change', {
-        code: newCommit.code,
-        commitId: newCommit.commitId,
+      sharedFilesManager.emitChange({
+        newCommit,
+        fileId: result.rows[0] && result.rows[0].id,
+        sharedEditId,
+        sharedViewId:
+          result.rows[0] && result.rows[0].shared_view_enabled
+            ? result.rows[0].shared_view_id
+            : null,
       });
 
-      if (result.rows[0] && result.rows[0].shared_view_enabled) {
-        io.to(`shared/view/${result.rows[0].shared_view_id}`).emit('change', {
-          code: newCommit.code,
-          commitId: newCommit.commitId,
-        });
-      }
       return { status: result.rowCount === 0 ? 404 : 200 };
     },
   };

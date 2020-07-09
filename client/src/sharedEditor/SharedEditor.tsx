@@ -5,7 +5,7 @@ import httpRequest from '../shared/httpRequest';
 import SyncService, { requestLimiterMethods } from '../shared/syncService';
 
 import { syncStatuses } from './constants';
-import useSharedFileChangeListener from './useSharedFileChangeListener';
+import useSharedFileChangeListener from '../shared/sharedFilesUtils/useSharedFileChangeListener';
 
 interface SharedEditorProps {
   id: string;

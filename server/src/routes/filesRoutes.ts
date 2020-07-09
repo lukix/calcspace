@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
-export default ({ dbClient }) => {
+export default ({ dbClient, sharedFilesManager }) => {
   const getFiles = {
     path: '/',
     method: 'get',
@@ -87,9 +87,22 @@ export default ({ dbClient }) => {
       const { fileId } = params;
       const { code } = body;
       const result = await dbClient.query(
-        'UPDATE files SET code = $1 WHERE id = $2 AND user_id = $3',
+        `UPDATE files SET code = $1 WHERE id = $2 AND user_id = $3
+        RETURNING shared_edit_id, shared_edit_enabled, shared_view_id, shared_view_enabled`,
         [code, fileId, user.userId]
       );
+      sharedFilesManager.emitChange({
+        newCommit: { code, commitId: null },
+        fileId,
+        sharedEditId:
+          result.rows[0] && result.rows[0].shared_edit_enabled
+            ? result.rows[0].shared_edit_id
+            : null,
+        sharedViewId:
+          result.rows[0] && result.rows[0].shared_view_enabled
+            ? result.rows[0].shared_view_id
+            : null,
+      });
       return { status: result.rowCount === 0 ? 404 : 200 };
     },
   };
