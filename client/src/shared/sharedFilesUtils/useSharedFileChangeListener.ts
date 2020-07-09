@@ -12,14 +12,15 @@ const useSharedFileChangeListener = ({
   id,
   commit,
   code,
-  selectionStart,
-  selectionEnd,
+  textareaRef,
   changeHandler,
 }) => {
   const [socket, setSocket] = useState<any>(null);
 
   const handleSocketChangeMessage = useCallback(
     (data) => {
+      const selectionStart = textareaRef.current?.selectionStart || 0;
+      const selectionEnd = textareaRef.current?.selectionEnd || 0;
       const newCode = mergeChanges(commit.code, code, data.code);
       const diffResult = diff.diffChars(code, newCode);
       const newSelectionStart = findNewCursorPosition(diffResult, selectionStart);
@@ -27,7 +28,7 @@ const useSharedFileChangeListener = ({
 
       changeHandler({ data, newCode, newSelectionStart, newSelectionEnd });
     },
-    [changeHandler, commit, code, selectionStart, selectionEnd]
+    [changeHandler, commit, code, textareaRef]
   );
 
   useEffect(() => {

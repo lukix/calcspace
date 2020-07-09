@@ -33,8 +33,7 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
     id,
     commit,
     code,
-    selectionStart: textareaRef.current?.selectionStart,
-    selectionEnd: textareaRef.current?.selectionEnd,
+    textareaRef,
     changeHandler: useCallback(({ data, newCode, newSelectionStart, newSelectionEnd }) => {
       setCode(newCode);
       setCommit({ commitId: data.commitId, code: data.code });
