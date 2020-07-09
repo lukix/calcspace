@@ -18,6 +18,7 @@ import authorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
 import { DATABASE_URL, PORT, CLIENT_URL } from './config';
 import userSettingsRoutes from './routes/userSettingsRoutes';
+import SharedFilesManager from './sharedFilesManager';
 
 (async () => {
   await setupDatabase();
@@ -44,6 +45,7 @@ import userSettingsRoutes from './routes/userSettingsRoutes';
 
   const http = app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
   const io = socketIO(http);
+  const sharedFilesManager = SharedFilesManager({ io });
 
   const testRoute = {
     path: '/',
@@ -54,12 +56,12 @@ import userSettingsRoutes from './routes/userSettingsRoutes';
   const routesDefinitions = nestRoutes('/api', [
     testRoute,
     ...nestRoutes('/users', usersRoutes({ dbClient })),
-    ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient, io })),
+    ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient, sharedFilesManager })),
     ...applyMiddlewares(
       [authorizationMiddleware],
       [
         ...nestRoutes('/user-settings', userSettingsRoutes({ dbClient })),
-        ...nestRoutes('/files', filesRoutes({ dbClient })),
+        ...nestRoutes('/files', filesRoutes({ dbClient, sharedFilesManager })),
       ]
     ),
   ]);

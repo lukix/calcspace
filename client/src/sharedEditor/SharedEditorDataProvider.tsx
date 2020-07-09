@@ -74,6 +74,7 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
         <div className={styles.guideWrapper}>
           <UserGuide
             isSignedIn={false}
+            userManaged={initialFileCommit?.userManaged}
             viewId={viewOnly ? id : initialFileCommit?.sharedViewId || undefined}
             editId={!viewOnly ? id : undefined}
           />

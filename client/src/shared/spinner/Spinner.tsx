@@ -7,6 +7,7 @@ interface SpinnerProps {
   show?: boolean;
   centered?: boolean;
   children?: ReactNode;
+  color?: string;
 }
 
 const Spinner: React.FC<SpinnerProps> = ({
@@ -14,17 +15,14 @@ const Spinner: React.FC<SpinnerProps> = ({
   show = true,
   centered = false,
   children = null,
+  color = '#DBD5A9',
 }) => {
   if (!show) {
     return <>{children}</>;
   }
 
-  const spinner = <MoonLoader size={size} color={'#DBD5A9'} loading={show} />;
-  return centered ? (
-    <div className={styles.spinnerCenteringContainer}>{spinner}</div>
-  ) : (
-    spinner
-  );
+  const spinner = <MoonLoader size={size} color={color} loading={show} />;
+  return centered ? <div className={styles.spinnerCenteringContainer}>{spinner}</div> : spinner;
 };
 
 export default Spinner;
