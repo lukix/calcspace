@@ -39,12 +39,8 @@ const SharingModal: React.FC<SharingModalProps> = ({
   setSharedViewEnabled,
   setSharedEditEnabled,
 }) => {
-  const [updateViewFlag, , isUpdatingViewFlag, updatingViewFlagError] = useAsyncAction(
-    updateViewFlagAction
-  );
-  const [updateEditFlag, , isUpdatingEditFlag, updatingEditFlagError] = useAsyncAction(
-    updateEditFlagAction
-  );
+  const [updateViewFlag, , isUpdatingViewFlag] = useAsyncAction(updateViewFlagAction);
+  const [updateEditFlag, , isUpdatingEditFlag] = useAsyncAction(updateEditFlagAction);
 
   const sharedViewUrl = getUrlToShare(routes.sharedViewFile.path, sharedViewId);
   const sharedEditUrl = getUrlToShare(routes.sharedEditFile.path, sharedEditId);
