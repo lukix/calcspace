@@ -77,8 +77,10 @@ const unitsList = {
   FORCE: createUnitWithPrefixes('N'),
   PRESSURE: createUnitWithPrefixes('Pa'),
   ENERGY: createUnitWithPrefixes('J'),
+  WATT_HOUR: createUnitWithPrefixes('Wh'),
   POWER: createUnitWithPrefixes('W'),
   CHARGE: createUnitWithPrefixes('C'),
+  AMPERE_HOUR: createUnitWithPrefixes('Ah'),
   VOLTAGE: createUnitWithPrefixes('V'),
   CAPACITANCE: createUnitWithPrefixes('F'),
   RESISTANCE: createUnitWithPrefixes('Ohm'),
@@ -147,11 +149,19 @@ const UnitsList: React.FC<UnitsListProps> = () => {
       <h3>Pressure</h3>
       <pre className={styles.codeSnippet}>{mapUnits(unitsList.PRESSURE)}</pre>
       <h3>Energy</h3>
-      <pre className={styles.codeSnippet}>{mapUnits(unitsList.ENERGY)}</pre>
+      <pre className={styles.codeSnippet}>
+        {mapUnits(unitsList.ENERGY)}
+        <br />
+        {mapUnits(unitsList.WATT_HOUR)}
+      </pre>
       <h3>Power</h3>
       <pre className={styles.codeSnippet}>{mapUnits(unitsList.POWER)}</pre>
       <h3>Electric charge</h3>
-      <pre className={styles.codeSnippet}>{mapUnits(unitsList.CHARGE)}</pre>
+      <pre className={styles.codeSnippet}>
+        {mapUnits(unitsList.CHARGE)}
+        <br />
+        {mapUnits(unitsList.AMPERE_HOUR)}
+      </pre>
       <h3>Electric potential</h3>
       <pre className={styles.codeSnippet}>{mapUnits(unitsList.VOLTAGE)}</pre>
       <h3>Capacitance</h3>

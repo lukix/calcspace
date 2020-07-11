@@ -189,6 +189,16 @@ export const units: Array<UnitMapTuple> = [
   ['lb', { multiplier: 0.45359237, baseUnits: [{ unit: 'kg', power: 1 }] }],
 
   ...getUnitsWithPrefixes('l', [{ unit: 'm', power: 3 }], { baseMultiplier: 1e-3 }),
+  ...getUnitsWithPrefixes(
+    'Wh',
+    [
+      { unit: 'm', power: 2 },
+      { unit: 'kg', power: 1 },
+      { unit: 's', power: -2 },
+    ],
+    { baseMultiplier: 3600 }
+  ),
+  ...getUnitsWithPrefixes('Ah', [{ unit: 'C', power: 1 }], { baseMultiplier: 3600 }),
 
   ['in', { multiplier: 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
   ['ft', { multiplier: 12 * 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
