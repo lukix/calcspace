@@ -4,7 +4,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
 
 .codeWrapper {
   position: relative;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 @mixin commonCodeFormat {
@@ -63,6 +63,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
 .buttons {
   margin-top: 1px;
   margin-right: 15px;
+  margin-bottom: 10px;
 }
 
 .modalToggleLabel {

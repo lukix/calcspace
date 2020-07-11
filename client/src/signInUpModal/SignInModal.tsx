@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { Switch, Case, Default } from 'react-when-then';
+
 import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
 import { Modal, ModalFormField } from '../shared/modal';
@@ -106,8 +108,11 @@ const LogInModal: React.FC<LogInModalProps> = () => {
       </Modal>
       <div className={styles.noAccountButtonWrapper}>
         <button onClick={openNewSharedFile}>
-          {isCreatingSharedFile ? 'Redirecting...' : 'Try without an account'}
-          {creatingSharedFileError && !isCreatingSharedFile && 'Error occured. Click to try again.'}
+          <Switch>
+            <Case when={isCreatingSharedFile}>Redirecting...</Case>
+            <Case when={creatingSharedFileError}>Error occured. Click to try again.</Case>
+            <Default>Try without an account</Default>
+          </Switch>
         </button>
       </div>
     </div>
