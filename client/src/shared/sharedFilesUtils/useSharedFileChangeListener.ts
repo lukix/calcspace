@@ -16,6 +16,7 @@ const useSharedFileChangeListener = ({
   changeHandler,
 }) => {
   const [socket, setSocket] = useState<any>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   const handleSocketChangeMessage = useCallback(
     (data) => {
@@ -36,6 +37,13 @@ const useSharedFileChangeListener = ({
     newSocket.emit(socketSubscribePath, { id });
     setSocket(newSocket);
 
+    newSocket.on('connect', () => {
+      setIsConnected(true);
+    });
+    newSocket.on('disconnect', () => {
+      setIsConnected(false);
+    });
+
     return () => {
       newSocket.disconnect();
       setSocket(null);
@@ -49,6 +57,8 @@ const useSharedFileChangeListener = ({
     socket.on('change', handleSocketChangeMessage);
     return () => socket.off('change');
   }, [socket, handleSocketChangeMessage]);
+
+  return { isConnected };
 };
 
 export default useSharedFileChangeListener;
