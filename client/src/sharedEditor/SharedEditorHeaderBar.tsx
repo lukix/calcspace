@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { FaExclamationCircle } from 'react-icons/fa';
 
 import HeaderBar from '../shared/headerBar';
-
 import Spinner from '../shared/spinner';
+import routes from '../shared/routes';
 
 import { syncStatuses } from './constants';
 import styles from './SharedEditor.module.scss';
@@ -18,7 +18,7 @@ const SharedEditorHeaderBar: React.FC<SharedEditorHeaderBarProps> = ({ syncStatu
     <HeaderBar
       headerTitle={
         <>
-          <Link to="/">Math IDE</Link>
+          <Link to={routes.home.path}>Math IDE</Link>
           <Spinner
             size={18}
             show={[syncStatuses.DIRTY, syncStatuses.STARTED].includes(syncStatus)}
@@ -33,7 +33,7 @@ const SharedEditorHeaderBar: React.FC<SharedEditorHeaderBarProps> = ({ syncStatu
       }
       icons={
         <div className={styles.headerLinks}>
-          <Link to="/log-in">Log In</Link> / <Link to="/sign-up">Sign Up</Link>
+          <Link to={routes.logIn.path}>Log In</Link> / <Link to={routes.signUp.path}>Sign Up</Link>
         </div>
       }
     />

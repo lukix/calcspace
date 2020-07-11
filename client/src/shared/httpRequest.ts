@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { API_URL } from '../config';
+import routes from '../shared/routes';
 
 const HttpRequest = ({ baseUrl, responseErrorHandlers = {} }) => {
-  const request = method => (url: string, data?: any) =>
+  const request = (method) => (url: string, data?: any) =>
     axios
       .request({
         method,
@@ -11,7 +12,7 @@ const HttpRequest = ({ baseUrl, responseErrorHandlers = {} }) => {
         withCredentials: true,
       })
       .then(({ data }) => data)
-      .catch(error => {
+      .catch((error) => {
         if (error.response && responseErrorHandlers[error.response.status]) {
           return responseErrorHandlers[error.response.status](error);
         } else {
@@ -30,7 +31,7 @@ const HttpRequest = ({ baseUrl, responseErrorHandlers = {} }) => {
 };
 
 const forbiddenErrorHandler = () => {
-  window.location.replace('/log-in');
+  window.location.replace(routes.logIn.path);
 };
 
 export default HttpRequest({

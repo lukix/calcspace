@@ -6,6 +6,7 @@ import { SIGN_OUT_URL } from '../config';
 import Spinner from '../shared/spinner';
 import { selectors, actions } from '../shared/filesStore';
 import HeaderBar from '../shared/headerBar';
+import routes from '../shared/routes';
 import styles from './SignedInHeaderBar.module.scss';
 
 interface SignedInHeaderBarProps {
@@ -42,7 +43,7 @@ const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
             onClick={toggleFilesPanel}
             title="Toggle files panel visibility"
           />
-          <Link to="/">Math IDE</Link>
+          <Link to={routes.home.path}>Math IDE</Link>
           <Spinner size={18} show={isSynchronizingAnyFile || areThereAnyChangesToBeSaved} />
           {showError && (
             <FaExclamationCircle

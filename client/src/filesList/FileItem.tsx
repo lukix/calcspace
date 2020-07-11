@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, ReactElement } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import { FaTrash, FaPen, FaRegCircle, FaRegDotCircle, FaHourglassEnd } from 'react-icons/fa';
+
+import routes from '../shared/routes';
 import styles from './FilesList.module.scss';
 
 interface StatusIconProps {
@@ -92,7 +94,7 @@ const FileItem: React.FC<FileItemProps> = ({
     }
   };
 
-  const path = `/file/${id}`;
+  const path = routes.file.path.replace(':fileId', id);
   const isBusy = isCreating || isDeleting || isRenaming;
   const isSelected = path === pathname;
 
@@ -104,7 +106,7 @@ const FileItem: React.FC<FileItemProps> = ({
 
   const deleteHandler = () => {
     if (isSelected) {
-      historyPush('/');
+      historyPush(routes.home.path);
     }
     deleteFile({ id });
   };

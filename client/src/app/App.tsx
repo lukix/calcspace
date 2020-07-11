@@ -11,10 +11,10 @@ const App: React.FC<AppProps> = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/log-in">
+        <Route path={routes.logIn.path}>
           <SignInModal />
         </Route>
-        <Route path="/sign-up">
+        <Route path={routes.signUp.path}>
           <SignUpModal />
         </Route>
         <Route path={routes.sharedEditFile.path}>
@@ -23,7 +23,7 @@ const App: React.FC<AppProps> = () => {
         <Route path={routes.sharedViewFile.path}>
           <SharedEditorDataProvider viewOnly />
         </Route>
-        <Route path="/">
+        <Route path={routes.home.path}>
           <AuthorizedApp />
         </Route>
       </Switch>

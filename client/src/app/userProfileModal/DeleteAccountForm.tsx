@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import httpRequest from '../../shared/httpRequest';
 import { ModalFormField, SubmitButton } from '../../shared/modal';
+import routes from '../../shared/routes';
 import sharedStyles from '../../shared/shared.module.scss';
 import styles from './UserProfileModal.module.scss';
 
@@ -44,7 +45,7 @@ const DeleteAccountForm: React.FC<DeleteAccountFormProps> = () => {
         formik.resetForm();
         formikProps.setStatus(SUCCESS_STATUS);
         setTimeout(() => {
-          window.location.replace('/');
+          window.location.replace(routes.home.path);
         }, 3000);
       } catch (err) {
         formikProps.setStatus(

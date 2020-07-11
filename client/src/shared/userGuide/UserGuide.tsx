@@ -191,9 +191,9 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId, userM
       </pre>
       <h2>Units</h2>
       <p>
-        Math IDE supports values with {isSignedIn ? <Link to="/units-list">units</Link> : 'units'}.
-        Unit symbol needs to be placed right after the number, without separating space character.
-        For example:
+        Math IDE supports values with{' '}
+        {isSignedIn ? <Link to={routes.unitsList.path}>units</Link> : 'units'}. Unit symbol needs to
+        be placed right after the number, without separating space character. For example:
       </p>
       <pre className={styles.codeSnippet}>
         15kg
@@ -265,7 +265,8 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId, userM
       <p>
         {isSignedIn && (
           <>
-            Here is a list of all available units: <Link to="/units-list">Units List</Link>.
+            Here is a list of all available units:{' '}
+            <Link to={routes.unitsList.path}>Units List</Link>.
           </>
         )}
       </p>

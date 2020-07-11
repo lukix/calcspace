@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa';
 import classNames from 'classnames';
+
 import Spinner from '../shared/spinner';
 import FileItem from './FileItem';
 import { actions, selectors } from '../shared/filesStore';
+import routes from '../shared/routes';
 import styles from './FilesList.module.scss';
 
 interface FilesListProps {
@@ -55,7 +57,7 @@ const FilesList: React.FC<FilesListProps> = ({
 
   const createNewFile = () => {
     addFile();
-    historyPush('/new-file');
+    historyPush(routes.newFile.path);
   };
 
   const filesList = (

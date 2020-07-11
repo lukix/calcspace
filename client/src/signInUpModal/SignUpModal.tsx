@@ -6,6 +6,7 @@ import { FaRegCheckCircle } from 'react-icons/fa';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
 import { Modal, ModalFormField } from '../shared/modal';
+import routes from '../shared/routes';
 import AppDescription from './AppDescription';
 import sharedStyles from '../shared/shared.module.scss';
 import styles from './SignInUpModal.module.scss';
@@ -89,7 +90,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
                   disabled={isAddingUser}
                 />
                 <p className={styles.signUpMessage}>
-                  Already have an account? <Link to="/log-in">Log in</Link>.
+                  Already have an account? <Link to={routes.logIn.path}>Log in</Link>.
                 </p>
               </div>
               {addUserError && (
@@ -102,7 +103,8 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
             <div className={styles.signUpSuccessMessage}>
               <FaRegCheckCircle />
               <p>
-                You have successfully signed up! You can <Link to="/log-in">Log in</Link> now.
+                You have successfully signed up! You can <Link to={routes.logIn.path}>Log in</Link>{' '}
+                now.
               </p>
             </div>
           )}

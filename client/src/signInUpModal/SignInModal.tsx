@@ -6,6 +6,7 @@ import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
 import { Modal, ModalFormField } from '../shared/modal';
 import useAsyncAction from '../shared/useAsyncAction';
+import routes from '../shared/routes';
 import AppDescription from './AppDescription';
 import sharedStyles from '../shared/shared.module.scss';
 import styles from './SignInUpModal.module.scss';
@@ -37,7 +38,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
         formikProps.setSubmitting(true);
         await httpRequest.post(`users/authenticate`, { username, password });
         setIsRedirecting(true);
-        window.location.replace('/');
+        window.location.replace(routes.home.path);
       } catch (err) {
         formikProps.setStatus(
           err.response && err.response.status === 401
@@ -65,7 +66,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
 
   useEffect(() => {
     if (sharedFile) {
-      historyPush(`shared/edit/${sharedFile.sharedEditId}`);
+      historyPush(routes.sharedEditFile.path.replace(':id', sharedFile.sharedEditId));
     }
   }, [historyPush, sharedFile]);
 
@@ -90,7 +91,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
                   disabled={formik.isSubmitting}
                 />
                 <p className={styles.signUpMessage}>
-                  Don't have an account? <Link to="/sign-up">Sign up</Link>.
+                  Don't have an account? <Link to={routes.signUp.path}>Sign up</Link>.
                 </p>
               </div>
               {formik.status === INVALID_CREDENTIALS_STATUS && (

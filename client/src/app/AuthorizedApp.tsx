@@ -7,6 +7,7 @@ import FilePage from '../filePage/FilePage';
 import NewFilePage from '../newFilePage/NewFilePage';
 import FilesList from '../filesList/FilesList';
 import UserGuide from '../shared/userGuide';
+import routes from '../shared/routes';
 import UnitsList from './UnitsList';
 import { UserProfileModal } from './userProfileModal';
 import { actions as reduxActions, selectors } from './store';
@@ -43,7 +44,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
   const hideUserModal = () => setIsUserModalVisible(false);
 
   if (fetchingUserError) {
-    return <Redirect to="/log-in" />;
+    return <Redirect to={routes.logIn.path} />;
   }
 
   if (isFetchingUser || !user) {
@@ -57,16 +58,16 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
         <FilesList />
         <div className={styles.content} ref={scrollableContentElement}>
           <Switch>
-            <Route path="/new-file">
+            <Route path={routes.newFile.path}>
               <NewFilePage />
             </Route>
-            <Route path="/file/:fileId">
+            <Route path={routes.file.path}>
               <FilePage />
             </Route>
-            <Route path="/units-list">
+            <Route path={routes.unitsList.path}>
               <UnitsList />
             </Route>
-            <Route path="/">
+            <Route path={routes.home.path}>
               <UserGuide isSignedIn />
             </Route>
           </Switch>

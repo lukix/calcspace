@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { selectors } from '../shared/filesStore';
 import Spinner from '../shared/spinner';
+import routes from '../shared/routes';
 
 interface NewFilePageProps {
   isCreatingFile: boolean;
@@ -28,13 +29,13 @@ const NewFilePage: React.FC<NewFilePageProps> = ({ isCreatingFile, files }) => {
         .filter(hasDate)
         .sort((fileA, fileB) => (fileA.createdDate < fileB.createdDate ? 1 : -1))[0];
       if (recentlyCreatedFile) {
-        historyPush(`/file/${recentlyCreatedFile.id}`);
+        historyPush(routes.file.path.replace(':fileId', recentlyCreatedFile.id));
       }
     }
   }, [historyPush, isCreatingFile, files]);
 
   if (!isCreatingFile) {
-    return <Redirect to="/" />;
+    return <Redirect to={routes.home.path} />;
   }
 
   return <Spinner centered />;
