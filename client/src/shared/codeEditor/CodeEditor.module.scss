@@ -64,6 +64,17 @@ $expression-font-family: 'Courier New', Courier, monospace;
   margin-top: 1px;
   margin-right: 15px;
   margin-bottom: 10px;
+
+  :global {
+    .radio-button-label, .toggle-button-label {
+      display: inline;
+    }
+    .radio-button-icon, .toggle-button-icon {
+      padding-right: 2px;
+      position: relative;
+      top: 2px;
+    }
+  }
 }
 
 .modalToggleLabel {
@@ -121,4 +132,18 @@ $expression-font-family: 'Courier New', Courier, monospace;
 
 .shareModeContainer {
   margin-top: 20px;
+}
+
+@media (max-width: 568px) {
+  .buttons {
+    :global {
+      .radio-button-label, .toggle-button-label {
+        display: none;
+      }
+      .radio-button-icon, .toggle-button-icon {
+        display: inline;
+        padding: 0 5px;
+      }
+    }
+  }
 }

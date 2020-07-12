@@ -3,7 +3,12 @@ import classNames from 'classnames';
 import styles from './RadioButtons.module.scss';
 
 interface RadioButtonsProps {
-  items: Array<{ value: string | boolean | number | null; label: string; description?: string }>;
+  items: Array<{
+    value: string | boolean | number | null;
+    label: string;
+    description?: string;
+    icon: React.ReactNode;
+  }>;
   value: string | boolean | number | null;
   onChange: Function;
   className?: string;
@@ -21,7 +26,8 @@ const RadioButtons: React.FC<RadioButtonsProps> = ({ items, value, onChange, cla
           onClick={() => onChange(item.value)}
           title={item.description || ''}
         >
-          {item.label}
+          <span className="radio-button-icon">{item.icon}</span>{' '}
+          <span className="radio-button-label">{item.label}</span>
         </div>
       ))}
     </div>

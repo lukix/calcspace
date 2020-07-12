@@ -10,7 +10,7 @@
     background: rgba(0, 0, 0, 0.3);
     padding: 8px;
     text-align: center;
-    width: 100px;
+    color: #ccc;
 
     &:hover {
       background: rgba(0, 0, 0, 0.6);
@@ -25,7 +25,6 @@
       border-top-color: $accent-color;
       border-bottom-color: $accent-color;
       color: black;
-      font-weight: bold;
     }
 
     &:first-child.selected {

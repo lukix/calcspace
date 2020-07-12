@@ -8,6 +8,7 @@ interface ToggleButtonProps {
   onChange: Function;
   className?: string;
   description?: string;
+  icon?: React.ReactNode;
 }
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({
@@ -16,6 +17,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
   onChange,
   className = '',
   description = '',
+  icon = null,
 }) => {
   return (
     <div className={classNames(styles.toggleButton, className)}>
@@ -26,7 +28,8 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
         onClick={() => onChange(!value)}
         title={description}
       >
-        {label}
+        <span className="toggle-button-icon">{icon}</span>{' '}
+        <span className="toggle-button-label">{label}</span>
       </div>
     </div>
   );
