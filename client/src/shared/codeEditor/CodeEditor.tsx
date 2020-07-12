@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { FaLink, FaPen, FaEye } from 'react-icons/fa';
-import { TiSortNumerically } from 'react-icons/ti';
+import { MdSettings } from 'react-icons/md';
 
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons';
 import ToggleButton from './toggleButton';
 import { tokenizeCode, tokenizedCodeToString } from './codeTokenizer';
 import SharingModal from './SharingModal';
+import EditorSettingsModal from './EditorSettingsModal';
 import styles from './CodeEditor.module.scss';
 
 interface CodeEditorProps {
@@ -27,7 +28,12 @@ const modes = {
   VIEW_MODE: 'VIEW_MODE',
 };
 const getModeOptions = (viewOnly) => [
-  { value: modes.EDIT_MODE, label: viewOnly ? 'Rich Mode' : 'Edit Mode', icon: <FaPen /> },
+  {
+    value: modes.EDIT_MODE,
+    label: viewOnly ? 'Rich Mode' : 'Edit Mode',
+    description: viewOnly ? 'Rich Mode' : 'Edit Mode',
+    icon: <FaPen />,
+  },
   {
     value: modes.VIEW_MODE,
     label: viewOnly ? 'Raw Mode' : 'View Mode',
@@ -50,15 +56,29 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   fileId,
 }) => {
   const [mode, setMode] = useState(modes.EDIT_MODE);
+
   const [exponentialNotation, setExponentialNotation] = useState(
     localStorage.getItem('exponentialNotation') === 'true'
   );
   const [showResultUnit, setShowResultUnit] = useState(
     localStorage.getItem('showResultUnit') === 'true'
   );
+
+  useEffect(() => {
+    localStorage.setItem('exponentialNotation', `${exponentialNotation}`);
+  }, [exponentialNotation]);
+
+  useEffect(() => {
+    localStorage.setItem('showResultUnit', `${showResultUnit}`);
+  }, [showResultUnit]);
+
   const [sharingModalVisible, setSharingModalVisible] = useState(false);
   const showSharingModal = () => setSharingModalVisible(true);
   const hideSharingModal = () => setSharingModalVisible(false);
+
+  const [editorSettingsModalVisible, setEditorSettingsModalVisible] = useState(false);
+  const showEditorSettingsModal = () => setEditorSettingsModalVisible(true);
+  const hideEditorSettingsModal = () => setEditorSettingsModalVisible(false);
 
   const [sharedViewEnabled, setSharedViewEnabled] = useState(Boolean(initialSharedViewEnabled));
   const [sharedEditEnabled, setSharedEditEnabled] = useState(Boolean(initialSharedEditEnabled));
@@ -73,14 +93,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     const value = e.target.value;
     onChange(value);
   };
-
-  useEffect(() => {
-    localStorage.setItem('exponentialNotation', `${exponentialNotation}`);
-  }, [exponentialNotation]);
-
-  useEffect(() => {
-    localStorage.setItem('showResultUnit', `${showResultUnit}`);
-  }, [showResultUnit]);
 
   const isInViewMode = mode === modes.VIEW_MODE;
 
@@ -103,33 +115,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       />
       <ToggleButton
         className={styles.buttons}
-        label="Exponential notation"
-        value={exponentialNotation}
-        onChange={setExponentialNotation}
-        description={
-          exponentialNotation
-            ? 'Exponential notation is on. Results greater or equal to 10000 will be displayed using exponential notation (for example 2.5e4 instead of 25000)'
-            : 'Exponential notation is off'
-        }
-        icon={<TiSortNumerically />}
+        label="Settings"
+        value={false}
+        onChange={showEditorSettingsModal}
+        description="Click to open editor settings"
+        icon={<MdSettings />}
       />
-      {isInViewMode && (
-        <ToggleButton
-          className={styles.buttons}
-          label="Show result unit"
-          value={showResultUnit}
-          onChange={setShowResultUnit}
-          description={showResultUnit ? 'Showing result unit is on' : 'Showing result unit is off'}
-          icon={<TiSortNumerically />}
-        />
-      )}
       {(sharedViewId || sharedEditId) && (
         <ToggleButton
           className={styles.buttons}
           label="Sharing"
           value={sharedViewEnabled || sharedEditEnabled}
           onChange={showSharingModal}
-          description={showResultUnit ? 'Sharing is on' : 'Sharing is off'}
+          description="Click to open sharing options"
           icon={<FaLink />}
         />
       )}
@@ -167,6 +165,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         setSharedViewEnabled={setSharedViewEnabled}
         setSharedEditEnabled={setSharedEditEnabled}
         fileId={fileId}
+      />
+      <EditorSettingsModal
+        visible={editorSettingsModalVisible}
+        hide={hideEditorSettingsModal}
+        exponentialNotation={exponentialNotation}
+        setExponentialNotation={setExponentialNotation}
+        showResultUnit={showResultUnit}
+        setShowResultUnit={setShowResultUnit}
       />
     </div>
   );
