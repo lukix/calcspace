@@ -9,6 +9,7 @@ interface ToggleButtonProps {
   className?: string;
   description?: string;
   icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({
@@ -18,6 +19,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
   className = '',
   description = '',
   icon = null,
+  disabled = false,
 }) => {
   return (
     <div className={classNames(styles.toggleButton, className)}>
@@ -25,7 +27,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
         className={classNames(styles.item, {
           [styles.selected]: value,
         })}
-        onClick={() => onChange(!value)}
+        onClick={disabled ? () => {} : () => onChange(!value)}
         title={description}
       >
         <span className="toggle-button-icon">{icon}</span>{' '}

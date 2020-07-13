@@ -12,6 +12,8 @@ interface SharedEditorProps {
   viewOnly: boolean;
   setSyncStatus: Function;
   initialFileCommit: { commitId: string; code: string };
+  viewId?: string;
+  editId?: string;
 }
 
 const SharedEditor: React.FC<SharedEditorProps> = ({
@@ -19,6 +21,8 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
   viewOnly,
   setSyncStatus,
   initialFileCommit,
+  viewId,
+  editId,
 }) => {
   const [code, setCode] = useState(initialFileCommit.code);
   const [commit, setCommit] = useState({
@@ -62,7 +66,15 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
   }, [code, viewOnly, syncService]);
 
   return (
-    <CodeEditor code={code} onChange={setCode} textareaRef={textareaRef} viewOnly={viewOnly} />
+    <CodeEditor
+      code={code}
+      onChange={setCode}
+      signedInView={false}
+      textareaRef={textareaRef}
+      viewOnly={viewOnly}
+      sharedViewId={viewId}
+      sharedEditId={editId}
+    />
   );
 };
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Switch, Case, Default } from 'react-when-then';
@@ -7,8 +7,8 @@ import { Switch, Case, Default } from 'react-when-then';
 import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
 import { Modal, ModalFormField } from '../shared/modal';
-import useAsyncAction from '../shared/useAsyncAction';
 import routes from '../shared/routes';
+import useCreateAndOpenSharedFile from '../shared/useCreateAndOpenSharedFile';
 import AppDescription from './AppDescription';
 import sharedStyles from '../shared/shared.module.scss';
 import styles from './SignInUpModal.module.scss';
@@ -53,24 +53,11 @@ const LogInModal: React.FC<LogInModalProps> = () => {
     },
   });
 
-  const [
+  const {
     createSharedFile,
-    sharedFile,
     isCreatingSharedFile,
     creatingSharedFileError,
-  ] = useAsyncAction(createSharedFileAction);
-
-  const openNewSharedFile = async () => {
-    createSharedFile();
-  };
-
-  const { push: historyPush } = useHistory();
-
-  useEffect(() => {
-    if (sharedFile) {
-      historyPush(routes.sharedEditFile.path.replace(':id', sharedFile.sharedEditId));
-    }
-  }, [historyPush, sharedFile]);
+  } = useCreateAndOpenSharedFile(createSharedFileAction);
 
   return (
     <div className={styles.pageContainer}>
@@ -107,7 +94,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
         </div>
       </Modal>
       <div className={styles.noAccountButtonWrapper}>
-        <button onClick={openNewSharedFile}>
+        <button onClick={createSharedFile}>
           <Switch>
             <Case when={isCreatingSharedFile}>Redirecting...</Case>
             <Case when={creatingSharedFileError}>Error occured. Click to try again.</Case>

@@ -87,6 +87,7 @@ const FilePage: React.FC<FilePageProps> = ({
     <CodeEditor
       code={code}
       onChange={onCodeChange}
+      signedInView
       textareaRef={textareaRef}
       sharedViewId={file && file.sharedViewId}
       sharedEditId={file && file.sharedEditId}

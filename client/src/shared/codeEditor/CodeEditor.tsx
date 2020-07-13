@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { FaLink, FaPen, FaEye } from 'react-icons/fa';
+import { FaLink, FaPen, FaEye, FaRegCopy } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
 
+import httpRequest from '../../shared/httpRequest';
+import useCreateAndOpenSharedFile from '../../shared/useCreateAndOpenSharedFile';
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons';
 import ToggleButton from './toggleButton';
@@ -11,9 +13,12 @@ import SharingModal from './SharingModal';
 import EditorSettingsModal from './EditorSettingsModal';
 import styles from './CodeEditor.module.scss';
 
+const createSharedFileAction = ({ code }) => httpRequest.post(`shared-files`, { code });
+
 interface CodeEditorProps {
   code: string;
   onChange: Function;
+  signedInView: boolean;
   textareaRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
   viewOnly?: boolean;
   sharedViewId?: string;
@@ -47,6 +52,7 @@ const getModeOptions = (viewOnly) => [
 const CodeEditor: React.FC<CodeEditorProps> = ({
   code,
   onChange,
+  signedInView,
   textareaRef,
   viewOnly = false,
   sharedViewId,
@@ -63,6 +69,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [showResultUnit, setShowResultUnit] = useState(
     localStorage.getItem('showResultUnit') === 'true'
   );
+
+  const {
+    createSharedFile: createFileCopy,
+    isCreatingSharedFile: isCreatingFileCopy,
+  } = useCreateAndOpenSharedFile(createSharedFileAction, { openInNewTab: true });
 
   useEffect(() => {
     localStorage.setItem('exponentialNotation', `${exponentialNotation}`);
@@ -121,7 +132,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         description="Click to open editor settings"
         icon={<MdSettings />}
       />
-      {(sharedViewId || sharedEditId) && (
+      {signedInView && (
         <ToggleButton
           className={styles.buttons}
           label="Sharing"
@@ -129,6 +140,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           onChange={showSharingModal}
           description="Click to open sharing options"
           icon={<FaLink />}
+        />
+      )}
+      {!signedInView && (
+        <ToggleButton
+          className={styles.buttons}
+          label={
+            isCreatingFileCopy ? 'Creating copy...' : `Create ${viewOnly ? 'Editable' : 'a'} Copy`
+          }
+          value={sharedViewEnabled || sharedEditEnabled}
+          onChange={() => createFileCopy({ code })}
+          description="Click to create editable copy"
+          icon={<FaRegCopy />}
+          disabled={isCreatingFileCopy}
         />
       )}
       <div className={styles.codeWrapper}>

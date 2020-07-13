@@ -2,9 +2,9 @@ import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
-export default ({ dbClient, sharedFilesManager }) => {
-  // ...
+const defaultSharedFileName = 'Unnamed shared file';
 
+export default ({ dbClient, sharedFilesManager }) => {
   const getFileBySharedEditId = {
     path: '/edit/:sharedEditId',
     method: 'get',
@@ -126,15 +126,15 @@ export default ({ dbClient, sharedFilesManager }) => {
   const addSharedFile = {
     path: '/',
     method: 'post',
-    handler: async () => {
-      const fileName = 'Unnamed shared file';
-      const fileCode = '';
+    handler: async ({ body }) => {
+      const { code } = body;
+      const fileCode = code || '';
       const newFile = await dbClient
         .query(
           `INSERT INTO files (name, code, shared_edit_enabled, shared_view_enabled)
           VALUES ($1, $2, TRUE, TRUE)
           RETURNING shared_edit_id`,
-          [fileName, fileCode]
+          [defaultSharedFileName, fileCode]
         )
         .then(({ rows }) => rows[0]);
 

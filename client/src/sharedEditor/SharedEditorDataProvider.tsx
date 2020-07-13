@@ -35,6 +35,9 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
     fetchFile(id, viewOnly);
   }, [fetchFile, id, viewOnly]);
 
+  const viewId = viewOnly ? id : initialFileCommit?.sharedViewId || undefined;
+  const editId = !viewOnly ? id : undefined;
+
   const renderContent = () => {
     if (isFetchingFile || !hasPerformedInitialFetch) {
       return <Spinner centered />;
@@ -62,6 +65,8 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
             commitId: initialFileCommit.commitId,
           }
         }
+        viewId={viewId}
+        editId={editId}
       />
     );
   };
@@ -75,8 +80,8 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
           <UserGuide
             isSignedIn={false}
             userManaged={initialFileCommit?.userManaged}
-            viewId={viewOnly ? id : initialFileCommit?.sharedViewId || undefined}
-            editId={!viewOnly ? id : undefined}
+            viewId={viewId}
+            editId={editId}
           />
         </div>
       </div>
