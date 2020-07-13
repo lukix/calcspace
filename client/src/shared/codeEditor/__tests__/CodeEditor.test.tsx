@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import CodeEditor from '../CodeEditor';
 
@@ -15,7 +16,11 @@ describe('CodeEditor component', () => {
     const code = 'x = 4\ny = 5';
 
     // when
-    const { queryAllByText } = render(<CodeEditor {...defaultProps} code={code} />);
+    const { queryAllByText } = render(
+      <BrowserRouter>
+        <CodeEditor {...defaultProps} code={code} signedInView />
+      </BrowserRouter>
+    );
 
     // then
     expect(queryAllByText('x = 4', { exact: false }).length).toBeGreaterThanOrEqual(1);
@@ -27,7 +32,11 @@ describe('CodeEditor component', () => {
     const code = 'x = 4 + 2';
 
     // when
-    const { queryByText } = render(<CodeEditor {...defaultProps} code={code} />);
+    const { queryByText } = render(
+      <BrowserRouter>
+        <CodeEditor {...defaultProps} code={code} signedInView />
+      </BrowserRouter>
+    );
 
     // then
     expect(queryByText('= 6', { exact: false })).not.toEqual(null);
