@@ -26,6 +26,7 @@ interface SharingModalProps {
   sharedEditEnabled: boolean;
   setSharedViewEnabled: Function;
   setSharedEditEnabled: Function;
+  signedInView: boolean;
 }
 
 const SharingModal: React.FC<SharingModalProps> = ({
@@ -38,6 +39,7 @@ const SharingModal: React.FC<SharingModalProps> = ({
   sharedEditEnabled,
   setSharedViewEnabled,
   setSharedEditEnabled,
+  signedInView,
 }) => {
   const [updateViewFlag, , isUpdatingViewFlag] = useAsyncAction(updateViewFlagAction);
   const [updateEditFlag, , isUpdatingEditFlag] = useAsyncAction(updateEditFlagAction);
@@ -65,7 +67,7 @@ const SharingModal: React.FC<SharingModalProps> = ({
                 checked={sharedViewEnabled}
                 onChange={toggleSharedView}
                 className={styles.modalToggle}
-                disabled={isUpdatingViewFlag}
+                disabled={isUpdatingViewFlag || !signedInView}
               />
               <span>
                 <Spinner size={16} color="#2B3A45" show={isUpdatingViewFlag}>
@@ -92,7 +94,7 @@ const SharingModal: React.FC<SharingModalProps> = ({
                 checked={sharedEditEnabled}
                 onChange={toggleSharedEdit}
                 className={styles.modalToggle}
-                disabled={isUpdatingEditFlag}
+                disabled={isUpdatingEditFlag || !signedInView}
               />
               <span>
                 <Spinner size={16} color="#2B3A45" show={isUpdatingEditFlag}>

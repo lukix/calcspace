@@ -74,6 +74,8 @@ const SharedEditor: React.FC<SharedEditorProps> = ({
       viewOnly={viewOnly}
       sharedViewId={viewId}
       sharedEditId={editId}
+      initialSharedViewEnabled={Boolean(viewId)}
+      initialSharedEditEnabled={Boolean(editId)}
     />
   );
 };

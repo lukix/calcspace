@@ -2,47 +2,43 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './UserGuide.module.scss';
 import routes from '../routes';
-import getUrlToShare from '../getUrlToShare';
 
-const getSharedUrlsDescription = ({ viewUrl, editUrl, userManaged }) => {
+const getSharedUrlsDescription = ({ viewEnabled, editEnabled, userManaged }) => {
   const deleteInfo = userManaged
     ? ' This file is managed by a user with an account and it can be deleted at any time.'
     : ' When the URL is not visited for at least 30 days, it may get deactivated.';
-  if (editUrl && viewUrl) {
+  if (editEnabled && viewEnabled) {
     return (
       <>
         <h2>Saving changes and sharing</h2>
         <p>
-          Any changes you make are automatically saved and are available for read-only use under
-          this URL: <span className={styles.inlineCode}>{viewUrl}</span>. Editing is possible via
-          another URL: <span className={styles.inlineCode}>{editUrl}</span>.{' '}
-          <b>Anyone who has access to this URL can see and edit the calculatons.</b>
+          Any changes you make are automatically saved and are available to anyone through the URL.
+          Click "Sharing" button to learn more about sharing options.
           {deleteInfo}
         </p>
       </>
     );
   }
-  if (editUrl && !viewUrl) {
+  if (editEnabled && !viewEnabled) {
     return (
       <>
         <h2>Saving changes and sharing</h2>
         <p>
-          Any changes you make are automatically saved and are available under this URL:{' '}
-          <span className={styles.inlineCode}>{editUrl}</span>.{' '}
-          <b>Anyone who has access to this URL can see and edit the calculatons.</b>
+          Any changes you make are automatically saved and are available to anyone through the URL.
+          Click "Sharing" button to learn more about sharing options.
           {deleteInfo}
         </p>
       </>
     );
   }
 
-  if (!editUrl && viewUrl) {
+  if (!editEnabled && viewEnabled) {
     return (
       <>
         <h2>You are in a read-only mode</h2>
         <p>
-          You got access to this page by following a read-only sharable URL:
-          <span className={styles.inlineCode}>{viewUrl}</span>. You cannot make any changes.
+          You got access to this page by following a read-only sharable URL. You cannot make any
+          changes.
           {deleteInfo}
         </p>
       </>
@@ -55,13 +51,16 @@ const getSharedUrlsDescription = ({ viewUrl, editUrl, userManaged }) => {
 interface UserGuideProps {
   isSignedIn: boolean;
   userManaged?: boolean;
-  editId?: string;
-  viewId?: string;
+  editEnabled?: boolean;
+  viewEnabled?: boolean;
 }
 
-const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId, userManaged }) => {
-  const editUrl = editId ? getUrlToShare(routes.sharedEditFile.path, editId) : null;
-  const viewUrl = viewId ? getUrlToShare(routes.sharedViewFile.path, viewId) : null;
+const UserGuide: React.FC<UserGuideProps> = ({
+  isSignedIn,
+  editEnabled,
+  viewEnabled,
+  userManaged,
+}) => {
   return (
     <div className={styles.userGuide}>
       <h2>Introduction</h2>
@@ -81,12 +80,7 @@ const UserGuide: React.FC<UserGuideProps> = ({ isSignedIn, editId, viewId, userM
           </>
         )}
       </p>
-      {!isSignedIn && getSharedUrlsDescription({ viewUrl, editUrl, userManaged })}
-      <h2>Beta Disclaimer</h2>
-      <p>
-        Please note that this is a beta version and the syntax described below may change in the
-        future.
-      </p>
+      {!isSignedIn && getSharedUrlsDescription({ viewEnabled, editEnabled, userManaged })}
       <h2>Getting Started</h2>
       <p>
         In the left panel, you can create multiple files. Each file is an independent environment

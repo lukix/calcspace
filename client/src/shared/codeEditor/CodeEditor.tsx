@@ -132,23 +132,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         description="Click to open editor settings"
         icon={<MdSettings />}
       />
-      {signedInView && (
-        <ToggleButton
-          className={styles.buttons}
-          label="Sharing"
-          value={sharedViewEnabled || sharedEditEnabled}
-          onChange={showSharingModal}
-          description="Click to open sharing options"
-          icon={<FaLink />}
-        />
-      )}
+      <ToggleButton
+        className={styles.buttons}
+        label="Sharing"
+        value={sharedViewEnabled || sharedEditEnabled}
+        onChange={showSharingModal}
+        description="Click to open sharing options"
+        icon={<FaLink />}
+      />
       {!signedInView && (
         <ToggleButton
           className={styles.buttons}
           label={
             isCreatingFileCopy ? 'Creating copy...' : `Create ${viewOnly ? 'Editable' : 'a'} Copy`
           }
-          value={sharedViewEnabled || sharedEditEnabled}
+          value={false}
           onChange={() => createFileCopy({ code })}
           description="Click to create editable copy"
           icon={<FaRegCopy />}
@@ -189,6 +187,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         setSharedViewEnabled={setSharedViewEnabled}
         setSharedEditEnabled={setSharedEditEnabled}
         fileId={fileId}
+        signedInView={signedInView}
       />
       <EditorSettingsModal
         visible={editorSettingsModalVisible}

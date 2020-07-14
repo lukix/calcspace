@@ -80,8 +80,8 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
           <UserGuide
             isSignedIn={false}
             userManaged={initialFileCommit?.userManaged}
-            viewId={viewId}
-            editId={editId}
+            viewEnabled={Boolean(viewId)}
+            editEnabled={Boolean(editId)}
           />
         </div>
       </div>
