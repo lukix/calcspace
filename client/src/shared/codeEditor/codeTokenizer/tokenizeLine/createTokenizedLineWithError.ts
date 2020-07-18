@@ -13,8 +13,9 @@ const createTokenizedLineWithError = ({
   start?: number | null;
   end?: number | null;
 }) => {
-  const errorSourceStart = start === null ? 0 : start;
-  const errorSourceEnd = end === null ? lineString.length : end;
+  const isErrorRangeEmpty = start === lineString.length || (start === end && start !== null);
+  const errorSourceStart = start === null || isErrorRangeEmpty ? 0 : start;
+  const errorSourceEnd = end === null || isErrorRangeEmpty ? lineString.length : end;
   return {
     values,
     tokenizedLine: [
