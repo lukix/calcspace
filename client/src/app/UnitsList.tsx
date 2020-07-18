@@ -2,73 +2,73 @@ import React, { Fragment } from 'react';
 import styles from './UnitsList.module.scss';
 
 const createUnitWithPrefixes = (symbol) => [
-  { unit: `1Y${symbol}`, equivaluent: `1e24${symbol}` },
-  { unit: `1Z${symbol}`, equivaluent: `1e21${symbol}` },
-  { unit: `1E${symbol}`, equivaluent: `1e18${symbol}` },
-  { unit: `1P${symbol}`, equivaluent: `1e15${symbol}` },
-  { unit: `1T${symbol}`, equivaluent: `1e12${symbol}` },
-  { unit: `1G${symbol}`, equivaluent: `1e9${symbol}` },
-  { unit: `1M${symbol}`, equivaluent: `1e6${symbol}` },
-  { unit: `1k${symbol}`, equivaluent: `1e3${symbol}` },
-  { unit: `1h${symbol}`, equivaluent: `1e2${symbol}` },
-  { unit: `1da${symbol}`, equivaluent: `1e1${symbol}` },
-  { unit: `1${symbol}`, equivaluent: `1${symbol}` },
-  { unit: `1d${symbol}`, equivaluent: `1e-1${symbol}` },
-  { unit: `1c${symbol}`, equivaluent: `1e-2${symbol}` },
-  { unit: `1m${symbol}`, equivaluent: `1e-3${symbol}` },
-  { unit: `1u${symbol}`, equivaluent: `1e-6${symbol}` },
-  { unit: `1n${symbol}`, equivaluent: `1e-9${symbol}` },
-  { unit: `1p${symbol}`, equivaluent: `1e-12${symbol}` },
-  { unit: `1f${symbol}`, equivaluent: `1e-15${symbol}` },
-  { unit: `1a${symbol}`, equivaluent: `1e-18${symbol}` },
-  { unit: `1z${symbol}`, equivaluent: `1e-21${symbol}` },
-  { unit: `1y${symbol}`, equivaluent: `1e-24${symbol}` },
+  { unit: `1Y${symbol}`, equivalent: { base: `1`, exponent: '24', unit: symbol } },
+  { unit: `1Z${symbol}`, equivalent: { base: `1`, exponent: '21', unit: symbol } },
+  { unit: `1E${symbol}`, equivalent: { base: `1`, exponent: '18', unit: symbol } },
+  { unit: `1P${symbol}`, equivalent: { base: `1`, exponent: '15', unit: symbol } },
+  { unit: `1T${symbol}`, equivalent: { base: `1`, exponent: '12', unit: symbol } },
+  { unit: `1G${symbol}`, equivalent: { base: `1`, exponent: '9', unit: symbol } },
+  { unit: `1M${symbol}`, equivalent: { base: `1`, exponent: '6', unit: symbol } },
+  { unit: `1k${symbol}`, equivalent: { base: `1`, exponent: '3', unit: symbol } },
+  { unit: `1h${symbol}`, equivalent: { base: `1`, exponent: '2', unit: symbol } },
+  { unit: `1da${symbol}`, equivalent: { base: `1`, exponent: '1', unit: symbol } },
+  { unit: `1${symbol}`, equivalent: { base: `1`, exponent: '', unit: symbol } },
+  { unit: `1d${symbol}`, equivalent: { base: `1`, exponent: '-1', unit: symbol } },
+  { unit: `1c${symbol}`, equivalent: { base: `1`, exponent: '-2', unit: symbol } },
+  { unit: `1m${symbol}`, equivalent: { base: `1`, exponent: '-3', unit: symbol } },
+  { unit: `1u${symbol}`, equivalent: { base: `1`, exponent: '-6', unit: symbol } },
+  { unit: `1n${symbol}`, equivalent: { base: `1`, exponent: '-9', unit: symbol } },
+  { unit: `1p${symbol}`, equivalent: { base: `1`, exponent: '-12', unit: symbol } },
+  { unit: `1f${symbol}`, equivalent: { base: `1`, exponent: '-15', unit: symbol } },
+  { unit: `1a${symbol}`, equivalent: { base: `1`, exponent: '-18', unit: symbol } },
+  { unit: `1z${symbol}`, equivalent: { base: `1`, exponent: '-21', unit: symbol } },
+  { unit: `1y${symbol}`, equivalent: { base: `1`, exponent: '-24', unit: symbol } },
 ];
 
 const unitsList = {
   KILOGRAM: [
-    { unit: '1Yg', equivaluent: '1e21kg' },
-    { unit: '1Zg', equivaluent: '1e18kg' },
-    { unit: '1Eg', equivaluent: '1e15kg' },
-    { unit: '1Pg', equivaluent: '1e12kg' },
-    { unit: '1Tg', equivaluent: '1e9kg' },
-    { unit: '1Gg', equivaluent: '1e6kg' },
-    { unit: '1Mg', equivaluent: '1e3kg' },
-    { unit: '1kg', equivaluent: '1kg' },
-    { unit: '1hg', equivaluent: '1e-1kg' },
-    { unit: '1dag', equivaluent: '1e-2kg' },
-    { unit: '1g', equivaluent: '1e-3kg' },
-    { unit: '1dg', equivaluent: '1e-4kg' },
-    { unit: '1cg', equivaluent: '1e-5kg' },
-    { unit: '1mg', equivaluent: '1e-6kg' },
-    { unit: '1ug', equivaluent: '1e-9kg' },
-    { unit: '1ng', equivaluent: '1e-12kg' },
-    { unit: '1pg', equivaluent: '1e-15kg' },
-    { unit: '1fg', equivaluent: '1e-18kg' },
-    { unit: '1ag', equivaluent: '1e-21kg' },
-    { unit: '1zg', equivaluent: '1e-24kg' },
-    { unit: '1yg', equivaluent: '1e-27kg' },
+    { unit: '1Yg', equivalent: { base: '1', exponent: '21', unit: 'kg' } },
+    { unit: '1Zg', equivalent: { base: '1', exponent: '18', unit: 'kg' } },
+    { unit: '1Eg', equivalent: { base: '1', exponent: '15', unit: 'kg' } },
+    { unit: '1Pg', equivalent: { base: '1', exponent: '12', unit: 'kg' } },
+    { unit: '1Tg', equivalent: { base: '1', exponent: '9', unit: 'kg' } },
+    { unit: '1Gg', equivalent: { base: '1', exponent: '6', unit: 'kg' } },
+    { unit: '1Mg', equivalent: { base: '1', exponent: '3', unit: 'kg' } },
+    { unit: '1kg', equivalent: { base: '1', exponent: '', unit: 'kg' } },
+    { unit: '1hg', equivalent: { base: '1', exponent: '-1', unit: 'kg' } },
+    { unit: '1dag', equivalent: { base: '1', exponent: '-2', unit: 'kg' } },
+    { unit: '1g', equivalent: { base: '1', exponent: '-3', unit: 'kg' } },
+    { unit: '1dg', equivalent: { base: '1', exponent: '-4', unit: 'kg' } },
+    { unit: '1cg', equivalent: { base: '1', exponent: '-5', unit: 'kg' } },
+    { unit: '1mg', equivalent: { base: '1', exponent: '-6', unit: 'kg' } },
+    { unit: '1ug', equivalent: { base: '1', exponent: '-9', unit: 'kg' } },
+    { unit: '1ng', equivalent: { base: '1', exponent: '-12', unit: 'kg' } },
+    { unit: '1pg', equivalent: { base: '1', exponent: '-15', unit: 'kg' } },
+    { unit: '1fg', equivalent: { base: '1', exponent: '-18', unit: 'kg' } },
+    { unit: '1ag', equivalent: { base: '1', exponent: '-21', unit: 'kg' } },
+    { unit: '1zg', equivalent: { base: '1', exponent: '-24', unit: 'kg' } },
+    { unit: '1yg', equivalent: { base: '1', exponent: '-27', unit: 'kg' } },
   ],
   TON: [
-    { unit: '1Gt', equivaluent: '1e12kg' },
-    { unit: '1Mt', equivaluent: '1e9kg' },
-    { unit: '1kt', equivaluent: '1e6kg' },
-    { unit: '1t', equivaluent: '1e3kg' },
+    { unit: '1Gt', equivalent: { base: '1', exponent: '12', unit: 'kg' } },
+    { unit: '1Mt', equivalent: { base: '1', exponent: '9', unit: 'kg' } },
+    { unit: '1kt', equivalent: { base: '1', exponent: '6', unit: 'kg' } },
+    { unit: '1t', equivalent: { base: '1', exponent: '3', unit: 'kg' } },
   ],
-  LB: [{ unit: '1lb', equivaluent: '0.45359237kg' }],
+  LB: [{ unit: '1lb', equivalent: { base: '0.45359237', exponent: '', unit: 'kg' } }],
   SECOND: createUnitWithPrefixes('s'),
   OTHER_TIME: [
-    { unit: '1min', equivaluent: '60s' },
-    { unit: '1h', equivaluent: '3600s' },
+    { unit: '1min', equivalent: { base: '60', exponent: '', unit: 's' } },
+    { unit: '1h', equivalent: { base: '3600', exponent: '', unit: 's' } },
   ],
   METER: createUnitWithPrefixes('m'),
   OTHER_LENGTH: [
-    { unit: '1in', equivaluent: '0.0254m' },
-    { unit: '1ft', equivaluent: '12in' },
-    { unit: '1yd', equivaluent: '3ft' },
-    { unit: '1mi', equivaluent: '1609.344m' },
+    { unit: '1in', equivalent: { base: '0.0254', exponent: '', unit: 'm' } },
+    { unit: '1ft', equivalent: { base: '12', exponent: '', unit: 'in' } },
+    { unit: '1yd', equivalent: { base: '3', exponent: '', unit: 'ft' } },
+    { unit: '1mi', equivalent: { base: '1609.344', exponent: '', unit: 'm' } },
   ],
-  VOLUME: [{ unit: '1l', equivaluent: '1dm^3' }],
+  VOLUME: [{ unit: '1l', equivalent: { base: '1', exponent: '', unit: 'dm^3' } }],
   CURRENT: createUnitWithPrefixes('A'),
   TEMPERATURE: createUnitWithPrefixes('K'),
   AMOUNT: createUnitWithPrefixes('mol'),
@@ -100,10 +100,18 @@ interface UnitsListProps {}
 
 const UnitsList: React.FC<UnitsListProps> = () => {
   const mapUnits = (units) =>
-    units.map(({ unit, equivaluent }, index) => (
+    units.map(({ unit, equivalent }, index) => (
       <Fragment key={`${unit}-${index}`}>
         {unit}
-        <span className={styles.tokenVirtual}> = {equivaluent}</span>
+        <span className={styles.tokenVirtual}> = {equivalent.base}</span>
+        {equivalent.exponent && (
+          <>
+            <span className={styles.tokenVirtual}>·10</span>
+            <sup className={styles.tokenVirtual}>{equivalent.exponent}</sup>
+          </>
+        )}
+
+        <span className={styles.tokenVirtual}>{equivalent.unit}</span>
         <br />
       </Fragment>
     ));

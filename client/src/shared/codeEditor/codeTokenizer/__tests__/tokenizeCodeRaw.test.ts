@@ -136,8 +136,8 @@ describe('tokenizeCode - raw result test', () => {
       `,
       options: { exponentialNotation: true },
       expectedResult: `
-        1000000 * 2 = 2e6
-        -1000000 * 2 = -2e6
+        1000000 * 2 = 2·106
+        -1000000 * 2 = -2·106
       `,
     },
     {
@@ -148,8 +148,8 @@ describe('tokenizeCode - raw result test', () => {
       `,
       options: { exponentialNotation: true },
       expectedResult: `
-        0.000002 = 2e-6
-        -0.000002 = -2e-6
+        0.000002 = 2·10-6
+        -0.000002 = -2·10-6
       `,
     },
     {

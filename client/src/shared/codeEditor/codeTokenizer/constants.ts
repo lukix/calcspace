@@ -8,6 +8,7 @@ export const tokens = {
   ERROR: 'ERROR',
   COMMENT: 'COMMENT',
   DESIRED_UNIT: 'DESIRED_UNIT',
+  POWER_ALIGN: 'POWER_ALIGN',
 };
 
 const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {

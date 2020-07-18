@@ -154,21 +154,23 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         />
       )}
       <div className={styles.codeWrapper}>
-        <textarea
-          className={styles.editorTextarea}
-          value={isInViewMode ? codeWithResults : code}
-          onChange={onCodeChange}
-          ref={textareaRef}
-          style={{
-            height: `${code.split('\n').length * 1.2}rem`,
-            width: `${longestLineLength}ch`,
-          }}
-          placeholder={isInViewMode || viewOnly ? 'File is empty' : 'Type a math expression...'}
-          readOnly={isInViewMode || viewOnly}
-          spellCheck={false}
-          autoCapitalize="off"
-          autoCorrect="off"
-        />
+        {!isInViewMode && (
+          <textarea
+            className={styles.editorTextarea}
+            value={code}
+            onChange={onCodeChange}
+            ref={textareaRef}
+            style={{
+              height: `${code.split('\n').length * 1.25}rem`,
+              width: `${longestLineLength}ch`,
+            }}
+            placeholder={viewOnly ? 'File is empty' : 'Type a math expression...'}
+            readOnly={viewOnly}
+            spellCheck={false}
+            autoCapitalize="off"
+            autoCorrect="off"
+          />
+        )}
         <pre
           className={classNames(styles.formattedCode, {
             [styles.withoutHighlighting]: isInViewMode,

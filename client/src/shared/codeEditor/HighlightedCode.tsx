@@ -14,7 +14,7 @@ const HighlightedLine = ({ tokens }) => {
     });
     return (
       <span key={index} className={className}>
-        {value}
+        {tags.includes(availableTokens.POWER_ALIGN) ? <sup>{value}</sup> : value}
       </span>
     );
   });

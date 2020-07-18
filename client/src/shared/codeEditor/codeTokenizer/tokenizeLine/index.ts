@@ -1,8 +1,8 @@
 import evaluateExpression from '../evaluateExpression';
 import { tokens, functions, unitsMap } from '../constants';
 import getUnitFromResultUnitString from '../getUnitFromResultUnitString';
-import numberToString from './numberToString';
-import valueWithUnitToString from './valueWithUnitToString';
+import formatNumber from './formatNumber';
+import formatValueWithUnit from './formatValueWithUnit';
 import convertToComprehendibleUnit from './convertToComprehendibleUnit';
 import convertToDesiredUnit from './convertToDesiredUnit';
 import createTokenizedLineWithError from './createTokenizedLineWithError';
@@ -105,14 +105,9 @@ const tokenizeLine = (
     });
   }
 
-  let resultValueString;
+  let valueConvertedToDesiredUnit;
   try {
-    resultValueString = resultUnit
-      ? `${numberToString(
-          convertToDesiredUnit(result, resultUnit).number,
-          exponentialNotation
-        )}${resultUnitPart?.trim().substring(1, resultUnitPart?.trim().length - 1)}`
-      : valueWithUnitToString(convertToComprehendibleUnit(result), exponentialNotation);
+    valueConvertedToDesiredUnit = resultUnit && convertToDesiredUnit(result, resultUnit).number;
   } catch (error) {
     return createTokenizedLineWithError({
       values,
@@ -122,8 +117,36 @@ const tokenizeLine = (
     });
   }
 
-  const showResult = result !== null && (sanitize(expression) !== resultValueString || resultUnit);
-  const resultString = showResult ? ` = ${resultValueString}` : '';
+  const resultObject = resultUnit
+    ? {
+        ...formatNumber(valueConvertedToDesiredUnit, exponentialNotation),
+        unitString: resultUnitPart?.trim().substring(1, resultUnitPart?.trim().length - 1),
+      }
+    : formatValueWithUnit(convertToComprehendibleUnit(result), exponentialNotation);
+
+  const resultValueString: string = [
+    resultObject.numberString,
+    resultObject.exponentString,
+    resultObject.unitString,
+  ].join('');
+  const showResult: boolean =
+    result !== null && (sanitize(expression) !== resultValueString || Boolean(resultUnit));
+  const resultTokens = !showResult
+    ? []
+    : resultObject.exponentString
+    ? [
+        { value: ` = ${resultObject.numberString}·10`, tags: [tokens.VIRTUAL] },
+        { value: resultObject.exponentString, tags: [tokens.VIRTUAL, tokens.POWER_ALIGN] },
+        ...(resultObject.unitString
+          ? [{ value: resultObject.unitString, tags: [tokens.VIRTUAL] }]
+          : []),
+      ]
+    : [
+        {
+          value: ` = ${resultObject.numberString}${resultObject.unitString}`,
+          tags: [tokens.VIRTUAL],
+        },
+      ];
 
   const tokenizedLine = [
     {
@@ -137,7 +160,7 @@ const tokenizeLine = (
     ...(resultUnitPart && showResultUnit
       ? [{ value: `=${resultUnitPart}`, tags: [tokens.NORMAL, tokens.DESIRED_UNIT] }]
       : []),
-    ...(resultString === '' ? [] : [{ value: resultString, tags: [tokens.VIRTUAL] }]),
+    ...resultTokens,
   ];
 
   return {

@@ -285,4 +285,54 @@ describe('tokenizeCode - tokenization test', () => {
       ],
     ]);
   });
+
+  it('should assign correct tag to exponents', () => {
+    // given
+    const code = '50000';
+
+    // when
+    const tokenizedCode = tokenizeCode(code, { exponentialNotation: true });
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        { value: '50000', tags: [tokens.NORMAL] },
+        {
+          value: ' = 5·10',
+          tags: [tokens.VIRTUAL],
+        },
+        {
+          value: '4',
+          tags: [tokens.VIRTUAL, tokens.POWER_ALIGN],
+        },
+      ],
+    ]);
+  });
+
+  it('should assign correct tag to exponents when units are present', () => {
+    // given
+    const code = '50000kg';
+
+    // when
+    const tokenizedCode = tokenizeCode(code, { exponentialNotation: true });
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        { value: '50000kg', tags: [tokens.NORMAL] },
+        {
+          value: ' = 5·10',
+          tags: [tokens.VIRTUAL],
+        },
+        {
+          value: '4',
+          tags: [tokens.VIRTUAL, tokens.POWER_ALIGN],
+        },
+        {
+          value: 'kg',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
 });
