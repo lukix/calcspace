@@ -199,7 +199,14 @@ export const units: Array<UnitMapTuple> = [
     ],
     { baseMultiplier: 3600 }
   ),
-  ...getUnitsWithPrefixes('Ah', [{ unit: 'C', power: 1 }], { baseMultiplier: 3600 }),
+  ...getUnitsWithPrefixes(
+    'Ah',
+    [
+      { unit: 'A', power: 1 },
+      { unit: 's', power: 1 },
+    ],
+    { baseMultiplier: 3600 }
+  ),
 
   ['in', { multiplier: 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
   ['ft', { multiplier: 12 * 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
