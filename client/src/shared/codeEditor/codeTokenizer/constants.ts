@@ -15,7 +15,7 @@ const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {
   if (unit.length !== 0) {
     throw new EvaluationError(`Function "${functionName}" doesn't accept values with units`);
   }
-  return { number: func(number), unit };
+  return { number: func(number), unit: [] };
 };
 
 export const functions: {
@@ -180,6 +180,9 @@ export const units: Array<UnitMapTuple> = [
   ]),
 
   // "Convinient" units:
+  ['rad', { multiplier: 1, baseUnits: [] }],
+  ['deg', { multiplier: Math.PI / 180, baseUnits: [] }],
+
   ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
   ['h', { multiplier: 3600, baseUnits: [{ unit: 's', power: 1 }] }],
 

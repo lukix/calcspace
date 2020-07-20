@@ -108,15 +108,6 @@ describe('tokenizeCode - raw result test', () => {
       `,
     },
     {
-      it: 'should display an error when unit after simplification is empty',
-      code: `
-        5 = [km/m]
-      `,
-      expectedResult: `
-        5 = [km/m]  Error: Desired result unit is empty after simplification
-      `,
-    },
-    {
       it: 'should show full number when exponential notation is off',
       code: `
         1000000 * 2
@@ -191,6 +182,17 @@ describe('tokenizeCode - raw result test', () => {
       `,
       expectedResult: `
         2e-1 = 0.2
+      `,
+    },
+    {
+      it: 'should be possible to see the result in degrees and radians',
+      code: `
+        3 = [rad]
+        PI / 180 = [deg]
+      `,
+      expectedResult: `
+        3 = [rad] = 3rad
+        PI / 180 = [deg] = 1deg
       `,
     },
   ].forEach((testCaseData) => {

@@ -68,6 +68,10 @@ const unitsList = {
     { unit: '1yd', equivalent: { base: '3', exponent: '', unit: 'ft' } },
     { unit: '1mi', equivalent: { base: '1609.344', exponent: '', unit: 'm' } },
   ],
+  ANGLE: [
+    { unit: '1deg', equivalent: { base: '0.017453292519943295', exponent: '', unit: 'rad' } },
+    { unit: '1rad', equivalent: { base: '1', exponent: '', unit: '' } },
+  ],
   VOLUME: [{ unit: '1l', equivalent: { base: '1', exponent: '', unit: 'dm^3' } }],
   CURRENT: createUnitWithPrefixes('A'),
   TEMPERATURE: createUnitWithPrefixes('K'),
@@ -140,6 +144,8 @@ const UnitsList: React.FC<UnitsListProps> = () => {
         {mapUnits(unitsList.OTHER_LENGTH)}
         <br />
       </pre>
+      <h3>Angle</h3>
+      <pre className={styles.codeSnippet}>{mapUnits(unitsList.ANGLE)}</pre>
       <h3>Volume</h3>
       <pre className={styles.codeSnippet}>{mapUnits(unitsList.VOLUME)}</pre>
       <h3>Electric current</h3>

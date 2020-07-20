@@ -9,9 +9,6 @@ const convertToDesiredUnit = ({ number, unit }, desiredUnit) => {
   const desiredUnitInBaseUnits = translateToBaseUnits(desiredUnit, unitsMap);
   const unitString = unitToString(translateToBaseUnits(unit, unitsMap));
   const desiredUnitString = unitToString(desiredUnitInBaseUnits);
-  if (desiredUnitString === '') {
-    throw new Error('Desired result unit is empty after simplification');
-  }
   if (unitString !== desiredUnitString) {
     throw new Error(`"${unitString}" cannot be converted to "${unitToString(desiredUnit)}"`);
   }

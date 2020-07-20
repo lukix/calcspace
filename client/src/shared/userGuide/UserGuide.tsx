@@ -181,7 +181,14 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />
         tan(0)<span className={styles.tokenVirtual}> = 0</span>
         <br />
-        atan(0)<span className={styles.tokenVirtual}> = 0</span>
+        atan(0)<span className={styles.tokenVirtual}> = 0</span>sin(90deg)
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// Degrees and radians</span>
+        <br />
+        sin(90deg)<span className={styles.tokenVirtual}> = 1</span>
+        <br />
+        cos(0rad)<span className={styles.tokenVirtual}> = 1</span>
       </pre>
       <h2>Units</h2>
       <p>
