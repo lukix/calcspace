@@ -194,6 +194,15 @@ export const units: Array<UnitMapTuple> = [
 
   ...getUnitsWithPrefixes('l', [{ unit: 'm', power: 3 }], { baseMultiplier: 1e-3 }),
   ...getUnitsWithPrefixes(
+    'eV',
+    [
+      { unit: 'm', power: 2 },
+      { unit: 'kg', power: 1 },
+      { unit: 's', power: -2 },
+    ],
+    { baseMultiplier: 1.602176634e-19 }
+  ),
+  ...getUnitsWithPrefixes(
     'Wh',
     [
       { unit: 'm', power: 2 },

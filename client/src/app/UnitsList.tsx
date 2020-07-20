@@ -81,6 +81,29 @@ const unitsList = {
   FORCE: createUnitWithPrefixes('N'),
   PRESSURE: createUnitWithPrefixes('Pa'),
   ENERGY: createUnitWithPrefixes('J'),
+  ELECTRONVOLT: [
+    { unit: '1YeV', equivalent: { base: '1', exponent: '24', unit: 'eV' } },
+    { unit: '1ZeV', equivalent: { base: '1', exponent: '21', unit: 'eV' } },
+    { unit: '1EeV', equivalent: { base: '1', exponent: '18', unit: 'eV' } },
+    { unit: '1PeV', equivalent: { base: '1', exponent: '15', unit: 'eV' } },
+    { unit: '1TeV', equivalent: { base: '1', exponent: '12', unit: 'eV' } },
+    { unit: '1GeV', equivalent: { base: '1', exponent: '9', unit: 'eV' } },
+    { unit: '1MeV', equivalent: { base: '1', exponent: '6', unit: 'eV' } },
+    { unit: '1keV', equivalent: { base: '1', exponent: '3', unit: 'eV' } },
+    { unit: '1heV', equivalent: { base: '1', exponent: '2', unit: 'eV' } },
+    { unit: '1daeV', equivalent: { base: '1', exponent: '1', unit: 'eV' } },
+    { unit: '1eV', equivalent: { base: '1.602176634', exponent: '-19', unit: 'J' } },
+    { unit: '1deV', equivalent: { base: '1', exponent: '-1', unit: 'eV' } },
+    { unit: '1ceV', equivalent: { base: '1', exponent: '-2', unit: 'eV' } },
+    { unit: '1meV', equivalent: { base: '1', exponent: '-3', unit: 'eV' } },
+    { unit: '1ueV', equivalent: { base: '1', exponent: '-6', unit: 'eV' } },
+    { unit: '1neV', equivalent: { base: '1', exponent: '-9', unit: 'eV' } },
+    { unit: '1peV', equivalent: { base: '1', exponent: '-12', unit: 'eV' } },
+    { unit: '1feV', equivalent: { base: '1', exponent: '-15', unit: 'eV' } },
+    { unit: '1aeV', equivalent: { base: '1', exponent: '-18', unit: 'eV' } },
+    { unit: '1zeV', equivalent: { base: '1', exponent: '-21', unit: 'eV' } },
+    { unit: '1yeV', equivalent: { base: '1', exponent: '-24', unit: 'eV' } },
+  ],
   WATT_HOUR: createUnitWithPrefixes('Wh'),
   POWER: createUnitWithPrefixes('W'),
   CHARGE: createUnitWithPrefixes('C'),
@@ -165,6 +188,8 @@ const UnitsList: React.FC<UnitsListProps> = () => {
       <h3>Energy</h3>
       <pre className={styles.codeSnippet}>
         {mapUnits(unitsList.ENERGY)}
+        <br />
+        {mapUnits(unitsList.ELECTRONVOLT)}
         <br />
         {mapUnits(unitsList.WATT_HOUR)}
       </pre>
