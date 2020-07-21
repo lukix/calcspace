@@ -83,6 +83,37 @@ const getUnitsWithPrefixes = (
   [`y${symbol}`, { multiplier: 1e-24 * baseMultiplier, baseUnits }],
 ];
 
+const getUnitsWithPositivePowerPrefixes = (
+  symbol: string,
+  baseUnits,
+  { baseMultiplier = 1 } = {}
+): Array<UnitMapTuple> => [
+  [`Y${symbol}`, { multiplier: 1e24 * baseMultiplier, baseUnits }],
+  [`Z${symbol}`, { multiplier: 1e21 * baseMultiplier, baseUnits }],
+  [`E${symbol}`, { multiplier: 1e18 * baseMultiplier, baseUnits }],
+  [`P${symbol}`, { multiplier: 1e15 * baseMultiplier, baseUnits }],
+  [`T${symbol}`, { multiplier: 1e12 * baseMultiplier, baseUnits }],
+  [`G${symbol}`, { multiplier: 1e9 * baseMultiplier, baseUnits }],
+  [`M${symbol}`, { multiplier: 1e6 * baseMultiplier, baseUnits }],
+  [`k${symbol}`, { multiplier: 1e3 * baseMultiplier, baseUnits }],
+  [`${symbol}`, { multiplier: 1 * baseMultiplier, baseUnits }],
+];
+
+const getUnitsWithBinaryPrefixes = (
+  symbol: string,
+  baseUnits,
+  { baseMultiplier = 1 } = {}
+): Array<UnitMapTuple> => [
+  [`Yi${symbol}`, { multiplier: 1024 ** 8 * baseMultiplier, baseUnits }],
+  [`Zi${symbol}`, { multiplier: 1024 ** 7 * baseMultiplier, baseUnits }],
+  [`Ei${symbol}`, { multiplier: 1024 ** 6 * baseMultiplier, baseUnits }],
+  [`Pi${symbol}`, { multiplier: 1024 ** 5 * baseMultiplier, baseUnits }],
+  [`Ti${symbol}`, { multiplier: 1024 ** 4 * baseMultiplier, baseUnits }],
+  [`Gi${symbol}`, { multiplier: 1024 ** 3 * baseMultiplier, baseUnits }],
+  [`Mi${symbol}`, { multiplier: 1024 ** 2 * baseMultiplier, baseUnits }],
+  [`ki${symbol}`, { multiplier: 1024 ** 1 * baseMultiplier, baseUnits }],
+];
+
 export const units: Array<UnitMapTuple> = [
   // SI base units:
   ...getUnitsWithPrefixes('s', [{ unit: 's', power: 1 }]),
@@ -193,6 +224,10 @@ export const units: Array<UnitMapTuple> = [
   ['lb', { multiplier: 0.45359237, baseUnits: [{ unit: 'kg', power: 1 }] }],
 
   ...getUnitsWithPrefixes('l', [{ unit: 'm', power: 3 }], { baseMultiplier: 1e-3 }),
+  ...getUnitsWithPositivePowerPrefixes('b', [{ unit: 'b', power: 1 }], { baseMultiplier: 1 }),
+  ...getUnitsWithBinaryPrefixes('b', [{ unit: 'b', power: 1 }], { baseMultiplier: 1 }),
+  ...getUnitsWithPositivePowerPrefixes('B', [{ unit: 'b', power: 1 }], { baseMultiplier: 8 }),
+  ...getUnitsWithBinaryPrefixes('B', [{ unit: 'b', power: 1 }], { baseMultiplier: 8 }),
   ...getUnitsWithPrefixes(
     'eV',
     [

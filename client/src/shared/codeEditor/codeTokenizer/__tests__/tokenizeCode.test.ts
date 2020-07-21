@@ -106,7 +106,7 @@ describe('tokenizeCode - tokenization test', () => {
 
   it('should correctly mark incorrect part when there are no equal characters', () => {
     // given
-    const code = '2 + 3b + 4';
+    const code = '2 + 3x + 4';
 
     // when
     const tokenizedCode = tokenizeCode(code);
@@ -116,12 +116,12 @@ describe('tokenizeCode - tokenization test', () => {
       [
         { value: '2 + ', tags: [tokens.NORMAL, tokens.ERROR] },
         {
-          value: '3b',
+          value: '3x',
           tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
         },
         { value: ' + 4', tags: [tokens.NORMAL, tokens.ERROR] },
         {
-          value: '  Error: Unknown unit "b"',
+          value: '  Error: Unknown unit "x"',
           tags: [tokens.VIRTUAL],
         },
       ],
@@ -130,7 +130,7 @@ describe('tokenizeCode - tokenization test', () => {
 
   it('should correctly mark incorrect expression part in assignment', () => {
     // given
-    const code = 'x = 2 + 3b + 4';
+    const code = 'x = 2 + 3x + 4';
 
     // when
     const tokenizedCode = tokenizeCode(code);
@@ -140,12 +140,12 @@ describe('tokenizeCode - tokenization test', () => {
       [
         { value: 'x = 2 + ', tags: [tokens.NORMAL, tokens.ERROR] },
         {
-          value: '3b',
+          value: '3x',
           tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE],
         },
         { value: ' + 4', tags: [tokens.NORMAL, tokens.ERROR] },
         {
-          value: '  Error: Unknown unit "b"',
+          value: '  Error: Unknown unit "x"',
           tags: [tokens.VIRTUAL],
         },
       ],
