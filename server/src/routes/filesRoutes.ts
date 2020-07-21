@@ -93,7 +93,7 @@ export default ({ dbClient, sharedFilesManager }) => {
       );
       sharedFilesManager.emitChange({
         newCommit: { code, commitId: null },
-        fileId,
+        fileId: result.rows[0] && result.rows[0].shared_edit_enabled ? fileId : null,
         sharedEditId:
           result.rows[0] && result.rows[0].shared_edit_enabled
             ? result.rows[0].shared_edit_id

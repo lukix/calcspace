@@ -6,7 +6,7 @@ import httpRequest from '../shared/httpRequest';
 import { actions } from '../shared/filesStore';
 import Spinner from '../shared/spinner';
 import CodeEditor from '../shared/codeEditor';
-import SyncService from '../shared/syncService';
+import SyncService, { requestLimiterMethods } from '../shared/syncService';
 import useSharedFileChangeListener from '../shared/sharedFilesUtils/useSharedFileChangeListener';
 import sharedStyles from '../shared/shared.module.scss';
 
@@ -63,6 +63,7 @@ const FilePage: React.FC<FilePageProps> = ({
     return SyncService({
       synchronize: (code) => httpRequest.put(`files/${fileId}/code`, { code }),
       requestLimiterTimeout: 600,
+      requestLimiterMethod: requestLimiterMethods.THROTTLE,
       onSyncStart: () => markSyncingStart({ id: fileId }),
       onSyncSuccess: () => markSyncingSuccess({ id: fileId }),
       onSyncError: () => markSyncingFailure({ id: fileId }),
