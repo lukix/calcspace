@@ -34,6 +34,8 @@ const forbiddenErrorHandler = () => {
   window.location.replace(routes.logIn.path);
 };
 
+export const httpRequestWithoutRedirect = HttpRequest({ baseUrl: API_URL });
+
 export default HttpRequest({
   baseUrl: API_URL,
   responseErrorHandlers: { 403: forbiddenErrorHandler },
