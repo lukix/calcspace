@@ -12,6 +12,7 @@ import styles from './SignedInHeaderBar.module.scss';
 interface SignedInHeaderBarProps {
   username: string | null;
   onAvatarClick: () => void;
+  isToggleButtonVisible?: boolean;
 
   isFilesPanelVisible: boolean;
   isSynchronizingAnyFile: boolean;
@@ -23,6 +24,8 @@ interface SignedInHeaderBarProps {
 const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
   username,
   onAvatarClick,
+  isToggleButtonVisible = true,
+
   isFilesPanelVisible,
   isSynchronizingAnyFile,
   areThereAnyChangesToBeSaved,
@@ -38,11 +41,13 @@ const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
     <HeaderBar
       headerTitle={
         <>
-          <FaBars
-            className={styles.menuToggleButton}
-            onClick={toggleFilesPanel}
-            title="Toggle files panel visibility"
-          />
+          {isToggleButtonVisible && (
+            <FaBars
+              className={styles.menuToggleButton}
+              onClick={toggleFilesPanel}
+              title="Toggle files panel visibility"
+            />
+          )}
           <Link to={routes.home.path}>Math IDE</Link>
           <Spinner size={18} show={isSynchronizingAnyFile || areThereAnyChangesToBeSaved} />
           {showError && (

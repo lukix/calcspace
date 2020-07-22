@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import SignedInHeaderBar from '../signedInHeaderBar';
@@ -8,16 +8,20 @@ import FilesList from '../filesList/FilesList';
 import UserGuide from '../shared/userGuide';
 import routes from '../shared/routes';
 import UnitsList from './UnitsList';
-import { UserProfileModal } from './userProfileModal';
 import { selectors } from './store';
 import styles from './App.module.scss';
 
 interface AuthorizedAppProps {
   user: { username: string } | null;
   fetchingUserError: boolean;
+  showUserModal: Function;
 }
 
-const AuthorizedApp: React.FC<AuthorizedAppProps> = ({ user, fetchingUserError }) => {
+const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
+  user,
+  fetchingUserError,
+  showUserModal,
+}) => {
   const { pathname } = useLocation();
   const scrollableContentElement = useRef<HTMLDivElement>(null);
 
@@ -26,10 +30,6 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({ user, fetchingUserError }
       scrollableContentElement.current.scrollTo(0, 0);
     }
   }, [pathname]);
-
-  const [isUserModalVisible, setIsUserModalVisible] = useState(false);
-  const showUserModal = () => setIsUserModalVisible(true);
-  const hideUserModal = () => setIsUserModalVisible(false);
 
   if (fetchingUserError) {
     return <Redirect to={routes.logIn.path} />;
@@ -57,7 +57,6 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({ user, fetchingUserError }
           </Switch>
         </div>
       </div>
-      {isUserModalVisible && <UserProfileModal onHide={hideUserModal} />}
     </div>
   );
 };

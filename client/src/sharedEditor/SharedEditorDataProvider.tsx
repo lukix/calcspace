@@ -5,6 +5,7 @@ import UserGuide from '../shared/userGuide';
 import useAsyncAction from '../shared/useAsyncAction';
 import httpRequest from '../shared/httpRequest';
 import Spinner from '../shared/spinner';
+import SignedInHeaderBar from '../signedInHeaderBar';
 
 import SharedEditorHeaderBar from './SharedEditorHeaderBar';
 import { syncStatuses } from './constants';
@@ -15,10 +16,14 @@ const fetchFileAction = (id, viewOnly) =>
   httpRequest.get(`shared-files/${viewOnly ? 'view' : 'edit'}/${id}`);
 
 interface SharedEditorDataProviderProps {
+  user: { username: string } | null;
+  showUserModal: Function;
   viewOnly?: boolean;
 }
 
 const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
+  user,
+  showUserModal,
   viewOnly = false,
 }) => {
   const { id } = useParams();
@@ -73,7 +78,15 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
 
   return (
     <div className={styles.sharedEditorPage}>
-      <SharedEditorHeaderBar syncStatus={syncStatus} />
+      {user ? (
+        <SignedInHeaderBar
+          username={user && user.username}
+          onAvatarClick={showUserModal}
+          isToggleButtonVisible={false}
+        />
+      ) : (
+        <SharedEditorHeaderBar syncStatus={syncStatus} />
+      )}
       <div className={styles.sharedEditorSectionsWrapper}>
         <div className={styles.editorWrapper}>{renderContent()}</div>
         <div className={styles.guideWrapper}>
