@@ -4,7 +4,7 @@ import {
   createAsyncActionCreator,
   createAsyncActionHandlers,
 } from '../shared/reduxHelpers';
-import httpRequest from '../shared/httpRequest';
+import { httpRequestWithoutRedirect } from '../shared/httpRequest';
 
 const actionTypes = {
   fetchLoggedInUser: createAsyncActionTypes('FETCH_LOGGED_IN_USER'),
@@ -13,7 +13,7 @@ const actionTypes = {
 export const actions = {
   fetchLoggedInUser: createAsyncActionCreator({
     actionTypes: actionTypes.fetchLoggedInUser,
-    action: () => httpRequest.get('users/logged-in'),
+    action: () => httpRequestWithoutRedirect.get('users/logged-in'),
   }),
 };
 
@@ -34,7 +34,7 @@ export const reducer = createReducer({
 });
 
 export const selectors = {
-  user: state => state.userData.user,
-  isFetchingUser: state => state.userData.isFetchingUser,
-  fetchingUserError: state => state.userData.fetchingUserError,
+  user: (state) => state.userData.user,
+  isFetchingUser: (state) => state.userData.isFetchingUser,
+  fetchingUserError: (state) => state.userData.fetchingUserError,
 };

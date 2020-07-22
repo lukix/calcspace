@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import Spinner from '../shared/spinner';
 import SignedInHeaderBar from '../signedInHeaderBar';
 import FilePage from '../filePage/FilePage';
 import NewFilePage from '../newFilePage/NewFilePage';
@@ -9,27 +8,20 @@ import FilesList from '../filesList/FilesList';
 import UserGuide from '../shared/userGuide';
 import routes from '../shared/routes';
 import UnitsList from './UnitsList';
-import { UserProfileModal } from './userProfileModal';
-import { actions as reduxActions, selectors } from './store';
+import { selectors } from './store';
 import styles from './App.module.scss';
 
 interface AuthorizedAppProps {
   user: { username: string } | null;
-  isFetchingUser: boolean;
   fetchingUserError: boolean;
-  fetchLoggedInUser: Function;
+  showUserModal: Function;
 }
 
 const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
   user,
-  isFetchingUser,
   fetchingUserError,
-  fetchLoggedInUser,
+  showUserModal,
 }) => {
-  useEffect(() => {
-    fetchLoggedInUser();
-  }, [fetchLoggedInUser]);
-
   const { pathname } = useLocation();
   const scrollableContentElement = useRef<HTMLDivElement>(null);
 
@@ -39,16 +31,8 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
     }
   }, [pathname]);
 
-  const [isUserModalVisible, setIsUserModalVisible] = useState(false);
-  const showUserModal = () => setIsUserModalVisible(true);
-  const hideUserModal = () => setIsUserModalVisible(false);
-
   if (fetchingUserError) {
     return <Redirect to={routes.logIn.path} />;
-  }
-
-  if (isFetchingUser || !user) {
-    return <Spinner centered />;
   }
 
   return (
@@ -73,7 +57,6 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
           </Switch>
         </div>
       </div>
-      {isUserModalVisible && <UserProfileModal onHide={hideUserModal} />}
     </div>
   );
 };
@@ -81,10 +64,7 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
 export default connect(
   (state) => ({
     user: selectors.user(state),
-    isFetchingUser: selectors.isFetchingUser(state),
     fetchingUserError: selectors.fetchingUserError(state),
   }),
-  {
-    fetchLoggedInUser: reduxActions.fetchLoggedInUser,
-  }
+  {}
 )(AuthorizedApp);
