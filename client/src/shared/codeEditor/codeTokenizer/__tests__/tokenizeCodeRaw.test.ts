@@ -195,6 +195,32 @@ describe('tokenizeCode - raw result test', () => {
         PI / 180 = [deg] = 1deg
       `,
     },
+    {
+      it: 'should display an error when units conversion cannot be performed',
+      code: `
+        2m = [kg]
+        3 = [kg]
+        4kg = [m/m]
+      `,
+      expectedResult: `
+        2m = [kg]  Error: [m] cannot be converted to [kg]
+        3 = [kg]  Error: unitless value cannot be converted to [kg]
+        4kg = [m/m]  Error: [kg] cannot be converted to a unitless value
+      `,
+    },
+    {
+      it: 'should display an error when trying to add value with unit with unitless value',
+      code: `
+        1m + 2s
+        3 + 4kg
+        5kg + 6
+      `,
+      expectedResult: `
+        1m + 2s  Error: Trying to add/subtract values with incompatible units: [m] and [s]
+        3 + 4kg  Error: Trying to add/subtract unitless value and a value with [kg] unit
+        5kg + 6  Error: Trying to add/subtract unitless value and a value with [kg] unit
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when

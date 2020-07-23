@@ -244,13 +244,13 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <span className={styles.tokenError}>4m + 4s</span>
         <span className={styles.tokenVirtual}>
           {'  '}
-          Error: Trying to add/subtract values with incompatible units: "m" and "s"
+          Error: Trying to add/subtract values with incompatible units: [m] and [s]
         </span>
         <br />
         <span className={styles.tokenError}>7s - 5s - 2kg</span>
         <span className={styles.tokenVirtual}>
           {'  '}
-          Error: Trying to add/subtract values with incompatible units: "s" and "kg"
+          Error: Trying to add/subtract values with incompatible units: [s] and [kg]
         </span>
         <br />
       </pre>
@@ -262,7 +262,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />E = <span className={styles.tokenError}>[kg]</span>
         <span className={styles.tokenVirtual}>
           {'  '}
-          Error: "kg*m^2/s^2" cannot be converted to "kg"
+          Error: "kg*m^2/s^2" cannot be converted to [kg]
         </span>
       </pre>
       <p>

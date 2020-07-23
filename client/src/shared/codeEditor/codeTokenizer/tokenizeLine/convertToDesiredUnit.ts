@@ -10,7 +10,13 @@ const convertToDesiredUnit = ({ number, unit }, desiredUnit) => {
   const unitString = unitToString(translateToBaseUnits(unit, unitsMap));
   const desiredUnitString = unitToString(desiredUnitInBaseUnits);
   if (unitString !== desiredUnitString) {
-    throw new Error(`"${unitString}" cannot be converted to "${unitToString(desiredUnit)}"`);
+    if (unitString === '') {
+      throw new Error(`unitless value cannot be converted to [${unitToString(desiredUnit)}]`);
+    }
+    if (desiredUnitString === '') {
+      throw new Error(`[${unitString}] cannot be converted to a unitless value`);
+    }
+    throw new Error(`[${unitString}] cannot be converted to [${unitToString(desiredUnit)}]`);
   }
   const unitMultiplier = calculateEffectiveUnitMultiplier(unit, unitsMap);
   const desiredUnitMultiplier = calculateEffectiveUnitMultiplier(desiredUnit, unitsMap);

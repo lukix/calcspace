@@ -133,8 +133,15 @@ const evaluateSum = (elements, values, functions, unitsMap) => {
   evaluatedElements.forEach(({ unit }) => {
     const unitString = unitToString(unit);
     if (firstElementUnitString !== unitString) {
+      if (firstElementUnitString === '' || unitString === '') {
+        throw new EvaluationError(
+          `Trying to add/subtract unitless value and a value with [${
+            firstElementUnitString || unitString
+          }] unit`
+        );
+      }
       throw new EvaluationError(
-        `Trying to add/subtract values with incompatible units: "${firstElementUnitString}" and "${unitString}"`
+        `Trying to add/subtract values with incompatible units: [${firstElementUnitString}] and [${unitString}]`
       );
     }
   });
