@@ -1,6 +1,8 @@
-import tokenizeCode from '../tokenizeCode';
+import CodeTokenizerWithCache from '../codeTokenizerWithCache';
 import tokenizedCodeToString from '../tokenizedCodeToString';
 import { trimIndentation } from '../testUtils';
+
+const tokenizeCode = CodeTokenizerWithCache();
 
 describe('tokenizeCode - raw result test', () => {
   [
