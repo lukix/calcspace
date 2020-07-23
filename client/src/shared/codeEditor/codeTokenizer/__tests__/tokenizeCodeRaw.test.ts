@@ -176,6 +176,16 @@ describe('tokenizeCode - raw result test', () => {
       `,
     },
     {
+      it: 'should not display any result for a line with "0" symbol',
+      code: `
+        0
+      `,
+      options: { exponentialNotation: true },
+      expectedResult: `
+        0
+      `,
+    },
+    {
       it: 'should support negative powers for exponential notation',
       code: `
         2e-1
