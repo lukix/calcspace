@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { FaLink, FaPen, FaEye, FaRegCopy } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
@@ -8,7 +8,7 @@ import useCreateAndOpenSharedFile from '../../shared/useCreateAndOpenSharedFile'
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons';
 import ToggleButton from './toggleButton';
-import { tokenizeCode, tokenizedCodeToString } from './codeTokenizer';
+import { CodeTokenizerWithCache, tokenizedCodeToString } from './codeTokenizer';
 import SharingModal from './SharingModal';
 import EditorSettingsModal from './EditorSettingsModal';
 import styles from './CodeEditor.module.scss';
@@ -61,6 +61,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   initialSharedEditEnabled,
   fileId,
 }) => {
+  const tokenizeCode = useMemo(() => CodeTokenizerWithCache(), []);
+
   const [mode, setMode] = useState(modes.EDIT_MODE);
 
   const [exponentialNotation, setExponentialNotation] = useState(
