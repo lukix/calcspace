@@ -1,3 +1,4 @@
+import pipe from 'ramda.pipe';
 import factorial from 'math-factorial';
 import { EvaluationError } from '../mathParser';
 
@@ -11,12 +12,30 @@ export const tokens = {
   POWER_ALIGN: 'POWER_ALIGN',
 };
 
-const createUnitlessFunction = (func, functionName) => ({ number, unit }) => {
+const createUnitlessFunction = (func, functionName, isInsideDomain = ({ number }) => true) =>
+  pipe(
+    disallowUnits(functionName),
+    checkDomain(functionName, isInsideDomain),
+    applyUnitlessFunction(func)
+  );
+
+const disallowUnits = (functionName) => ({ number, unit }) => {
   if (unit.length !== 0) {
     throw new EvaluationError(`Function "${functionName}" doesn't accept values with units`);
   }
-  return { number: func(number), unit: [] };
+  return { number, unit };
 };
+
+const checkDomain = (functionName, isInsideDomain) => ({ number, unit }) => {
+  if (!isInsideDomain({ number, unit })) {
+    throw new EvaluationError(
+      `"${functionName}" function received a value which is outside of its domain`
+    );
+  }
+  return { number, unit };
+};
+
+const applyUnitlessFunction = (func) => ({ number }) => ({ number: func(number), unit: [] });
 
 export const functions: {
   [name: string]: (value: {
@@ -24,10 +43,13 @@ export const functions: {
     unit: Array<{ unit: string; power: number }>;
   }) => { number: number; unit: Array<{ unit: string; power: number }> };
 } = {
-  sqrt: (value) => ({
-    number: Math.sqrt(value.number),
-    unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),
-  }),
+  sqrt: pipe(
+    checkDomain('sqrt', ({ number }) => number >= 0),
+    (value) => ({
+      number: Math.sqrt(value.number),
+      unit: value.unit.map((unit) => ({ ...unit, power: unit.power / 2 })),
+    })
+  ),
   abs: (value) => ({
     number: Math.abs(value.number),
     unit: value.unit,
@@ -36,14 +58,14 @@ export const functions: {
     number: Math.sign(value.number),
     unit: [],
   }),
-  log: createUnitlessFunction(Math.log, 'log'),
+  log: createUnitlessFunction(Math.log, 'log', ({ number }) => number > 0),
   sin: createUnitlessFunction(Math.sin, 'sin'),
   cos: createUnitlessFunction(Math.cos, 'cos'),
   tan: createUnitlessFunction(Math.tan, 'tan'),
-  asin: createUnitlessFunction(Math.asin, 'asin'),
-  acos: createUnitlessFunction(Math.acos, 'acos'),
+  asin: createUnitlessFunction(Math.asin, 'asin', ({ number }) => Math.abs(number) <= 1),
+  acos: createUnitlessFunction(Math.acos, 'acos', ({ number }) => Math.abs(number) <= 1),
   atan: createUnitlessFunction(Math.atan, 'atan'),
-  factorial: createUnitlessFunction(factorial, 'factorial'),
+  factorial: createUnitlessFunction(factorial, 'factorial', ({ number }) => number >= 0),
 };
 
 export const constants = {
