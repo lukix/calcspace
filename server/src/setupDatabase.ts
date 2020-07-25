@@ -50,6 +50,52 @@ const queries = [
       ADD COLUMN IF NOT EXISTS last_opened timestamptz DEFAULT NULL
     `,
   },
+  {
+    name: 'createSetUpdatedAtFunction',
+    sql: `
+      CREATE OR REPLACE FUNCTION set_updated_at_timestamp_function()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        NEW.updated_at = NOW();
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql
+    `,
+  },
+  {
+    name: 'addTimestampColumnsToUsersTable',
+    sql: `
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS created_at timestamptz DEFAULT NOW(),
+      ADD COLUMN IF NOT EXISTS updated_at timestamptz DEFAULT NULL
+    `,
+  },
+  {
+    name: 'createSetUserUpdatedAtTrigger',
+    sql: `
+      CREATE TRIGGER users_set_updated_at_timestamp_trigger
+      BEFORE UPDATE ON users
+      FOR EACH ROW
+      EXECUTE PROCEDURE set_updated_at_timestamp_function()
+    `,
+  },
+  {
+    name: 'addTimestampColumnsToFilesTable',
+    sql: `
+      ALTER TABLE files
+      ADD COLUMN IF NOT EXISTS created_at timestamptz DEFAULT NOW(),
+      ADD COLUMN IF NOT EXISTS updated_at timestamptz DEFAULT NULL
+    `,
+  },
+  {
+    name: 'createSetFileUpdatedAtTrigger',
+    sql: `
+      CREATE TRIGGER files_set_updated_at_timestamp_trigger
+      BEFORE UPDATE ON files
+      FOR EACH ROW
+      EXECUTE PROCEDURE set_updated_at_timestamp_function()
+    `,
+  },
 ];
 
 const setupDatabase = async () => {
