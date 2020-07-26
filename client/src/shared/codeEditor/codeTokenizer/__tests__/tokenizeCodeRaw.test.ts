@@ -233,6 +233,49 @@ describe('tokenizeCode - raw result test', () => {
         5kg + 6  Error: Trying to add/subtract unitless value and a value with [kg] unit
       `,
     },
+    {
+      it: 'should not allow division by zero',
+      code: `
+        5 / 0
+        5m / 0
+        5m / 0m
+        5 / 0m
+        0 / 0
+      `,
+      expectedResult: `
+        5 / 0  Error: Division by zero is not allowed
+        5m / 0  Error: Division by zero is not allowed
+        5m / 0m  Error: Division by zero is not allowed
+        5 / 0m  Error: Division by zero is not allowed
+        0 / 0  Error: Division by zero is not allowed
+      `,
+    },
+    {
+      it: 'should not allow rising zero to negative power',
+      code: `
+        0^(-1)
+        (2 - 1 - 1)^(-2)
+        0^0
+      `,
+      expectedResult: `
+        0^(-1)  Error: Division by zero is not allowed
+        (2 - 1 - 1)^(-2)  Error: Division by zero is not allowed
+        0^0 = 1
+      `,
+    },
+    {
+      it: 'should not allow rising negative numbers to fractional powers',
+      code: `
+        (-4)^(-1.5)
+        (-4)^0.5
+        4^0.5
+      `,
+      expectedResult: `
+        (-4)^(-1.5)  Error: Raising negative numbers to fractional powers is not supported
+        (-4)^0.5  Error: Raising negative numbers to fractional powers is not supported
+        4^0.5 = 2
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when

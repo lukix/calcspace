@@ -106,6 +106,18 @@ const evaluatePower = (elements, values, functions, unitsMap) => {
     unit,
     power: power * effectivePower,
   }));
+  if (effectivePower < 0 && firstElement.number === 0) {
+    throw new EvaluationError(`Division by zero is not allowed`, {
+      start: elements[0].position,
+      end: elements[elements.length - 1].positionEnd || null,
+    });
+  }
+  if (!Number.isInteger(effectivePower) && firstElement.number < 0) {
+    throw new EvaluationError(`Raising negative numbers to fractional powers is not supported`, {
+      start: elements[0].position,
+      end: elements[elements.length - 1].positionEnd || null,
+    });
+  }
   return { number: firstElement.number ** effectivePower, unit: resultUnit };
 };
 
