@@ -178,6 +178,17 @@ describe('tokenizeCode - raw result test', () => {
       `,
     },
     {
+      it: 'should always use exponential notation for large numbers',
+      code: `
+        1.1e46
+        1.1e46 + 0.1e46
+      `,
+      expectedResult: `
+        1.1e46 = 1.1·1046
+        1.1e46 + 0.1e46 = 1.2·1046
+      `,
+    },
+    {
       it: 'should not display any result for a line with "0" symbol',
       code: `
         0
@@ -274,6 +285,39 @@ describe('tokenizeCode - raw result test', () => {
         (-4)^(-1.5)  Error: Raising negative numbers to fractional powers is not supported
         (-4)^0.5  Error: Raising negative numbers to fractional powers is not supported
         4^0.5 = 2
+      `,
+    },
+    {
+      it: 'should limit precision to enable nicer looking results',
+      code: `
+        1.00000000000001e46
+        1.000000000000001e46
+        0.1 + 0.2
+        0.3 - 0.1
+        5 - 9.4333
+        sin(30deg)
+        cos(60deg)
+        1 / 3
+        20
+        202
+        2020
+        2.02
+        2.020
+      `,
+      expectedResult: `
+        1.00000000000001e46 = 1.00000000000001·1046
+        1.000000000000001e46 = 1·1046
+        0.1 + 0.2 = 0.3
+        0.3 - 0.1 = 0.2
+        5 - 9.4333 = -4.4333
+        sin(30deg) = 0.5
+        cos(60deg) = 0.5
+        1 / 3 = 0.333333333333333
+        20
+        202
+        2020
+        2.02
+        2.020 = 2.02
       `,
     },
   ].forEach((testCaseData) => {
