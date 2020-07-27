@@ -132,7 +132,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
       <h2>Constants and Functions</h2>
       <p>Right now there is only a single constant available:</p>
       <pre className={styles.codeSnippet}>
-        PI<span className={styles.tokenVirtual}> = 3.141592653589793</span>
+        PI<span className={styles.tokenVirtual}> = 3.14159265358979</span>
       </pre>
       <p>and a few functions:</p>
       <pre className={styles.codeSnippet}>
