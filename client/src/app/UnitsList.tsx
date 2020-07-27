@@ -55,7 +55,10 @@ const unitsList = {
     { unit: '1kt', equivalent: { constant: '1', exponent: '6', unit: 'kg' } },
     { unit: '1t', equivalent: { constant: '1', exponent: '3', unit: 'kg' } },
   ],
-  LB: [{ unit: '1lb', equivalent: { constant: '0.45359237', exponent: '', unit: 'kg' } }],
+  IMPERIAL_MASS: [
+    { unit: '1oz', equivalent: { constant: '28.349523125', exponent: '', unit: 'g' } },
+    { unit: '1lb', equivalent: { constant: '0.45359237', exponent: '', unit: 'kg' } },
+  ],
   SECOND: createUnitWithPrefixes('s'),
   OTHER_TIME: [
     { unit: '1min', equivalent: { constant: '60', exponent: '', unit: 's' } },
@@ -193,7 +196,7 @@ const UnitsList: React.FC<UnitsListProps> = () => {
         <br />
         {mapUnits(unitsList.TON)}
         <br />
-        {mapUnits(unitsList.LB)}
+        {mapUnits(unitsList.IMPERIAL_MASS)}
       </pre>
       <h3>Time</h3>
       <pre className={styles.codeSnippet}>
