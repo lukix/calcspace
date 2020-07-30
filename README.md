@@ -1,5 +1,5 @@
-# Math IDE
-Math IDE lets you write sequences of math expressions and instantly evaluate them for any input data that you provide.
+# Calc Space
+Calc Space lets you write sequences of math expressions and instantly evaluate them for any input data that you provide.
 
 ## Development
 

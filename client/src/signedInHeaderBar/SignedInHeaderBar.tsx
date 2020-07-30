@@ -48,7 +48,7 @@ const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
               title="Toggle files panel visibility"
             />
           )}
-          <Link to={routes.home.path}>Math IDE</Link>
+          <Link to={routes.home.path}>CalcSpace.com</Link>
           <Spinner size={18} show={isSynchronizingAnyFile || areThereAnyChangesToBeSaved} />
           {showError && (
             <FaExclamationCircle

@@ -3,8 +3,8 @@ import styles from './SignInUpModal.module.scss';
 
 const AppDescription = () => (
   <p>
-    <span className={styles.em}>Math IDE</span> lets you write sequences of math
-    expressions and instantly evaluate them for any input data that you provide.
+    <span className={styles.em}>CalcSpace.com</span> lets you write sequences of math expressions
+    and instantly evaluate them for any input data that you provide.
   </p>
 );
 

@@ -65,18 +65,18 @@ const UserGuide: React.FC<UserGuideProps> = ({
     <div className={styles.userGuide}>
       <h2>Introduction</h2>
       <p>
-        Welcome! Math IDE lets you write sequences of math expressions and instantly evaluate them
-        for any input data that you provide.{' '}
+        Welcome! CalcSpace.com lets you write sequences of math expressions and instantly evaluate
+        them for any input data that you provide.{' '}
         {isSignedIn ? (
           <>
             <b>Select a file in the left panel to start writing your own math expressions</b> or
-            continue reading this guide to get familiar with how Math IDE works.
+            continue reading this guide to get familiar with how CalcSpace.com works.
           </>
         ) : (
           <>
             On the left side of the screen (top on smaller screens) there is a text field where you
             can enter your math expressions. Continue reading this guide to get familiar with how
-            Math IDE works.
+            CalcSpace.com works.
           </>
         )}
       </p>
@@ -194,7 +194,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
       </pre>
       <h2>Units</h2>
       <p>
-        Math IDE supports values with{' '}
+        CalcSpace.com supports values with{' '}
         {isSignedIn ? <Link to={routes.unitsList.path}>units</Link> : 'units'}. Unit symbol needs to
         be placed right after the number, without separating space character. For example:
       </p>

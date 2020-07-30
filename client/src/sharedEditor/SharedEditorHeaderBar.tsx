@@ -18,7 +18,7 @@ const SharedEditorHeaderBar: React.FC<SharedEditorHeaderBarProps> = ({ syncStatu
     <HeaderBar
       headerTitle={
         <>
-          <Link to={routes.home.path}>Math IDE</Link>
+          <Link to={routes.home.path}>CalcSpace.com</Link>
           <Spinner
             size={18}
             show={[syncStatuses.DIRTY, syncStatuses.STARTED].includes(syncStatus)}
