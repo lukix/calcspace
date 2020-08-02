@@ -100,6 +100,8 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />
         123 / 5<span className={styles.tokenVirtual}> = 2.46</span>
         <br />2 ^ 3<span className={styles.tokenVirtual}> = 8</span>
+        <br />
+        10 ^ (-1)<span className={styles.tokenVirtual}> = 0.1</span>
       </pre>
       <h2>Variables</h2>
       <p>Here is how you can declare variables:</p>
