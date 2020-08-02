@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import * as yup from 'yup';
 import getJwtTokenCookie from '../auth/getNewJwtTokenCookie';
 import { SALT_ROUNDS, JWT_TOKEN_COOKIE_NAME, SIGN_OUT_URL } from '../config';
-import authorizationMiddleware from '../auth/authorizationMiddleware';
+import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
 export default ({ dbClient }) => {
@@ -103,9 +103,16 @@ export default ({ dbClient }) => {
   const getCurrentlyLoggedInUser = {
     path: '/logged-in',
     method: 'get',
-    middlewares: [authorizationMiddleware],
+    middlewares: [
+      createAuthorizationMiddleware({
+        authFailCallback: () => {
+          dbClient.query(`INSERT INTO stats (action) VALUES ('LOAD_APP')`);
+        },
+      }),
+    ],
     handler: async ({ user }) => {
-      const { username } = user;
+      const { username, userId } = user;
+      await dbClient.query(`INSERT INTO stats (action, user_id) VALUES ('LOAD_APP', $1)`, [userId]);
       return { response: { username } };
     },
   };

@@ -71,6 +71,13 @@ const queries = [
     `,
   },
   {
+    name: 'removeSetUserUpdatedAtTriggerIfExists',
+    sql: `
+      DROP TRIGGER IF EXISTS users_set_updated_at_timestamp_trigger
+      ON users
+    `,
+  },
+  {
     name: 'createSetUserUpdatedAtTrigger',
     sql: `
       CREATE TRIGGER users_set_updated_at_timestamp_trigger
@@ -88,12 +95,31 @@ const queries = [
     `,
   },
   {
+    name: 'removeSetFileUpdatedAtTriggerIfExists',
+    sql: `
+      DROP TRIGGER IF EXISTS files_set_updated_at_timestamp_trigger
+      ON files
+    `,
+  },
+  {
     name: 'createSetFileUpdatedAtTrigger',
     sql: `
       CREATE TRIGGER files_set_updated_at_timestamp_trigger
       BEFORE UPDATE ON files
       FOR EACH ROW
       EXECUTE PROCEDURE set_updated_at_timestamp_function()
+    `,
+  },
+  {
+    name: 'createStatsTable',
+    sql: `
+      CREATE TABLE IF NOT EXISTS stats (
+        id          UUID NOT NULL DEFAULT uuid_generate_v4() CONSTRAINT statsPK PRIMARY KEY,
+        user_id     UUID,
+        action      varchar(40) NOT NULL,
+        created_at  timestamptz DEFAULT NOW(),
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
     `,
   },
 ];

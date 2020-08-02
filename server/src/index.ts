@@ -14,7 +14,7 @@ import {
 import usersRoutes from './routes/usersRoutes';
 import filesRoutes from './routes/filesRoutes';
 import sharedFilesRoutes from './routes/sharedFilesRoutes';
-import authorizationMiddleware from './auth/authorizationMiddleware';
+import createAuthorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
 import { DATABASE_URL, PORT, CLIENT_URL } from './config';
 import userSettingsRoutes from './routes/userSettingsRoutes';
@@ -58,7 +58,7 @@ import SharedFilesManager from './sharedFilesManager';
     ...nestRoutes('/users', usersRoutes({ dbClient })),
     ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient, sharedFilesManager })),
     ...applyMiddlewares(
-      [authorizationMiddleware],
+      [createAuthorizationMiddleware()],
       [
         ...nestRoutes('/user-settings', userSettingsRoutes({ dbClient })),
         ...nestRoutes('/files', filesRoutes({ dbClient, sharedFilesManager })),
