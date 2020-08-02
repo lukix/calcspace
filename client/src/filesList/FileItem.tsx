@@ -6,6 +6,13 @@ import { FaTrash, FaPen, FaRegCircle, FaRegDotCircle, FaHourglassEnd } from 'rea
 import routes from '../shared/routes';
 import styles from './FilesList.module.scss';
 
+const useStateWithReinitialization = (initialValue) => {
+  const [state, setState] = useState(initialValue);
+  useEffect(() => setState(initialValue), [initialValue]);
+  return [state, setState];
+};
+
+const validateFileName = (name) => name.toLowerCase().match(/^[a-z0-9. _\-ąćęłńóśżź]+$/);
 interface StatusIconProps {
   isSynchronizing: boolean;
   isModified: boolean;
@@ -67,6 +74,9 @@ const FileItem: React.FC<FileItemProps> = ({
   const { push: historyPush } = useHistory();
   const [isInRenamingMode, setIsInRenamingMode] = useState(false);
   const textInput = useRef<HTMLInputElement>(null);
+  const [editedName, setEditedName] = useStateWithReinitialization(name);
+
+  const isFileNameInvalid = !validateFileName(editedName);
 
   const focusTextInput = () => {
     if (textInput.current) {
@@ -86,11 +96,12 @@ const FileItem: React.FC<FileItemProps> = ({
     }
   };
 
-  const saveNewName = (e) => {
+  const saveNewName = () => {
     setIsInRenamingMode(false);
-    const newName = e.target.value.trim();
-    if (newName) {
-      renameFile({ id, oldName: name, newName });
+    if (!isFileNameInvalid && editedName !== name) {
+      renameFile({ id, oldName: name, newName: editedName });
+    } else {
+      setEditedName(name);
     }
   };
 
@@ -130,10 +141,12 @@ const FileItem: React.FC<FileItemProps> = ({
             <input
               ref={textInput}
               type="text"
-              defaultValue={name}
+              value={editedName}
+              onChange={(e) => setEditedName(e.target.value)}
               onBlur={saveNewName}
               onKeyPress={selectEnterPresses(saveNewName)}
               maxLength={30}
+              className={classNames({ [styles.invalidFileName]: isFileNameInvalid })}
             />
           ) : (
             <span>{name}</span>

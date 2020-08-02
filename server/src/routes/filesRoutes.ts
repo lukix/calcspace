@@ -112,12 +112,17 @@ export default ({ dbClient, sharedFilesManager }) => {
     method: 'put',
     validate: validateBodyWithYup(
       yup.object({
-        name: yup.string(),
+        name: yup.string().max(30),
       })
     ),
     handler: async ({ body, user, params }) => {
       const { fileId } = params;
       const { name } = body;
+
+      if (!name.toLowerCase().match(/^[a-z0-9. _\-ąćęłńóśżź]+$/)) {
+        return { status: 400, response: { message: 'Invalid file name' } };
+      }
+
       const result = await dbClient.query(
         'UPDATE files SET name = $1 WHERE id = $2 AND user_id = $3',
         [name, fileId, user.userId]
