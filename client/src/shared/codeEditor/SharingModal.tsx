@@ -57,6 +57,8 @@ const SharingModal: React.FC<SharingModalProps> = ({
     updateEditFlag(fileId, !sharedEditEnabled);
   };
 
+  const selectAllTextInInput = (e) => e.target.select();
+
   return (
     <Modal visible={visible} onHide={hide} title="Sharing Options">
       {sharedViewId && (
@@ -82,6 +84,7 @@ const SharingModal: React.FC<SharingModalProps> = ({
               readOnly
               value={sharedViewUrl}
               className={styles.sharedModalUrlBox}
+              onFocus={selectAllTextInInput}
             />
           )}
         </div>
@@ -109,6 +112,7 @@ const SharingModal: React.FC<SharingModalProps> = ({
               readOnly
               value={sharedEditUrl}
               className={styles.sharedModalUrlBox}
+              onFocus={selectAllTextInInput}
             />
           )}
         </div>
