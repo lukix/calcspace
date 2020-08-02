@@ -5,7 +5,7 @@ export const DATABASE_URL =
 export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'secret123';
 export const TOKEN_EXPIRATION_DURATION_MS = process.env.TOKEN_EXPIRATION_DURATION_MS
   ? Number(process.env.TOKEN_EXPIRATION_DURATION_MS)
-  : 4 * 60 * 60 * 1000;
+  : 48 * 60 * 60 * 1000;
 export const TOKEN_RENEW_AFTER_MS = process.env.TOKEN_RENEW_AFTER_MS
   ? Number(process.env.TOKEN_RENEW_AFTER_MS)
   : 5 * 60 * 1000;

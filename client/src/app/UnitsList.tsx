@@ -282,6 +282,36 @@ const UnitsList: React.FC<UnitsListProps> = () => {
         <br />
         {mapUnits(unitsList.BYTE_BINARY_PREFIXES)}
       </pre>
+      <h3>Currency</h3>
+      <pre className={styles.codeSnippet}>
+        <span className={styles.tokenComment}>// Warning:</span>
+        <br />
+        <span className={styles.tokenComment}>
+          // As for now, it's not possible to convert values between different currency units
+        </span>
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// United States dollar</span>
+        <br />
+        1USD
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// Euro</span>
+        <br />
+        1EUR
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// British pound</span>
+        <br />
+        1GBP
+        <br />
+        <br />
+        <span className={styles.tokenComment}>// Polish złoty</span>
+        <br />
+        1PLN
+        <br />
+        <br />
+      </pre>
     </div>
   );
 };

@@ -282,6 +282,12 @@ export const units: Array<UnitMapTuple> = [
   ['ft', { multiplier: 12 * 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
   ['yd', { multiplier: 3 * 12 * 25.4e-3, baseUnits: [{ unit: 'm', power: 1 }] }],
   ['mi', { multiplier: 1609.344, baseUnits: [{ unit: 'm', power: 1 }] }],
+
+  // Currency units
+  ['USD', { multiplier: 1, baseUnits: [{ unit: 'USD', power: 1 }] }],
+  ['EUR', { multiplier: 1, baseUnits: [{ unit: 'EUR', power: 1 }] }],
+  ['GBP', { multiplier: 1, baseUnits: [{ unit: 'GBP', power: 1 }] }],
+  ['PLN', { multiplier: 1, baseUnits: [{ unit: 'PLN', power: 1 }] }],
 ];
 
 export const unitsApplicableForResult = [
@@ -307,6 +313,14 @@ export const unitsApplicableForResult = [
   'lx',
   'Gy',
   'kat',
+  'USD',
+  'EUR',
+  'GBP',
+  'PLN',
 ];
+
+if ([...new Map(units)].length !== units.length) {
+  throw new Error('There are duplicated units!');
+}
 
 export const unitsMap = new Map(units);
