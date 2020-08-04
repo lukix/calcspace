@@ -8,6 +8,7 @@ interface ModalProps {
   onHide?: Function;
   title?: string;
   floating?: boolean;
+  className?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -16,10 +17,11 @@ const Modal: React.FC<ModalProps> = ({
   onHide = () => {},
   title,
   floating = true,
+  className = '',
 }) => {
   if (!floating) {
     return (
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={classNames(styles.modal, className)} onClick={(e) => e.stopPropagation()}>
         {title && <div className={styles.modalHeader}>{title}</div>}
         <div>{children}</div>
       </div>
@@ -30,7 +32,7 @@ const Modal: React.FC<ModalProps> = ({
       className={classNames(styles.modalOverlay, { [styles.visible]: visible })}
       onClick={() => onHide()}
     >
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={classNames(styles.modal, className)} onClick={(e) => e.stopPropagation()}>
         {title && <div className={styles.modalHeader}>{title}</div>}
         <div>{children}</div>
       </div>

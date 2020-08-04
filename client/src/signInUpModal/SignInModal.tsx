@@ -93,15 +93,21 @@ const LogInModal: React.FC<LogInModalProps> = () => {
           </Spinner>
         </div>
       </Modal>
-      <div className={styles.noAccountButtonWrapper}>
-        <button onClick={createSharedFile}>
-          <Switch>
-            <Case when={isCreatingSharedFile}>Redirecting...</Case>
-            <Case when={creatingSharedFileError}>Error occured. Click to try again.</Case>
-            <Default>Try without an account</Default>
-          </Switch>
-        </button>
-      </div>
+      <Modal
+        visible
+        title="Try Without Signing In"
+        floating={false}
+        className={styles.tryWithoutAccountModal}
+      >
+        <Spinner show={isCreatingSharedFile} centered>
+          <button onClick={createSharedFile}>
+            <Switch>
+              <Case when={creatingSharedFileError}>Error occured. Click to try again.</Case>
+              <Default>Start now!</Default>
+            </Switch>
+          </button>
+        </Spinner>
+      </Modal>
     </div>
   );
 };

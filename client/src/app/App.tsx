@@ -4,9 +4,10 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Spinner from '../shared/spinner';
 import { SignInModal, SignUpModal } from '../signInUpModal';
 import SharedEditorDataProvider from '../sharedEditor/SharedEditorDataProvider';
+import { LandingPage } from '../LandingPage';
+import routes from '../shared/routes';
 import { UserProfileModal } from './userProfileModal';
 import AuthorizedApp from './AuthorizedApp';
-import routes from '../shared/routes';
 import { actions as reduxActions, selectors } from './store';
 
 interface AppProps {
@@ -43,6 +44,9 @@ const App: React.FC<AppProps> = ({
           </Route>
           <Route path={routes.signUp.path}>
             <SignUpModal />
+          </Route>
+          <Route path={routes.landing.path}>
+            <LandingPage />
           </Route>
           <Route path={routes.sharedEditFile.path}>
             <SharedEditorDataProvider user={user} showUserModal={showUserModal} />
