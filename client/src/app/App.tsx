@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Spinner from '../shared/spinner';
 import { SignInModal, SignUpModal } from '../signInUpModal';
 import SharedEditorDataProvider from '../sharedEditor/SharedEditorDataProvider';
-import { LandingPage } from '../LandingPage';
+import LandingPage from '../LandingPage';
 import routes from '../shared/routes';
 import { UserProfileModal } from './userProfileModal';
 import AuthorizedApp from './AuthorizedApp';

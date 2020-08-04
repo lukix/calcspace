@@ -23,16 +23,11 @@
   }
 
   h2:not(:first-child) {
-    margin-top: 45px;
+    margin-top: 65px;
   }
 }
 
 .modalsContainer {
   max-width: 550px;
-}
-
-.codeSnippet {
-  background: rgba(0, 0, 0, 0.4);
-  height: 140px;
-  width: 100%;
+  margin-left: 35px;
 }
