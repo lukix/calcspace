@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 import SignedInHeaderBar from '../signedInHeaderBar';
 import FilePage from '../filePage/FilePage';
 import NewFilePage from '../newFilePage/NewFilePage';
@@ -12,16 +12,12 @@ import { selectors } from './store';
 import styles from './App.module.scss';
 
 interface AuthorizedAppProps {
-  user: { username: string } | null;
+  user: { username: string };
   fetchingUserError: boolean;
   showUserModal: Function;
 }
 
-const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
-  user,
-  fetchingUserError,
-  showUserModal,
-}) => {
+const AuthorizedApp: React.FC<AuthorizedAppProps> = ({ user, showUserModal }) => {
   const { pathname } = useLocation();
   const scrollableContentElement = useRef<HTMLDivElement>(null);
 
@@ -30,11 +26,6 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
       scrollableContentElement.current.scrollTo(0, 0);
     }
   }, [pathname]);
-
-  // TODO
-  // if (fetchingUserError) {
-  //   return <Redirect to={routes.logIn.path} />;
-  // }
 
   return (
     <div className={styles.app}>
@@ -65,7 +56,6 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
 export default connect(
   (state) => ({
     user: selectors.user(state),
-    fetchingUserError: selectors.fetchingUserError(state),
   }),
   {}
 )(AuthorizedApp);
