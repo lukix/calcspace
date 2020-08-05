@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SignInModal } from '../signInUpModal';
+import { SignInModal } from './signInModal';
 import CodeSnippet from './CodeSnippet/index';
 import {
   COMPLEX_CALCULATIONS_FRAMES,
@@ -38,6 +38,12 @@ const LandingPage: React.FC<LandingPageProps> = () => {
       </header>
       <div className={styles.mainContainer}>
         <div className={styles.snippetsContainer}>
+          <h2>About</h2>
+          <p>
+            <b>CalcSpace.com</b> lets you build multi-line calculations and instantly reevaluate
+            them on change. It supports units of measurement, so it's great for physics and
+            engineering. Sharing mechanism makes it easy to colaborate with other people.
+          </p>
           <h2>Build complex multi-line calculations and see results as you type</h2>
           <CodeSnippet code={complexCalculationsCode} />
           <h2>Don't waste time converting units by hand</h2>

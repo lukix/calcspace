@@ -9,7 +9,8 @@ import { Modal, ModalFormField } from '../shared/modal';
 import routes from '../shared/routes';
 import AppDescription from './AppDescription';
 import sharedStyles from '../shared/shared.module.scss';
-import styles from './SignInUpModal.module.scss';
+import { SignInUpModalsStyles } from '../shared/signInUpModals';
+import styles from './SignUpModal.module.scss';
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -64,10 +65,10 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
   });
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={SignInUpModalsStyles.pageContainer}>
       <Modal visible title="Create An Account" floating={false}>
         <AppDescription />
-        <div className={styles.signInModal}>
+        <div className={SignInUpModalsStyles.modal}>
           {!addedUser ? (
             <form onSubmit={formik.handleSubmit}>
               <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
@@ -83,14 +84,14 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
                 label="Repeat password"
                 formikProps={formik}
               />
-              <div className={styles.submitButtonWrapper}>
+              <div className={SignInUpModalsStyles.submitButtonWrapper}>
                 <input
                   type="submit"
                   value={isAddingUser ? 'Signing Up...' : 'Sign Up'}
                   disabled={isAddingUser}
                 />
-                <p className={styles.signUpMessage}>
-                  Already have an account? <Link to={routes.logIn.path}>Log in</Link>.
+                <p className={SignInUpModalsStyles.switchPageMessage}>
+                  Already have an account? <Link to={routes.home.path}>Log in</Link>.
                 </p>
               </div>
               {addUserError && (
@@ -103,7 +104,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
             <div className={styles.signUpSuccessMessage}>
               <FaRegCheckCircle />
               <p>
-                You have successfully signed up! You can <Link to={routes.logIn.path}>Log in</Link>{' '}
+                You have successfully signed up! You can <Link to={routes.home.path}>Log in</Link>{' '}
                 now.
               </p>
             </div>

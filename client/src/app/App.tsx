@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Spinner from '../shared/spinner';
-import { SignInModal, SignUpModal } from '../signInUpModal';
+import { SignUpModal } from '../signUpModal';
 import SharedEditorDataProvider from '../sharedEditor/SharedEditorDataProvider';
 import LandingPage from '../LandingPage';
 import routes from '../shared/routes';
@@ -39,14 +39,8 @@ const App: React.FC<AppProps> = ({
     <>
       <BrowserRouter>
         <Switch>
-          <Route path={routes.logIn.path}>
-            <SignInModal />
-          </Route>
           <Route path={routes.signUp.path}>
             <SignUpModal />
-          </Route>
-          <Route path={routes.landing.path}>
-            <LandingPage />
           </Route>
           <Route path={routes.sharedEditFile.path}>
             <SharedEditorDataProvider user={user} showUserModal={showUserModal} />
@@ -55,7 +49,7 @@ const App: React.FC<AppProps> = ({
             <SharedEditorDataProvider user={user} showUserModal={showUserModal} viewOnly />
           </Route>
           <Route path={routes.home.path}>
-            <AuthorizedApp showUserModal={showUserModal} />
+            {user ? <AuthorizedApp showUserModal={showUserModal} /> : <LandingPage />}
           </Route>
         </Switch>
       </BrowserRouter>

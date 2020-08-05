@@ -4,14 +4,14 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Switch, Case, Default } from 'react-when-then';
 
-import httpRequest from '../shared/httpRequest';
-import Spinner from '../shared/spinner';
-import { Modal, ModalFormField } from '../shared/modal';
-import routes from '../shared/routes';
-import useCreateAndOpenSharedFile from '../shared/useCreateAndOpenSharedFile';
-import AppDescription from './AppDescription';
-import sharedStyles from '../shared/shared.module.scss';
-import styles from './SignInUpModal.module.scss';
+import httpRequest from '../../shared/httpRequest';
+import Spinner from '../../shared/spinner';
+import { Modal, ModalFormField } from '../../shared/modal';
+import routes from '../../shared/routes';
+import useCreateAndOpenSharedFile from '../../shared/useCreateAndOpenSharedFile';
+import sharedStyles from '../../shared/shared.module.scss';
+import { SignInUpModalsStyles } from '../../shared/signInUpModals';
+import styles from './SignInModal.module.scss';
 
 const createSharedFileAction = () => httpRequest.post(`shared-files`);
 
@@ -60,10 +60,9 @@ const LogInModal: React.FC<LogInModalProps> = () => {
   } = useCreateAndOpenSharedFile(createSharedFileAction);
 
   return (
-    <div className={styles.pageContainer}>
+    <>
       <Modal visible title="Log In" floating={false}>
-        <AppDescription />
-        <div className={styles.signInModal}>
+        <div className={SignInUpModalsStyles.modal}>
           <Spinner show={isRedirecting} centered>
             <form onSubmit={formik.handleSubmit}>
               <ModalFormField type="text" name="username" label="Username" formikProps={formik} />
@@ -73,13 +72,13 @@ const LogInModal: React.FC<LogInModalProps> = () => {
                 label="Password"
                 formikProps={formik}
               />
-              <div className={styles.submitButtonWrapper}>
+              <div className={SignInUpModalsStyles.submitButtonWrapper}>
                 <input
                   type="submit"
                   value={formik.isSubmitting ? 'Logging in...' : 'Log in'}
                   disabled={formik.isSubmitting}
                 />
-                <p className={styles.signUpMessage}>
+                <p className={SignInUpModalsStyles.switchPageMessage}>
                   Don't have an account? <Link to={routes.signUp.path}>Sign up</Link>.
                 </p>
               </div>
@@ -108,7 +107,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
           </button>
         </Spinner>
       </Modal>
-    </div>
+    </>
   );
 };
 

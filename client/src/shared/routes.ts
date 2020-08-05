@@ -1,7 +1,6 @@
 const routes = {
   home: { path: '/' },
   landing: { path: '/landing' },
-  logIn: { path: '/log-in' },
   signUp: { path: '/sign-up' },
   newFile: { path: '/new-file' },
   file: { path: '/file/:fileId' },

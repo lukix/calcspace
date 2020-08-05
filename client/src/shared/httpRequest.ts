@@ -31,7 +31,7 @@ const HttpRequest = ({ baseUrl, responseErrorHandlers = {} }) => {
 };
 
 const forbiddenErrorHandler = () => {
-  window.location.replace(routes.logIn.path);
+  window.location.replace(routes.home.path);
 };
 
 export const httpRequestWithoutRedirect = HttpRequest({ baseUrl: API_URL });

@@ -31,9 +31,10 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
     }
   }, [pathname]);
 
-  if (fetchingUserError) {
-    return <Redirect to={routes.logIn.path} />;
-  }
+  // TODO
+  // if (fetchingUserError) {
+  //   return <Redirect to={routes.logIn.path} />;
+  // }
 
   return (
     <div className={styles.app}>
