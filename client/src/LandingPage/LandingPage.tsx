@@ -1,39 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SignInModal } from '../signInUpModal';
 import CodeSnippet from './CodeSnippet/index';
+import {
+  COMPLEX_CALCULATIONS_FRAMES,
+  CONVERTING_UNITS_FRAMES,
+  FINDING_MISTAKES_FRAMES,
+} from './snippetsFrames';
 import styles from './LandingPage.module.scss';
 
-const snippets = {
-  COMPLEX_CALCULATIONS: `x = 3
-    y = 8 / 2
-    sqrt(x^2 + y^2)`,
-  CONVERTING_UNITS: `g = 9.81m/s^2
-    m = 100kg + 45lb
-    h = 6ft + 3in
+const useAnimatedString = (frames: { value: string; delay: number }[]): string => {
+  const [frameIndex, setFrameIndex] = useState(0);
 
-    // Potential energy:
-    E = m * g * h = [kJ]`,
-  FIND_MISTAKES: `m = 10kg
-    v = 7.2km/h
-    E = (m*v)/2 = [J]`,
+  const currentFrame = frames[frameIndex];
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setFrameIndex((index) => (index + 1) % frames.length);
+    }, currentFrame.delay);
+
+    return () => clearInterval(timerId);
+  }, [frames, currentFrame]);
+
+  return currentFrame?.value || '';
 };
 
 interface LandingPageProps {}
 
 const LandingPage: React.FC<LandingPageProps> = () => {
+  const complexCalculationsCode = useAnimatedString(COMPLEX_CALCULATIONS_FRAMES);
+  const convertingUnitsCode = useAnimatedString(CONVERTING_UNITS_FRAMES);
+  const findingMistakesCode = useAnimatedString(FINDING_MISTAKES_FRAMES);
+
   return (
     <div>
       <header className={styles.pageHeader}>
         <h1>CalcSpace.com</h1>
       </header>
       <div className={styles.mainContainer}>
-        <div>
+        <div className={styles.snippetsContainer}>
           <h2>Build complex multi-line calculations and see results as you type</h2>
-          <CodeSnippet code={snippets.COMPLEX_CALCULATIONS} />
+          <CodeSnippet code={complexCalculationsCode} />
           <h2>Don't waste time converting units by hand</h2>
-          <CodeSnippet code={snippets.CONVERTING_UNITS} />
+          <CodeSnippet code={convertingUnitsCode} />
           <h2>Find mistakes in your calculations with no effort</h2>
-          <CodeSnippet code={snippets.FIND_MISTAKES} />
+          <CodeSnippet code={findingMistakesCode} />
         </div>
         <div className={styles.modalsContainer}>
           <SignInModal />
