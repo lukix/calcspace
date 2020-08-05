@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, useLocation } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import SignedInHeaderBar from '../signedInHeaderBar';
 import FilePage from '../filePage/FilePage';
 import NewFilePage from '../newFilePage/NewFilePage';
@@ -34,17 +34,20 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({ user, showUserModal }) =>
         <FilesList />
         <div className={styles.content} ref={scrollableContentElement}>
           <Switch>
-            <Route path={routes.newFile.path}>
+            <Route path={routes.newFile.path} exact>
               <NewFilePage />
             </Route>
-            <Route path={routes.file.path}>
+            <Route path={routes.file.path} exact>
               <FilePage />
             </Route>
-            <Route path={routes.unitsList.path}>
+            <Route path={routes.unitsList.path} exact>
               <UnitsList />
             </Route>
-            <Route path={routes.home.path}>
+            <Route path={routes.home.path} exact>
               <UserGuide isSignedIn />
+            </Route>
+            <Route>
+              <Redirect to={routes.home.path} />
             </Route>
           </Switch>
         </div>
