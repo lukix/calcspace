@@ -33,6 +33,38 @@
 }
 
 .modalsContainer {
-  width: 400px;
+  width: 420px;
   margin-left: 55px;
+}
+
+@media(max-width: 1199px) {
+  .pageHeader {
+    padding: 15px 0;
+  }
+
+  .mainContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .mainContainer {
+    max-width: calc(100vw - 20px);
+    padding: 20px 0;
+    margin: 0 10px;
+    overflow: hidden;
+
+    h2:not(:first-child) {
+      margin-top: 35px;
+    }
+  }
+
+  .snippetsContainer {
+    max-width: 100%;
+  }
+
+  .modalsContainer {
+    max-width: 100vw;
+    margin-left: 0px;
+    margin-bottom: 20px;
+  }
 }

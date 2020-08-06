@@ -61,7 +61,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
 
   return (
     <>
-      <Modal visible title="Log In" floating={false}>
+      <Modal visible title="Log In" floating={false} className={styles.signInModal}>
         <div className={SignInUpModalsStyles.modal}>
           <Spinner show={isRedirecting} centered>
             <form onSubmit={formik.handleSubmit}>
