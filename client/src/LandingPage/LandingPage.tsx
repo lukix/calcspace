@@ -40,9 +40,9 @@ const LandingPage: React.FC<LandingPageProps> = () => {
         <div className={styles.snippetsContainer}>
           <h2>About</h2>
           <p>
-            <b>CalcSpace.com</b> lets you build multi-line calculations and instantly reevaluate
-            them on change. It supports units of measurement, so it's great for physics and
-            engineering. Sharing mechanism makes it easy to colaborate with other people.
+            <b>CalcSpace.com</b> lets you build multi-line calculations and instantly see the
+            results. It supports units of measurement, so it's great for physics and engineering.
+            Sharing mechanism makes it easy to colaborate with other people.
           </p>
           <h2>Build complex multi-line calculations and see results as you type</h2>
           <CodeSnippet code={complexCalculationsCode} />

@@ -65,8 +65,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
     <div className={styles.userGuide}>
       <h2>Introduction</h2>
       <p>
-        Welcome! CalcSpace.com lets you write sequences of math expressions and instantly evaluate
-        them for any input data that you provide.{' '}
+        Welcome! CalcSpace.com lets you build multi-line calculations and instantly see the results.{' '}
         {isSignedIn ? (
           <>
             <b>Select a file in the left panel to start writing your own math expressions</b> or
