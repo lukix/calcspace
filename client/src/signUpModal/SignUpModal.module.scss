@@ -1,0 +1,32 @@
+@import '../style/colors.scss';
+
+.signUpSuccessMessage {
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-top: 15px;
+    display: block;
+    color: #449944;
+    font-size: 80px;
+  }
+}
+
+.em {
+  color: $dark-accent-color;
+  font-weight: bold;
+}

@@ -1,0 +1,70 @@
+@import '../style/colors.scss';
+
+.pageHeader {
+  border-bottom: 4px solid $accent-color;
+  text-align: center;
+  padding: 20px 0;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.mainContainer {
+  max-width: 1200px;
+  margin: 0px auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 40px 0;
+
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0px;
+  }
+
+  h2:not(:first-child) {
+    margin-top: 65px;
+  }
+}
+
+.snippetsContainer {
+  flex: 1;
+}
+
+.modalsContainer {
+  width: 420px;
+  margin-left: 55px;
+}
+
+@media(max-width: 1199px) {
+  .pageHeader {
+    padding: 15px 0;
+  }
+
+  .mainContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .mainContainer {
+    max-width: calc(100vw - 20px);
+    padding: 20px 0;
+    margin: 0 10px;
+    overflow: hidden;
+
+    h2:not(:first-child) {
+      margin-top: 35px;
+    }
+  }
+
+  .snippetsContainer {
+    max-width: 100%;
+  }
+
+  .modalsContainer {
+    max-width: 100vw;
+    margin-left: 0px;
+    margin-bottom: 20px;
+  }
+}

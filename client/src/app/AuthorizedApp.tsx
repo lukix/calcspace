@@ -12,16 +12,12 @@ import { selectors } from './store';
 import styles from './App.module.scss';
 
 interface AuthorizedAppProps {
-  user: { username: string } | null;
+  user: { username: string };
   fetchingUserError: boolean;
   showUserModal: Function;
 }
 
-const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
-  user,
-  fetchingUserError,
-  showUserModal,
-}) => {
+const AuthorizedApp: React.FC<AuthorizedAppProps> = ({ user, showUserModal }) => {
   const { pathname } = useLocation();
   const scrollableContentElement = useRef<HTMLDivElement>(null);
 
@@ -31,10 +27,6 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
     }
   }, [pathname]);
 
-  if (fetchingUserError) {
-    return <Redirect to={routes.logIn.path} />;
-  }
-
   return (
     <div className={styles.app}>
       <SignedInHeaderBar username={user && user.username} onAvatarClick={showUserModal} />
@@ -42,17 +34,20 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
         <FilesList />
         <div className={styles.content} ref={scrollableContentElement}>
           <Switch>
-            <Route path={routes.newFile.path}>
+            <Route path={routes.newFile.path} exact>
               <NewFilePage />
             </Route>
-            <Route path={routes.file.path}>
+            <Route path={routes.file.path} exact>
               <FilePage />
             </Route>
-            <Route path={routes.unitsList.path}>
+            <Route path={routes.unitsList.path} exact>
               <UnitsList />
             </Route>
-            <Route path={routes.home.path}>
+            <Route path={routes.home.path} exact>
               <UserGuide isSignedIn />
+            </Route>
+            <Route>
+              <Redirect to={routes.home.path} />
             </Route>
           </Switch>
         </div>
@@ -64,7 +59,6 @@ const AuthorizedApp: React.FC<AuthorizedAppProps> = ({
 export default connect(
   (state) => ({
     user: selectors.user(state),
-    fetchingUserError: selectors.fetchingUserError(state),
   }),
   {}
 )(AuthorizedApp);

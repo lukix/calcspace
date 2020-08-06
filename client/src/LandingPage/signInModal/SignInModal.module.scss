@@ -1,0 +1,44 @@
+@import '../../style/colors.scss';
+
+.signInModal {
+  width: auto;
+  margin: 0;
+}
+
+.tryWithoutAccountModal {
+  min-height: 0;
+  margin: 0;
+  margin-top: 35px;
+  width: auto;
+
+  button {
+    background: $dark-accent-color;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    font-size: 1.2rem;
+    padding: 15px 25px;
+    margin: 30px 0;
+    width: 100%;
+
+    &:hover {
+      background: lighten($dark-accent-color, 8);
+    }
+  }
+}
+
+@media(max-width: 1199px) {
+  .signInModal {
+    min-height: 0;
+  }
+
+  .tryWithoutAccountModal {
+    margin-top: 20px;
+
+    button {
+      margin: 5px 0;
+    }
+  }
+}

@@ -33,7 +33,7 @@ const SharedEditorHeaderBar: React.FC<SharedEditorHeaderBarProps> = ({ syncStatu
       }
       icons={
         <div className={styles.headerLinks}>
-          <Link to={routes.logIn.path}>Log In</Link> / <Link to={routes.signUp.path}>Sign Up</Link>
+          <Link to={routes.home.path}>Log In</Link> / <Link to={routes.signUp.path}>Sign Up</Link>
         </div>
       }
     />
