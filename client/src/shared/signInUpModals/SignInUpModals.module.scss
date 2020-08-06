@@ -38,5 +38,9 @@
     border-radius: 4px;
     font-size: 1rem;
     cursor: pointer;
+
+    &:hover {
+      background: lighten($dark-accent-color, 8);
+    }
   }
 }
