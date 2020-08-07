@@ -65,7 +65,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
   });
 
   return (
-    <div className={SignInUpModalsStyles.pageContainer}>
+    <div className={styles.pageContainer}>
       <Modal visible title="Create An Account" floating={false}>
         <AppDescription />
         <div className={SignInUpModalsStyles.modal}>
