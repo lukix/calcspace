@@ -52,7 +52,9 @@ const LandingPage: React.FC<LandingPageProps> = () => {
           <CodeSnippet code={findingMistakesCode} />
         </div>
         <div className={styles.modalsContainer}>
-          <SignInModal />
+          <div className={styles.modalsInnerWrapper}>
+            <SignInModal />
+          </div>
         </div>
       </div>
     </div>
