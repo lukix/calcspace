@@ -5,6 +5,8 @@
   ],
 
   "editor.formatOnSave": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
   // Enable per-language
   "[javascript]": {
     "editor.formatOnSave": true

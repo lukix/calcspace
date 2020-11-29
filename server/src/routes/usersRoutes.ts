@@ -5,6 +5,14 @@ import { SALT_ROUNDS, JWT_TOKEN_COOKIE_NAME, SIGN_OUT_URL } from '../config';
 import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
+const truncateUserAgent = (userAgent) => {
+  const maxLength = 150;
+  if (!userAgent) {
+    return userAgent;
+  }
+  return userAgent.length > maxLength ? `${userAgent.substring(0, maxLength - 3)}...` : userAgent;
+};
+
 export default ({ dbClient }) => {
   const authenticate = {
     path: '/authenticate',
@@ -105,14 +113,23 @@ export default ({ dbClient }) => {
     method: 'get',
     middlewares: [
       createAuthorizationMiddleware({
-        authFailCallback: () => {
-          dbClient.query(`INSERT INTO stats (action) VALUES ('LOAD_APP')`);
+        authFailCallback: (req) => {
+          const userAgent = req.get('User-Agent');
+          const truncatedUserAgent = truncateUserAgent(userAgent);
+          dbClient.query(`INSERT INTO stats (action, user_agent) VALUES ('LOAD_APP', $1)`, [
+            truncatedUserAgent,
+          ]);
         },
       }),
     ],
-    handler: async ({ user }) => {
-      const { username, userId } = user;
-      await dbClient.query(`INSERT INTO stats (action, user_id) VALUES ('LOAD_APP', $1)`, [userId]);
+    handler: async (req) => {
+      const { username, userId } = req.user;
+      const userAgent = req.get('User-Agent');
+      const truncatedUserAgent = truncateUserAgent(userAgent);
+      await dbClient.query(
+        `INSERT INTO stats (action, user_agent, user_id) VALUES ('LOAD_APP', $1, $2)`,
+        [truncatedUserAgent, userId]
+      );
       return { response: { username } };
     },
   };

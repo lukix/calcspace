@@ -3,13 +3,13 @@ import getNewJwtTokenCookie from './getNewJwtTokenCookie';
 import { JWT_SECRET_KEY, JWT_TOKEN_COOKIE_NAME, TOKEN_RENEW_AFTER_MS } from '../config';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const noop = () => {};
+const noop: (req, res) => void = () => {};
 
 const createAuthorizationMiddleware = ({ authFailCallback = noop } = {}) => {
   const authorizationMiddleware = async (req, res, next) => {
     const jwtToken = req.cookies[JWT_TOKEN_COOKIE_NAME];
     if (!jwtToken) {
-      await authFailCallback();
+      await authFailCallback(req, res);
       return res.sendStatus(403);
     }
     try {
@@ -23,7 +23,7 @@ const createAuthorizationMiddleware = ({ authFailCallback = noop } = {}) => {
 
       req.user = { userId, username };
     } catch (err) {
-      authFailCallback();
+      authFailCallback(req, res);
       return res.sendStatus(403);
     }
 

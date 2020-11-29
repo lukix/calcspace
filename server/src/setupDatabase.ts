@@ -122,6 +122,13 @@ const queries = [
       )
     `,
   },
+  {
+    name: 'addUserAgentColumnToStatsTable',
+    sql: `
+      ALTER TABLE stats
+      ADD COLUMN IF NOT EXISTS user_agent varchar(150) DEFAULT NULL
+    `,
+  },
 ];
 
 const setupDatabase = async () => {
