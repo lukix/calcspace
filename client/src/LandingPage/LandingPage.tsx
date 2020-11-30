@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
+import Spinner from '../shared/spinner';
 import { SignInModal } from './signInModal';
-import CodeSnippet from './CodeSnippet/index';
 import {
   COMPLEX_CALCULATIONS_FRAMES,
   CONVERTING_UNITS_FRAMES,
   FINDING_MISTAKES_FRAMES,
 } from './snippetsFrames';
 import styles from './LandingPage.module.scss';
+
+const CodeSnippet = lazy(() => import('./CodeSnippet/index'));
 
 const useAnimatedString = (frames: { value: string; delay: number }[]): string => {
   const [frameIndex, setFrameIndex] = useState(0);
@@ -44,12 +46,14 @@ const LandingPage: React.FC<LandingPageProps> = () => {
             results. It supports units of measurement, so it's great for physics and engineering.
             Sharing mechanism makes it easy to colaborate with other people.
           </p>
-          <h2>Build complex multi-line calculations and see results as you type</h2>
-          <CodeSnippet code={complexCalculationsCode} />
-          <h2>Don't waste time converting units by hand</h2>
-          <CodeSnippet code={convertingUnitsCode} />
-          <h2>Find mistakes in your calculations with no effort</h2>
-          <CodeSnippet code={findingMistakesCode} />
+          <Suspense fallback={<Spinner centered />}>
+            <h2>Build complex multi-line calculations and see results as you type</h2>
+            <CodeSnippet code={complexCalculationsCode} />
+            <h2>Don't waste time converting units by hand</h2>
+            <CodeSnippet code={convertingUnitsCode} />
+            <h2>Find mistakes in your calculations with no effort</h2>
+            <CodeSnippet code={findingMistakesCode} />
+          </Suspense>
         </div>
         <div className={styles.modalsContainer}>
           <div className={styles.modalsInnerWrapper}>

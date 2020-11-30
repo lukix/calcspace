@@ -1,14 +1,15 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
 import { SignUpModal } from '../signUpModal';
-import SharedEditorDataProvider from '../sharedEditor/SharedEditorDataProvider';
 import LandingPage from '../LandingPage';
 import routes from '../shared/routes';
 import { UserProfileModal } from './userProfileModal';
-import AuthorizedApp from './AuthorizedApp';
 import { actions as reduxActions, selectors } from './store';
+
+const AuthorizedApp = lazy(() => import('./AuthorizedApp'));
+const SharedEditorDataProvider = lazy(() => import('../sharedEditor/SharedEditorDataProvider'));
 
 interface AppProps {
   user: { username: string } | null;
@@ -54,14 +55,20 @@ const App: React.FC<AppProps> = ({
             <SignUpModal />
           </Route>
           <Route path={routes.sharedEditFile.path} exact>
-            <SharedEditorDataProvider user={user} showUserModal={showUserModal} />
+            <Suspense fallback={<Spinner centered />}>
+              <SharedEditorDataProvider user={user} showUserModal={showUserModal} />
+            </Suspense>
           </Route>
           <Route path={routes.sharedViewFile.path} exact>
-            <SharedEditorDataProvider user={user} showUserModal={showUserModal} viewOnly />
+            <Suspense fallback={<Spinner centered />}>
+              <SharedEditorDataProvider user={user} showUserModal={showUserModal} viewOnly />
+            </Suspense>
           </Route>
           {user && (
             <Route path={routes.home.path}>
-              <AuthorizedApp showUserModal={showUserModal} />
+              <Suspense fallback={<Spinner centered />}>
+                <AuthorizedApp showUserModal={showUserModal} />
+              </Suspense>
             </Route>
           )}
           <Route path={routes.home.path} exact>
