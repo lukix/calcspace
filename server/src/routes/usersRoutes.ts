@@ -6,7 +6,7 @@ import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
 const truncateUserAgent = (userAgent) => {
-  const maxLength = 150;
+  const maxLength = 200;
   if (!userAgent) {
     return userAgent;
   }

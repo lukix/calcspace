@@ -129,6 +129,13 @@ const queries = [
       ADD COLUMN IF NOT EXISTS user_agent varchar(150) DEFAULT NULL
     `,
   },
+  {
+    name: 'changeUserAgentColumnSize',
+    sql: `
+      ALTER TABLE stats
+      ALTER COLUMN user_agent type varchar(200)
+    `,
+  },
 ];
 
 const setupDatabase = async () => {
