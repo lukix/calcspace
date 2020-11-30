@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
@@ -17,21 +17,32 @@ interface AppProps {
   fetchLoggedInUser: Function;
 }
 
+const LAST_VISIT_DATE_KEY = 'lastVisitDate';
+const getLastVisitDate = () => localStorage.getItem(LAST_VISIT_DATE_KEY);
+const setLastVisitDate = (value) => localStorage.setItem(LAST_VISIT_DATE_KEY, value);
+
 const App: React.FC<AppProps> = ({
   fetchLoggedInUser,
   user,
   isFetchingUser,
   fetchingUserError,
 }) => {
-  useEffect(() => {
-    fetchLoggedInUser();
+  const fetchUser = useCallback(async () => {
+    await fetchLoggedInUser();
+    setLastVisitDate(new Date().toISOString());
   }, [fetchLoggedInUser]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const showUserModal = () => setIsUserModalVisible(true);
   const hideUserModal = () => setIsUserModalVisible(false);
 
-  if (isFetchingUser || (!user && !fetchingUserError)) {
+  const hasSiteBeenAlreadyVisited = Boolean(getLastVisitDate());
+
+  if (hasSiteBeenAlreadyVisited && (isFetchingUser || (!user && !fetchingUserError))) {
     return <Spinner centered />;
   }
 
