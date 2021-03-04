@@ -1,25 +1,22 @@
 import jwt from 'jsonwebtoken';
-import getNewJwtTokenCookie from './getNewJwtTokenCookie';
-import { JWT_SECRET_KEY, JWT_TOKEN_COOKIE_NAME, TOKEN_RENEW_AFTER_MS } from '../config';
+import { JWT_SECRET_KEY } from '../config';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop: (req, res) => void = () => {};
 
 const createAuthorizationMiddleware = ({ authFailCallback = noop } = {}) => {
   const authorizationMiddleware = async (req, res, next) => {
-    const jwtToken = req.cookies[JWT_TOKEN_COOKIE_NAME];
+    const [authType, jwtToken] = (req.headers.authorization || '').split(' ');
     if (!jwtToken) {
       await authFailCallback(req, res);
       return res.sendStatus(403);
     }
+    if (authType !== 'Bearer') {
+      await authFailCallback(req, res);
+      return res.status(403).send({ message: 'Unsupported authorization type' });
+    }
     try {
-      const { userId, username, iat: issuedAtTime } = jwt.verify(jwtToken, JWT_SECRET_KEY);
-
-      const shouldRenewToken = new Date().getTime() - issuedAtTime * 1e3 > TOKEN_RENEW_AFTER_MS;
-      if (shouldRenewToken) {
-        const jwtTokenCookie = getNewJwtTokenCookie(userId, username);
-        res.cookie(jwtTokenCookie.name, jwtTokenCookie.value, jwtTokenCookie.options);
-      }
+      const { userId, username } = jwt.verify(jwtToken, JWT_SECRET_KEY);
 
       req.user = { userId, username };
     } catch (err) {

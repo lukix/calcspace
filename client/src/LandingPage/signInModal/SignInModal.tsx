@@ -11,6 +11,7 @@ import routes from '../../shared/routes';
 import useCreateAndOpenSharedFile from '../../shared/useCreateAndOpenSharedFile';
 import sharedStyles from '../../shared/shared.module.scss';
 import { SignInUpModalsStyles } from '../../shared/signInUpModals';
+import { setAuthToken } from '../../shared/authToken';
 import styles from './SignInModal.module.scss';
 
 const createSharedFileAction = () => httpRequest.post(`shared-files`);
@@ -38,7 +39,11 @@ const LogInModal: React.FC<LogInModalProps> = () => {
       try {
         formikProps.setStatus(null);
         formikProps.setSubmitting(true);
-        await httpRequest.post(`users/authenticate`, { username, password });
+        const { token, expirationTime } = await httpRequest.post(`users/authenticate`, {
+          username,
+          password,
+        });
+        setAuthToken({ token, tokenExpirationTime: expirationTime });
         setIsRedirecting(true);
         window.location.replace(routes.home.path);
       } catch (err) {

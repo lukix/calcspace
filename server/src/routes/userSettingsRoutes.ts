@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import * as yup from 'yup';
 import { SALT_ROUNDS } from '../config';
 import { validateBodyWithYup } from '../shared/express-helpers';
-import { JWT_TOKEN_COOKIE_NAME } from '../config';
 
 export default ({ dbClient }) => {
   const changePassword = {
@@ -45,7 +44,7 @@ export default ({ dbClient }) => {
         password: yup.string().required(),
       })
     ),
-    handler: async ({ body, user: { username } }, res) => {
+    handler: async ({ body, user: { username } }) => {
       const { password } = body;
       const user = await dbClient
         .query('SELECT id, password FROM users WHERE name = $1', [username])
@@ -62,8 +61,6 @@ export default ({ dbClient }) => {
 
       await dbClient.query('DELETE FROM files WHERE user_id = $1', [user.id]);
       await dbClient.query('DELETE FROM users WHERE id = $1', [user.id]);
-
-      res.clearCookie(JWT_TOKEN_COOKIE_NAME);
     },
   };
 
