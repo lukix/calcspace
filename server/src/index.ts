@@ -20,61 +20,70 @@ import { DATABASE_URL, PORT, CLIENT_URL } from './config';
 import userSettingsRoutes from './routes/userSettingsRoutes';
 import SharedFilesManager from './sharedFilesManager';
 
+console.log('Starting application');
+
 (async () => {
-  await setupDatabase();
-
-  const app = express();
-  app.disable('x-powered-by');
-
-  app.use(cors({ credentials: true, origin: CLIENT_URL }));
-  app.use(bodyParser.json());
-  app.use(cookieParser());
-
-  const dbClient = new Client({
-    connectionString: DATABASE_URL,
-  });
-
   try {
-    await dbClient.connect();
-  } catch (err) {
-    console.log('ERROR WHILE CONNECTING TO THE DB');
-    throw err;
+    console.log('Setting up the DB...');
+    await setupDatabase();
+    console.log('DB setup completed.');
+
+    const app = express();
+    app.disable('x-powered-by');
+
+    app.use(cors({ credentials: true, origin: CLIENT_URL }));
+    app.use(bodyParser.json());
+    app.use(cookieParser());
+
+    const dbClient = new Client({
+      connectionString: DATABASE_URL,
+    });
+
+    try {
+      await dbClient.connect();
+    } catch (err) {
+      console.log('ERROR WHILE CONNECTING TO THE DB');
+      throw err;
+    }
+
+    console.log('Connected successfully to the DB server');
+
+    const http = app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
+    const io = socketIO(http);
+    const sharedFilesManager = SharedFilesManager({ io });
+
+    const testRoute = {
+      path: '/',
+      method: 'get',
+      handler: () => ({ response: 'Hello World!' }),
+    };
+
+    const routesDefinitions = nestRoutes('/api', [
+      testRoute,
+      ...nestRoutes('/users', usersRoutes({ dbClient })),
+      ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient, sharedFilesManager })),
+      ...applyMiddlewares(
+        [createAuthorizationMiddleware()],
+        [
+          ...nestRoutes('/user-settings', userSettingsRoutes({ dbClient })),
+          ...nestRoutes('/files', filesRoutes({ dbClient, sharedFilesManager })),
+        ]
+      ),
+    ]);
+
+    const rootRouter = createRouterFromRouteObjects(routesDefinitions);
+
+    console.log(routesDefinitions.map(({ path, method }) => `${path} (${method})`));
+
+    app.use(rootRouter);
+
+    process.on('SIGINT', async () => {
+      dbClient.end();
+      console.log('DB disconnected on app termination');
+      process.exit(0);
+    });
+  } catch (error) {
+    console.log('Application has crashed.');
+    console.error(error);
   }
-
-  console.log('Connected successfully to the DB server');
-
-  const http = app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
-  const io = socketIO(http);
-  const sharedFilesManager = SharedFilesManager({ io });
-
-  const testRoute = {
-    path: '/',
-    method: 'get',
-    handler: () => ({ response: 'Hello World!' }),
-  };
-
-  const routesDefinitions = nestRoutes('/api', [
-    testRoute,
-    ...nestRoutes('/users', usersRoutes({ dbClient })),
-    ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient, sharedFilesManager })),
-    ...applyMiddlewares(
-      [createAuthorizationMiddleware()],
-      [
-        ...nestRoutes('/user-settings', userSettingsRoutes({ dbClient })),
-        ...nestRoutes('/files', filesRoutes({ dbClient, sharedFilesManager })),
-      ]
-    ),
-  ]);
-
-  const rootRouter = createRouterFromRouteObjects(routesDefinitions);
-
-  console.log(routesDefinitions.map(({ path, method }) => `${path} (${method})`));
-
-  app.use(rootRouter);
-
-  process.on('SIGINT', async () => {
-    dbClient.end();
-    console.log('DB disconnected on app termination');
-    process.exit(0);
-  });
 })();
