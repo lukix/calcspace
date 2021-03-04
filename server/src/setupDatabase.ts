@@ -142,7 +142,9 @@ const setupDatabase = async () => {
   const client = new Client({
     connectionString: DATABASE_URL,
   });
+  console.log('Connecting to the DB for setup phase...');
   await client.connect();
+  console.log('Connected.');
   try {
     for (const { name, sql } of queries) {
       console.log(`Executing ${name}...`);

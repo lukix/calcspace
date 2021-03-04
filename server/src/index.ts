@@ -25,8 +25,13 @@ console.log('Starting application');
 (async () => {
   try {
     console.log('Setting up the DB...');
-    await setupDatabase();
-    console.log('DB setup completed.');
+    try {
+      await setupDatabase();
+      console.log('DB setup completed.');
+    } catch (error) {
+      console.error(error);
+      console.log('DB setup failed. Proceeding without setup...');
+    }
 
     const app = express();
     app.disable('x-powered-by');
