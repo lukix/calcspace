@@ -5,6 +5,7 @@ import Spinner from '../shared/spinner';
 import { SignUpModal } from '../signUpModal';
 import LandingPage from '../LandingPage';
 import routes from '../shared/routes';
+import { hasValidAuthToken } from '../shared/authToken';
 import { UserProfileModal } from './userProfileModal';
 import { actions as reduxActions, selectors } from './store';
 
@@ -18,10 +19,6 @@ interface AppProps {
   fetchLoggedInUser: Function;
 }
 
-const LAST_VISIT_DATE_KEY = 'lastVisitDate';
-const getLastVisitDate = () => localStorage.getItem(LAST_VISIT_DATE_KEY);
-const setLastVisitDate = (value) => localStorage.setItem(LAST_VISIT_DATE_KEY, value);
-
 const App: React.FC<AppProps> = ({
   fetchLoggedInUser,
   user,
@@ -30,7 +27,6 @@ const App: React.FC<AppProps> = ({
 }) => {
   const fetchUser = useCallback(async () => {
     await fetchLoggedInUser();
-    setLastVisitDate(new Date().toISOString());
   }, [fetchLoggedInUser]);
 
   useEffect(() => {
@@ -41,9 +37,7 @@ const App: React.FC<AppProps> = ({
   const showUserModal = () => setIsUserModalVisible(true);
   const hideUserModal = () => setIsUserModalVisible(false);
 
-  const hasSiteBeenAlreadyVisited = Boolean(getLastVisitDate());
-
-  if (hasSiteBeenAlreadyVisited && (isFetchingUser || (!user && !fetchingUserError))) {
+  if (hasValidAuthToken() && (isFetchingUser || (!user && !fetchingUserError))) {
     return <Spinner centered />;
   }
 

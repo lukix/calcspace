@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
-import getJwtTokenCookie from '../auth/getNewJwtTokenCookie';
-import { SALT_ROUNDS, JWT_TOKEN_COOKIE_NAME, SIGN_OUT_URL } from '../config';
+import getNewJwtToken from '../auth/getNewJwtToken';
+import { SALT_ROUNDS, SIGN_OUT_URL } from '../config';
 import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
@@ -23,7 +23,7 @@ export default ({ dbClient }) => {
         password: yup.string().required(),
       })
     ),
-    handler: async ({ body }, res) => {
+    handler: async ({ body }) => {
       const AUTH_FAILED_RESPONSE = {
         response: { message: 'Invalid username or password' },
         status: 401,
@@ -36,9 +36,8 @@ export default ({ dbClient }) => {
         return AUTH_FAILED_RESPONSE;
       }
 
-      const jwtTokenCookie = getJwtTokenCookie(user.id, username);
-      res.cookie(jwtTokenCookie.name, jwtTokenCookie.value, jwtTokenCookie.options);
-      return { response: { username } };
+      const { token, expirationTime } = getNewJwtToken(user.id, username);
+      return { response: { token, expirationTime } };
     },
   };
 
@@ -46,7 +45,6 @@ export default ({ dbClient }) => {
     path: '/sign-out',
     method: 'get',
     handler: async (req, res) => {
-      res.clearCookie(JWT_TOKEN_COOKIE_NAME);
       res.redirect(SIGN_OUT_URL);
     },
   };
