@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
-import getNewJwtToken from '../auth/getNewJwtToken';
+import { createToken } from '../auth/jwtTokenUtils';
 import { SALT_ROUNDS, SIGN_OUT_URL } from '../config';
 import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
@@ -36,7 +36,8 @@ export default ({ dbClient }) => {
         return AUTH_FAILED_RESPONSE;
       }
 
-      const { token, expirationTime } = getNewJwtToken(user.id, username);
+      // TODO: This endpoint should return refreshToken
+      const { token, expirationTime } = createToken(user.id);
       return { response: { token, expirationTime } };
     },
   };
@@ -121,14 +122,20 @@ export default ({ dbClient }) => {
       }),
     ],
     handler: async (req) => {
-      const { username, userId } = req.user;
+      const { userId } = req.user;
       const userAgent = req.get('User-Agent');
       const truncatedUserAgent = truncateUserAgent(userAgent);
+      const user = await dbClient
+        .query(`SELECT name FROM users WHERE id = $1`, [userId])
+        .then(({ rows }) => rows[0]);
       await dbClient.query(
         `INSERT INTO stats (action, user_agent, user_id) VALUES ('LOAD_APP', $1, $2)`,
         [truncatedUserAgent, userId]
       );
-      return { response: { username } };
+      if (user) {
+        return { response: { username: user.name } };
+      }
+      return { status: 404 };
     },
   };
 

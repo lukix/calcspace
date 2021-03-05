@@ -13,10 +13,10 @@ export default ({ dbClient }) => {
         newPassword: yup.string().min(6).max(72).required(),
       })
     ),
-    handler: async ({ body, user: { username } }) => {
+    handler: async ({ body, user: { userId } }) => {
       const { currentPassword, newPassword } = body;
       const user = await dbClient
-        .query('SELECT id, password FROM users WHERE name = $1', [username])
+        .query('SELECT id, password FROM users WHERE id = $1', [userId])
         .then(({ rows }) => rows[0]);
 
       const AUTH_FAILED_RESPONSE = {
@@ -29,9 +29,9 @@ export default ({ dbClient }) => {
       }
 
       const hashedNewPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
-      await dbClient.query('UPDATE users SET password = $1 WHERE name = $2', [
+      await dbClient.query('UPDATE users SET password = $1 WHERE id = $2', [
         hashedNewPassword,
-        username,
+        userId,
       ]);
     },
   };
@@ -44,10 +44,10 @@ export default ({ dbClient }) => {
         password: yup.string().required(),
       })
     ),
-    handler: async ({ body, user: { username } }) => {
+    handler: async ({ body, user: { userId } }) => {
       const { password } = body;
       const user = await dbClient
-        .query('SELECT id, password FROM users WHERE name = $1', [username])
+        .query('SELECT password FROM users WHERE id = $1', [userId])
         .then(({ rows }) => rows[0]);
 
       const AUTH_FAILED_RESPONSE = {
@@ -59,8 +59,8 @@ export default ({ dbClient }) => {
         return AUTH_FAILED_RESPONSE;
       }
 
-      await dbClient.query('DELETE FROM files WHERE user_id = $1', [user.id]);
-      await dbClient.query('DELETE FROM users WHERE id = $1', [user.id]);
+      await dbClient.query('DELETE FROM files WHERE user_id = $1', [userId]);
+      await dbClient.query('DELETE FROM users WHERE id = $1', [userId]);
     },
   };
 
