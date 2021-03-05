@@ -136,6 +136,16 @@ const queries = [
       ALTER COLUMN user_agent type varchar(200)
     `,
   },
+  {
+    name: 'createRefreshTokens',
+    sql: `
+      CREATE TABLE IF NOT EXISTS inactive_refresh_tokens (
+        id          UUID NOT NULL DEFAULT uuid_generate_v4() CONSTRAINT inactive_refresh_tokensPK PRIMARY KEY,
+        token       varchar(40) NOT NULL,
+        expire_at   timestamptz
+      )
+    `,
+  },
 ];
 
 const setupDatabase = async () => {
