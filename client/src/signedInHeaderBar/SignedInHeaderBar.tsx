@@ -7,7 +7,7 @@ import Spinner from '../shared/spinner';
 import { selectors, actions } from '../shared/filesStore';
 import HeaderBar from '../shared/headerBar';
 import routes from '../shared/routes';
-import { clearAuthToken } from '../shared/authToken';
+import { clearTokens } from '../shared/authTokens';
 import styles from './SignedInHeaderBar.module.scss';
 
 interface SignedInHeaderBarProps {
@@ -61,7 +61,7 @@ const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
       }
       icons={
         <>
-          <a href={SIGN_OUT_URL} className={styles.signOutLink} onClick={clearAuthToken}>
+          <a href={SIGN_OUT_URL} className={styles.signOutLink} onClick={clearTokens}>
             Log Out
           </a>
           {username && <FaUserCircle title="Account Settings" onClick={onAvatarClick} />}

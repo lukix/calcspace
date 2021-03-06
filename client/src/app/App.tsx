@@ -5,7 +5,7 @@ import Spinner from '../shared/spinner';
 import { SignUpModal } from '../signUpModal';
 import LandingPage from '../LandingPage';
 import routes from '../shared/routes';
-import { hasValidAuthToken } from '../shared/authToken';
+import { hasValidRefreshToken } from '../shared/authTokens';
 import { UserProfileModal } from './userProfileModal';
 import { actions as reduxActions, selectors } from './store';
 
@@ -37,7 +37,7 @@ const App: React.FC<AppProps> = ({
   const showUserModal = () => setIsUserModalVisible(true);
   const hideUserModal = () => setIsUserModalVisible(false);
 
-  if (hasValidAuthToken() && (isFetchingUser || (!user && !fetchingUserError))) {
+  if (hasValidRefreshToken() && (isFetchingUser || (!user && !fetchingUserError))) {
     return <Spinner centered />;
   }
 

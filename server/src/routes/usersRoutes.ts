@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
-import { createToken } from '../auth/jwtTokenUtils';
+import { createToken, createRefreshToken, verifyToken, tokenTypes } from '../auth/jwtTokenUtils';
 import { SALT_ROUNDS, SIGN_OUT_URL } from '../config';
 import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
@@ -36,8 +36,27 @@ export default ({ dbClient }) => {
         return AUTH_FAILED_RESPONSE;
       }
 
-      // TODO: This endpoint should return refreshToken
-      const { token, expirationTime } = createToken(user.id);
+      const { token, expirationTime } = createRefreshToken(user.id);
+      return { response: { token, expirationTime } };
+    },
+  };
+
+  const renewToken = {
+    path: '/renew-token',
+    method: 'post',
+    validate: validateBodyWithYup(
+      yup.object({
+        refreshToken: yup.string().required(),
+      })
+    ),
+    handler: async ({ body }) => {
+      const { refreshToken } = body;
+      const { userId } = verifyToken(refreshToken, tokenTypes.REFRESH);
+
+      // TODO: Check if user still exists in the DB
+      // TODO: Check refreshToken against blacklist in the DB
+
+      const { token, expirationTime } = createToken(userId);
       return { response: { token, expirationTime } };
     },
   };
@@ -139,5 +158,12 @@ export default ({ dbClient }) => {
     },
   };
 
-  return [authenticate, signOut, addUser, getUsernameAvailability, getCurrentlyLoggedInUser];
+  return [
+    authenticate,
+    renewToken,
+    signOut,
+    addUser,
+    getUsernameAvailability,
+    getCurrentlyLoggedInUser,
+  ];
 };

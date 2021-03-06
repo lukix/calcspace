@@ -11,7 +11,7 @@ import routes from '../../shared/routes';
 import useCreateAndOpenSharedFile from '../../shared/useCreateAndOpenSharedFile';
 import sharedStyles from '../../shared/shared.module.scss';
 import { SignInUpModalsStyles } from '../../shared/signInUpModals';
-import { setAuthToken } from '../../shared/authToken';
+import { setRefreshToken } from '../../shared/authTokens';
 import styles from './SignInModal.module.scss';
 
 const createSharedFileAction = () => httpRequest.post(`shared-files`);
@@ -43,7 +43,7 @@ const LogInModal: React.FC<LogInModalProps> = () => {
           username,
           password,
         });
-        setAuthToken({ token, tokenExpirationTime: expirationTime });
+        setRefreshToken(token, expirationTime);
         setIsRedirecting(true);
         window.location.replace(routes.home.path);
       } catch (err) {

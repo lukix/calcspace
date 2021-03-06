@@ -10,6 +10,14 @@ export const tokenTypes = {
   REFRESH: 'refresh_v1',
 };
 
+export const verifyToken = (jwtToken, expectedType) => {
+  const { type, ...payload } = jwt.verify(jwtToken, JWT_SECRET_KEY);
+  if (type !== expectedType) {
+    throw new Error('Incorrect token type');
+  }
+  return payload;
+};
+
 export const createToken = (userId) => {
   const token = jwt.sign({ userId, type: tokenTypes.MAIN }, JWT_SECRET_KEY, {
     expiresIn: `${TOKEN_EXPIRATION_DURATION_MS}ms`,
