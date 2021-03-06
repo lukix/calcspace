@@ -8,7 +8,7 @@ import FilesList from '../filesList/FilesList';
 import UserGuide from '../shared/userGuide';
 import routes from '../shared/routes';
 import UnitsList from './UnitsList';
-import { selectors } from './store';
+import { selectors } from '../shared/userDataStore';
 import styles from './App.module.scss';
 
 interface AuthorizedAppProps {

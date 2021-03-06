@@ -1,20 +1,60 @@
 import axios from 'axios';
-import { API_URL } from '../config';
+import {
+  API_URL,
+  RENEW_TOKEN_URL,
+  FIRST_REQUEST_REFRESH_TOKEN_EXPIRATION_MARGIN_MS,
+} from '../config';
 import routes from '../shared/routes';
-import { getAuthToken } from '../shared/authToken';
+import {
+  hasValidAuthToken,
+  hasValidRefreshToken,
+  setAuthToken,
+  getAuthToken,
+  getRefreshToken,
+  clearTokens,
+} from './authTokens';
 
-const getAuthHeader = () => {
-  const token = getAuthToken();
-  if (!token) {
+let hasFirstRequestBeenSent = false;
+
+const getAuthHeader = async () => {
+  if (
+    !hasFirstRequestBeenSent &&
+    !hasValidRefreshToken(FIRST_REQUEST_REFRESH_TOKEN_EXPIRATION_MARGIN_MS)
+  ) {
+    clearTokens();
     return {};
   }
 
-  return { Authorization: `Bearer ${token}` };
+  if (hasValidAuthToken()) {
+    return { Authorization: `Bearer ${getAuthToken()}` };
+  }
+  if (hasValidRefreshToken()) {
+    const refreshToken = getRefreshToken();
+    try {
+      const {
+        data: { token, expirationTime },
+      } = await axios.request({
+        method: 'post',
+        url: RENEW_TOKEN_URL,
+        data: { refreshToken },
+        withCredentials: true,
+      });
+      setAuthToken(token, expirationTime);
+      return { Authorization: `Bearer ${token}` };
+    } catch (error) {
+      console.error('Renewing auth token failed');
+      console.error(error);
+      return {};
+    }
+  }
+
+  return {};
 };
 
 const HttpRequest = ({ baseUrl, sendAuthHeader = false, responseErrorHandlers = {} }) => {
-  const request = (method) => (url: string, data?: any) => {
-    const authHeader = sendAuthHeader ? getAuthHeader() : {};
+  const request = (method) => async (url: string, data?: any) => {
+    const authHeader = sendAuthHeader ? await getAuthHeader() : {};
+    hasFirstRequestBeenSent = true;
 
     return axios
       .request({

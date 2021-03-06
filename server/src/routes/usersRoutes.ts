@@ -1,7 +1,13 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
-import getNewJwtToken from '../auth/getNewJwtToken';
-import { SALT_ROUNDS, SIGN_OUT_URL } from '../config';
+import {
+  createToken,
+  createRefreshToken,
+  verifyToken,
+  deactivateToken,
+  tokenTypes,
+} from '../auth/jwtTokenUtils';
+import { SALT_ROUNDS } from '../config';
 import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
@@ -36,16 +42,82 @@ export default ({ dbClient }) => {
         return AUTH_FAILED_RESPONSE;
       }
 
-      const { token, expirationTime } = getNewJwtToken(user.id, username);
+      const { token, expirationTime } = createRefreshToken(user.id);
       return { response: { token, expirationTime } };
+    },
+  };
+
+  const renewToken = {
+    path: '/renew-token',
+    method: 'post',
+    validate: validateBodyWithYup(
+      yup.object({
+        refreshToken: yup.string().required(),
+      })
+    ),
+    handler: async ({ body }) => {
+      const { refreshToken } = body;
+
+      const AUTH_FAILED_RESPONSE = {
+        status: 403,
+        response: { message: 'Token verification failed' },
+      };
+
+      try {
+        const { userId } = verifyToken(refreshToken, tokenTypes.REFRESH);
+        const { token, expirationTime } = createToken(userId);
+
+        const user = await dbClient
+          .query('SELECT id FROM users WHERE id = $1', [userId])
+          .then(({ rows }) => rows[0]);
+
+        if (!user) {
+          return AUTH_FAILED_RESPONSE;
+        }
+
+        const blackListedToken = await dbClient
+          .query('SELECT id FROM inactive_refresh_tokens WHERE token = $1', [refreshToken])
+          .then(({ rows }) => rows[0]);
+
+        if (blackListedToken) {
+          return AUTH_FAILED_RESPONSE;
+        }
+
+        return { response: { token, expirationTime } };
+      } catch {
+        return AUTH_FAILED_RESPONSE;
+      }
     },
   };
 
   const signOut = {
     path: '/sign-out',
-    method: 'get',
-    handler: async (req, res) => {
-      res.redirect(SIGN_OUT_URL);
+    method: 'post',
+    middlewares: [createAuthorizationMiddleware()],
+    validate: validateBodyWithYup(
+      yup.object({
+        refreshToken: yup.string().required(),
+      })
+    ),
+    handler: async ({ body, authToken }) => {
+      const { refreshToken } = body;
+      try {
+        const { exp } = verifyToken(refreshToken, tokenTypes.REFRESH);
+        const expireAt = new Date(exp * 1000);
+        await dbClient.query(
+          'INSERT INTO inactive_refresh_tokens (token, expire_at) VALUES ($1, $2)',
+          [refreshToken, expireAt]
+        );
+        deactivateToken(authToken.token, authToken.exp);
+        return { status: 200 };
+      } catch (error) {
+        console.error('LOGOUT ERROR');
+        console.error(error);
+        return {
+          status: 400,
+          response: { message: 'Invalid refresh token provided' },
+        };
+      }
     },
   };
 
@@ -121,16 +193,29 @@ export default ({ dbClient }) => {
       }),
     ],
     handler: async (req) => {
-      const { username, userId } = req.user;
+      const { userId } = req.user;
       const userAgent = req.get('User-Agent');
       const truncatedUserAgent = truncateUserAgent(userAgent);
+      const user = await dbClient
+        .query(`SELECT name FROM users WHERE id = $1`, [userId])
+        .then(({ rows }) => rows[0]);
       await dbClient.query(
         `INSERT INTO stats (action, user_agent, user_id) VALUES ('LOAD_APP', $1, $2)`,
         [truncatedUserAgent, userId]
       );
-      return { response: { username } };
+      if (user) {
+        return { response: { username: user.name } };
+      }
+      return { status: 404 };
     },
   };
 
-  return [authenticate, signOut, addUser, getUsernameAvailability, getCurrentlyLoggedInUser];
+  return [
+    authenticate,
+    renewToken,
+    signOut,
+    addUser,
+    getUsernameAvailability,
+    getCurrentlyLoggedInUser,
+  ];
 };

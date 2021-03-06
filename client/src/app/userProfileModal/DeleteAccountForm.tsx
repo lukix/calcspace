@@ -5,7 +5,7 @@ import httpRequest from '../../shared/httpRequest';
 import { ModalFormField, SubmitButton } from '../../shared/modal';
 import routes from '../../shared/routes';
 import sharedStyles from '../../shared/shared.module.scss';
-import { clearAuthToken } from '../../shared/authToken';
+import { clearTokens } from '../../shared/authTokens';
 import styles from './UserProfileModal.module.scss';
 
 const validationSchema = yup.object().shape({
@@ -43,7 +43,7 @@ const DeleteAccountForm: React.FC<DeleteAccountFormProps> = () => {
         formikProps.setStatus(null);
         formikProps.setSubmitting(true);
         await httpRequest.delete(`user-settings/account`, { password });
-        clearAuthToken();
+        clearTokens();
         formik.resetForm();
         formikProps.setStatus(SUCCESS_STATUS);
         setTimeout(() => {

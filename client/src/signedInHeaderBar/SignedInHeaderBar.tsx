@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaBars, FaUserCircle, FaExclamationCircle } from 'react-icons/fa';
-import { SIGN_OUT_URL } from '../config';
 import Spinner from '../shared/spinner';
 import { selectors, actions } from '../shared/filesStore';
+import {
+  selectors as userDataSelectors,
+  actions as userDataActions,
+} from '../shared/userDataStore';
 import HeaderBar from '../shared/headerBar';
 import routes from '../shared/routes';
-import { clearAuthToken } from '../shared/authToken';
 import styles from './SignedInHeaderBar.module.scss';
 
 interface SignedInHeaderBarProps {
@@ -20,6 +22,8 @@ interface SignedInHeaderBarProps {
   areThereAnyChangesToBeSaved: boolean;
   areThereAnySynchronizationErrors: boolean;
   setFilesPanelVisible: Function;
+  isLoggingOut: boolean;
+  logOut: Function;
 }
 
 const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
@@ -32,12 +36,15 @@ const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
   areThereAnyChangesToBeSaved,
   areThereAnySynchronizationErrors,
   setFilesPanelVisible,
+  isLoggingOut,
+  logOut,
 }) => {
   const showSpinner = isSynchronizingAnyFile || areThereAnyChangesToBeSaved;
   const showError = areThereAnySynchronizationErrors && !showSpinner;
   const toggleFilesPanel = () => {
     setFilesPanelVisible(!isFilesPanelVisible);
   };
+
   return (
     <HeaderBar
       headerTitle={
@@ -61,9 +68,10 @@ const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
       }
       icons={
         <>
-          <a href={SIGN_OUT_URL} className={styles.signOutLink} onClick={clearAuthToken}>
-            Log Out
-          </a>
+          <Spinner size={18} show={isLoggingOut} />
+          <button className={styles.signOutLink} disabled={isLoggingOut} onClick={() => logOut()}>
+            {isLoggingOut ? 'Logging Out' : 'Log Out'}
+          </button>
           {username && <FaUserCircle title="Account Settings" onClick={onAvatarClick} />}
         </>
       }
@@ -77,8 +85,10 @@ export default connect(
     isSynchronizingAnyFile: selectors.isSynchronizingAnyFile(state),
     areThereAnyChangesToBeSaved: selectors.areThereAnyChangesToBeSaved(state),
     areThereAnySynchronizationErrors: selectors.areThereAnySynchronizationErrors(state),
+    isLoggingOut: userDataSelectors.isLoggingOut(state),
   }),
   {
     setFilesPanelVisible: actions.setFilesPanelVisible,
+    logOut: userDataActions.logOut,
   }
 )(SignedInHeaderBar);

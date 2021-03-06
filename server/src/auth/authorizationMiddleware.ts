@@ -1,5 +1,4 @@
-import jwt from 'jsonwebtoken';
-import { JWT_SECRET_KEY } from '../config';
+import { verifyToken, tokenTypes } from './jwtTokenUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop: (req, res) => void = () => {};
@@ -16,9 +15,9 @@ const createAuthorizationMiddleware = ({ authFailCallback = noop } = {}) => {
       return res.status(403).send({ message: 'Unsupported authorization type' });
     }
     try {
-      const { userId, username } = jwt.verify(jwtToken, JWT_SECRET_KEY);
-
-      req.user = { userId, username };
+      const { userId, exp } = verifyToken(jwtToken, tokenTypes.MAIN);
+      req.user = { userId };
+      req.authToken = { token: jwtToken, exp };
     } catch (err) {
       authFailCallback(req, res);
       return res.sendStatus(403);

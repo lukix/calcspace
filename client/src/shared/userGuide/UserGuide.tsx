@@ -14,7 +14,7 @@ const getSharedUrlsDescription = ({ viewEnabled, editEnabled, userManaged }) => 
         <p>
           Any changes you make are automatically saved and are available to anyone through the URL.
           Click "Sharing" button to learn more about sharing options.
-          {deleteInfo}
+          <b>{deleteInfo}</b>
         </p>
       </>
     );
@@ -26,7 +26,7 @@ const getSharedUrlsDescription = ({ viewEnabled, editEnabled, userManaged }) => 
         <p>
           Any changes you make are automatically saved and are available to anyone through the URL.
           Click "Sharing" button to learn more about sharing options.
-          {deleteInfo}
+          <b>{deleteInfo}</b>
         </p>
       </>
     );
