@@ -15,8 +15,9 @@ const createAuthorizationMiddleware = ({ authFailCallback = noop } = {}) => {
       return res.status(403).send({ message: 'Unsupported authorization type' });
     }
     try {
-      const { userId } = verifyToken(jwtToken, tokenTypes.MAIN);
+      const { userId, exp } = verifyToken(jwtToken, tokenTypes.MAIN);
       req.user = { userId };
+      req.authToken = { token: jwtToken, exp };
     } catch (err) {
       authFailCallback(req, res);
       return res.sendStatus(403);

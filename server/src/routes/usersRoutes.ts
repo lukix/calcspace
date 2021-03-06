@@ -1,6 +1,12 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
-import { createToken, createRefreshToken, verifyToken, tokenTypes } from '../auth/jwtTokenUtils';
+import {
+  createToken,
+  createRefreshToken,
+  verifyToken,
+  deactivateToken,
+  tokenTypes,
+} from '../auth/jwtTokenUtils';
 import { SALT_ROUNDS } from '../config';
 import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
@@ -87,13 +93,14 @@ export default ({ dbClient }) => {
   const signOut = {
     path: '/sign-out',
     method: 'post',
+    middlewares: [createAuthorizationMiddleware()],
     validate: validateBodyWithYup(
       yup.object({
         refreshToken: yup.string().required(),
       })
     ),
-    handler: async (req) => {
-      const { refreshToken } = req.body;
+    handler: async ({ body, authToken }) => {
+      const { refreshToken } = body;
       try {
         const { exp } = verifyToken(refreshToken, tokenTypes.REFRESH);
         const expireAt = new Date(exp * 1000);
@@ -101,6 +108,7 @@ export default ({ dbClient }) => {
           'INSERT INTO inactive_refresh_tokens (token, expire_at) VALUES ($1, $2)',
           [refreshToken, expireAt]
         );
+        deactivateToken(authToken.token, authToken.exp);
         return { status: 200 };
       } catch (error) {
         console.error('LOGOUT ERROR');
