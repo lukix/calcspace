@@ -141,7 +141,7 @@ const queries = [
     sql: `
       CREATE TABLE IF NOT EXISTS inactive_refresh_tokens (
         id          UUID NOT NULL DEFAULT uuid_generate_v4() CONSTRAINT inactive_refresh_tokensPK PRIMARY KEY,
-        token       varchar(40) NOT NULL,
+        token       varchar(240) NOT NULL,
         expire_at   timestamptz
       )
     `,

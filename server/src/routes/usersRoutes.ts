@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
 import { createToken, createRefreshToken, verifyToken, tokenTypes } from '../auth/jwtTokenUtils';
-import { SALT_ROUNDS, SIGN_OUT_URL } from '../config';
+import { SALT_ROUNDS } from '../config';
 import createAuthorizationMiddleware from '../auth/authorizationMiddleware';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
@@ -52,25 +52,64 @@ export default ({ dbClient }) => {
     handler: async ({ body }) => {
       const { refreshToken } = body;
 
+      const AUTH_FAILED_RESPONSE = {
+        status: 403,
+        response: { message: 'Token verification failed' },
+      };
+
       try {
         const { userId } = verifyToken(refreshToken, tokenTypes.REFRESH);
         const { token, expirationTime } = createToken(userId);
 
-        // TODO: Check if user still exists in the DB
-        // TODO: Check refreshToken against blacklist in the DB
+        const user = await dbClient
+          .query('SELECT id FROM users WHERE id = $1', [userId])
+          .then(({ rows }) => rows[0]);
+
+        if (!user) {
+          return AUTH_FAILED_RESPONSE;
+        }
+
+        const blackListedToken = await dbClient
+          .query('SELECT id FROM inactive_refresh_tokens WHERE token = $1', [refreshToken])
+          .then(({ rows }) => rows[0]);
+
+        if (blackListedToken) {
+          return AUTH_FAILED_RESPONSE;
+        }
 
         return { response: { token, expirationTime } };
       } catch {
-        return { status: 403, response: { message: 'Token verification failed' } };
+        return AUTH_FAILED_RESPONSE;
       }
     },
   };
 
   const signOut = {
     path: '/sign-out',
-    method: 'get',
-    handler: async (req, res) => {
-      res.redirect(SIGN_OUT_URL);
+    method: 'post',
+    validate: validateBodyWithYup(
+      yup.object({
+        refreshToken: yup.string().required(),
+      })
+    ),
+    handler: async (req) => {
+      const { refreshToken } = req.body;
+      try {
+        const { exp } = verifyToken(refreshToken, tokenTypes.REFRESH);
+        const expireAt = new Date(exp * 1000);
+        await dbClient.query(
+          'INSERT INTO inactive_refresh_tokens (token, expire_at) VALUES ($1, $2)',
+          [refreshToken, expireAt]
+        );
+        return { status: 200 };
+      } catch (error) {
+        console.error('LOGOUT ERROR');
+        console.error(error);
+        return {
+          status: 400,
+          response: { message: 'Invalid refresh token provided' },
+        };
+      }
     },
   };
 

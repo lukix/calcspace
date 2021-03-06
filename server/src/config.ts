@@ -13,4 +13,3 @@ export const REFRESH_TOKEN_EXPIRATION_DURATION_MS = process.env.REFRESH_TOKEN_EX
   ? Number(process.env.REFRESH_TOKEN_EXPIRATION_DURATION_MS)
   : 30 * DAY_IN_MS;
 export const SALT_ROUNDS = 14;
-export const SIGN_OUT_URL = `${CLIENT_URL}`;

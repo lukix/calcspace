@@ -1,7 +1,20 @@
 @import '../style/colors.scss';
 
 .signOutLink {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
   font-size: 1rem;
+
+  &:disabled {
+    cursor: default;
+    color: #888;
+  }
+
+  &:hover:not(&:disabled) {
+    text-decoration: underline;
+  }
 }
 
 .contentContainer {
