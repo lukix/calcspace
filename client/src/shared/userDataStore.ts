@@ -3,8 +3,8 @@ import {
   createAsyncActionTypes,
   createAsyncActionCreator,
   createAsyncActionHandlers,
-} from '../shared/reduxHelpers';
-import { httpRequestWithoutRedirect } from '../shared/httpRequest';
+} from './reduxHelpers';
+import { httpRequestWithoutRedirect } from './httpRequest';
 
 const actionTypes = {
   fetchLoggedInUser: createAsyncActionTypes('FETCH_LOGGED_IN_USER'),

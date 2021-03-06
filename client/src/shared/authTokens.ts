@@ -15,14 +15,14 @@ const getTokenMethods = (tokenKeyName, tokenExpirationTimeKeyName) => {
     localStorage.removeItem(tokenKeyName);
     localStorage.removeItem(tokenExpirationTimeKeyName);
   };
-  const hasValidToken = () => {
+  const hasValidToken = (marginTimeMs = TOKEN_EXPIRATION_MARGIN_MS) => {
     const tokenExpirationTime = localStorage.getItem(tokenExpirationTimeKeyName);
 
     if (!tokenExpirationTime) {
       return false;
     }
 
-    return new Date().getTime() + TOKEN_EXPIRATION_MARGIN_MS < Number(tokenExpirationTime);
+    return new Date().getTime() + marginTimeMs < Number(tokenExpirationTime);
   };
 
   return { getToken, setToken, clearToken, hasValidToken };

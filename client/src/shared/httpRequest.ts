@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { API_URL, RENEW_TOKEN_URL } from '../config';
+import {
+  API_URL,
+  RENEW_TOKEN_URL,
+  FIRST_REQUEST_REFRESH_TOKEN_EXPIRATION_MARGIN_MS,
+} from '../config';
 import routes from '../shared/routes';
 import {
   hasValidAuthToken,
@@ -7,9 +11,20 @@ import {
   setAuthToken,
   getAuthToken,
   getRefreshToken,
+  clearTokens,
 } from './authTokens';
 
+let hasFirstRequestBeenSent = false;
+
 const getAuthHeader = async () => {
+  if (
+    !hasFirstRequestBeenSent &&
+    !hasValidRefreshToken(FIRST_REQUEST_REFRESH_TOKEN_EXPIRATION_MARGIN_MS)
+  ) {
+    clearTokens();
+    return {};
+  }
+
   if (hasValidAuthToken()) {
     return { Authorization: `Bearer ${getAuthToken()}` };
   }
@@ -39,6 +54,7 @@ const getAuthHeader = async () => {
 const HttpRequest = ({ baseUrl, sendAuthHeader = false, responseErrorHandlers = {} }) => {
   const request = (method) => async (url: string, data?: any) => {
     const authHeader = sendAuthHeader ? await getAuthHeader() : {};
+    hasFirstRequestBeenSent = true;
 
     return axios
       .request({

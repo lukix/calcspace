@@ -6,8 +6,8 @@ import { SignUpModal } from '../signUpModal';
 import LandingPage from '../LandingPage';
 import routes from '../shared/routes';
 import { hasValidRefreshToken } from '../shared/authTokens';
+import { actions as reduxActions, selectors } from '../shared/userDataStore';
 import { UserProfileModal } from './userProfileModal';
-import { actions as reduxActions, selectors } from './store';
 
 const AuthorizedApp = lazy(() => import('./AuthorizedApp'));
 const SharedEditorDataProvider = lazy(() => import('../sharedEditor/SharedEditorDataProvider'));

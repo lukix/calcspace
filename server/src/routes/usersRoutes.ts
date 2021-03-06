@@ -51,13 +51,18 @@ export default ({ dbClient }) => {
     ),
     handler: async ({ body }) => {
       const { refreshToken } = body;
-      const { userId } = verifyToken(refreshToken, tokenTypes.REFRESH);
 
-      // TODO: Check if user still exists in the DB
-      // TODO: Check refreshToken against blacklist in the DB
+      try {
+        const { userId } = verifyToken(refreshToken, tokenTypes.REFRESH);
+        const { token, expirationTime } = createToken(userId);
 
-      const { token, expirationTime } = createToken(userId);
-      return { response: { token, expirationTime } };
+        // TODO: Check if user still exists in the DB
+        // TODO: Check refreshToken against blacklist in the DB
+
+        return { response: { token, expirationTime } };
+      } catch {
+        return { status: 403, response: { message: 'Token verification failed' } };
+      }
     },
   };
 

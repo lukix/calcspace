@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Switch, Case, Default } from 'react-when-then';
 
+import { actions as reduxActions } from '../../shared/userDataStore';
 import httpRequest from '../../shared/httpRequest';
 import Spinner from '../../shared/spinner';
 import { Modal, ModalFormField } from '../../shared/modal';
@@ -24,9 +26,11 @@ const validationSchema = yup.object().shape({
 const INVALID_CREDENTIALS_STATUS = 'INVALID_CREDENTIALS_STATUS';
 const OTHER_ERROR_STATUS = 'OTHER_ERROR_STATUS';
 
-interface LogInModalProps {}
+interface LogInModalProps {
+  fetchLoggedInUser: Function;
+}
 
-const LogInModal: React.FC<LogInModalProps> = () => {
+const LogInModal: React.FC<LogInModalProps> = ({ fetchLoggedInUser }) => {
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const formik = useFormik({
@@ -45,14 +49,13 @@ const LogInModal: React.FC<LogInModalProps> = () => {
         });
         setRefreshToken(token, expirationTime);
         setIsRedirecting(true);
-        window.location.replace(routes.home.path);
+        await fetchLoggedInUser();
       } catch (err) {
         formikProps.setStatus(
           err.response && err.response.status === 401
             ? INVALID_CREDENTIALS_STATUS
             : OTHER_ERROR_STATUS
         );
-      } finally {
         formikProps.setSubmitting(false);
       }
     },
@@ -116,4 +119,6 @@ const LogInModal: React.FC<LogInModalProps> = () => {
   );
 };
 
-export default LogInModal;
+export default connect(null, {
+  fetchLoggedInUser: reduxActions.fetchLoggedInUser,
+})(LogInModal);
