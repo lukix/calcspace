@@ -146,6 +146,12 @@ const queries = [
       )
     `,
   },
+  {
+    name: 'cleanUpExpiredTokens',
+    sql: `
+      DELETE FROM inactive_refresh_tokens WHERE expire_at < NOW()
+    `,
+  },
 ];
 
 const setupDatabase = async () => {
