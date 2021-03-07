@@ -15,5 +15,4 @@ export const REFRESH_TOKEN_EXPIRATION_DURATION_MS = process.env.REFRESH_TOKEN_EX
 export const TOKENS_CLEANUP_THRESHOLD = process.env.TOKENS_CLEANUP_THRESHOLD
   ? Number(process.env.TOKENS_CLEANUP_THRESHOLD)
   : 1000;
-export const ENABLE_POSTGRES_SSL = Boolean(process.env.ENABLE_POSTGRES_SSL || false);
 export const SALT_ROUNDS = 14;
