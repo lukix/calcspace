@@ -16,7 +16,7 @@ import filesRoutes from './routes/filesRoutes';
 import sharedFilesRoutes from './routes/sharedFilesRoutes';
 import createAuthorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
-import { DATABASE_URL, PORT, CLIENT_URL } from './config';
+import { DATABASE_URL, ENABLE_POSTGRES_SSL, PORT, CLIENT_URL } from './config';
 import userSettingsRoutes from './routes/userSettingsRoutes';
 import SharedFilesManager from './sharedFilesManager';
 
@@ -42,6 +42,7 @@ console.log('Starting application');
 
     const dbClient = new Client({
       connectionString: DATABASE_URL,
+      ssl: ENABLE_POSTGRES_SSL,
     });
 
     try {
