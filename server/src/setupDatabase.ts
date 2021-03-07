@@ -164,6 +164,9 @@ const queries = [
 const setupDatabase = async () => {
   const client = new Client({
     connectionString: DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   });
   console.log('Connecting to the DB for setup phase...');
   await client.connect();

@@ -42,6 +42,9 @@ console.log('Starting application');
 
     const dbClient = new Client({
       connectionString: DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     });
 
     try {
