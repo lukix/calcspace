@@ -152,6 +152,13 @@ const queries = [
       DELETE FROM inactive_refresh_tokens WHERE expire_at < NOW()
     `,
   },
+  {
+    name: 'addDeletedFlagColumnToUsersTable',
+    sql: `
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS deleted BOOLEAN DEFAULT FALSE
+    `,
+  },
 ];
 
 const setupDatabase = async () => {

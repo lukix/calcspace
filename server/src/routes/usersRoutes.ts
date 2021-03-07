@@ -36,7 +36,7 @@ export default ({ dbClient }) => {
       };
       const { username, password } = body;
       const user = await dbClient
-        .query('SELECT id, password FROM users WHERE name = $1', [username])
+        .query('SELECT id, password FROM users WHERE deleted is FALSE AND name = $1', [username])
         .then(({ rows }) => rows[0]);
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return AUTH_FAILED_RESPONSE;
@@ -68,7 +68,7 @@ export default ({ dbClient }) => {
         const { token, expirationTime } = createToken(userId);
 
         const user = await dbClient
-          .query('SELECT id FROM users WHERE id = $1', [userId])
+          .query('SELECT id FROM users WHERE deleted is FALSE AND id = $1', [userId])
           .then(({ rows }) => rows[0]);
 
         if (!user) {

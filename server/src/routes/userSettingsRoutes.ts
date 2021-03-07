@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import * as yup from 'yup';
 import { SALT_ROUNDS } from '../config';
+import { deactivateToken } from '../auth/jwtTokenUtils';
 import { validateBodyWithYup } from '../shared/express-helpers';
 
 export default ({ dbClient }) => {
@@ -44,7 +45,7 @@ export default ({ dbClient }) => {
         password: yup.string().required(),
       })
     ),
-    handler: async ({ body, user: { userId } }) => {
+    handler: async ({ body, authToken, user: { userId } }) => {
       const { password } = body;
       const user = await dbClient
         .query('SELECT password FROM users WHERE id = $1', [userId])
@@ -60,7 +61,8 @@ export default ({ dbClient }) => {
       }
 
       await dbClient.query('DELETE FROM files WHERE user_id = $1', [userId]);
-      await dbClient.query('DELETE FROM users WHERE id = $1', [userId]);
+      await dbClient.query('UPDATE users SET deleted = TRUE WHERE id = $1', [userId]);
+      deactivateToken(authToken.token, authToken.exp);
     },
   };
 
