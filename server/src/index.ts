@@ -16,7 +16,7 @@ import filesRoutes from './routes/filesRoutes';
 import sharedFilesRoutes from './routes/sharedFilesRoutes';
 import createAuthorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
-import { DATABASE_URL, PORT, CLIENT_URL } from './config';
+import { DATABASE_URL, PORT, CLIENT_URL, SSL_DB_CONNECTION_OPTIONS } from './config';
 import userSettingsRoutes from './routes/userSettingsRoutes';
 import SharedFilesManager from './sharedFilesManager';
 
@@ -42,9 +42,7 @@ console.log('Starting application');
 
     const dbClient = new Client({
       connectionString: DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      ...SSL_DB_CONNECTION_OPTIONS,
     });
 
     try {

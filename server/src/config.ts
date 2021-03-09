@@ -15,4 +15,13 @@ export const REFRESH_TOKEN_EXPIRATION_DURATION_MS = process.env.REFRESH_TOKEN_EX
 export const TOKENS_CLEANUP_THRESHOLD = process.env.TOKENS_CLEANUP_THRESHOLD
   ? Number(process.env.TOKENS_CLEANUP_THRESHOLD)
   : 1000;
+const DB_SSL_ENABLED = Boolean(process.env.DB_SSL_ENABLED);
+
 export const SALT_ROUNDS = 14;
+export const SSL_DB_CONNECTION_OPTIONS = DB_SSL_ENABLED
+  ? {
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    }
+  : {};

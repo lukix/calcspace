@@ -1,6 +1,6 @@
 import { Client } from 'pg';
 
-import { DATABASE_URL } from './config';
+import { DATABASE_URL, SSL_DB_CONNECTION_OPTIONS } from './config';
 
 const queries = [
   {
@@ -164,9 +164,7 @@ const queries = [
 const setupDatabase = async () => {
   const client = new Client({
     connectionString: DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
+    ...SSL_DB_CONNECTION_OPTIONS,
   });
   console.log('Connecting to the DB for setup phase...');
   await client.connect();
