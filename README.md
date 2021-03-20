@@ -1,7 +1,30 @@
-# Calc Space
-Calc Space lets you write sequences of math expressions and instantly evaluate them for any input data that you provide.
+# CalcSpace
+[calcspace.com](https://calcspace.com) is a web application that lets you build multi-line calculations and instantly see the results. It supports units of measurement, so it's great for physics and engineering. Sharing mechanism makes it easy to collaborate with other people.
+
+![CalcSpace usage demo](feature-preview.gif)
+
+## Repository structure
+This repository contains both backend and frontend code.
+Backend code sits in the `/server` directory and frontend code in the `/client` directory.
+
+## Technologies
+Here is a list of a few of the most important technologies used on this project:
+- JavaScript (technically TypeScript but with a very forgiving configuration)
+- ReactJS
+- ExpressJS
+- PostgreSQL + [node-postgres](https://www.npmjs.com/package/pg)
 
 ## Development
+
+### NodeJS version
+NodeJS version that is currently used in the project can be found in the `.nvmrc` file. It should match the version specified in `server/package.json > engines.node` (for Heroku) and in both Dockerfiles.
+
+### Install dependencies
+```
+yarn run install:all
+```
+
+### docker-compose cheat sheet
 
 Start app by running:
 ```
@@ -22,3 +45,10 @@ See logs:
 ```
 docker-compose logs -f
 ```
+
+### DB migrations
+Database migrations are run on every start of the NodeJS server. They are specified in the `setupDatabase.ts` file.
+
+### Deployment
+On every push to the `master` branch, application deploy is triggered automatically.
+Backend is deployed on Heroku and frontend is deployed on Netlify.

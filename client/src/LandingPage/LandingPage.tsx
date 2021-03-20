@@ -44,7 +44,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
           <p>
             <b>CalcSpace.com</b> lets you build multi-line calculations and instantly see the
             results. It supports units of measurement, so it's great for physics and engineering.
-            Sharing mechanism makes it easy to colaborate with other people.
+            Sharing mechanism makes it easy to collaborate with other people.
           </p>
           <Suspense fallback={<Spinner centered />}>
             <h2>Build complex multi-line calculations and see results as you type</h2>
