@@ -107,6 +107,32 @@ describe('evaluateParsedExpression', () => {
     expect(result).toEqual({ number: 4, unit: [] });
   });
 
+  it("should evaluate expression where power's units are cancelled out", () => {
+    // given
+    const expression = '5^(3s / 1s)';
+    const { parsedExpression } = parseExpression(expression);
+    const unitsMap = new Map([['s', { multiplier: 1, baseUnits: [{ unit: 's', power: 1 }] }]]);
+    const options = { unitsMap };
+
+    // when
+    const result = evaluateParsedExpression(parsedExpression, options);
+
+    // then
+    expect(result).toEqual({ number: 125, unit: [] });
+  });
+
+  it('should throw an error when power has units', () => {
+    // given
+    const expression = '5^(2kg)';
+    const { parsedExpression } = parseExpression(expression);
+
+    // when
+    const testFunction = () => evaluateParsedExpression(parsedExpression);
+
+    // then
+    expect(testFunction).toThrow();
+  });
+
   it('should throw an error when there are undefined variables', () => {
     // given
     const expression = 'a + b';

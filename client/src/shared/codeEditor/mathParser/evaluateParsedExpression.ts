@@ -92,7 +92,8 @@ const evaluatePower = (elements, values, functions, unitsMap) => {
   );
   const [firstElement, ...restElements] = evaluatedElements;
   restElements.forEach(({ unit }) => {
-    if (unit.length > 0) {
+    const nonZeroPowerUnits = unit.filter(({ power }) => power !== 0);
+    if (nonZeroPowerUnits.length > 0) {
       throw new EvaluationError(`Powers with units are not supported`, {
         start: elements[0].position,
         end: elements[elements.length - 1].positionEnd || null,
