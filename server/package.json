@@ -1,5 +1,5 @@
 {
-  "name": "math-ide-server",
+  "name": "calcspace-server",
   "version": "1.0.0",
   "scripts": {
     "start": "node out/index.js",
