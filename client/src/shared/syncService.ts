@@ -6,6 +6,11 @@ export const requestLimiterMethods = {
   THROTTLE: 'THROTTLE',
 };
 
+const delayEdgeBehavior = {
+  leading: false,
+  trailing: true,
+};
+
 const SyncService = ({
   synchronize,
   requestLimiterTimeout = 400,
@@ -17,8 +22,8 @@ const SyncService = ({
   let waitingChanges = null;
   const trySynchronizingLimited =
     requestLimiterMethod === requestLimiterMethods.THROTTLE
-      ? throttle(trySynchronizing, requestLimiterTimeout)
-      : debounce(trySynchronizing, requestLimiterTimeout);
+      ? throttle(trySynchronizing, requestLimiterTimeout, delayEdgeBehavior)
+      : debounce(trySynchronizing, requestLimiterTimeout, delayEdgeBehavior);
 
   async function trySynchronizing() {
     if (waitingChanges === null) {
