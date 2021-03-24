@@ -14,7 +14,7 @@ import styles from './SignedInHeaderBar.module.scss';
 
 interface SignedInHeaderBarProps {
   username: string | null;
-  onAvatarClick: () => void;
+  onAvatarClick: Function;
   isToggleButtonVisible?: boolean;
 
   isFilesPanelVisible: boolean;
@@ -72,7 +72,7 @@ const SignedInHeaderBar: React.FC<SignedInHeaderBarProps> = ({
           <button className={styles.signOutLink} disabled={isLoggingOut} onClick={() => logOut()}>
             {isLoggingOut ? 'Logging Out' : 'Log Out'}
           </button>
-          {username && <FaUserCircle title="Account Settings" onClick={onAvatarClick} />}
+          {username && <FaUserCircle title="Account Settings" onClick={() => onAvatarClick()} />}
         </>
       }
     />

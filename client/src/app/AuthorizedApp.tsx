@@ -13,7 +13,6 @@ import styles from './App.module.scss';
 
 interface AuthorizedAppProps {
   user: { username: string };
-  fetchingUserError: boolean;
   showUserModal: Function;
 }
 
