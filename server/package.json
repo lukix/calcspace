@@ -1,6 +1,8 @@
 {
   "name": "calcspace-server",
   "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
   "scripts": {
     "start": "node out/index.js",
     "dev": "concurrently \"tsc --watch\" \"nodemon --watch out out/index.js\"",
@@ -11,7 +13,7 @@
     "setupDb": "node ./out/setupDatabase.js"
   },
   "dependencies": {
-    "bcrypt": "^3.0.8",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -20,20 +22,20 @@
     "pg": "^8.5.1",
     "socket.io": "^2.3.0",
     "uuid": "^8.3.2",
-    "yup": "^0.28.4"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.20",
-    "@types/node": "^14.14.33",
-    "@typescript-eslint/eslint-plugin": "^2.28.0",
-    "@typescript-eslint/parser": "^2.28.0",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
     "concurrently": "^5.1.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-jest": "^24.2.0",
+    "eslint": "^7.23.0",
+    "eslint-plugin-jest": "^24.3.2",
     "jest": "^26.6.3",
     "nodemon": "^2.0.7",
-    "ts-jest": "^26.5.3",
-    "typescript": "^3.8.3"
+    "ts-jest": "^26.5.4",
+    "typescript": "^4.2.3"
   },
   "engines": {
     "node": "14.16.x"

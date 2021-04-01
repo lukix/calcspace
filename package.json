@@ -1,6 +1,7 @@
 {
   "name": "calcspace",
   "version": "1.0.0",
+  "private": true,
   "repository": "git@github.com:lukix/calcspace.git",
   "author": "Łukasz Jenczmyk",
   "license": "MIT",
