@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import styles from './UserGuide.module.scss';
 import routes from '../routes';
 
+/* eslint-disable react/jsx-no-comment-textnodes */
+
 const getSharedUrlsDescription = ({ viewEnabled, editEnabled, userManaged }) => {
   const deleteInfo = userManaged
     ? ' This file is managed by a user with an account and it can be deleted at any time.'

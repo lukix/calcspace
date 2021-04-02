@@ -8,7 +8,7 @@ E = m * g * h = [kJ]`;
 const defaultDelay = 100;
 const pauseDelay = 3000;
 
-export default [
+const convertingUnitsFrames = [
   { value: CONVERTING_UNITS, delay: pauseDelay },
   { value: CONVERTING_UNITS.substring(0, CONVERTING_UNITS.length - 1), delay: defaultDelay },
   { value: CONVERTING_UNITS.substring(0, CONVERTING_UNITS.length - 2), delay: defaultDelay },
@@ -26,3 +26,5 @@ export default [
   { value: CONVERTING_UNITS.substring(0, CONVERTING_UNITS.length - 3) + 'k', delay: defaultDelay },
   { value: CONVERTING_UNITS.substring(0, CONVERTING_UNITS.length - 3) + 'kJ', delay: defaultDelay },
 ];
+
+export default convertingUnitsFrames;

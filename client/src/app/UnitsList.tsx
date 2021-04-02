@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import styles from './UnitsList.module.scss';
 
+/* eslint-disable react/jsx-no-comment-textnodes */
+
 const createUnitWithPrefixes = (symbol) => [
   { unit: `1Y${symbol}`, equivalent: { constant: `1`, exponent: '24', unit: symbol } },
   { unit: `1Z${symbol}`, equivalent: { constant: `1`, exponent: '21', unit: symbol } },

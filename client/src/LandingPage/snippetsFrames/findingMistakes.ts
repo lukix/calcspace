@@ -6,7 +6,7 @@ const suffix = ') / 2 = [J]';
 
 const defaultDelay = 100;
 
-export default [
+const findingMistakesFrames = [
   { value: FINDING_MISTAKES + suffix, delay: 3000 },
   { value: FINDING_MISTAKES + ' ' + suffix, delay: defaultDelay },
   { value: FINDING_MISTAKES + ' ^' + suffix, delay: defaultDelay },
@@ -16,3 +16,5 @@ export default [
   { value: FINDING_MISTAKES + ' ^' + suffix, delay: defaultDelay },
   { value: FINDING_MISTAKES + ' ' + suffix, delay: defaultDelay },
 ];
+
+export default findingMistakesFrames;
