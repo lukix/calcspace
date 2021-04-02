@@ -1,9 +1,10 @@
 import createTokenizedLineWithError from './createTokenizedLineWithError';
 
-const validateSplittedParts = ({ partsSplittedByEqualSigns, values, lineString }) => {
+const validateSplittedParts = ({ partsSplittedByEqualSigns, values, customFunctions, lineString }) => {
   if (partsSplittedByEqualSigns.length > 3) {
     return createTokenizedLineWithError({
       values,
+      customFunctions,
       lineString,
       errorMessage: 'Too many equal signs',
       start:
@@ -21,6 +22,7 @@ const validateSplittedParts = ({ partsSplittedByEqualSigns, values, lineString }
   ) {
     return createTokenizedLineWithError({
       values,
+      customFunctions,
       lineString,
       errorMessage: 'Expected square brackets [...] after last "="',
       start: partsSplittedByEqualSigns[0].length + partsSplittedByEqualSigns[1].length + 2,

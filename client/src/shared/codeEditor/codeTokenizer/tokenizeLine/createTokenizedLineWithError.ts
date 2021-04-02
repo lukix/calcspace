@@ -2,12 +2,14 @@ import { tokens } from '../constants';
 
 const createTokenizedLineWithError = ({
   values,
+  customFunctions,
   lineString,
   errorMessage,
   start = null,
   end = null,
 }: {
   values: any;
+  customFunctions: any,
   lineString: string;
   errorMessage: string;
   start?: number | null;
@@ -18,6 +20,7 @@ const createTokenizedLineWithError = ({
   const errorSourceEnd = end === null || isErrorRangeEmpty ? lineString.length : end;
   return {
     values,
+    customFunctions,
     tokenizedLine: [
       {
         value: lineString.substring(0, errorSourceStart),
