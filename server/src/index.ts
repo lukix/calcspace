@@ -3,7 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { Client } from 'pg';
-import socketIO from 'socket.io';
+import { Server as SocketServer } from 'socket.io';
 
 import {
   createRouterFromRouteObjects,
@@ -36,7 +36,8 @@ console.log('Starting application');
     const app = express();
     app.disable('x-powered-by');
 
-    app.use(cors({ credentials: true, origin: CLIENT_URL }));
+    const corsOptions = { credentials: true, origin: CLIENT_URL };
+    app.use(cors(corsOptions));
     app.use(bodyParser.json());
     app.use(cookieParser());
 
@@ -55,7 +56,7 @@ console.log('Starting application');
     console.log('Connected successfully to the DB server');
 
     const http = app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
-    const io = socketIO(http);
+    const io = new SocketServer(http, { cors: corsOptions });
     const sharedFilesManager = SharedFilesManager({ io });
 
     const testRoute = {

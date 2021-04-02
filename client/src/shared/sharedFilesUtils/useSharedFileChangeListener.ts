@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import socketIO from 'socket.io-client';
+import { io as socketIO } from 'socket.io-client';
 import * as diff from 'diff';
 
 import { SOCKETS_URL } from '../../config';
