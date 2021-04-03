@@ -26,8 +26,10 @@ describe('buildFunctions', () => {
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        subexpressionContent: [
-          { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+        arguments: [
+          [
+            { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+          ],
         ],
       },
     ]);
@@ -73,12 +75,14 @@ describe('buildFunctions', () => {
           {
             type: tokens.FUNCTION,
             name: 'foo',
-            subexpressionContent: [
-              {
-                type: tokens.SYMBOL,
-                value: 'c',
-                symbolType: symbolTypes.VARIABLE,
-              },
+            arguments: [
+              [
+                {
+                  type: tokens.SYMBOL,
+                  value: 'c',
+                  symbolType: symbolTypes.VARIABLE,
+                },
+              ],
             ],
           },
         ],
@@ -114,12 +118,16 @@ describe('buildFunctions', () => {
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        subexpressionContent: [
-          {
-            type: tokens.FUNCTION,
-            name: 'bar',
-            subexpressionContent: [],
-          },
+        arguments: [
+          [
+            {
+              type: tokens.FUNCTION,
+              name: 'bar',
+              arguments: [
+                []
+              ],
+            },
+          ],
         ],
       },
     ]);
@@ -183,5 +191,115 @@ describe('buildFunctions', () => {
 
     // then
     expect(testFunction).toThrowError(ParserError);
+  });
+
+  it('should replace VARIABLE SYMBOL and a list of SUBEXPRESSIONS with multi argument FUNCTION token', () => {
+    // given
+    const tokensList = [
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
+      { type: tokens.OPERATOR, value: '+' },
+      { type: tokens.SYMBOL, value: 'foo', symbolType: symbolTypes.VARIABLE },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [{ type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC }],
+      },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [{ type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE }],
+      },
+    ];
+
+    // when
+    const tokensListWithFunctions = buildFunctions(tokensList);
+
+    // then
+    expect(tokensListWithFunctions).toEqual([
+      { type: tokens.SYMBOL, value: 'a', symbolType: symbolTypes.VARIABLE },
+      { type: tokens.OPERATOR, value: '+' },
+      {
+        type: tokens.FUNCTION,
+        name: 'foo',
+        arguments: [
+          [
+            { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
+          ],
+          [
+            { type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE },
+          ]
+        ],
+      },
+    ]);
+  });
+
+  it('should build multi-argument function nested in function', () => {
+    // given
+    const tokensList = [
+      { type: tokens.SYMBOL, value: 'foo', symbolType: symbolTypes.VARIABLE },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [
+          {
+            type: tokens.SYMBOL,
+            value: 'bar',
+            symbolType: symbolTypes.VARIABLE,
+          },
+          {
+            type: tokens.SUBEXPRESSION,
+            value: [
+              {
+                type: tokens.SYMBOL,
+                value: '2',
+                symbolType: symbolTypes.NUMERIC,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: tokens.SUBEXPRESSION,
+        value: [
+          {
+            type: tokens.SYMBOL,
+            value: 'x',
+            symbolType: symbolTypes.VARIABLE,
+          },
+        ],
+      },
+    ];
+
+    // when
+    const tokensListWithFunctions = buildFunctions(tokensList);
+
+    // then
+    expect(tokensListWithFunctions).toEqual([
+      {
+        type: tokens.FUNCTION,
+        name: 'foo',
+        arguments: [
+          [
+            {
+              type: tokens.FUNCTION,
+              name: 'bar',
+              arguments: [
+                [
+                  {
+                    type: tokens.SYMBOL,
+                    value: '2',
+                    symbolType: symbolTypes.NUMERIC,
+                  },
+                ]
+              ],
+            },
+          ],
+          [
+            {
+              type: tokens.SYMBOL,
+              value: 'x',
+              symbolType: symbolTypes.VARIABLE,
+            },
+          ],
+        ],
+      },
+    ]);
   });
 });

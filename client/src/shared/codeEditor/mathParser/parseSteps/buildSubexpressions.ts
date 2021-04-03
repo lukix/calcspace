@@ -3,6 +3,7 @@ import { ParserError } from '../errors';
 
 const isOpeningParenthesis = (token) => token.type === tokens.OPERATOR && token.value === '(';
 const isClosingParenthesis = (token) => token.type === tokens.OPERATOR && token.value === ')';
+const isComma = (token) => token.type === tokens.OPERATOR && token.value === ',';
 
 const createSubexpression = (
   value: Array<{ type: string; value: any }>,
@@ -57,6 +58,26 @@ const buildSubexpressions = (
       return appendToLastSubexpressionInStack(
         removeLastItemFromStack(subexpressionsStack),
         subexpressionToken
+      );
+    }
+    if (isComma(currentToken)) {
+      if (subexpressionsStack.length <= 1) {
+        throw new ParserError('Encountered comma outside of parentheses', {
+          start: currentToken.position,
+          end: currentToken.position + 1,
+        });
+      }
+      const subexpressionToken = createSubexpression(
+        getLastItemFromStack(subexpressionsStack).tokens,
+        getLastItemFromStack(subexpressionsStack).position,
+        currentToken.position + 1
+      );
+      return pushToStack(
+        appendToLastSubexpressionInStack(
+          removeLastItemFromStack(subexpressionsStack),
+          subexpressionToken
+        ),
+        { tokens: [], position: currentToken.position }
       );
     }
 

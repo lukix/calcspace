@@ -18,13 +18,13 @@ const evaluateFunction = (functionToken, values, functions, unitsMap) => {
       end: functionToken.positionEnd,
     });
   }
-  const argumentValue = evaluateSum(
-    functionToken.subexpressionContent,
+  const argumentsValues = functionToken.arguments.map(argumentExpression => evaluateSum(
+    argumentExpression,
     values,
     functions,
     unitsMap
-  );
-  const { number, unit } = func(argumentValue);
+  ))
+  const { number, unit } = func(...argumentsValues);
   return { number, unit };
 };
 

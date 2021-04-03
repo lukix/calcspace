@@ -2,7 +2,7 @@ import tokenTypes from '../tokens';
 import { ParserError } from '../errors';
 
 const ALLOWED_SYMBOL_CHARS = '.abcdefghijklmnoprstuwvqxyz0123456789_'.split('');
-const ALLOWED_OPERATOR_CHARS = '+-*/^()'.split('');
+const ALLOWED_OPERATOR_CHARS = ',+-*/^()'.split('');
 const SPACE_CHAR = ' ';
 
 const isValidSymbolChar = (char) => ALLOWED_SYMBOL_CHARS.includes(char.toLocaleLowerCase());

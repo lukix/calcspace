@@ -195,14 +195,17 @@ const UserGuide: React.FC<UserGuideProps> = ({
       </pre>
       <h2>Custom function</h2>
       <p>
-        You can define your own functions. Currently only one-line, one-argument functions are supported.
+        You can define your own functions. Currently only one-line functions are supported.
       </p>
       <pre className={styles.codeSnippet}>
         f(x) = 2 * x - 1
         <br/>a = f(3)<span className={styles.tokenVirtual}> = 5</span>
-        <br />
+        <br /><br />
         half(a) = a / 2
         <br/>x = half(50)<span className={styles.tokenVirtual}> = 25</span>
+        <br /><br />
+        sum(a, b) = a + b
+        <br/>sum(abs(-2), 2 + 2 * 2)<span className={styles.tokenVirtual}> = 8</span>
       </pre>
       <h2>Units</h2>
       <p>
