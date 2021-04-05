@@ -2,7 +2,7 @@ import mapRouteObjectToRoute from '../mapRouteObjectToRoute';
 
 describe('mapRouteObjectToRoute', () => {
   it('should create a function which sets default status and correct response', async () => {
-    const handler = req => ({
+    const handler = (req) => ({
       response: `Response: received ${req.body}`,
     });
     const route = mapRouteObjectToRoute({ handler });
@@ -68,8 +68,8 @@ describe('mapRouteObjectToRoute', () => {
   });
 
   it('should create a function which sets status 200 when validation passes', async () => {
-    const handler = req => ({});
-    const validate = req => (req.body.x ? null : new Error('x is required'));
+    const handler = (req) => ({});
+    const validate = (req) => (req.body.x ? null : new Error('x is required'));
     const route = mapRouteObjectToRoute({ handler, validate });
     const req = { body: { x: 'non empty value' } };
     const res = {
@@ -84,8 +84,8 @@ describe('mapRouteObjectToRoute', () => {
   });
 
   it('should create a function which sets status 400 when validation fails', async () => {
-    const handler = req => ({});
-    const validate = req => (req.body.x ? null : { error: 'x is required' });
+    const handler = (req) => ({});
+    const validate = (req) => (req.body.x ? null : { error: 'x is required' });
     const route = mapRouteObjectToRoute({ handler, validate });
     const req = { body: {} };
     const res = {

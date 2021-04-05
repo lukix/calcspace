@@ -40,11 +40,12 @@
   font-size: 0.8rem;
 }
 
-
 .formField {
   margin-bottom: 15px;
 
-  .label, input[type="text"], input[type="password"] {
+  .label,
+  input[type='text'],
+  input[type='password'] {
     display: block;
     margin-bottom: 5px;
     width: 100%;
@@ -61,7 +62,8 @@
     }
   }
 
-  input[type="text"], input[type="password"] {
+  input[type='text'],
+  input[type='password'] {
     font-size: 1rem;
     height: 26px;
     padding: 0 5px;
@@ -71,7 +73,7 @@
 .submitButtonWrapper {
   margin-bottom: 15px;
 
-  input[type="submit"] {
+  input[type='submit'] {
     background: $dark-accent-color;
     color: white;
     padding: 8px 16px;

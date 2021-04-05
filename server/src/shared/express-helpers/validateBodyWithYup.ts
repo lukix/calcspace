@@ -1,4 +1,4 @@
-const validateBodyWithYup = validationSchema => async ({ body }) => {
+const validateBodyWithYup = (validationSchema) => async ({ body }) => {
   try {
     await validationSchema.validate(body, {
       convert: false,

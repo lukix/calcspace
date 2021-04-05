@@ -20,12 +20,12 @@ const createAsyncActionHandlers: CreateAsyncActionHandlers = ({
   pendingKey,
   errorKey,
 }) => ({
-  [types.START]: state => ({
+  [types.START]: (state) => ({
     ...state,
     ...optionalKey(pendingKey, true),
     ...optionalKey(errorKey, false),
   }),
-  [types.FAILURE]: state => ({
+  [types.FAILURE]: (state) => ({
     ...state,
     ...optionalKey(pendingKey, false),
     ...optionalKey(errorKey, true),
