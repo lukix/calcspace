@@ -8,6 +8,7 @@
   "scripts": {
     "install:all": "yarn && cd ./server && yarn && cd ../client && yarn",
     "pre-push": "cd ./server && yarn run pre-push && cd ../client && yarn run pre-push",
+    "pre-commit": "cd ./server && yarn run pre-commit && cd ../client && yarn run pre-commit",
     "format:check": "cd ./server && yarn run format:check && cd ../client && yarn run format:check",
     "format:fix": "cd ./server && yarn run format:fix && cd ../client && yarn run format:fix"
   },
@@ -16,6 +17,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "yarn run pre-commit",
       "pre-push": "yarn run pre-push"
     }
   },
