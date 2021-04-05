@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "install:all": "yarn && cd ./server && yarn && cd ../client && yarn",
-    "pre-push": "cd ./server && yarn run pre-push && cd ../client && yarn run pre-push"
+    "pre-push": "cd ./server && yarn run pre-push && cd ../client && yarn run pre-push",
+    "format:check": "cd ./server && yarn run format:check && cd ../client && yarn run format:check",
+    "format:fix": "cd ./server && yarn run format:fix && cd ../client && yarn run format:fix"
   },
   "devDependencies": {
     "husky": "^4.2.5"
