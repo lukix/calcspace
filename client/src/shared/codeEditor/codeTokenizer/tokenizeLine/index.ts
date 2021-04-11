@@ -8,13 +8,16 @@ import convertToDesiredUnit from './convertToDesiredUnit';
 import createTokenizedLineWithError from './createTokenizedLineWithError';
 import classifyPartsSplittedByEqualSigns from './classifyPartsSplittedByEqualSigns';
 import validateSplittedParts from './validateSplittedParts';
-import validateSymbol from './validateSymbol';
+import parseSymbol from './parseSymbol';
+import {EvaluationError} from "../../mathParser";
 
 const ALL_WHITESPACES_REGEX = /\s/g;
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
 
 const tokenizeLine = (
   values,
+  customFunctions,
+  customFunctionsRaw,
   lineString,
   { exponentialNotation = false, showResultUnit = true }
 ) => {
@@ -23,6 +26,8 @@ const tokenizeLine = (
   if (sanitizedExpression === '') {
     return {
       values,
+      customFunctions,
+      customFunctionsRaw,
       tokenizedLine: [],
     };
   }
@@ -30,6 +35,8 @@ const tokenizeLine = (
   if (sanitizedExpression.substring(0, 2) === '//') {
     return {
       values,
+      customFunctions,
+      customFunctionsRaw,
       tokenizedLine: [{ value: lineString, tags: [tokens.COMMENT] }],
     };
   }
@@ -38,6 +45,8 @@ const tokenizeLine = (
   const splittedPartsValidationError = validateSplittedParts({
     partsSplittedByEqualSigns,
     values,
+    customFunctions,
+    customFunctionsRaw,
     lineString,
   });
   if (splittedPartsValidationError) {
@@ -50,11 +59,12 @@ const tokenizeLine = (
   } = classifyPartsSplittedByEqualSigns(partsSplittedByEqualSigns);
 
   const symbol = symbolBeforeSanitization ? sanitize(symbolBeforeSanitization) : null;
-
-  const symbolValidationError = validateSymbol({ symbol, values, lineString, functions });
-  if (symbolValidationError) {
-    return symbolValidationError;
+  const parsedSymbol = parseSymbol({ symbol, values, customFunctions, lineString, functions });
+  if (parsedSymbol.error) {
+    return parsedSymbol.error;
   }
+  const { functionName, functionArguments } = parsedSymbol;
+  const isFunction = !!functionName;
 
   const expressionPartBeginningIndex = symbolBeforeSanitization
     ? symbolBeforeSanitization.length + 1
@@ -65,11 +75,13 @@ const tokenizeLine = (
     (expression ? expression.length + 1 : 0);
 
   const { unit: resultUnit, error: resultUnitError } = resultUnitPart
-    ? getUnitFromResultUnitString(resultUnitPart)
+    ? getUnitFromResultUnitString(resultUnitPart, !isFunction)
     : { unit: null, error: null };
   if (resultUnitError) {
     return createTokenizedLineWithError({
       values,
+      customFunctions,
+      customFunctionsRaw,
       lineString,
       errorMessage: resultUnitError,
       start: resultUnitPartBeginningIndex,
@@ -81,6 +93,8 @@ const tokenizeLine = (
     if (unknownUnit) {
       return createTokenizedLineWithError({
         values,
+        customFunctions,
+        customFunctionsRaw,
         lineString,
         errorMessage: `Unknown unit "${unknownUnit.unit}"`,
         start: lineString.lastIndexOf('=') + 1,
@@ -88,16 +102,61 @@ const tokenizeLine = (
     }
   }
 
+  if (isFunction) {
+    const customFunction = (...args) => {
+      const { result, error } = evaluateExpression(
+        expression,
+        {
+          ...values,
+          ...(functionArguments as string[]).reduce((acc, argumentName, index) => ({
+            ...acc,
+            [argumentName]: args[index],
+          }), {}),
+        },
+        {
+          ...functions,
+          ...customFunctions,
+        },
+        unitsMap
+      );
+      if (error) {
+        throw new EvaluationError(`Error in function "${functionName}": ${error}`);
+      }
+
+      return result;
+    };
+
+    return {
+      values: {},
+      customFunctions: {
+        [functionName as string]: customFunction,
+      },
+      customFunctionsRaw: {
+        [functionName as string]: sanitizedExpression,
+      },
+      tokenizedLine: [
+        {
+          value: lineString,
+          tags: [tokens.NORMAL],
+        },
+      ],
+    };
+  }
   const { result, error, startCharIndex, endCharIndex } = evaluateExpression(
     expression,
     values,
-    functions,
+    {
+      ...functions,
+      ...customFunctions,
+    },
     unitsMap
   );
 
   if (error) {
     return createTokenizedLineWithError({
       values,
+      customFunctions,
+      customFunctionsRaw,
       lineString,
       errorMessage: error,
       start: (startCharIndex || 0) + expressionPartBeginningIndex,
@@ -111,6 +170,8 @@ const tokenizeLine = (
   } catch (error) {
     return createTokenizedLineWithError({
       values,
+      customFunctions,
+      customFunctionsRaw,
       lineString,
       errorMessage: error.message,
       start: expressionPartBeginningIndex,
@@ -165,6 +226,8 @@ const tokenizeLine = (
 
   return {
     values: symbol && result !== null ? { [symbol]: result } : {},
+    customFunctions,
+    customFunctionsRaw,
     tokenizedLine,
   };
 };

@@ -2,9 +2,12 @@ import { parseUnits } from '../mathParser';
 
 const UNITS_REGEX = /^([A-Za-z]+(\^[1-9]+[0-9]*)?(\/|\*))*([A-Za-z]+(\^(-?[1-9])+[0-9]*)?)$/;
 
-const getUnitFromResultUnitString = (resultUnitString) => {
+const getUnitFromResultUnitString = (resultUnitString, allowUnits = true) => {
   const trimmedResultUnitString = resultUnitString.trim();
 
+  if (trimmedResultUnitString && !allowUnits) {
+    return { unit: null, error: 'Units are not allowed here' };
+  }
   if (trimmedResultUnitString.replace(/\s/g) !== trimmedResultUnitString) {
     return { unit: null, error: 'Encountered unexpected whitespaces' };
   }

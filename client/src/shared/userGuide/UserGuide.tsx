@@ -195,6 +195,17 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />
         cos(0rad)<span className={styles.tokenVirtual}> = 1</span>
       </pre>
+      <h2>Custom functions</h2>
+      <p>
+        You can define your own functions. Currently only one-line, one-argument functions are supported.
+      </p>
+      <pre className={styles.codeSnippet}>
+        f(x) = 2 * x - 1
+        <br/>a = f(3)<span className={styles.tokenVirtual}> = 5</span>
+        <br />
+        half(a) = a / 2
+        <br/>x = half(50)<span className={styles.tokenVirtual}> = 25</span>
+      </pre>
       <h2>Units</h2>
       <p>
         CalcSpace.com supports values with{' '}

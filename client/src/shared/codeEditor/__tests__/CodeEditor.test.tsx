@@ -41,4 +41,19 @@ describe('CodeEditor component', () => {
     // then
     expect(queryByText('= 6', { exact: false })).not.toEqual(null);
   });
+
+  it('should display result of an expression with custom function', () => {
+    // given
+    const code = 'f(x) = x * 2\nx = f(12)';
+
+    // when
+    const { queryByText } = render(
+      <BrowserRouter>
+        <CodeEditor {...defaultProps} code={code} signedInView />
+      </BrowserRouter>
+    );
+
+    // then
+    expect(queryByText('= 24', { exact: false })).not.toEqual(null);
+  });
 });
