@@ -55,7 +55,7 @@ describe('tokenizeCode - raw result test', () => {
       `,
     },
     {
-      it: 'should show result in default unit when declaring varaible',
+      it: 'should show result in default unit when declaring variable',
       code: `
         energy = 500N * 3m
       `,
@@ -318,6 +318,102 @@ describe('tokenizeCode - raw result test', () => {
         2020
         2.02
         2.020 = 2.02
+      `,
+    },
+    {
+      it: 'should support functions',
+      code: `
+        f(x) = x * 3
+        a = 2
+
+        c = f(a)
+      `,
+      expectedResult: `
+        f(x) = x * 3
+        a = 2
+
+        c = f(a) = 6
+      `,
+    },
+    {
+      it: 'should show function result in default unit',
+      code: `
+        f(x) = x * 3
+        a = 2kg
+
+        c = f(a)
+      `,
+      expectedResult: `
+        f(x) = x * 3
+        a = 2kg
+
+        c = f(a) = 6kg
+      `,
+    },
+    {
+      it: 'should display an error for function with invalid parameters',
+      code: `
+        f(;) = x * 3
+        a = 2kg
+
+        c = f(a)
+      `,
+      expectedResult: `
+        f(;) = x * 3  Error: Invalid function parameters
+        a = 2kg
+
+        c = f(a)  Error: Missing or invalid function f
+      `,
+    },
+    {
+      it: 'should display an error when redefining built-in function as a variable',
+      code: `
+        sqrt = 2
+      `,
+      expectedResult: `
+        sqrt = 2  Error: Variable or function cannot have the same name as an existing function "sqrt"
+      `,
+    },
+    {
+      it: 'should display an error when redefining custom function as a variable',
+      code: `
+        f(x) = x * 2
+        f = 4
+      `,
+      expectedResult: `
+        f(x) = x * 2
+        f = 4  Error: "f" has already been defined. Variables and functions cannot be redefined
+      `,
+    },
+    {
+      it: 'should display an error when redefining custom function as another custom function',
+      code: `
+        f(x) = x * 2
+        f(y) = x / 2
+      `,
+      expectedResult: `
+        f(x) = x * 2
+        f(y) = x / 2  Error: "f" has already been defined. Variables and functions cannot be redefined
+      `,
+    },
+    {
+      it: 'should display an error when redefining variable as a custom function',
+      code: `
+        f = 4
+        f(x) = x * 2
+      `,
+      expectedResult: `
+        f = 4
+        f(x) = x * 2  Error: "f" has already been defined. Variables and functions cannot be redefined
+      `,
+    },
+    {
+      it: 'should display an error when redefining built-in function as a custom function',
+      code: `
+        sqrt(x) = x * 2
+      `,
+      expectedResult: `
+        sqrt(x) = x * 2  Error: Variable or function cannot have the same name as an existing function "sqrt"
       `,
     },
   ].forEach((testCaseData) => {

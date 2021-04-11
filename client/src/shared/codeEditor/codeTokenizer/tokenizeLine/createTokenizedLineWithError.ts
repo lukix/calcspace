@@ -3,6 +3,7 @@ import { tokens } from '../constants';
 const createTokenizedLineWithError = ({
   values,
   customFunctions,
+  customFunctionsRaw,
   lineString,
   errorMessage,
   start = null,
@@ -10,6 +11,7 @@ const createTokenizedLineWithError = ({
 }: {
   values: any;
   customFunctions: any,
+  customFunctionsRaw?: any,
   lineString: string;
   errorMessage: string;
   start?: number | null;
@@ -21,6 +23,7 @@ const createTokenizedLineWithError = ({
   return {
     values,
     customFunctions,
+    customFunctionsRaw: customFunctionsRaw || null,
     tokenizedLine: [
       {
         value: lineString.substring(0, errorSourceStart),
