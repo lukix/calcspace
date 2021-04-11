@@ -193,7 +193,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />
         cos(0rad)<span className={styles.tokenVirtual}> = 1</span>
       </pre>
-      <h2>Custom function</h2>
+      <h2>Custom functions</h2>
       <p>
         You can define your own functions. Currently only one-line, one-argument functions are supported.
       </p>
