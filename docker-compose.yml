@@ -24,7 +24,7 @@ services:
       - /app/node_modules
     environment:
       - PORT=${PORT}
-      - CLIENT_URL=${CLIENT_URL}
+      - ORIGIN_URL=${ORIGIN_URL}
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - TOKEN_EXPIRATION_DURATION_MS=${TOKEN_EXPIRATION_DURATION_MS}
