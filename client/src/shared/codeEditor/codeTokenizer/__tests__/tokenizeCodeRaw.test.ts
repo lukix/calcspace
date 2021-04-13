@@ -416,6 +416,81 @@ describe('tokenizeCode - raw result test', () => {
         sqrt(x) = x * 2  Error: Variable or function cannot have the same name as an existing function "sqrt"
       `,
     },
+    {
+      it: 'should support multi-argument functions',
+      code: `
+        f(x, y) = x * y
+        a = 2
+        b = 3
+
+        c = f(a, b)
+      `,
+      expectedResult: `
+        f(x, y) = x * y
+        a = 2
+        b = 3
+
+        c = f(a, b) = 6
+      `,
+    },
+    {
+      it: 'should support zero-argument functions',
+      code: `
+        f() = 3 * 2
+
+        a = f()
+      `,
+      expectedResult: `
+        f() = 3 * 2
+
+        a = f() = 6
+      `,
+    },
+    {
+      it: 'should show multi-argument function result in default unit',
+      code: `
+        f(x, y) = x + y
+        a = 2kg
+        b = 500g
+
+        c = f(a, b)
+      `,
+      expectedResult: `
+        f(x, y) = x + y
+        a = 2kg
+        b = 500g = 0.5kg
+
+        c = f(a, b) = 2.5kg
+      `,
+    },
+    {
+      it: 'should display an error for multi-argument function with invalid parameters',
+      code: `
+        f(x, ;) = x * 3
+        a = 2kg
+
+        c = f(a)
+      `,
+      expectedResult: `
+        f(x, ;) = x * 3  Error: Invalid function parameters
+        a = 2kg
+
+        c = f(a)  Error: Missing or invalid function f
+      `,
+    },
+    {
+      it: 'should display an error for two adjacent brackets',
+      code: `
+        f(x, y) = x * y
+
+        f(2)(3)
+      `,
+      expectedResult: `
+        f(x, y) = x * y
+
+        f(2)(3)  Error: Expected an operator or comma but encountered another parenthesis
+      `,
+    },
   ].forEach((testCaseData) => {
     it(testCaseData.it, () => {
       // when

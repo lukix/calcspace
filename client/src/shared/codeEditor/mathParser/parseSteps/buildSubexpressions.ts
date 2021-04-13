@@ -39,7 +39,15 @@ const buildSubexpressions = (
       position?: number;
     }>;
   }> = [{ tokens: [], position: 0 }];
+  let lastToken: { type: string, value: any, position?: number } | null = null;
   const subexpressionsStack = primaryTokensList.reduce((subexpressionsStack, currentToken) => {
+    if (lastToken && isClosingParenthesis(lastToken) && isOpeningParenthesis(currentToken)) {
+      throw new ParserError('Expected an operator or comma but encountered another parenthesis', {
+        start: currentToken.position,
+        end: currentToken.position + 1,
+      });
+    }
+    lastToken = currentToken;
     if (isOpeningParenthesis(currentToken)) {
       return pushToStack(subexpressionsStack, { tokens: [], position: currentToken.position });
     }
