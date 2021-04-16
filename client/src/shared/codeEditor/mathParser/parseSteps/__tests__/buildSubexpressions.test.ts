@@ -180,12 +180,10 @@ describe('buildSubexpressions', () => {
       },
       {
         type: tokens.SUBEXPRESSION,
-        value: [
-          { type: tokens.SYMBOL, value: 'd', position: 6 },
-        ],
+        value: [{ type: tokens.SYMBOL, value: 'd', position: 6 }],
         position: 5,
         positionEnd: 8,
       },
     ]);
-  })
+  });
 });

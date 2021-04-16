@@ -17,7 +17,7 @@ const createAsyncActionCreator = <T extends any[]>({
   mapSuccessAction = (action, ...args) => action,
   mapFailureAction = (action, ...args) => action,
 }: CreateAsyncActionCreator<T>) => {
-  const apiActionCreator = (...args: T) => async dispatch => {
+  const apiActionCreator = (...args: T) => async (dispatch) => {
     const startAction = { type: actionTypes.START };
     dispatch(mapStartAction(startAction, ...args));
     try {

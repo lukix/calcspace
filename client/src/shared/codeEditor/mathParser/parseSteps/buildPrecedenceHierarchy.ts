@@ -107,8 +107,9 @@ const buildPrecedenceHierarchy = (tokensList, processSubexpressions = true) => {
         if (token.type === tokens.FUNCTION) {
           return {
             ...token,
-            arguments: token.arguments
-              .map(argumentSubexpressions => buildPrecedenceHierarchy(argumentSubexpressions)),
+            arguments: token.arguments.map((argumentSubexpressions) =>
+              buildPrecedenceHierarchy(argumentSubexpressions)
+            ),
           };
         }
         return token;

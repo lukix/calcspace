@@ -12,7 +12,7 @@ const checkDuplicateSymbol = (symbol, lineString, values, functions, customFunct
         lineString,
         errorMessage: `Variable or function cannot have the same name as an existing function "${symbol}"`,
         end: lineString.indexOf('='),
-      })
+      }),
     };
   }
 
@@ -43,9 +43,11 @@ const parseSymbol = ({ symbol, values, customFunctions, lineString, functions })
   const functionMatch = IS_FUNCTION_REGEX.exec(symbol);
   if (functionMatch) {
     const functionArguments = functionMatch[2] ? functionMatch[2].split(',') : [];
-    if (functionArguments.some(argument => {
-      return !argument.match(IS_SYMBOL_REGEX);
-    })) {
+    if (
+      functionArguments.some((argument) => {
+        return !argument.match(IS_SYMBOL_REGEX);
+      })
+    ) {
       return {
         functionName: null,
         error: createTokenizedLineWithError({
@@ -59,7 +61,13 @@ const parseSymbol = ({ symbol, values, customFunctions, lineString, functions })
       };
     }
 
-    const duplicateCheckResult = checkDuplicateSymbol(functionMatch[1], lineString, values,  functions, customFunctions);
+    const duplicateCheckResult = checkDuplicateSymbol(
+      functionMatch[1],
+      lineString,
+      values,
+      functions,
+      customFunctions
+    );
 
     if (duplicateCheckResult.error) {
       return duplicateCheckResult;
@@ -84,7 +92,13 @@ const parseSymbol = ({ symbol, values, customFunctions, lineString, functions })
     };
   }
 
-  const duplicateCheckResult = checkDuplicateSymbol(symbol, lineString, values,  functions, customFunctions);
+  const duplicateCheckResult = checkDuplicateSymbol(
+    symbol,
+    lineString,
+    values,
+    functions,
+    customFunctions
+  );
 
   if (duplicateCheckResult.error) {
     return duplicateCheckResult;

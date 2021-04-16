@@ -16,14 +16,21 @@ const CodeTokenizerWithCache = () => {
     const { evaluatedLines } = codeLines.reduce((acc, expression) => {
       const cacheKey = JSON.stringify({
         values: acc.values,
-        customFunctions: Object.entries(acc.customFunctions)
-          .map(([key]) => `${key}:${acc.customFunctionsRaw[key]}`),
+        customFunctions: Object.entries(acc.customFunctions).map(
+          ([key]) => `${key}:${acc.customFunctionsRaw[key]}`
+        ),
         expression,
         options,
       });
       const lineTokenizationResult = cache.has(cacheKey)
         ? cache.get(cacheKey)
-        : tokenizeLine(acc.values, acc.customFunctions, acc.customFunctionsRaw, expression, options);
+        : tokenizeLine(
+            acc.values,
+            acc.customFunctions,
+            acc.customFunctionsRaw,
+            expression,
+            options
+          );
       tempCache.set(cacheKey, lineTokenizationResult);
       const { values, customFunctions, customFunctionsRaw, tokenizedLine } = lineTokenizationResult;
       return {

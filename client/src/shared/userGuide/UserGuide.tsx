@@ -196,18 +196,19 @@ const UserGuide: React.FC<UserGuideProps> = ({
         cos(0rad)<span className={styles.tokenVirtual}> = 1</span>
       </pre>
       <h2>Custom functions</h2>
-      <p>
-        You can define your own functions:
-      </p>
+      <p>You can define your own functions:</p>
       <pre className={styles.codeSnippet}>
         f(x) = 2 * x - 1
-        <br/>a = f(3)<span className={styles.tokenVirtual}> = 5</span>
-        <br /><br />
+        <br />a = f(3)<span className={styles.tokenVirtual}> = 5</span>
+        <br />
+        <br />
         half(a) = a / 2
-        <br/>x = half(50)<span className={styles.tokenVirtual}> = 25</span>
-        <br /><br />
+        <br />x = half(50)<span className={styles.tokenVirtual}> = 25</span>
+        <br />
+        <br />
         sum(a, b) = a + b
-        <br/>sum(abs(-2), 2 + 2 * 2)<span className={styles.tokenVirtual}> = 8</span>
+        <br />
+        sum(abs(-2), 2 + 2 * 2)<span className={styles.tokenVirtual}> = 8</span>
       </pre>
       <h2>Units</h2>
       <p>

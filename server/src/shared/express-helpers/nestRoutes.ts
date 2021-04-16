@@ -1,5 +1,5 @@
 const nestRoutes = (pathSuffix, routeObjects) =>
-  routeObjects.map(routeObject => ({
+  routeObjects.map((routeObject) => ({
     ...routeObject,
     path: `${pathSuffix}${routeObject.path}`,
   }));

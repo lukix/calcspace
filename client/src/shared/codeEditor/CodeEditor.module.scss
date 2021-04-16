@@ -58,7 +58,8 @@ $expression-font-family: 'Courier New', Courier, monospace;
       color: #999;
     }
 
-    .tokenComment, .tokenDesiredUnit {
+    .tokenComment,
+    .tokenDesiredUnit {
       color: $accent-color;
     }
   }
@@ -70,10 +71,12 @@ $expression-font-family: 'Courier New', Courier, monospace;
   margin-bottom: 10px;
 
   :global {
-    .radio-button-label, .toggle-button-label {
+    .radio-button-label,
+    .toggle-button-label {
       display: inline;
     }
-    .radio-button-icon, .toggle-button-icon {
+    .radio-button-icon,
+    .toggle-button-icon {
       padding-right: 2px;
       position: relative;
       top: 2px;
@@ -103,7 +106,8 @@ $expression-font-family: 'Courier New', Courier, monospace;
   background-color: $prime-background-color;
 }
 
-.modalToggle:global(:not(.react-toggle--checked):hover:not(.react-toggle--disabled) .react-toggle-track) {
+.modalToggle:global(:not(.react-toggle--checked):hover:not(.react-toggle--disabled)
+    .react-toggle-track) {
   background-color: $prime-background-color;
 }
 
@@ -141,10 +145,12 @@ $expression-font-family: 'Courier New', Courier, monospace;
 @media (max-width: 568px) {
   .buttons {
     :global {
-      .radio-button-label, .toggle-button-label {
+      .radio-button-label,
+      .toggle-button-label {
         display: none;
       }
-      .radio-button-icon, .toggle-button-icon {
+      .radio-button-icon,
+      .toggle-button-icon {
         display: inline;
         padding: 0 5px;
       }

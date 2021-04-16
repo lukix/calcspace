@@ -10,8 +10,8 @@ const createTokenizedLineWithError = ({
   end = null,
 }: {
   values: any;
-  customFunctions: any,
-  customFunctionsRaw?: any,
+  customFunctions: any;
+  customFunctionsRaw?: any;
   lineString: string;
   errorMessage: string;
   start?: number | null;
