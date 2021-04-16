@@ -16,7 +16,7 @@ describe('validateTokensList', () => {
             { type: tokens.SYMBOL, value: '6' },
             { type: tokens.OPERATOR, value: '*' },
             { type: tokens.SYMBOL, value: '9' },
-          ]
+          ],
         ],
       },
       { type: tokens.OPERATOR, value: '-' },
@@ -188,9 +188,7 @@ describe('validateTokensList', () => {
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        arguments: [
-          [{ type: tokens.OPERATOR, value: '*' }],
-        ],
+        arguments: [[{ type: tokens.OPERATOR, value: '*' }]],
       },
     ];
 

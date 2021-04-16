@@ -9,7 +9,7 @@ import createTokenizedLineWithError from './createTokenizedLineWithError';
 import classifyPartsSplittedByEqualSigns from './classifyPartsSplittedByEqualSigns';
 import validateSplittedParts from './validateSplittedParts';
 import parseSymbol from './parseSymbol';
-import {EvaluationError} from "../../mathParser";
+import { EvaluationError } from '../../mathParser';
 
 const ALL_WHITESPACES_REGEX = /\s/g;
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
@@ -108,10 +108,13 @@ const tokenizeLine = (
         expression,
         {
           ...values,
-          ...(functionArguments as string[]).reduce((acc, argumentName, index) => ({
-            ...acc,
-            [argumentName]: args[index],
-          }), {}),
+          ...(functionArguments as string[]).reduce(
+            (acc, argumentName, index) => ({
+              ...acc,
+              [argumentName]: args[index],
+            }),
+            {}
+          ),
         },
         {
           ...functions,

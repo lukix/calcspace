@@ -26,11 +26,7 @@ describe('buildFunctions', () => {
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        arguments: [
-          [
-            { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
-          ],
-        ],
+        arguments: [[{ type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC }]],
       },
     ]);
   });
@@ -123,9 +119,7 @@ describe('buildFunctions', () => {
             {
               type: tokens.FUNCTION,
               name: 'bar',
-              arguments: [
-                []
-              ],
+              arguments: [[]],
             },
           ],
         ],
@@ -220,12 +214,8 @@ describe('buildFunctions', () => {
         type: tokens.FUNCTION,
         name: 'foo',
         arguments: [
-          [
-            { type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC },
-          ],
-          [
-            { type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE },
-          ]
+          [{ type: tokens.SYMBOL, value: '9', symbolType: symbolTypes.NUMERIC }],
+          [{ type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE }],
         ],
       },
     ]);
@@ -287,7 +277,7 @@ describe('buildFunctions', () => {
                     value: '2',
                     symbolType: symbolTypes.NUMERIC,
                   },
-                ]
+                ],
               ],
             },
           ],
