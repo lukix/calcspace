@@ -195,6 +195,20 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />
         cos(0rad)<span className={styles.tokenVirtual}> = 1</span>
       </pre>
+      <h2>Custom functions</h2>
+      <p>
+        You can define your own functions:
+      </p>
+      <pre className={styles.codeSnippet}>
+        f(x) = 2 * x - 1
+        <br/>a = f(3)<span className={styles.tokenVirtual}> = 5</span>
+        <br /><br />
+        half(a) = a / 2
+        <br/>x = half(50)<span className={styles.tokenVirtual}> = 25</span>
+        <br /><br />
+        sum(a, b) = a + b
+        <br/>sum(abs(-2), 2 + 2 * 2)<span className={styles.tokenVirtual}> = 8</span>
+      </pre>
       <h2>Units</h2>
       <p>
         CalcSpace.com supports values with{' '}
@@ -242,7 +256,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />
         (1m * 4m)^2<span className={styles.tokenVirtual}> = 16m^4</span>
       </pre>
-      <p>Trying to add or subtract values with incompatibe units will result in an error:</p>
+      <p>Trying to add or subtract values with incompatible units will result in an error:</p>
       <pre className={styles.codeSnippet}>
         <span className={styles.tokenError}>4m + 4s</span>
         <span className={styles.tokenVirtual}>

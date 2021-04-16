@@ -20,7 +20,7 @@ const validateTokensList = (tokensList) => {
       validateTokensList(token.value);
     }
     if (token.type === tokens.FUNCTION) {
-      validateTokensList(token.subexpressionContent);
+      token.arguments.forEach(validateTokensList);
     }
   });
 

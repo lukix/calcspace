@@ -16,7 +16,13 @@ import filesRoutes from './routes/filesRoutes';
 import sharedFilesRoutes from './routes/sharedFilesRoutes';
 import createAuthorizationMiddleware from './auth/authorizationMiddleware';
 import setupDatabase from './setupDatabase';
-import { DATABASE_URL, PORT, CLIENT_URL, SSL_DB_CONNECTION_OPTIONS } from './config';
+import {
+  DATABASE_URL,
+  PORT,
+  ORIGIN_URL,
+  ORIGIN_REGEXP_PREFIX,
+  SSL_DB_CONNECTION_OPTIONS,
+} from './config';
 import userSettingsRoutes from './routes/userSettingsRoutes';
 import SharedFilesManager from './sharedFilesManager';
 
@@ -36,7 +42,12 @@ console.log('Starting application');
     const app = express();
     app.disable('x-powered-by');
 
-    const corsOptions = { credentials: true, origin: CLIENT_URL };
+    const corsOptions = {
+      credentials: true,
+      origin: ORIGIN_URL.startsWith(ORIGIN_REGEXP_PREFIX)
+        ? new RegExp(ORIGIN_URL.slice(ORIGIN_REGEXP_PREFIX.length))
+        : ORIGIN_URL,
+    };
     app.use(cors(corsOptions));
     app.use(bodyParser.json());
     app.use(cookieParser());

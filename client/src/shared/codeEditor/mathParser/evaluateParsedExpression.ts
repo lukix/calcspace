@@ -6,6 +6,13 @@ import unitToString from './unitToString';
 import translateToBaseUnits from './translateToBaseUnits';
 import calculateEffectiveUnitMultiplier from './calculateEffectiveUnitMultiplier';
 
+const isArgumentListEmpty = argumentList => (
+  argumentList.length === 1
+    && argumentList[0].length === 1
+    && argumentList[0][0].length
+    && !argumentList[0][0][0].length
+);
+
 const evaluateSubexpression = (subexpressionToken, values, functions, unitsMap) => {
   return evaluateSum(subexpressionToken.value, values, functions, unitsMap);
 };
@@ -18,13 +25,16 @@ const evaluateFunction = (functionToken, values, functions, unitsMap) => {
       end: functionToken.positionEnd,
     });
   }
-  const argumentValue = evaluateSum(
-    functionToken.subexpressionContent,
-    values,
-    functions,
-    unitsMap
-  );
-  const { number, unit } = func(argumentValue);
+
+  const argumentsValues = isArgumentListEmpty(functionToken.arguments)
+    ? []
+    : functionToken.arguments.map(argumentExpression => evaluateSum(
+      argumentExpression,
+      values,
+      functions,
+      unitsMap
+    ));
+  const { number, unit } = func(...argumentsValues);
   return { number, unit };
 };
 

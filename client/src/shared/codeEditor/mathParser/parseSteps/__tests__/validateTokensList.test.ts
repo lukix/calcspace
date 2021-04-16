@@ -11,10 +11,12 @@ describe('validateTokensList', () => {
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        subexpressionContent: [
-          { type: tokens.SYMBOL, value: '6' },
-          { type: tokens.OPERATOR, value: '*' },
-          { type: tokens.SYMBOL, value: '9' },
+        arguments: [
+          [
+            { type: tokens.SYMBOL, value: '6' },
+            { type: tokens.OPERATOR, value: '*' },
+            { type: tokens.SYMBOL, value: '9' },
+          ]
         ],
       },
       { type: tokens.OPERATOR, value: '-' },
@@ -141,10 +143,12 @@ describe('validateTokensList', () => {
       {
         type: tokens.FUNCTION,
         name: 'sin',
-        subexpressionContent: [
-          { type: tokens.SYMBOL, value: '2' },
-          { type: tokens.OPERATOR, value: '*' },
-          { type: tokens.SYMBOL, value: '3' },
+        arguments: [
+          [
+            { type: tokens.SYMBOL, value: '2' },
+            { type: tokens.OPERATOR, value: '*' },
+            { type: tokens.SYMBOL, value: '3' },
+          ],
         ],
       },
     ];
@@ -184,7 +188,9 @@ describe('validateTokensList', () => {
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        subexpressionContent: [{ type: tokens.OPERATOR, value: '*' }],
+        arguments: [
+          [{ type: tokens.OPERATOR, value: '*' }],
+        ],
       },
     ];
 
