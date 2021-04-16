@@ -195,7 +195,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
       </pre>
       <h2>Custom functions</h2>
       <p>
-        You can define your own functions. Currently only one-line functions are supported.
+        You can define your own functions:
       </p>
       <pre className={styles.codeSnippet}>
         f(x) = 2 * x - 1
@@ -254,7 +254,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
         <br />
         (1m * 4m)^2<span className={styles.tokenVirtual}> = 16m^4</span>
       </pre>
-      <p>Trying to add or subtract values with incompatibe units will result in an error:</p>
+      <p>Trying to add or subtract values with incompatible units will result in an error:</p>
       <pre className={styles.codeSnippet}>
         <span className={styles.tokenError}>4m + 4s</span>
         <span className={styles.tokenVirtual}>
