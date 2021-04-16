@@ -11,10 +11,12 @@ describe('buildPrecedenceHierarchy', () => {
       {
         type: tokens.FUNCTION,
         name: 'foo',
-        subexpressionContent: [
-          { type: tokens.SYMBOL, value: '2', symbolType: symbolTypes.NUMERIC, number: 2 },
-          { type: tokens.OPERATOR, value: '*' },
-          { type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE },
+        arguments: [
+          [
+            { type: tokens.SYMBOL, value: '2', symbolType: symbolTypes.NUMERIC, number: 2 },
+            { type: tokens.OPERATOR, value: '*' },
+            { type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE },
+          ],
         ],
       },
       { type: tokens.OPERATOR, value: '*' },
@@ -36,10 +38,12 @@ describe('buildPrecedenceHierarchy', () => {
           {
             type: tokens.FUNCTION,
             name: 'foo',
-            subexpressionContent: [
+            arguments: [
               [
-                [{ type: tokens.SYMBOL, value: '2', symbolType: symbolTypes.NUMERIC, number: 2 }],
-                [{ type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE }],
+                [
+                  [{ type: tokens.SYMBOL, value: '2', symbolType: symbolTypes.NUMERIC, number: 2 }],
+                  [{ type: tokens.SYMBOL, value: 'b', symbolType: symbolTypes.VARIABLE }],
+                ],
               ],
             ],
           },
