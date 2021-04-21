@@ -1,0 +1,97 @@
+@import '../style/colors.scss';
+
+.pageHeader {
+  border-bottom: 4px solid $accent-color;
+  text-align: center;
+  padding: 20px 0;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.mainContainer {
+  width: calc(100% - 100px);
+  padding: 50px 0;
+  margin: 0px auto;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 0;
+
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0px;
+  }
+
+  h2:not(:first-child) {
+    margin-top: 65px;
+  }
+}
+
+.expressionInput {
+  width: 100%;
+  height: 2rem;
+  font-size: 1.8rem;
+  padding: 6px;
+}
+
+.stepContainer {
+  margin-top: 45px;
+}
+
+.stepResultContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: darken($prime-background-color, 15);
+  color: white;
+  padding: 10px;
+  height: 25px;
+  min-width: 30px;
+  margin-right: 10px;
+
+  border: 0px;
+  border-bottom: solid 5px black;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:global(.type_SYMBOL) {
+    border-color: #faa;
+  }
+
+  &:global(.type_OPERATOR) {
+    border-color: #aaf;
+  }
+
+  &:global(.type_SPACE) {
+    border-color: white;
+  }
+
+  &:global(.type_SUBEXPRESSION) {
+    border-color: #afa;
+  }
+
+  &:global(.type_FUNCTION) {
+    border-color: #ff0;
+  }
+
+  &:global(.symbolType_VARIABLE) {
+    border-style: solid;
+  }
+
+  &:global(.symbolType_NUMERIC) {
+    border-style: dashed;
+  }
+
+  &:global(.symbolType_NUMERIC_WITH_UNIT) {
+    border-style: dotted;
+  }
+}

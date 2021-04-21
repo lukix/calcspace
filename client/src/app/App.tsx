@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
 import { SignUpModal } from '../signUpModal';
 import LandingPage from '../LandingPage';
+import AnalyzerPage from '../AnalyzerPage';
 import routes from '../shared/routes';
 import { hasValidRefreshToken } from '../shared/authTokens';
 import { actions as reduxActions, selectors } from '../shared/userDataStore';
@@ -57,6 +58,9 @@ const App: React.FC<AppProps> = ({
             <Suspense fallback={<Spinner centered />}>
               <SharedEditorDataProvider user={user} showUserModal={showUserModal} viewOnly />
             </Suspense>
+          </Route>
+          <Route path={routes.analyzer.path} exact>
+            <AnalyzerPage />
           </Route>
           {user && (
             <Route path={routes.home.path}>

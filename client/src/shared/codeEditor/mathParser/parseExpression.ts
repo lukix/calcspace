@@ -1,15 +1,13 @@
 import pipe from 'ramda.pipe';
 import parseToPrimaryTokens from './parseSteps/parseToPrimaryTokens';
 import classifySymbols from './parseSteps/classifySymbols';
+import buildComplexUnits from './parseSteps/buildComplexUnits';
 import buildSymbolsWithExponentialNotation from './parseSteps/buildSymbolsWithExponentialNotation';
+import removeSpaceTokens from './parseSteps/removeSpaceTokens';
 import buildSubexpressions from './parseSteps/buildSubexpressions';
 import buildFunctions from './parseSteps/buildFunctions';
 import validateTokensList from './parseSteps/validateTokensList';
 import buildPrecedenceHierarchy from './parseSteps/buildPrecedenceHierarchy';
-import buildComplexUnits from './parseSteps/buildComplexUnits';
-import tokens from './tokens';
-
-const removeSpaceTokens = (tokensList) => tokensList.filter((token) => token.type !== tokens.SPACE);
 
 const parseExpression = (expression: string) => {
   try {
