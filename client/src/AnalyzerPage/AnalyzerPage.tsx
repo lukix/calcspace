@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { Fragment, useState, useMemo } from 'react';
 import classNames from 'classnames';
+import ReactTooltip from 'react-tooltip';
 
 import parseToPrimaryTokens from '../shared/codeEditor/mathParser/parseSteps/parseToPrimaryTokens';
 import classifySymbols from '../shared/codeEditor/mathParser/parseSteps/classifySymbols';
@@ -121,16 +122,22 @@ const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
             ) : (
               <div className={styles.stepResultContainer}>
                 {result.map((token, blockIndex) => (
-                  <div
-                    key={`${stepIndex}-${blockIndex}`}
-                    className={classNames(
-                      styles.block,
-                      `type_${token.type}`,
-                      `symbolType_${token.symbolType || 'DEFAULT'}`
-                    )}
-                  >
-                    {getDisplayValue(token)}
-                  </div>
+                  <Fragment key={`${stepIndex}-${blockIndex}`}>
+                    <div
+                      className={classNames(
+                        styles.block,
+                        `type_${token.type}`,
+                        `symbolType_${token.symbolType || 'DEFAULT'}`
+                      )}
+                      data-tip
+                      data-for={`tooltip-${stepIndex}-${blockIndex}`}
+                    >
+                      {getDisplayValue(token)}
+                    </div>
+                    <ReactTooltip effect="solid" id={`tooltip-${stepIndex}-${blockIndex}`}>
+                      <pre>{JSON.stringify(token, null, 2)}</pre>
+                    </ReactTooltip>
+                  </Fragment>
                 ))}
               </div>
             )}
