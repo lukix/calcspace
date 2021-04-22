@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 
 import TokenBlock from './TokenBlock';
 import PrecedenceHierarchy from './PrecedenceHierarchy';
+import ExpressionError from './ExpressionError';
 import analyzeExpression from './analyzeExpression';
 
 import styles from './AnalyzerPage.module.scss';
@@ -38,7 +39,7 @@ const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
           <div key={stepIndex} className={styles.stepContainer}>
             <h2>{stepName}</h2>
             {error ? (
-              `${error}`
+              <ExpressionError expression={expression} error={error} />
             ) : (
               <div className={styles.stepResultContainer}>
                 {result.map((token, blockIndex) => (
