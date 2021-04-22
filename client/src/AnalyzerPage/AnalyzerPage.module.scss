@@ -76,11 +76,11 @@
   }
 
   &:global(.type_SUBEXPRESSION) {
-    border-color: #afa;
+    border-color: #aff;
   }
 
   &:global(.type_FUNCTION) {
-    border-color: #ff0;
+    border-color: #faf;
   }
 
   &:global(.symbolType_VARIABLE) {
@@ -93,5 +93,48 @@
 
   &:global(.symbolType_NUMERIC_WITH_UNIT) {
     border-style: dotted;
+  }
+}
+
+.hierarchyElement {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: solid 1px white;
+  padding: 15px;
+  margin-right: 20px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &.sumElement {
+    &:not(:last-child):after {
+      font-size: 20px;
+      content: '+';
+      position: relative;
+      right: -22px;
+      width: 0;
+    }
+  }
+
+  &.productElement {
+    &:not(:last-child):after {
+      font-size: 20px;
+      content: '*';
+      position: relative;
+      right: -22px;
+      width: 0;
+    }
+  }
+
+  &.powerElement {
+    &:not(:last-child):after {
+      font-size: 20px;
+      content: '^';
+      position: relative;
+      right: -22px;
+      width: 0;
+    }
   }
 }
