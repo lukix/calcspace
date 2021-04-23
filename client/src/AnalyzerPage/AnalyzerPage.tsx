@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import debounce from 'lodash.debounce';
 
 import TokenBlock from './TokenBlock';
 import PrecedenceHierarchy from './PrecedenceHierarchy';
@@ -7,11 +8,22 @@ import analyzeExpression from './analyzeExpression';
 
 import styles from './AnalyzerPage.module.scss';
 
+const defaultExpressionValue = 'x+50m/s * c^2 - f(0.1+2e-1)';
+
+const useDebouncedState = (defaultState, delay) => {
+  const [state, setState] = useState(defaultState);
+  const debouncedSetState = useMemo(() => debounce(setState, delay), [delay]);
+  return [state, debouncedSetState];
+};
+
 interface AnalyzerPageProps {}
 
 const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
-  const [expression, setExpression] = useState('x+50m/s * c^2 - f(0.1+2e-1)');
+  const [expression, setExpression] = useDebouncedState(defaultExpressionValue, 200);
+  const [expressionInputValue, setExpressionInputValue] = useState(defaultExpressionValue);
+
   const changeExpression = (event) => {
+    setExpressionInputValue(event.target.value);
     setExpression(event.target.value);
   };
 
@@ -28,7 +40,7 @@ const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
         <input
           type="text"
           className={styles.expressionInput}
-          value={expression}
+          value={expressionInputValue}
           onChange={changeExpression}
           placeholder="Type an expression to analyze..."
           spellCheck={false}
