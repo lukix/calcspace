@@ -2,11 +2,26 @@
 
 .pageHeader {
   border-bottom: 4px solid $accent-color;
-  text-align: center;
-  padding: 20px 0;
+  padding: 20px 20px;
+  display: flex;
+  justify-content: space-between;
 
   h1 {
     margin: 0;
+  }
+
+  a {
+    color: $accent-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .githubLink {
+    color: white;
+    font-size: 2rem;
   }
 }
 
@@ -16,7 +31,6 @@
   margin: 0px auto;
   display: flex;
   flex-direction: column;
-  padding: 40px 0;
 
   h2 {
     font-size: 1.2rem;
@@ -144,5 +158,39 @@
 
   .invalidPart {
     color: red;
+  }
+}
+
+.stepDetailsIcon {
+  margin-left: 6px;
+  position: relative;
+  top: 3px;
+  cursor: pointer;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.stepDetailsModal {
+  background: $prime-background-color;
+  color: white;
+
+  .legendLabel {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 12px;
+  }
+
+  .block {
+    width: 25px;
+    margin-right: 15px;
+  }
+
+  .legendEntry {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
   }
 }

@@ -1,7 +1,10 @@
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import debounce from 'lodash.debounce';
+import { FaInfoCircle, FaGithub } from 'react-icons/fa';
 
 import TokenBlock from './TokenBlock';
+import StepDetailsModal from './StepDetailsModal';
 import PrecedenceHierarchy from './PrecedenceHierarchy';
 import ExpressionError from './ExpressionError';
 import analyzeExpression from './analyzeExpression';
@@ -19,6 +22,10 @@ const useDebouncedState = (defaultState, delay) => {
 interface AnalyzerPageProps {}
 
 const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
+  const [currentModalStep, setCurrentModalStep] = useState(null);
+  const openStepDetailsModal = (stepIndex) => setCurrentModalStep(stepIndex);
+  const hideStepDetailsModal = () => setCurrentModalStep(null);
+
   const [expression, setExpression] = useDebouncedState(defaultExpressionValue, 200);
   const [expressionInputValue, setExpressionInputValue] = useState(defaultExpressionValue);
 
@@ -34,7 +41,16 @@ const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
   return (
     <div>
       <header className={styles.pageHeader}>
-        <h1>CalcSpace.com - Parsing Engine Analyzer (for developers)</h1>
+        <h1>
+          <Link to="/">CalcSpace.com</Link> | Parsing Engine Analyzer (for developers)
+        </h1>
+        <a
+          href="https://github.com/lukix/calcspace"
+          className={styles.githubLink}
+          title="Calcspace on Github"
+        >
+          <FaGithub />
+        </a>
       </header>
       <div className={styles.mainContainer}>
         <input
@@ -49,7 +65,14 @@ const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
         />
         {tokenResults.map(({ stepName, result, error }, stepIndex) => (
           <div key={stepIndex} className={styles.stepContainer}>
-            <h2>{stepName}</h2>
+            <h2>
+              {stepIndex + 1}. {stepName}{' '}
+              <FaInfoCircle
+                className={styles.stepDetailsIcon}
+                title="Show details"
+                onClick={() => openStepDetailsModal(stepIndex)}
+              />
+            </h2>
             {error ? (
               <ExpressionError expression={expression} error={error} />
             ) : (
@@ -65,12 +88,24 @@ const AnalyzerPage: React.FC<AnalyzerPageProps> = () => {
             )}
           </div>
         ))}
-        <h2>{precedenceHierarchy.stepName}</h2>
+        <h2>
+          {tokenResults.length + 1}. {precedenceHierarchy.stepName}
+          <FaInfoCircle
+            className={styles.stepDetailsIcon}
+            title="Show details"
+            onClick={() => openStepDetailsModal(tokenResults.length)}
+          />
+        </h2>
         <PrecedenceHierarchy
           result={precedenceHierarchy.result}
           error={precedenceHierarchy.error}
         />
       </div>
+      <StepDetailsModal
+        onHide={() => hideStepDetailsModal()}
+        stepResults={[...tokenResults, precedenceHierarchy]}
+        currentModalStep={currentModalStep}
+      />
     </div>
   );
 };
