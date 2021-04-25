@@ -67,6 +67,7 @@ const analyzeExpression = (expression) => {
   const steps = [
     {
       func: parseToPrimaryTokens,
+      name: 'parseToPrimaryTokens',
       description: `Characters in the original string are mapped into tokens.
         Each token has information about its position in the original string (for error highlighting),
         value and type (SYMBOL, OPERATOR or SPACE).`,
@@ -74,12 +75,14 @@ const analyzeExpression = (expression) => {
     },
     {
       func: classifySymbols,
+      name: 'classifySymbols',
       description: `Each symbol token is classified into one of the three categories:
         VARIABLE, NUMERIC or NUMERIC_WITH_UNIT.`,
       legend: legendB,
     },
     {
       func: buildComplexUnits,
+      name: 'buildComplexUnits',
       description: `Sequences of tokens: NUMERIC_WITH_UNIT, OPERATOR, VARIABLE
         are merged into a single NUMERIC_WITH_UNIT token with more complex unit. For example "15m", "/", "s"
         would be combined into a single token "15m/s".`,
@@ -87,6 +90,7 @@ const analyzeExpression = (expression) => {
     },
     {
       func: buildSymbolsWithExponentialNotation,
+      name: 'buildSymbolsWithExponentialNotation',
       description: `"e" is a special symbol which should not be
         treated as a unit. It is used for exponential notation. For example "15e-2" is equivalent to "15*10^(-2)".
         This step changes NUMERIC_WITH_UNIT tokens where the unit is "e" into NUMERIC tokens.`,
@@ -94,27 +98,32 @@ const analyzeExpression = (expression) => {
     },
     {
       func: removeSpaceTokens,
+      name: 'removeSpaceTokens',
       description: `SPACE tokens are not significant for the following steps, so they can be removed.`,
       legend: legendC,
     },
     {
       func: buildSubexpressions,
+      name: 'buildSubexpressions',
       description: `Tokens between brackets are nested in SUBEXPRESSION tokens.`,
       legend: legendD,
     },
     {
       func: buildFunctions,
+      name: 'buildFunctions',
       description: `VARIABLE SYMBOL followed by a SUBEXPRESSION make a function.`,
       legend: legendE,
     },
     {
       func: validateTokensList,
+      name: 'validateTokensList',
       description: `This step looks for incorrect patterns in the token list,
       like for example adjacent operators ("15++3", "4^*2").`,
       legend: legendE,
     },
     {
       func: buildPrecedenceHierarchy,
+      name: 'buildPrecedenceHierarchy',
       description: `This is the final step that prepares a data structure that
       is convenient for evaluation. The flat list of tokens is converted into a 3D array,
       representing a sum of products of powers.`,
@@ -145,7 +154,7 @@ const analyzeExpression = (expression) => {
         results: [
           ...acc.results,
           {
-            stepName: currentStep.func.name,
+            stepName: currentStep.name,
             description: currentStep.description,
             legend: currentStep.legend,
             result: [],
@@ -162,7 +171,7 @@ const analyzeExpression = (expression) => {
         results: [
           ...acc.results,
           {
-            stepName: currentStep.func.name,
+            stepName: currentStep.name,
             description: currentStep.description,
             legend: currentStep.legend,
             result: newResult,
@@ -176,7 +185,7 @@ const analyzeExpression = (expression) => {
         results: [
           ...acc.results,
           {
-            stepName: currentStep.func.name,
+            stepName: currentStep.name,
             description: currentStep.description,
             legend: currentStep.legend,
             result: [],
