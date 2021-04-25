@@ -18,7 +18,7 @@ const ExpressionError: React.FC<ExpressionErrorProps> = ({ expression, error }) 
 
     return (
       <>
-        <pre className={styles.expressionError}>{`${error}`}</pre>
+        <p>{`${error}`}</p>
         <pre className={styles.expressionError}>
           {firstPart}
           <span className={styles.invalidPart}>{errorPart}</span>
