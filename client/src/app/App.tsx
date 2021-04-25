@@ -4,13 +4,13 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
 import { SignUpModal } from '../signUpModal';
 import LandingPage from '../LandingPage';
-import AnalyzerPage from '../AnalyzerPage';
 import routes from '../shared/routes';
 import { hasValidRefreshToken } from '../shared/authTokens';
 import { actions as reduxActions, selectors } from '../shared/userDataStore';
 import { UserProfileModal } from './userProfileModal';
 
 const AuthorizedApp = lazy(() => import('./AuthorizedApp'));
+const AnalyzerPage = lazy(() => import('../AnalyzerPage'));
 const SharedEditorDataProvider = lazy(() => import('../sharedEditor/SharedEditorDataProvider'));
 
 interface AppProps {
@@ -60,7 +60,9 @@ const App: React.FC<AppProps> = ({
             </Suspense>
           </Route>
           <Route path={routes.analyzer.path} exact>
-            <AnalyzerPage />
+            <Suspense fallback={<Spinner centered />}>
+              <AnalyzerPage />
+            </Suspense>
           </Route>
           {user && (
             <Route path={routes.home.path}>
