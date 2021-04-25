@@ -1,0 +1,201 @@
+@import '../style/colors.scss';
+
+.pageHeader {
+  border-bottom: 4px solid $accent-color;
+  padding: 20px 20px;
+  display: flex;
+  justify-content: space-between;
+
+  h1 {
+    margin: 0;
+  }
+
+  a {
+    color: $accent-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .githubLink {
+    color: white;
+    font-size: 2rem;
+  }
+}
+
+.mainContainer {
+  width: calc(100vw - 15px);
+  padding: 40px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0px;
+  }
+
+  h2:not(:first-child) {
+    margin-top: 65px;
+  }
+}
+
+.expressionInput {
+  width: calc(100% - 12px);
+  height: 2rem;
+  font-size: 1.8rem;
+  padding: 6px;
+}
+
+.stepContainer {
+  margin-top: 45px;
+}
+
+.stepResultContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: darken($prime-background-color, 15);
+  color: white;
+  padding: 10px;
+  height: 25px;
+  min-width: 30px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+
+  border: 0px;
+  border-bottom: solid 5px black;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:global(.type_SYMBOL) {
+    border-color: #faa;
+  }
+
+  &:global(.type_OPERATOR) {
+    border-color: #aaf;
+  }
+
+  &:global(.type_SPACE) {
+    border-color: white;
+  }
+
+  &:global(.type_SUBEXPRESSION) {
+    border-color: #aff;
+  }
+
+  &:global(.type_FUNCTION) {
+    border-color: #faf;
+  }
+
+  &:global(.symbolType_VARIABLE) {
+    border-style: solid;
+  }
+
+  &:global(.symbolType_NUMERIC) {
+    border-style: dashed;
+  }
+
+  &:global(.symbolType_NUMERIC_WITH_UNIT) {
+    border-style: dotted;
+  }
+}
+
+.hierarchyElement {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: solid 1px white;
+  padding: 15px;
+  margin-right: 20px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &.sumElement {
+    margin-bottom: 15px;
+
+    &:not(:last-child):after {
+      font-size: 20px;
+      content: '+';
+      position: relative;
+      right: -22px;
+      width: 0;
+    }
+  }
+
+  &.productElement {
+    &:not(:last-child):after {
+      font-size: 20px;
+      content: '*';
+      position: relative;
+      right: -22px;
+      width: 0;
+    }
+  }
+
+  &.powerElement {
+    &:not(:last-child):after {
+      font-size: 20px;
+      content: '^';
+      position: relative;
+      right: -22px;
+      width: 0;
+    }
+  }
+}
+
+.expressionError {
+  font-size: 1.2rem;
+
+  .invalidPart {
+    color: red;
+  }
+}
+
+.stepDetailsIcon {
+  margin-left: 6px;
+  position: relative;
+  top: 3px;
+  cursor: pointer;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.stepDetailsModal {
+  overflow: auto;
+  background: $prime-background-color;
+  color: white;
+
+  .legendLabel {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 12px;
+  }
+
+  .block {
+    width: 25px;
+    margin-right: 15px;
+  }
+
+  .legendEntry {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+}

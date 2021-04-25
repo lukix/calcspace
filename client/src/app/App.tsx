@@ -10,6 +10,7 @@ import { actions as reduxActions, selectors } from '../shared/userDataStore';
 import { UserProfileModal } from './userProfileModal';
 
 const AuthorizedApp = lazy(() => import('./AuthorizedApp'));
+const AnalyzerPage = lazy(() => import('../AnalyzerPage'));
 const SharedEditorDataProvider = lazy(() => import('../sharedEditor/SharedEditorDataProvider'));
 
 interface AppProps {
@@ -56,6 +57,11 @@ const App: React.FC<AppProps> = ({
           <Route path={routes.sharedViewFile.path} exact>
             <Suspense fallback={<Spinner centered />}>
               <SharedEditorDataProvider user={user} showUserModal={showUserModal} viewOnly />
+            </Suspense>
+          </Route>
+          <Route path={routes.analyzer.path} exact>
+            <Suspense fallback={<Spinner centered />}>
+              <AnalyzerPage />
             </Suspense>
           </Route>
           {user && (
