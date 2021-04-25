@@ -11,7 +11,7 @@ import analyzeExpression from './analyzeExpression';
 
 import styles from './AnalyzerPage.module.scss';
 
-const defaultExpressionValue = 'x+50m/s * c^2 - f(0.1+2e-1)';
+const defaultExpressionValue = 'a + b * 3m/s';
 
 const useDebouncedState = (defaultState, delay) => {
   const [state, setState] = useState(defaultState);

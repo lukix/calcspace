@@ -26,11 +26,10 @@
 }
 
 .mainContainer {
-  width: calc(100% - 100px);
-  padding: 50px 0;
-  margin: 0px auto;
-  display: flex;
-  flex-direction: column;
+  width: calc(100vw - 15px);
+  padding: 40px;
+  box-sizing: border-box;
+  overflow: hidden;
 
   h2 {
     font-size: 1.2rem;
@@ -43,7 +42,7 @@
 }
 
 .expressionInput {
-  width: 100%;
+  width: calc(100% - 12px);
   height: 2rem;
   font-size: 1.8rem;
   padding: 6px;
@@ -57,6 +56,8 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .block {
@@ -69,6 +70,7 @@
   height: 25px;
   min-width: 30px;
   margin-right: 10px;
+  margin-bottom: 10px;
 
   border: 0px;
   border-bottom: solid 5px black;
@@ -123,6 +125,8 @@
   }
 
   &.sumElement {
+    margin-bottom: 15px;
+
     &:not(:last-child):after {
       font-size: 20px;
       content: '+';
@@ -174,6 +178,7 @@
 }
 
 .stepDetailsModal {
+  overflow: auto;
   background: $prime-background-color;
   color: white;
 
@@ -191,6 +196,6 @@
   .legendEntry {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
   }
 }
