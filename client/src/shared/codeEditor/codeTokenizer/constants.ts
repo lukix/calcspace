@@ -232,9 +232,10 @@ export const units: Array<UnitMapTuple> = [
     { unit: 'mol', power: 1 },
   ]),
 
-  // "Convinient" units:
+  // "Convenient" units:
   ['rad', { multiplier: 1, baseUnits: [] }],
   ['deg', { multiplier: Math.PI / 180, baseUnits: [] }],
+  ['%', { multiplier: 0.01, baseUnits: [] }],
 
   ['min', { multiplier: 60, baseUnits: [{ unit: 's', power: 1 }] }],
   ['h', { multiplier: 3600, baseUnits: [{ unit: 's', power: 1 }] }],

@@ -1,6 +1,4 @@
-import { parseUnits } from '../mathParser';
-
-const UNITS_REGEX = /^([A-Za-z]+(\^[1-9]+[0-9]*)?(\/|\*))*([A-Za-z]+(\^(-?[1-9])+[0-9]*)?)$/;
+import { parseUnits, isValidUnit } from '../mathParser';
 
 const getUnitFromResultUnitString = (resultUnitString, allowUnits = true) => {
   const trimmedResultUnitString = resultUnitString.trim();
@@ -33,7 +31,7 @@ const getUnitFromResultUnitString = (resultUnitString, allowUnits = true) => {
     };
   }
   const unitString = trimmedResultUnitString.substring(1, trimmedResultUnitString.length - 1);
-  if (!unitString.match(UNITS_REGEX)) {
+  if (!isValidUnit(unitString)) {
     return { unit: null, error: 'Invalid desired result unit' };
   }
 

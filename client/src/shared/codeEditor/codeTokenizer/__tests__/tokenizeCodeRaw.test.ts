@@ -33,6 +33,23 @@ describe('tokenizeCode - raw result test', () => {
       `,
     },
     {
+      it: 'should support percentages',
+      code: `
+        50% + 1
+        0.1 = [%]
+        40%%
+        60a%
+        80%^2
+      `,
+      expectedResult: `
+        50% + 1 = 1.5
+        0.1 = [%] = 10%
+        40%%  Error: Invalid unit
+        60a%  Error: Invalid unit
+        80%^2  Error: Invalid unit
+      `,
+    },
+    {
       it: 'should support comments',
       code: `
         a = 3

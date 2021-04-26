@@ -1,8 +1,7 @@
 import tokens from '../tokens';
 import symbolTypes from '../symbolTypes';
 import { ParserError } from '../errors';
-
-const UNIT_REGEX = /^([A-Za-z]+(\^[1-9]+[0-9]*)?(\/|\*))*([A-Za-z]+(\^(-?[1-9])+[0-9]*)?)$/;
+import isValidUnit from '../isValidUnit';
 
 const isOperatorToken = (token, oparatorChars) =>
   token?.type === tokens.OPERATOR && oparatorChars.includes(token?.value);
@@ -42,7 +41,7 @@ const buildComplexUnits = (tokensList) => {
           ...unitTokens.map(({ value }) => value),
         ].join('');
 
-        if (!complexUnit.match(UNIT_REGEX)) {
+        if (!isValidUnit(complexUnit)) {
           throw new ParserError('Invalid unit', {
             start: acc.currentSymbolWithUnit.position,
             end: acc.currentSymbolWithUnit.positionEnd + complexUnit.length,
