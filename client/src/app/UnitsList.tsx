@@ -77,6 +77,7 @@ const unitsList = {
     { unit: '1deg', equivalent: { constant: '0.017453292519943295', exponent: '', unit: 'rad' } },
     { unit: '1rad', equivalent: { constant: '1', exponent: '', unit: '' } },
   ],
+  PERCENTAGE: [{ unit: '1%', equivalent: { constant: '0.01', exponent: '', unit: '' } }],
   VOLUME: [{ unit: '1l', equivalent: { constant: '1', exponent: '', unit: 'dm^3' } }],
   CURRENT: createUnitWithPrefixes('A'),
   TEMPERATURE: createUnitWithPrefixes('K'),
@@ -216,6 +217,8 @@ const UnitsList: React.FC<UnitsListProps> = () => {
       </pre>
       <h3>Angle</h3>
       <pre className={styles.codeSnippet}>{mapUnits(unitsList.ANGLE)}</pre>
+      <h3>Percentage</h3>
+      <pre className={styles.codeSnippet}>{mapUnits(unitsList.PERCENTAGE)}</pre>
       <h3>Volume</h3>
       <pre className={styles.codeSnippet}>{mapUnits(unitsList.VOLUME)}</pre>
       <h3>Electric current</h3>
