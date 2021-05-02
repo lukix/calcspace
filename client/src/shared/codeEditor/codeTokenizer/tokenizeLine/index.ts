@@ -1,15 +1,12 @@
-import evaluateExpression from '../evaluateExpression';
 import { tokens, functions, unitsMap } from '../constants';
-import getUnitFromResultUnitString from '../getUnitFromResultUnitString';
 import formatNumber from './formatNumber';
 import formatValueWithUnit from './formatValueWithUnit';
 import convertToComprehendibleUnit from './convertToComprehendibleUnit';
 import convertToDesiredUnit from './convertToDesiredUnit';
 import createTokenizedLineWithError from './createTokenizedLineWithError';
-import classifyPartsSplittedByEqualSigns from './classifyPartsSplittedByEqualSigns';
-import validateSplittedParts from './validateSplittedParts';
-import parseSymbol from './parseSymbol';
-import { EvaluationError } from '../../mathParser';
+import { evaluateParsedExpression } from '../../mathParser';
+
+import parseLine from './parseLine';
 
 const ALL_WHITESPACES_REGEX = /\s/g;
 const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
@@ -21,18 +18,21 @@ const tokenizeLine = (
   lineString,
   { exponentialNotation = false, showResultUnit = true }
 ) => {
-  const sanitizedExpression = lineString.trimStart();
+  const { error, isCommented, symbol, expression, resultUnit, meta } = parseLine(lineString);
 
-  if (sanitizedExpression === '') {
-    return {
+  if (error) {
+    return createTokenizedLineWithError({
       values,
       customFunctions,
       customFunctionsRaw,
-      tokenizedLine: [],
-    };
+      lineString,
+      errorMessage: error.message,
+      start: error.start,
+      end: error.end,
+    });
   }
 
-  if (sanitizedExpression.substring(0, 2) === '//') {
+  if (isCommented) {
     return {
       values,
       customFunctions,
@@ -41,51 +41,92 @@ const tokenizeLine = (
     };
   }
 
-  const partsSplittedByEqualSigns = lineString.split('=');
-  const splittedPartsValidationError = validateSplittedParts({
-    partsSplittedByEqualSigns,
-    values,
-    customFunctions,
-    customFunctionsRaw,
-    lineString,
-  });
-  if (splittedPartsValidationError) {
-    return splittedPartsValidationError;
-  }
-  const {
-    symbolBeforeSanitization,
-    expression,
-    resultUnitPart,
-  } = classifyPartsSplittedByEqualSigns(partsSplittedByEqualSigns);
-
-  const symbol = symbolBeforeSanitization ? sanitize(symbolBeforeSanitization) : null;
-  const parsedSymbol = parseSymbol({ symbol, values, customFunctions, lineString, functions });
-  if (parsedSymbol.error) {
-    return parsedSymbol.error;
-  }
-  const { functionName, functionArguments } = parsedSymbol;
-  const isFunction = !!functionName;
-
-  const expressionPartBeginningIndex = symbolBeforeSanitization
-    ? symbolBeforeSanitization.length + 1
-    : 0;
-
-  const resultUnitPartBeginningIndex =
-    (symbolBeforeSanitization ? symbolBeforeSanitization.length + 1 : 0) +
-    (expression ? expression.length + 1 : 0);
-
-  const { unit: resultUnit, error: resultUnitError } = resultUnitPart
-    ? getUnitFromResultUnitString(resultUnitPart, !isFunction)
-    : { unit: null, error: null };
-  if (resultUnitError) {
-    return createTokenizedLineWithError({
+  if (!expression) {
+    return {
       values,
       customFunctions,
       customFunctionsRaw,
-      lineString,
-      errorMessage: resultUnitError,
-      start: resultUnitPartBeginningIndex,
-    });
+      tokenizedLine: [],
+    };
+  }
+
+  if (symbol) {
+    if (functions[symbol.name] !== undefined) {
+      return createTokenizedLineWithError({
+        values,
+        customFunctions,
+        customFunctionsRaw,
+        lineString,
+        errorMessage: `Variable or function cannot have the same name as an existing function "${symbol.name}"`,
+      });
+    }
+
+    if (values[symbol.name] !== undefined || customFunctions[symbol.name] !== undefined) {
+      return createTokenizedLineWithError({
+        values,
+        customFunctions,
+        customFunctionsRaw,
+        lineString,
+        errorMessage: `"${symbol.name}" has already been defined. Variables and functions cannot be redefined`,
+      });
+    }
+  }
+
+  if (symbol && symbol.type === 'FUNCTION') {
+    if (resultUnit) {
+      return createTokenizedLineWithError({
+        values,
+        customFunctions,
+        customFunctionsRaw,
+        lineString,
+        errorMessage: `Units are not allowed in function declaration`,
+        start: meta.resultUnitStartIndex,
+      });
+    }
+
+    const newCustomFunction = (...args) => {
+      try {
+        const result = evaluateParsedExpression(expression, {
+          values: {
+            ...values,
+            ...(symbol.arguments as string[]).reduce(
+              (acc, argumentName, index) => ({
+                ...acc,
+                [argumentName]: args[index],
+              }),
+              {}
+            ),
+          },
+          functions: {
+            ...functions,
+            ...customFunctions,
+          },
+          unitsMap,
+        });
+        return result;
+      } catch (err) {
+        if (err.message) {
+          err.message = `Error in function "${symbol.name}": ${err.message}`;
+        }
+        throw err;
+      }
+    };
+
+    return {
+      values: {},
+      customFunctions: {
+        [symbol.name as string]: newCustomFunction,
+      },
+      customFunctionsRaw: {
+        [symbol.name as string]: lineString,
+      },
+      tokenizedLine: [
+        {
+          value: lineString,
+          tags: [tokens.NORMAL],
+        },
+      ],
+    };
   }
 
   if (resultUnit) {
@@ -97,73 +138,30 @@ const tokenizeLine = (
         customFunctionsRaw,
         lineString,
         errorMessage: `Unknown unit "${unknownUnit.unit}"`,
-        start: lineString.lastIndexOf('=') + 1,
+        start: meta.resultUnitStartIndex,
       });
     }
   }
 
-  if (isFunction) {
-    const customFunction = (...args) => {
-      const { result, error } = evaluateExpression(
-        expression,
-        {
-          ...values,
-          ...(functionArguments as string[]).reduce(
-            (acc, argumentName, index) => ({
-              ...acc,
-              [argumentName]: args[index],
-            }),
-            {}
-          ),
-        },
-        {
-          ...functions,
-          ...customFunctions,
-        },
-        unitsMap
-      );
-      if (error) {
-        throw new EvaluationError(`Error in function "${functionName}": ${error}`);
-      }
-
-      return result;
-    };
-
-    return {
-      values: {},
-      customFunctions: {
-        [functionName as string]: customFunction,
+  let result;
+  try {
+    result = evaluateParsedExpression(expression, {
+      values,
+      functions: {
+        ...functions,
+        ...customFunctions,
       },
-      customFunctionsRaw: {
-        [functionName as string]: sanitizedExpression,
-      },
-      tokenizedLine: [
-        {
-          value: lineString,
-          tags: [tokens.NORMAL],
-        },
-      ],
-    };
-  }
-  const { result, error, startCharIndex, endCharIndex } = evaluateExpression(
-    expression,
-    values,
-    {
-      ...functions,
-      ...customFunctions,
-    },
-    unitsMap
-  );
-
-  if (error) {
+      unitsMap,
+    });
+  } catch (err) {
     return createTokenizedLineWithError({
       values,
       customFunctions,
       customFunctionsRaw,
       lineString,
-      errorMessage: error,
-      start: (startCharIndex || 0) + expressionPartBeginningIndex,
-      end: endCharIndex ? (endCharIndex || 0) + expressionPartBeginningIndex : null,
+      errorMessage: err.message,
+      start: meta.expressionStartIndex + err.startCharIndex,
+      end: meta.expressionStartIndex + err.endCharIndex,
     });
   }
 
@@ -177,14 +175,16 @@ const tokenizeLine = (
       customFunctionsRaw,
       lineString,
       errorMessage: error.message,
-      start: expressionPartBeginningIndex,
+      start: meta.resultUnitStartIndex,
     });
   }
 
   const resultObject = resultUnit
     ? {
         ...formatNumber(valueConvertedToDesiredUnit, exponentialNotation),
-        unitString: resultUnitPart?.trim().substring(1, resultUnitPart?.trim().length - 1),
+        unitString: meta.resultUnitString
+          ?.trim()
+          .substring(1, meta.resultUnitString?.trim().length - 1),
       }
     : formatValueWithUnit(convertToComprehendibleUnit(result), exponentialNotation);
 
@@ -194,7 +194,8 @@ const tokenizeLine = (
     resultObject.unitString,
   ].join('');
   const showResult: boolean =
-    result !== null && (sanitize(expression) !== resultValueString || Boolean(resultUnit));
+    result !== null &&
+    (sanitize(meta.expressionString) !== resultValueString || Boolean(resultUnit));
   const resultTokens = !showResult
     ? []
     : resultObject.exponentString
@@ -214,21 +215,21 @@ const tokenizeLine = (
 
   const tokenizedLine = [
     {
-      value: resultUnitPart
+      value: resultUnit
         ? showResultUnit
-          ? lineString.substring(0, resultUnitPartBeginningIndex - 1)
-          : lineString.substring(0, resultUnitPartBeginningIndex - 1).trimEnd()
+          ? lineString.substring(0, meta.resultUnitStartIndex - 1)
+          : lineString.substring(0, meta.resultUnitStartIndex - 1).trimEnd()
         : lineString,
       tags: [tokens.NORMAL],
     },
-    ...(resultUnitPart && showResultUnit
-      ? [{ value: `=${resultUnitPart}`, tags: [tokens.NORMAL, tokens.DESIRED_UNIT] }]
+    ...(resultUnit && showResultUnit
+      ? [{ value: `=${meta.resultUnitString}`, tags: [tokens.NORMAL, tokens.DESIRED_UNIT] }]
       : []),
     ...resultTokens,
   ];
 
   return {
-    values: symbol && result !== null ? { [symbol]: result } : {},
+    values: symbol && result !== null ? { [symbol.name]: result } : {},
     customFunctions,
     customFunctionsRaw,
     tokenizedLine,

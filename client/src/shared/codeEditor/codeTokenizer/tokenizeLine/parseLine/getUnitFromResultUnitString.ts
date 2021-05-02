@@ -1,11 +1,8 @@
-import { parseUnits, isValidUnit } from '../mathParser';
+import { parseUnits, isValidUnit } from '../../../mathParser';
 
-const getUnitFromResultUnitString = (resultUnitString, allowUnits = true) => {
+const getUnitFromResultUnitString = (resultUnitString) => {
   const trimmedResultUnitString = resultUnitString.trim();
 
-  if (trimmedResultUnitString && !allowUnits) {
-    return { unit: null, error: 'Units are not allowed here' };
-  }
   if (trimmedResultUnitString.replace(/\s/g) !== trimmedResultUnitString) {
     return { unit: null, error: 'Encountered unexpected whitespaces' };
   }
