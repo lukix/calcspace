@@ -1,7 +1,7 @@
-import CodeTokenizerWithCache from '../codeTokenizerWithCache';
+import CodeTokenizer from '../codeTokenizer';
 import { tokens } from '../constants';
 
-const tokenizeCode = CodeTokenizerWithCache();
+const tokenizeCode = CodeTokenizer();
 
 describe('tokenizeCode - tokenization test', () => {
   it('should return tokenized structure with results', () => {

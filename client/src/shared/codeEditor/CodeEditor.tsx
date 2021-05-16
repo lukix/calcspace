@@ -8,7 +8,7 @@ import useCreateAndOpenSharedFile from '../../shared/useCreateAndOpenSharedFile'
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons';
 import ToggleButton from './toggleButton';
-import { CodeTokenizerWithCache, tokenizedCodeToString } from './codeTokenizer';
+import { CodeTokenizer, tokenizedCodeToString } from './codeTokenizer';
 import SharingModal from './SharingModal';
 import EditorSettingsModal from './EditorSettingsModal';
 import styles from './CodeEditor.module.scss';
@@ -61,7 +61,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   initialSharedEditEnabled,
   fileId,
 }) => {
-  const tokenizeCode = useMemo(() => CodeTokenizerWithCache(), []);
+  const tokenizeCode = useMemo(() => CodeTokenizer(), []);
 
   const [mode, setMode] = useState(modes.EDIT_MODE);
 

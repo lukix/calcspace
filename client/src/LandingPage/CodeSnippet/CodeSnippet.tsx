@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
-import { CodeTokenizerWithCache, HighlightedCode, codeEditorStyles } from '../../shared/codeEditor';
+import { CodeTokenizer, HighlightedCode, codeEditorStyles } from '../../shared/codeEditor';
 import styles from './CodeSnippet.module.scss';
 
 interface CodeSnippetProps {
@@ -8,7 +8,7 @@ interface CodeSnippetProps {
 }
 
 const CodeSnippet: React.FC<CodeSnippetProps> = ({ code }) => {
-  const tokenizeCode = useMemo(() => CodeTokenizerWithCache(), []);
+  const tokenizeCode = useMemo(() => CodeTokenizer(), []);
 
   const sanitizedCode = code
     .split('\n')
