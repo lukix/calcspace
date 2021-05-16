@@ -5,11 +5,13 @@ import convertToComprehendibleUnit from './convertToComprehendibleUnit';
 import convertToDesiredUnit from './convertToDesiredUnit';
 import { evaluateParsedExpression } from '../../../mathParser';
 
-import parseLine from '../parseLine';
-
-const evaluateLine = (values, customFunctions, lineString, { exponentialNotation = false }) => {
+const evaluateLine = (
+  values,
+  customFunctions,
+  lineParsingResult,
+  { exponentialNotation = false }
+) => {
   const templateResultObject = {
-    lineString,
     error: null,
     isCommented: false,
 
@@ -29,7 +31,7 @@ const evaluateLine = (values, customFunctions, lineString, { exponentialNotation
     },
   };
 
-  const { error, isCommented, symbol, expression, desiredUnit } = parseLine(lineString);
+  const { error, isCommented, symbol, expression, desiredUnit } = lineParsingResult;
 
   if (error) {
     return {
