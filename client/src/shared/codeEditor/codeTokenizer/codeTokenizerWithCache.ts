@@ -1,49 +1,31 @@
 import { constants } from './constants';
+
+import evaluateLine from './tokenizeLine/evaluateLine';
 import tokenizeLine from './tokenizeLine';
 
 const CodeTokenizerWithCache = () => {
-  let cache = new Map();
-
+  // TODO: Add cache back
   const tokenizeCodeWithCache = (code, options = {}) => {
-    const tempCache = new Map();
     const codeLines = code.split('\n');
     const initialState = {
       values: constants,
       customFunctions: {},
-      customFunctionsRaw: {},
       evaluatedLines: [],
     };
-    const { evaluatedLines } = codeLines.reduce((acc, expression) => {
-      const cacheKey = JSON.stringify({
-        values: acc.values,
-        customFunctions: Object.entries(acc.customFunctions).map(
-          ([key]) => `${key}:${acc.customFunctionsRaw[key]}`
-        ),
-        expression,
-        options,
-      });
-      const lineTokenizationResult = cache.has(cacheKey)
-        ? cache.get(cacheKey)
-        : tokenizeLine(
-            acc.values,
-            acc.customFunctions,
-            acc.customFunctionsRaw,
-            expression,
-            options
-          );
-      tempCache.set(cacheKey, lineTokenizationResult);
-      const { values, customFunctions, customFunctionsRaw, tokenizedLine } = lineTokenizationResult;
+    const { evaluatedLines } = codeLines.reduce((acc, codeLine) => {
+      const evaluatedLine = evaluateLine(acc.values, acc.customFunctions, codeLine, options);
       return {
-        values: { ...acc.values, ...values },
-        customFunctions: { ...acc.customFunctions, ...customFunctions },
-        customFunctionsRaw: { ...acc.customFunctionsRaw, ...customFunctionsRaw },
-        evaluatedLines: [...acc.evaluatedLines, tokenizedLine],
+        values: { ...acc.values, ...evaluatedLine.newVariable },
+        customFunctions: { ...acc.customFunctions, ...evaluatedLine.newFunction },
+        evaluatedLines: [...acc.evaluatedLines, evaluatedLine],
       };
     }, initialState);
 
-    cache = tempCache;
+    const tokenizedLines = evaluatedLines.map((evaluatedLine) =>
+      tokenizeLine(evaluatedLine, options)
+    );
 
-    return evaluatedLines;
+    return tokenizedLines;
   };
 
   return tokenizeCodeWithCache;

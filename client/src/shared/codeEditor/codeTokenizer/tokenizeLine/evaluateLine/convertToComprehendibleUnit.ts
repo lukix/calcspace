@@ -1,5 +1,5 @@
-import { unitToString } from '../../mathParser';
-import { units, unitsApplicableForResult } from '../constants';
+import { unitToString } from '../../../mathParser';
+import { units, unitsApplicableForResult } from '../../constants';
 
 const convertToComprehendibleUnit = ({ number, unit }) => {
   const unitString = unitToString(unit);

@@ -8,14 +8,11 @@ const emptyResult = {
   isCommented: false,
   symbol: null,
   expression: null,
-  resultUnit: null,
-  meta: {
-    expressionString: '',
-    expressionStartIndex: null,
-    resultUnitString: '',
-    resultUnitStartIndex: null,
-  },
+  desiredUnit: null,
 };
+
+const ALL_WHITESPACES_REGEX = /\s/g;
+const sanitize = (str: string) => str.replace(ALL_WHITESPACES_REGEX, '');
 
 const createGenericErrorResult = (lineString) => ({
   ...emptyResult,
@@ -42,6 +39,19 @@ const wrapResultWithError = (func) => {
   } catch (error) {
     return { result: null, error };
   }
+};
+
+const getResultObject = (partObject, parseFunction) => {
+  if (!partObject) {
+    return null;
+  }
+  return {
+    rawString: partObject.value,
+    sanitizedString: sanitize(partObject.value),
+    parsedValue: parseFunction(partObject.value),
+    startIndex: partObject.startIndex,
+    endIndex: partObject.startIndex + partObject.value.length,
+  };
 };
 
 const parseLine = (lineString) => {
@@ -75,22 +85,17 @@ const parseLine = (lineString) => {
   const { symbolPart, expressionPart, resultUnitPart } = splitResult;
 
   try {
-    const symbol = symbolPart ? parseSymbol(symbolPart.value) : null;
-    const expression = expressionPart ? parseExpression(expressionPart.value) : null;
-    const resultUnit = resultUnitPart ? parseResultUnit(resultUnitPart.value) : null;
+    const symbolResultObject = getResultObject(symbolPart, parseSymbol);
+    const expressionResultObject = getResultObject(expressionPart, parseExpression);
+    const desiredUnitResultObject = getResultObject(resultUnitPart, parseResultUnit);
 
     return {
+      ...emptyResult,
       error: null,
       isCommented: false,
-      expression,
-      symbol,
-      resultUnit,
-      meta: {
-        expressionString: expressionPart?.value || '',
-        expressionStartIndex: expressionPart?.startIndex || null,
-        resultUnitString: resultUnitPart?.value || '',
-        resultUnitStartIndex: resultUnitPart?.startIndex || null,
-      },
+      symbol: symbolResultObject,
+      expression: expressionResultObject,
+      desiredUnit: desiredUnitResultObject,
     };
   } catch (error) {
     if (error instanceof ParseSymbolError) {
