@@ -36,13 +36,21 @@ const Cache = () => {
       evaluatedLinesCache.push({ key, value: evaluatedLine });
       return evaluatedLine;
     },
+    cleanUp: (expectedSize) => {
+      const CACHE_SIZE_MARGIN = 1000;
+      if (parsingCache.size > expectedSize + CACHE_SIZE_MARGIN) {
+        parsingCache.clear();
+      }
+    },
   };
 };
 
 const CodeTokenizer = (cache = Cache()) => {
   const tokenizeCode = (code, options = {}) => {
-    cache.invalidateOnOptionsChange(options);
     const codeLines = code.split('\n');
+
+    cache.invalidateOnOptionsChange(options);
+    cache.cleanUp(codeLines.length);
 
     const parsedLines = codeLines.map((lineString) => {
       return cache.getParsedLine({
