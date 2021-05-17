@@ -1,8 +1,8 @@
-import CodeTokenizerWithCache from '../codeTokenizerWithCache';
+import CodeTokenizer from '../codeTokenizer';
 import tokenizedCodeToString from '../tokenizedCodeToString';
 import { trimIndentation } from '../testUtils';
 
-const tokenizeCode = CodeTokenizerWithCache();
+const tokenizeCode = CodeTokenizer();
 
 describe('tokenizeCode - raw result test', () => {
   [
@@ -506,6 +506,35 @@ describe('tokenizeCode - raw result test', () => {
         f(x, y) = x * y
 
         f(2)(3)  Error: Expected an operator or comma but encountered another parenthesis
+      `,
+    },
+    {
+      it: 'should display an error when desired unit is unknown',
+      code: `
+        5kg = [foo]
+      `,
+      expectedResult: `
+        5kg = [foo]  Error: Unknown unit "foo"
+      `,
+    },
+    {
+      it: 'should display an error when there is a missing value in a function',
+      code: `
+        f(x) = x + a
+        f(5)
+      `,
+      expectedResult: `
+        f(x) = x + a
+        f(5)  Error: Error in function "f": Missing value for symbol a
+      `,
+    },
+    {
+      it: 'should display an error when there is a desired unit specified for function declaration',
+      code: `
+        f(x) = x + 1 = [kg]
+      `,
+      expectedResult: `
+        f(x) = x + 1 = [kg]  Error: Units are not allowed in function declaration
       `,
     },
   ].forEach((testCaseData) => {
