@@ -3,7 +3,7 @@ import formatNumber from './formatNumber';
 import formatValueWithUnit from './formatValueWithUnit';
 import convertToComprehendibleUnit from './convertToComprehendibleUnit';
 import convertToDesiredUnit from './convertToDesiredUnit';
-import { evaluateParsedExpression } from '../../../mathParser';
+import { evaluateParsedExpression } from '../expressionParser';
 
 const evaluateLine = (
   values,

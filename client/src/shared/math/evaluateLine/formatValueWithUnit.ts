@@ -1,4 +1,4 @@
-import { unitToString } from '../../../mathParser';
+import { unitToString } from '../expressionParser';
 import formatNumber from './formatNumber';
 
 const formatValueWithUnit = ({ number, unit }, exponentialNotation) => {

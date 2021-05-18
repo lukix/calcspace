@@ -1,4 +1,4 @@
-import { parseUnits, isValidUnit } from '../../../mathParser';
+import { parseUnits, isValidUnit } from '../expressionParser';
 
 const getUnitFromResultUnitString = (resultUnitString) => {
   const trimmedResultUnitString = resultUnitString.trim();

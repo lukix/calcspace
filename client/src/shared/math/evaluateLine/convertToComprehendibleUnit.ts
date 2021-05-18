@@ -1,4 +1,4 @@
-import { unitToString } from '../../../mathParser';
+import { unitToString } from '../expressionParser';
 import { units, unitsApplicableForResult } from './constants';
 
 const convertToComprehendibleUnit = ({ number, unit }) => {

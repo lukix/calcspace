@@ -1,12 +1,12 @@
-import parseToPrimaryTokens from '../shared/codeEditor/mathParser/parseSteps/parseToPrimaryTokens';
-import classifySymbols from '../shared/codeEditor/mathParser/parseSteps/classifySymbols';
-import buildComplexUnits from '../shared/codeEditor/mathParser/parseSteps/buildComplexUnits';
-import buildSymbolsWithExponentialNotation from '../shared/codeEditor/mathParser/parseSteps/buildSymbolsWithExponentialNotation';
-import removeSpaceTokens from '../shared/codeEditor/mathParser/parseSteps/removeSpaceTokens';
-import buildSubexpressions from '../shared/codeEditor/mathParser/parseSteps/buildSubexpressions';
-import buildFunctions from '../shared/codeEditor/mathParser/parseSteps/buildFunctions';
-import validateTokensList from '../shared/codeEditor/mathParser/parseSteps/validateTokensList';
-import buildPrecedenceHierarchy from '../shared/codeEditor/mathParser/parseSteps/buildPrecedenceHierarchy';
+import parseToPrimaryTokens from '../shared/math/expressionParser/parseSteps/parseToPrimaryTokens';
+import classifySymbols from '../shared/math/expressionParser/parseSteps/classifySymbols';
+import buildComplexUnits from '../shared/math/expressionParser/parseSteps/buildComplexUnits';
+import buildSymbolsWithExponentialNotation from '../shared/math/expressionParser/parseSteps/buildSymbolsWithExponentialNotation';
+import removeSpaceTokens from '../shared/math/expressionParser/parseSteps/removeSpaceTokens';
+import buildSubexpressions from '../shared/math/expressionParser/parseSteps/buildSubexpressions';
+import buildFunctions from '../shared/math/expressionParser/parseSteps/buildFunctions';
+import validateTokensList from '../shared/math/expressionParser/parseSteps/validateTokensList';
+import buildPrecedenceHierarchy from '../shared/math/expressionParser/parseSteps/buildPrecedenceHierarchy';
 
 const legendA = [
   { token: { type: 'SYMBOL', value: '' }, label: `{ type: 'SYMBOL', ... }` },

@@ -2,7 +2,7 @@ import {
   unitToString,
   translateToBaseUnits,
   calculateEffectiveUnitMultiplier,
-} from '../../../mathParser';
+} from '../expressionParser';
 import { unitsMap } from './constants';
 
 const convertToDesiredUnit = ({ number, unit }, desiredUnit) => {

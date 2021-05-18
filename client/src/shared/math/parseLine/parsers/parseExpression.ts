@@ -1,4 +1,4 @@
-import { parseExpression as parse } from '../../../../mathParser';
+import { parseExpression as parse } from '../../expressionParser';
 
 export class ParseExpressionError {
   message: string;

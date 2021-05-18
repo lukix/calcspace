@@ -1,6 +1,6 @@
 import pipe from 'ramda.pipe';
 import factorial from 'math-factorial';
-import { EvaluationError } from '../../../mathParser';
+import { EvaluationError } from '../expressionParser';
 
 const createUnitlessFunction = (func, functionName, isInsideDomain = ({ number }) => true) =>
   pipe(

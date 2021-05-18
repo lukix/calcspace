@@ -1,7 +1,7 @@
 import { constants } from './constants';
 
-import parseLine from './tokenizeLine/parseLine';
-import evaluateLine from './tokenizeLine/evaluateLine';
+import parseLine from '../../math/parseLine';
+import evaluateLine from '../../math/evaluateLine';
 import tokenizeLine from './tokenizeLine';
 
 const Cache = () => {
