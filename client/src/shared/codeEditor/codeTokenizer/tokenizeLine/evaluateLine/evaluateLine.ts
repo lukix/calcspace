@@ -1,4 +1,4 @@
-import { functions, unitsMap } from '../../constants';
+import { functions, unitsMap } from './constants';
 import formatNumber from './formatNumber';
 import formatValueWithUnit from './formatValueWithUnit';
 import convertToComprehendibleUnit from './convertToComprehendibleUnit';

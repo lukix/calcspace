@@ -3,7 +3,7 @@ import {
   translateToBaseUnits,
   calculateEffectiveUnitMultiplier,
 } from '../../../mathParser';
-import { unitsMap } from '../../constants';
+import { unitsMap } from './constants';
 
 const convertToDesiredUnit = ({ number, unit }, desiredUnit) => {
   const desiredUnitInBaseUnits = translateToBaseUnits(desiredUnit, unitsMap);
