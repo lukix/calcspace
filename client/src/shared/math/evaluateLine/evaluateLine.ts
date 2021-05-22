@@ -1,3 +1,5 @@
+import checkFunctionForUndefinedSymbols from './checkFunctionForUndefinedSymbols';
+
 import { functions, unitsMap } from './constants';
 import formatNumber from './formatNumber';
 import formatValueWithUnit from './formatValueWithUnit';
@@ -89,6 +91,17 @@ const evaluateLine = (
           start: desiredUnit.startIndex,
           end: null,
         },
+      };
+    }
+
+    const undefinedSymbolsError = checkFunctionForUndefinedSymbols(symbol, expression, values, {
+      ...functions,
+      ...customFunctions,
+    });
+    if (undefinedSymbolsError) {
+      return {
+        ...templateResultObject,
+        error: undefinedSymbolsError,
       };
     }
 

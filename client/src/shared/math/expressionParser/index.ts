@@ -5,4 +5,5 @@ export { default as parseUnits } from './parseUnits';
 export { default as isValidUnit } from './isValidUnit';
 export { default as translateToBaseUnits } from './translateToBaseUnits';
 export { default as calculateEffectiveUnitMultiplier } from './calculateEffectiveUnitMultiplier';
+export { default as findRequiredSymbols } from './findRequiredSymbols';
 export { EvaluationError } from './errors';
