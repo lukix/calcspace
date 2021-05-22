@@ -520,12 +520,12 @@ describe('tokenizeCode - raw result test', () => {
     {
       it: 'should display an error when there is a missing value in a function',
       code: `
-        f(x) = x + a
+        f(x) = x + 5kg
         f(5)
       `,
       expectedResult: `
-        f(x) = x + a
-        f(5)  Error: Error in function "f": Missing value for symbol a
+        f(x) = x + 5kg
+        f(5)  Error: Error in function "f": Trying to add/subtract unitless value and a value with [kg] unit
       `,
     },
     {
@@ -535,6 +535,28 @@ describe('tokenizeCode - raw result test', () => {
       `,
       expectedResult: `
         f(x) = x + 1 = [kg]  Error: Units are not allowed in function declaration
+      `,
+    },
+    {
+      it: 'should display an error when there are undefined symbols in function declaration',
+      code: `
+        a = 5
+        f(x) = x + a
+        g(x) = x + c * d^2
+      `,
+      expectedResult: `
+        a = 5
+        f(x) = x + a
+        g(x) = x + c * d^2  Error: Missing value for symbols: c, d
+      `,
+    },
+    {
+      it: 'should display an error when there are undefined functions in function declaration',
+      code: `
+        f(x) = x + boo(4)
+      `,
+      expectedResult: `
+        f(x) = x + boo(4)  Error: Missing functions: boo
       `,
     },
   ].forEach((testCaseData) => {
