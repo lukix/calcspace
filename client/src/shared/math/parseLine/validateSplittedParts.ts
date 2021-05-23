@@ -4,7 +4,9 @@ const validateSplittedParts = (partsSplittedByEqualSigns) => {
       message: 'Too many equal signs',
       start:
         partsSplittedByEqualSigns[0].length +
+        1 +
         partsSplittedByEqualSigns[1].length +
+        1 +
         partsSplittedByEqualSigns[2].length,
       end: null,
     };

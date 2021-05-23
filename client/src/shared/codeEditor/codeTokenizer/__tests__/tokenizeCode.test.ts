@@ -337,4 +337,27 @@ describe('tokenizeCode - tokenization test', () => {
       ],
     ]);
   });
+
+  it('should correctly mark error when there are too many equality characters', () => {
+    // given
+    const code = '13kg+3kg = [kg] = jk = kj';
+
+    // when
+    const tokenizedCode = tokenizeCode(code);
+
+    // then
+    expect(tokenizedCode).toEqual([
+      [
+        {
+          value: '13kg+3kg = [kg] = jk ',
+          tags: [tokens.NORMAL, tokens.ERROR],
+        },
+        { value: '= kj', tags: [tokens.NORMAL, tokens.ERROR, tokens.ERROR_SOURCE] },
+        {
+          value: '  Error: Too many equal signs',
+          tags: [tokens.VIRTUAL],
+        },
+      ],
+    ]);
+  });
 });
