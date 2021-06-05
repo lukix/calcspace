@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import Spinner from '../shared/spinner';
-import { SignInModal } from './signInModal';
+import { SignInModal } from '../shared/signInModal';
 import { StartNowModal } from './startNowModal';
 import { StartNowButton } from './startNowButton';
 import { SignInButton } from './signInButton';

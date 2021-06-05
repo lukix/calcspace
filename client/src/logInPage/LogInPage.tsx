@@ -1,5 +1,5 @@
 import React from 'react';
-import { SignInModal } from '../LandingPage/signInModal';
+import { SignInModal } from '../shared/signInModal';
 import styles from './LogInPage.module.scss';
 
 interface LogInPageProps {}

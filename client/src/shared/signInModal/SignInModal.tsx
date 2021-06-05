@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { actions as reduxActions } from '../../shared/userDataStore';
-import httpRequest from '../../shared/httpRequest';
-import Spinner from '../../shared/spinner';
-import { Modal, ModalFormField } from '../../shared/modal';
-import routes from '../../shared/routes';
-import sharedStyles from '../../shared/shared.module.scss';
-import { SignInUpModalsStyles } from '../../shared/signInUpModals';
-import { setRefreshToken } from '../../shared/authTokens';
+import { actions as reduxActions } from '../userDataStore';
+import httpRequest from '../httpRequest';
+import Spinner from '../spinner';
+import { Modal, ModalFormField } from '../modal';
+import routes from '../routes';
+import sharedStyles from '../shared.module.scss';
+import { SignInUpModalsStyles } from '../signInUpModals';
+import { setRefreshToken } from '../authTokens';
 import styles from './SignInModal.module.scss';
 
 const validationSchema = yup.object().shape({
