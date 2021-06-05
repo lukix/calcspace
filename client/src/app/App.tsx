@@ -2,7 +2,8 @@ import React, { Suspense, lazy, useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../shared/spinner';
-import { SignUpModal } from '../signUpModal';
+import { SignUpPage } from '../signUpPage';
+import { LogInPage } from '../logInPage';
 import LandingPage from '../LandingPage';
 import routes from '../shared/routes';
 import { hasValidRefreshToken } from '../shared/authTokens';
@@ -46,9 +47,6 @@ const App: React.FC<AppProps> = ({
     <>
       <BrowserRouter>
         <Switch>
-          <Route path={routes.signUp.path} exact>
-            <SignUpModal />
-          </Route>
           <Route path={routes.sharedEditFile.path} exact>
             <Suspense fallback={<Spinner centered />}>
               <SharedEditorDataProvider user={user} showUserModal={showUserModal} />
@@ -71,6 +69,12 @@ const App: React.FC<AppProps> = ({
               </Suspense>
             </Route>
           )}
+          <Route path={routes.signUp.path} exact>
+            <SignUpPage />
+          </Route>
+          <Route path={routes.logIn.path} exact>
+            <LogInPage />
+          </Route>
           <Route path={routes.home.path} exact>
             <LandingPage />
           </Route>

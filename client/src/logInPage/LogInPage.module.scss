@@ -1,0 +1,13 @@
+@import '../style/colors.scss';
+
+.pageContainer {
+  width: calc(100% - 30px);
+  min-height: 100%;
+  padding: 0 15px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

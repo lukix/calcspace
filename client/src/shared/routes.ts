@@ -2,6 +2,7 @@ const routes = {
   home: { path: '/' },
   analyzer: { path: '/analyzer' },
   signUp: { path: '/sign-up' },
+  logIn: { path: '/log-in' },
   newFile: { path: '/new-file' },
   file: { path: '/file/:fileId' },
   unitsList: { path: '/units-list' },

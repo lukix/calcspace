@@ -10,7 +10,7 @@ import routes from '../shared/routes';
 import AppDescription from './AppDescription';
 import sharedStyles from '../shared/shared.module.scss';
 import { SignInUpModalsStyles } from '../shared/signInUpModals';
-import styles from './SignUpModal.module.scss';
+import styles from './SignUpPage.module.scss';
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -35,9 +35,9 @@ const validationSchema = yup.object().shape({
 const addedUserAction = ({ username, password }) =>
   httpRequest.post('users', { username, password });
 
-interface SignUpModalProps {}
+interface SignUpPageProps {}
 
-const SignUpModal: React.FC<SignUpModalProps> = () => {
+const SignUpPage: React.FC<SignUpPageProps> = () => {
   const [addUser, addedUser, isAddingUser, addUserError] = useAsyncAction(addedUserAction);
 
   const formik = useFormik({
@@ -91,7 +91,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
                   disabled={isAddingUser}
                 />
                 <p className={SignInUpModalsStyles.switchPageMessage}>
-                  Already have an account? <Link to={routes.home.path}>Log in</Link>.
+                  Already have an account? <Link to={routes.logIn.path}>Log in</Link>.
                 </p>
               </div>
               {addUserError && (
@@ -104,7 +104,7 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
             <div className={styles.signUpSuccessMessage}>
               <FaRegCheckCircle />
               <p>
-                You have successfully signed up! You can <Link to={routes.home.path}>Log in</Link>{' '}
+                You have successfully signed up! You can <Link to={routes.logIn.path}>Log in</Link>{' '}
                 now.
               </p>
             </div>
@@ -115,4 +115,4 @@ const SignUpModal: React.FC<SignUpModalProps> = () => {
   );
 };
 
-export default SignUpModal;
+export default SignUpPage;

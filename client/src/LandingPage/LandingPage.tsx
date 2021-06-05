@@ -1,6 +1,9 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import Spinner from '../shared/spinner';
 import { SignInModal } from './signInModal';
+import { StartNowModal } from './startNowModal';
+import { StartNowButton } from './startNowButton';
+import { SignInButton } from './signInButton';
 import {
   COMPLEX_CALCULATIONS_FRAMES,
   CONVERTING_UNITS_FRAMES,
@@ -58,6 +61,13 @@ const LandingPage: React.FC<LandingPageProps> = () => {
         <div className={styles.modalsContainer}>
           <div className={styles.modalsInnerWrapper}>
             <SignInModal />
+            <StartNowModal />
+          </div>
+        </div>
+        <div className={styles.modalsContainerCompact}>
+          <div className={styles.modalsInnerWrapper}>
+            <StartNowButton />
+            <SignInButton />
           </div>
         </div>
       </div>
