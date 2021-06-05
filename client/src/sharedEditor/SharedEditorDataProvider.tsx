@@ -54,7 +54,7 @@ const SharedEditorDataProvider: React.FC<SharedEditorDataProviderProps> = ({
           <ul>
             <li>The URL is incorrect.</li>
             <li>The file has been removed due to not being visited for more than 30 days.</li>
-            <li>Some other unexpected error has occured.</li>
+            <li>Some other unexpected error has occurred.</li>
           </ul>
         </div>
       );

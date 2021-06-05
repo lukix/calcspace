@@ -96,7 +96,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
               </div>
               {addUserError && (
                 <p className={sharedStyles.errorMessage}>
-                  Unexpected error has occured. Signing up failed.
+                  Unexpected error has occurred. Signing up failed.
                 </p>
               )}
             </form>
