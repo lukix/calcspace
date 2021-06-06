@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SignUpModal.module.scss';
+import styles from './SignUpPage.module.scss';
 
 const AppDescription = () => (
   <p>

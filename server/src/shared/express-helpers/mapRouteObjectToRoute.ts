@@ -21,7 +21,7 @@ const mapRouteObjectToRoute = ({
   } catch (err) {
     console.log(err); // TODO: Decouple - custom logger
     res.status(500);
-    res.send({ error: 'Internal server error has occured' });
+    res.send({ error: 'Internal server error has occurred' });
   }
 };
 

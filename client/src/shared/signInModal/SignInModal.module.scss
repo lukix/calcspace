@@ -1,0 +1,12 @@
+@import '../../style/colors.scss';
+
+.signInModal {
+  width: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 1199px) {
+  .signInModal {
+    min-height: 0;
+  }
+}
