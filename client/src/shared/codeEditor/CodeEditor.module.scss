@@ -1,4 +1,5 @@
 @import '../../style/colors.scss';
+@import '../../style/mixins.scss';
 
 $expression-font-family: 'Courier New', Courier, monospace;
 
@@ -46,22 +47,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
   width: fit-content;
 
   &:not(.withoutHighlighting) {
-    .tokenError {
-      color: #dcc;
-    }
-
-    .tokenErrorSource {
-      color: #f44;
-    }
-
-    .tokenVirtual {
-      color: #999;
-    }
-
-    .tokenComment,
-    .tokenDesiredUnit {
-      color: $accent-color;
-    }
+    @include tokenColors;
   }
 }
 
