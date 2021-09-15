@@ -259,13 +259,13 @@ const UserGuide: React.FC<UserGuideProps> = ({
       </pre>
       <p>Trying to add or subtract values with incompatible units will result in an error:</p>
       <pre className={styles.codeSnippet}>
-        <span className={styles.tokenError}>4m + 4s</span>
+        <span className={styles.tokenErrorSource}>4m + 4s</span>
         <span className={styles.tokenVirtual}>
           {'  '}
           Error: Trying to add/subtract values with incompatible units: [m] and [s]
         </span>
         <br />
-        <span className={styles.tokenError}>7s - 5s - 2kg</span>
+        <span className={styles.tokenErrorSource}>7s - 5s - 2kg</span>
         <span className={styles.tokenVirtual}>
           {'  '}
           Error: Trying to add/subtract values with incompatible units: [s] and [kg]
@@ -277,7 +277,7 @@ const UserGuide: React.FC<UserGuideProps> = ({
         2.5kg = [g]<span className={styles.tokenVirtual}> = 2500g</span>
         <br />E = 1500J = [N*m]<span className={styles.tokenVirtual}> = 1500N*m</span>
         <br />E = [kJ]<span className={styles.tokenVirtual}> = 1.5kJ</span>
-        <br />E = <span className={styles.tokenError}>[kg]</span>
+        <br />E = <span className={styles.tokenErrorSource}>[kg]</span>
         <span className={styles.tokenVirtual}>
           {'  '}
           Error: "kg*m^2/s^2" cannot be converted to [kg]

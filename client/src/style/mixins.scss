@@ -1,0 +1,31 @@
+@import './colors.scss';
+
+@mixin tokenColors {
+  .tokenError {
+    color: #dcc;
+  }
+
+  .tokenErrorSource {
+    color: #f44;
+  }
+
+  .tokenVirtual {
+    color: #aaa;
+  }
+
+  .tokenComment,
+  .tokenDesiredUnit {
+    color: $accent-color;
+  }
+}
+
+@mixin formattedCode {
+  font-family: $expression-font-family;
+  font-size: 1.1rem;
+  line-height: 1.25rem;
+  color: $font-light-color;
+
+  sup {
+    line-height: 0;
+  }
+}

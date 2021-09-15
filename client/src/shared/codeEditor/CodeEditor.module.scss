@@ -1,4 +1,5 @@
 @import '../../style/colors.scss';
+@import '../../style/mixins.scss';
 
 $expression-font-family: 'Courier New', Courier, monospace;
 
@@ -8,18 +9,12 @@ $expression-font-family: 'Courier New', Courier, monospace;
 }
 
 @mixin commonCodeFormat {
-  font-family: $expression-font-family;
-  font-size: 1rem;
-  line-height: 1.25rem;
+  @include formattedCode;
+
   margin: 0;
   padding: 8px;
   border: 0;
   overflow: hidden;
-  color: $font-light-color;
-
-  sup {
-    line-height: 0;
-  }
 }
 
 .editorTextarea {
@@ -46,22 +41,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
   width: fit-content;
 
   &:not(.withoutHighlighting) {
-    .tokenError {
-      color: #dcc;
-    }
-
-    .tokenErrorSource {
-      color: #f44;
-    }
-
-    .tokenVirtual {
-      color: #999;
-    }
-
-    .tokenComment,
-    .tokenDesiredUnit {
-      color: $accent-color;
-    }
+    @include tokenColors;
   }
 }
 
