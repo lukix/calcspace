@@ -10,7 +10,7 @@
   }
 
   .tokenVirtual {
-    color: #999;
+    color: #aaa;
   }
 
   .tokenComment,
@@ -21,7 +21,7 @@
 
 @mixin formattedCode {
   font-family: $expression-font-family;
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 1.25rem;
   color: $font-light-color;
 
