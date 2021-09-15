@@ -3,19 +3,6 @@
 
 $expression-font-family: 'Courier New', Courier, monospace;
 
-@mixin formattedCode {
-  font-family: $expression-font-family;
-  font-size: 1rem;
-  line-height: 1.25rem;
-  color: $font-light-color;
-
-  sup {
-    line-height: 0;
-  }
-
-  @include tokenColors;
-}
-
 .userGuide {
   max-width: 800px;
   font-size: 1.2rem;
@@ -27,6 +14,7 @@ $expression-font-family: 'Courier New', Courier, monospace;
 
 .codeSnippet {
   @include formattedCode;
+  @include tokenColors;
 
   margin-left: 10px;
   padding: 10px;

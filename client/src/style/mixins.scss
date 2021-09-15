@@ -18,3 +18,14 @@
     color: $accent-color;
   }
 }
+
+@mixin formattedCode {
+  font-family: $expression-font-family;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  color: $font-light-color;
+
+  sup {
+    line-height: 0;
+  }
+}
