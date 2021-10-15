@@ -67,4 +67,4 @@ Backend is deployed on Heroku and frontend is deployed on Netlify.
 
 ### Math parser
 
-Calcspace uses a custom math parser. For more details check [parseExpression docs](./client/src/shared/math/expressionParser/docs/docs.md) and parsing analyzer tool on [calcspace.com/analyze](https://calcspace.com/analyze).
+Calcspace uses a custom math parser. For more details check [parseExpression docs](./client/src/shared/math/expressionParser/docs/docs.md) and parsing analyzer tool on [calcspace.com/analyzer](https://calcspace.com/analyzer).
