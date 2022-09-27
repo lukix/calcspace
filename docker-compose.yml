@@ -6,7 +6,7 @@ services:
     restart: always
     command: yarn start
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -18,7 +18,7 @@ services:
     restart: always
     command: yarn run dev
     ports:
-      - "3001:3001"
+      - '3001:3001'
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -32,10 +32,37 @@ services:
     image: postgres
     restart: always
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - ./db:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+  authentication-service:
+    build: ./authenticationService
+    restart: always
+    command: yarn run dev
+    ports:
+      - '3002:3002'
+    volumes:
+      - ./authenticationService:/app
+      - /app/node_modules
+    environment:
+      - PORT=${AUTHENTICATION_SERVICE_PORT}
+      - ORIGIN_URL=${ORIGIN_URL}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TOKEN_EXPIRATION_DURATION_MS=${TOKEN_EXPIRATION_DURATION_MS}
+    depends_on:
+      - dynamodb
+  dynamodb:
+    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
+    image: 'amazon/dynamodb-local:latest'
+    restart: always
+    container_name: dynamodb-local
+    ports:
+      - '8000:8000'
+    volumes:
+      - './authDb:/home/dynamodblocal/data'
+    working_dir: /home/dynamodblocal

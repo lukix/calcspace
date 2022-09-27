@@ -1,8 +1,5 @@
 {
-  "eslint.workingDirectories": [
-    "client",
-    "server"
-  ],
+  "eslint.workingDirectories": ["client", "server", "authenticationService"],
 
   "editor.formatOnSave": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -20,10 +17,5 @@
   "[css]": {
     "editor.formatOnSave": true
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }
