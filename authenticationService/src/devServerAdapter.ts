@@ -4,7 +4,13 @@ import AWS from 'aws-sdk';
 
 import { createRouterFromRouteObjects } from './shared/express-helpers';
 
-import { PORT, DATABASE_URL } from './config';
+import {
+  PORT,
+  DATABASE_URL,
+  DATABASE_REGION,
+  DATABASE_ACCESS_KEY_ID,
+  DATABASE_SECRET_ACCESS_KEY,
+} from './config';
 
 import routes from './routes';
 import DbService from './dbService';
@@ -14,10 +20,10 @@ console.log('Starting authentication service');
 (async () => {
   try {
     const dynamodb = new AWS.DynamoDB({
-      region: 'us-west-2',
+      region: DATABASE_REGION,
       endpoint: DATABASE_URL,
-      accessKeyId: 'TEST',
-      secretAccessKey: 'TEST',
+      accessKeyId: DATABASE_ACCESS_KEY_ID,
+      secretAccessKey: DATABASE_SECRET_ACCESS_KEY,
     });
 
     const app = express();
