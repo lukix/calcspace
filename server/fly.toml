@@ -1,0 +1,44 @@
+# fly.toml file generated for calcspace-api on 2022-11-26T21:59:12+01:00
+
+app = "calcspace-api"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+  ORIGIN_URL = "regexp:^(https://calcspace\\.com|https://deploy-preview-\\d+--math-ide\\.netlify\\.app)$"
+  DB_SSL_ENABLED = "true"
+  PORT = "8080"
+
+[build]
+  builder = "heroku/buildpacks:20"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
