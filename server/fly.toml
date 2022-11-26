@@ -10,6 +10,9 @@ processes = []
   DB_SSL_ENABLED = "true"
   PORT = "8080"
 
+[build]
+  builder = "heroku/buildpacks:20"
+
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
