@@ -6,7 +6,7 @@ kill_timeout = 5
 processes = []
 
 [env]
-  ORIGIN_URL = "regexp:^(https://calcspace\.com|https://deploy-preview-\d+--math-ide\.netlify\.app)$"
+  ORIGIN_URL = "regexp:^(https://calcspace\\.com|https://deploy-preview-\\d+--math-ide\\.netlify\\.app)$"
   DB_SSL_ENABLED = "true"
   PORT = "8080"
 
