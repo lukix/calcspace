@@ -1,0 +1,12 @@
+name: test-actions
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14.16.0'
+      - run: yarn run install:all
+      - run: yarn run pre-push
