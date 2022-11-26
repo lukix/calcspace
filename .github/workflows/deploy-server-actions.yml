@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - configure-continuous-deployment-to-flyio
 jobs:
   deploy:
     runs-on: ubuntu-latest
