@@ -70,14 +70,24 @@ console.log('Starting application');
     const io = new SocketServer(http, { cors: corsOptions });
     const sharedFilesManager = SharedFilesManager({ io });
 
-    const testRoute = {
-      path: '/',
+    const apiHealthCheckRoute = {
+      path: '/api-health-check',
       method: 'get',
-      handler: () => ({ response: 'Hello World!' }),
+      handler: () => ({ health: 'ok' }),
+    };
+
+    const dbHealthCheckRoute = {
+      path: '/db-health-check',
+      method: 'get',
+      handler: async () => {
+        await dbClient.query('SELECT 1');
+        return { health: 'ok' };
+      },
     };
 
     const routesDefinitions = nestRoutes('/api', [
-      testRoute,
+      apiHealthCheckRoute,
+      dbHealthCheckRoute,
       ...nestRoutes('/users', usersRoutes({ dbClient })),
       ...nestRoutes('/shared-files', sharedFilesRoutes({ dbClient, sharedFilesManager })),
       ...applyMiddlewares(
