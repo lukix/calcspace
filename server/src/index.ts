@@ -73,7 +73,7 @@ console.log('Starting application');
     const apiHealthCheckRoute = {
       path: '/api-health-check',
       method: 'get',
-      handler: () => ({ health: 'ok' }),
+      handler: () => ({ response: { health: 'ok' } }),
     };
 
     const dbHealthCheckRoute = {
@@ -81,7 +81,7 @@ console.log('Starting application');
       method: 'get',
       handler: async () => {
         await dbClient.query('SELECT 1');
-        return { health: 'ok' };
+        return { response: { health: 'ok' } };
       },
     };
 
