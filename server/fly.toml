@@ -45,7 +45,7 @@ processes = []
 
   [[services.http_checks]]
     interval = 10000
-    grace_period = "10s"
+    grace_period = "60s"
     method = "get"
     path = "/api"
     protocol = "https"
