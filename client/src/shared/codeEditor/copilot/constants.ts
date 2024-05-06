@@ -77,3 +77,12 @@ If the code is complete, answer with empty response
 
 export const DEBOUNCE_WAIT = 1500;
 export const CACHE_SIZE = 100;
+
+export const MODES = {
+  NONE: 'none',
+  OPENAI: 'openai',
+  GROQ: 'groq',
+  OLLAMA_CHAT: 'ollama-chat',
+  OLLAMA_GENERATE: 'ollama-generate',
+} as const;
+export type Mode = typeof MODES[keyof typeof MODES];

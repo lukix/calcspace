@@ -13,6 +13,8 @@ import SharingModal from './SharingModal';
 import EditorSettingsModal from './EditorSettingsModal';
 import styles from './CodeEditor.module.scss';
 import { useCopilot } from './copilot/useCopilot';
+import { MODES } from './copilot/constants';
+import { useCopilotOptions } from './copilot/useCopilotOptions';
 
 const createSharedFileAction = ({ code }) => httpRequest.post(`shared-files`, { code });
 
@@ -66,6 +68,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const [mode, setMode] = useState(modes.EDIT_MODE);
 
+  const {
+    copilotMode,
+    setCopilotMode,
+    openAIApiKey,
+    setOpenAIApiKey,
+    groqApiKey,
+    setGroqApiKey,
+    ollamaUrl,
+    setOllamaUrl,
+  } = useCopilotOptions();
+
   const [exponentialNotation, setExponentialNotation] = useState(
     localStorage.getItem('exponentialNotation') === 'true'
   );
@@ -103,11 +116,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     initialSharedEditEnabled,
   ]);
 
-  const onCodeChange = (e) => {
-    const value = e.target.value;
-    onChange(value);
-  };
-
   const isInViewMode = mode === modes.VIEW_MODE;
 
   const evaluatedCode = tokenizeCode(code, {
@@ -115,7 +123,16 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     showResultUnit: !isInViewMode || showResultUnit,
   });
 
-  const [completion, onAccept] = useCopilot(code, isInViewMode, onChange);
+  const [enabledCompletion, setEnabledCompletion] = useState(false);
+  const [completion, onAccept] = useCopilot({
+    code,
+    enable: enabledCompletion && !isInViewMode && copilotMode !== MODES.NONE,
+    onChange,
+    mode: copilotMode,
+    openAIApiKey,
+    groqApiKey,
+    ollamaUrl,
+  });
 
   const evaluatedCodeWithCompletion = evaluatedCode.map((line, index) => {
     if (index === evaluatedCode.length - 1) {
@@ -133,7 +150,18 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       e.preventDefault();
       onAccept();
     }
+    if (e.key === 'Escape') {
+      setEnabledCompletion(false);
+    }
   }
+
+  const onCodeChange = (e) => {
+    const value = e.target.value;
+    if (value !== code) {
+      setEnabledCompletion(true);
+    }
+    onChange(value);
+  };
 
   const codeWithResults = tokenizedCodeToString(evaluatedCodeWithCompletion);
 
@@ -222,6 +250,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         setExponentialNotation={setExponentialNotation}
         showResultUnit={showResultUnit}
         setShowResultUnit={setShowResultUnit}
+        copilotMode={copilotMode}
+        setCopilotMode={setCopilotMode}
+        openAIApiKey={openAIApiKey}
+        setOpenAIApiKey={setOpenAIApiKey}
+        groqApiKey={groqApiKey}
+        setGroqApiKey={setGroqApiKey}
+        ollamaUrl={ollamaUrl}
+        setOllamaUrl={setOllamaUrl}
       />
     </div>
   );
