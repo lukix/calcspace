@@ -60,11 +60,6 @@ docker-compose logs -f
 
 Database migrations are run on every start of the NodeJS server. They are specified in the `setupDatabase.ts` file.
 
-### Deployment
-
-On every push to the `master` branch, application deploy is triggered automatically.
-Backend is deployed on Heroku and frontend is deployed on Netlify.
-
 ### Math parser
 
 Calcspace uses a custom math parser. For more details check [parseExpression docs](./client/src/shared/math/expressionParser/docs/docs.md) and parsing analyzer tool on [calcspace.com/analyzer](https://calcspace.com/analyzer).
