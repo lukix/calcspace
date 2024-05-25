@@ -8,16 +8,19 @@ import useCreateAndOpenSharedFile from '../../shared/useCreateAndOpenSharedFile'
 import HighlightedCode from './HighlightedCode';
 import RadioButtons from './radioButtons';
 import ToggleButton from './toggleButton';
-import { CodeTokenizer, tokenizedCodeToString } from './codeTokenizer';
+import { CodeTokenizer, tokenizedCodeToString, tokens } from './codeTokenizer';
 import SharingModal from './SharingModal';
 import EditorSettingsModal from './EditorSettingsModal';
 import styles from './CodeEditor.module.scss';
+import { useCopilot } from './copilot/useCopilot';
+import { MODES } from './copilot/constants';
+import { useCopilotOptions } from './copilot/useCopilotOptions';
 
 const createSharedFileAction = ({ code }) => httpRequest.post(`shared-files`, { code });
 
 interface CodeEditorProps {
   code: string;
-  onChange: Function;
+  onChange: (value: string) => void;
   signedInView: boolean;
   textareaRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
   viewOnly?: boolean;
@@ -65,6 +68,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const [mode, setMode] = useState(modes.EDIT_MODE);
 
+  const {
+    copilotMode,
+    setCopilotMode,
+    openAIApiKey,
+    setOpenAIApiKey,
+    groqApiKey,
+    setGroqApiKey,
+    ollamaUrl,
+    setOllamaUrl,
+  } = useCopilotOptions();
+
   const [exponentialNotation, setExponentialNotation] = useState(
     localStorage.getItem('exponentialNotation') === 'true'
   );
@@ -102,11 +116,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     initialSharedEditEnabled,
   ]);
 
-  const onCodeChange = (e) => {
-    const value = e.target.value;
-    onChange(value);
-  };
-
   const isInViewMode = mode === modes.VIEW_MODE;
 
   const evaluatedCode = tokenizeCode(code, {
@@ -114,7 +123,47 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     showResultUnit: !isInViewMode || showResultUnit,
   });
 
-  const codeWithResults = tokenizedCodeToString(evaluatedCode);
+  const [enabledCompletion, setEnabledCompletion] = useState(false);
+  const [completion, onAccept] = useCopilot({
+    code,
+    enable: enabledCompletion && !isInViewMode && copilotMode !== MODES.NONE,
+    onChange,
+    mode: copilotMode,
+    openAIApiKey,
+    groqApiKey,
+    ollamaUrl,
+  });
+
+  const evaluatedCodeWithCompletion = evaluatedCode.map((line, index) => {
+    if (index === evaluatedCode.length - 1) {
+      const index = line.findIndex(({ tags }) => tags.includes(tokens.VIRTUAL));
+      line.splice(index < 0 ? line.length : index, 0, {
+        value: completion,
+        tags: [tokens.VIRTUAL, 'COMPLETION'],
+      });
+    }
+    return line;
+  });
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      onAccept();
+    }
+    if (e.key === 'Escape') {
+      setEnabledCompletion(false);
+    }
+  }
+
+  const onCodeChange = (e) => {
+    const value = e.target.value;
+    if (value !== code) {
+      setEnabledCompletion(true);
+    }
+    onChange(value);
+  };
+
+  const codeWithResults = tokenizedCodeToString(evaluatedCodeWithCompletion);
 
   const longestLineLength = Math.max(...codeWithResults.split('\n').map((line) => line.length));
 
@@ -171,6 +220,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
             spellCheck={false}
             autoCapitalize="off"
             autoCorrect="off"
+            onKeyDown={handleKeyDown}
           />
         )}
         <pre
@@ -178,7 +228,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
             [styles.withoutHighlighting]: isInViewMode,
           })}
         >
-          <HighlightedCode tokenizedLines={evaluatedCode} />
+          <HighlightedCode tokenizedLines={evaluatedCodeWithCompletion} />
         </pre>
       </div>
       <SharingModal
@@ -200,6 +250,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         setExponentialNotation={setExponentialNotation}
         showResultUnit={showResultUnit}
         setShowResultUnit={setShowResultUnit}
+        copilotMode={copilotMode}
+        setCopilotMode={setCopilotMode}
+        openAIApiKey={openAIApiKey}
+        setOpenAIApiKey={setOpenAIApiKey}
+        groqApiKey={groqApiKey}
+        setGroqApiKey={setGroqApiKey}
+        ollamaUrl={ollamaUrl}
+        setOllamaUrl={setOllamaUrl}
       />
     </div>
   );
