@@ -74,6 +74,12 @@ $expression-font-family: 'Courier New', Courier, monospace;
   }
 }
 
+.modalInputLabel {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
 .modalToggle:global(.react-toggle--checked .react-toggle-track) {
   background-color: $dark-accent-color;
 }
