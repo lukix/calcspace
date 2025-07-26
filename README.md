@@ -22,7 +22,7 @@ Here is a list of a few of the most important technologies used on this project:
 
 ### NodeJS version
 
-NodeJS version that is currently used in the project can be found in the `.nvmrc` file. It should match the version specified in `server/package.json > engines.node` (for Heroku) and in both Dockerfiles.
+NodeJS version that is currently used in the project can be found in the `.nvmrc` file. It should match the version specified in both Dockerfiles.
 
 ### Install dependencies
 
